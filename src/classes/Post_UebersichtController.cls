@@ -28,7 +28,7 @@ public with sharing class Post_UebersichtController {
 	public static String initialize ( String accountId, String userType, String objectName ) {
 		Post_UebersichtController ctrl = new Post_UebersichtController();
 		
-		/*try {*/
+		try {
 			
 			if ( objectName == 'Task' ) {
 				ctrl = initializeTaskComponent( ctrl, userType, accountId );
@@ -39,10 +39,10 @@ public with sharing class Post_UebersichtController {
 			else{
 				//Sonarqube --> do nothing
 			}
-		/*}
+		}
 		catch ( Exception e ) {
 			throw new AuraHandledException ( e.getMessage() );
-		}*/
+		}
 		
 		return JSON.serialize( ctrl );
 	}
@@ -52,7 +52,7 @@ public with sharing class Post_UebersichtController {
 		
 		Post_UebersichtController ctrl = new Post_UebersichtController();
 		
-		/*try {*/
+		try {
 			if ( objectName == 'Task' ) {
 				ctrl = initializeTaskComponent( ctrl, userType, accountId, filterValue );
 			}
@@ -62,10 +62,10 @@ public with sharing class Post_UebersichtController {
 			else{
 				//Sonarqube --> do nothing
 			}
-		/*}
+		}
 		catch ( Exception e ) {
 			throw new AuraHandledException ( e.getMessage() );
-		}*/
+		}
 		
 		return JSON.serialize( ctrl );
 	}
@@ -73,7 +73,7 @@ public with sharing class Post_UebersichtController {
 	@AuraEnabled
 	public static List<String> fetchRecordTypeValues ( String objectName ) {
 		
-		/*try {*/
+		try {
 			List<RecordTypeInfo> recordTypeInfos = Schema.getGlobalDescribe().get( objectName ).getDescribe().getRecordTypeInfos();
 			recordTypesById = new Map<Id, String>();
 			for ( RecordTypeInfo recordTypeInfo : recordTypeInfos ) {
@@ -83,10 +83,10 @@ public with sharing class Post_UebersichtController {
 					recordTypesById.put( recordTypeInfo.getRecordTypeId(), recordTypeInfo.getName() );
 				}
 			}
-		/*}
+		}
 		catch ( Exception e ) {
 			throw new AuraHandledException ( e.getMessage() );
-		}*/
+		}
 		return recordTypesById.values();
 	}
 	
