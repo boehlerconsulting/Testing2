@@ -41,7 +41,7 @@ private class FormataenderungLeadGenCtrlTest {
                             ShippingPostalCode = '05643',
                             GL__c = orge.Id,
                             GL_Name__c = 'Berlin',
-                            RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('OrgE Dummy').getRecordTypeId()
+                            RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('OrgE_Dummy').getRecordTypeId()
                     ),
                     true
             );
@@ -121,7 +121,7 @@ private class FormataenderungLeadGenCtrlTest {
                         ShippingCity = 'Bonn',
                         ShippingStreet ='BonBon',
                         ShippingPostalCode = '05643',
-                        RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('OrgE Dummy').getRecordTypeId()
+                        RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('OrgE_Dummy').getRecordTypeId()
                 ),
                 true
         );

@@ -408,7 +408,7 @@ public with sharing class FormataenderungLeadGenCtrl {
 			Lead ld = new Lead(
 					Formataenderung__c = true,
 					Filialnetzaenderung__c = fnae.Id,
-					RecordTypeId = Schema.SObjectType.Lead.getRecordTypeInfosByName().get( 'Kaltakquise' ).getRecordTypeId(),
+					RecordTypeId = Schema.SObjectType.Lead.getRecordTypeInfosByDeveloperName().get( 'Kaltakquise' ).getRecordTypeId(),
 					Status = 'Vertragsverhandlung',
 					Email = filialpartnerComplete.E_Mail_Vertragspartner__c,
 					Phone = filialpartnerComplete.Phone,
