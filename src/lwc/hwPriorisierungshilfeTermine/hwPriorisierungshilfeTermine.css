@@ -1,0 +1,17 @@
+/**
+ *@author       Mats Böhler
+ *@created      07.12.2019
+ *@version      1.0
+ *@since        45.0
+ *
+ *
+ *@description  hwPriorisierungshilfeTermine.css
+ *
+ *
+ *@changelog    07.12.2019 Mats Böhler - Created
+ *              
+ * 
+ */
+.slds-modal__container {
+    width: 98% !important;
+}

@@ -1,0 +1,669 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      24.06.2020
+ *
+ *
+ *@description  StandortpraesentationPackstation
+ *
+ *
+ *@changelog    24.06.2020 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<apex:page id="StandortpraesentationPackstation"
+           renderAs="pdf"
+           controller="StandortpraesentationPackstationCtrl"
+           action="{!controllerAction}"
+           applyHtmlTag="false"
+           applyBodyTag="false"
+           showHeader="false"
+           standardStylesheets="false"
+           cache="true">
+
+    <head>
+        <style>
+
+            @page {
+                size: 21.0cm 29.7cm;
+                margin-top: 0.5cm;
+                margin-left: 1.5cm;
+                margin-right: 1.5cm;
+                margin-bottom: 0.5cm;
+
+            }
+
+            .pageFont {
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: medium;
+            }
+
+            @page rotated {
+                size: A4 landscape;
+            }
+
+            .rotated {
+                page: rotated;
+
+            }
+
+            .centered {
+                text-align: center;
+            }
+
+            .background-grey {
+                background-color: #EDEDED;
+            }
+
+        </style>
+    </head>
+
+    <body>
+
+    <!-- FIRST PAGE -->
+    <div class="content pageFont">
+        <table border="1" cellspacing="0" class="centered">
+            <tr>
+                <td style="width: 200px;" rowspan="2">
+                    <div>
+                        <img src="{!PostLogo}"
+                             width="160"/>
+                    </div>
+                </td>
+                <td style="width: 300px;" rowspan="2">
+                    <div><span style="font-weight: bold">Packstation:</span> Standort-Dokumentation</div>
+                    <div>- Fotos vor Aufbau -</div>
+                </td>
+                <td style="width: 200px;text-align: center" rowspan="2">
+                    <div>
+                        <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+
+                            <apex:param value="{!Today()}"/>
+
+                        </apex:outputText>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+            </tr>
+        </table>
+        <table border="1" cellspacing="0" style="margin-top: 5px;">
+            <tr>
+                <td style="width: 700px;" rowspan="2">
+                    <div><a href="{!Link}">{!Lead.Company}</a></div>
+                </td>
+            </tr>
+        </table>
+        <table border="1" cellspacing="0" style="margin-top: 5px; font-size: small">
+            <tr>
+                <td style="width: 150px;">
+                    <div class="background-grey">PLZ</div>
+                </td>
+                <td style="width: 200px;">
+                    <div class="background-grey">Stadt</div>
+                </td>
+                <td style="width: 350px;">
+                    <div class="background-grey">Straße und Hausnummer</div>
+                </td>
+            </tr>
+            <tr >
+                <td style="width: 100px;">
+                    <div>{!Lead.PostalCode}</div>
+                </td>
+                <td style="width: 150px;">
+                    <div>{!Lead.City}</div>
+                </td>
+                <td style="width: 250px;">
+                    <div>{!Lead.Street}</div>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" class="centered" style="margin-top: 5px;">
+            <tr>
+                <td class="image-border" style="width: 325px; height: 200px">
+
+                    <apex:outputPanel rendered="{!PictureExists['pic1']}">
+
+                        <img
+                                src="{!Picture['pic1']}"
+                                height="100%"
+                        />
+                    </apex:outputPanel>
+                </td>
+                <td style="width: 10px;">
+                    <div>
+                    </div>
+                </td>
+                <td class="image-border" style="width: 325px; height: 200px">
+
+                    <apex:outputPanel rendered="{!PictureExists['pic2']}">
+
+                        <img
+                                src="{!Picture['pic2']}"
+                                height="100%"
+                        />
+                    </apex:outputPanel>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 650px; height: 10px" colspan="3">
+
+                </td>
+            </tr>
+            <tr>
+                <td class="image-border" style="width: 325px; height: 200px">
+
+                    <apex:outputPanel rendered="{!PictureExists['pic3']}">
+
+                        <img
+                                src="{!Picture['pic3']}"
+                                height="100%"
+                        />
+                    </apex:outputPanel>
+                </td>
+                <td style="width: 10px;">
+                    <div>
+                    </div>
+                </td>
+                <td class="image-border" style="width: 325px; height: 200px">
+
+                    <apex:outputPanel rendered="{!PictureExists['pic4']}">
+
+                        <img
+                                src="{!Picture['pic4']}"
+                                height="100%"
+                        />
+                    </apex:outputPanel>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 650px; height: 10px" colspan="3">
+
+                </td>
+            </tr>
+            <tr>
+                <td class="image-border" style="width: 325px; height: 200px">
+
+                    <apex:outputPanel rendered="{!PictureExists['pic5']}">
+
+                        <img
+                                src="{!Picture['pic5']}"
+                                height="100%"
+                        />
+                    </apex:outputPanel>
+                </td>
+                <td style="width: 10px;">
+                    <div>
+                    </div>
+                </td>
+                <td class="image-border" style="width: 325px; height: 200px">
+
+                    <apex:outputPanel rendered="{!PictureExists['pic6']}">
+
+                        <img
+                                src="{!Picture['pic6']}"
+                                height="100%"
+                        />
+                    </apex:outputPanel>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 650px; height: 10px" colspan="3">
+
+                </td>
+            </tr>
+            <tr>
+                <td class="image-border" style="width: 325px; height: 200px">
+
+                    <apex:outputPanel rendered="{!PictureExists['pic7']}">
+
+                        <img
+                                src="{!Picture['pic7']}"
+                                height="100%"
+                        />
+                    </apex:outputPanel>
+                </td>
+                <td style="width: 10px;">
+                    <div>
+                    </div>
+                </td>
+                <td class="image-border" style="width: 325px; height: 200px">
+
+                    <apex:outputPanel rendered="{!PictureExists['pic8']}">
+
+                        <img
+                                src="{!Picture['pic8']}"
+                                height="100%"
+                        />
+                    </apex:outputPanel>
+                </td>
+            </tr>
+        </table>
+
+        <table border="1" cellspacing="0" class="centered" style="margin-top: 5px;">
+            <tr>
+                <td style="width: 200px;">
+                    <div><img src="{!PackstationLogo}"
+                              width="150px"/>
+                    </div>
+                </td>
+                <td style="width: 300px;">
+                    <div style="font-weight: bold">Deutsche Post AG</div>
+                    <div>Multikanalvertrieb</div>
+                </td>
+                <td style="width: 200px;">
+                    <div>Vertriebsleitung</div>
+                    <div>{!VL}</div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+
+    <!-- SECOND PAGE -->
+
+    <div style="page-break-after:always;"/>
+
+    <div class="content pageFont">
+        <table border="1" cellspacing="0" class="centered">
+            <tr>
+                <td style="width: 200px;" rowspan="2">
+                    <div><img src="{!PostLogo}"
+                              width="160"/>
+                    </div>
+                </td>
+                <td style="width: 300px;" rowspan="2">
+                    <div><span style="font-weight: bold">Packstation:</span> Standort-Dokumentation</div>
+                    <div>- Fotos geplanter Mikrostandort -</div>
+                </td>
+                <td style="width: 200px;" rowspan="2">
+                    <div>
+                        <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+
+                            <apex:param value="{!Today()}"/>
+
+                        </apex:outputText>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+
+            </tr>
+        </table>
+        <table border="1" cellspacing="0" style="margin-top: 5px;">
+            <tr>
+                <td style="width: 700px;" rowspan="2">
+                    <div><a href="{!Link}">{!Lead.Company}</a></div>
+                </td>
+            </tr>
+        </table>
+        <table border="1" cellspacing="0" style="margin-top: 5px; font-size: small">
+            <tr>
+                <td style="width: 150px;">
+                    <div class="background-grey">PLZ</div>
+                </td>
+                <td style="width: 200px;">
+                    <div class="background-grey">Stadt</div>
+                </td>
+                <td style="width: 350px;">
+                    <div class="background-grey">Straße und Hausnummer</div>
+                </td>
+            </tr>
+            <tr >
+                <td style="width: 100px;">
+                    <div>{!Lead.PostalCode}</div>
+                </td>
+                <td style="width: 150px;">
+                    <div>{!Lead.City}</div>
+                </td>
+                <td style="width: 250px;">
+                    <div>{!Lead.Street}</div>
+                </td>
+            </tr>
+        </table>
+
+        <table cellspacing="0" class="centered" style="margin-top: 5px;">
+            <tr>
+                <td class="image-border" style="width: 660px; height: 420px">
+
+                    <apex:outputPanel rendered="{!PictureExists['pic9']}">
+
+                        <img
+                                src="{!Picture['pic9']}"
+                                height="100%"
+                        />
+                    </apex:outputPanel>
+                </td>
+            </tr>
+            <tr>
+                <td style="height: 10px">
+
+                </td>
+            </tr>
+            <tr>
+                <td class="image-border" style="width: 660px; height: 420px">
+
+                    <apex:outputPanel rendered="{!PictureExists['pic10']}">
+
+                        <img
+                                src="{!Picture['pic10']}"
+                                height="100%"
+                        />
+                    </apex:outputPanel>
+                </td>
+            </tr>
+        </table>
+
+        <table border="1" cellspacing="0" class="centered" style="margin-top: 5px;">
+            <tr>
+                <td style="width: 200px;">
+                    <div><img src="{!PackstationLogo}"
+                              width="150px"/>
+                    </div>
+                </td>
+                <td style="width: 300px;">
+                    <div style="font-weight: bold">Deutsche Post AG</div>
+                    <div>Multikanalvertrieb</div>
+                </td>
+                <td style="width: 200px;">
+                    <div>Vertriebsleitung</div>
+                    <div>{!VL}</div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- THIRD PAGE -->
+    <div style="page-break-after:always;"/>
+
+    <div class="pageFont rotated">
+
+        <table width="1000" border="1" cellspacing="0" class="centered">
+            <tr>
+                <td style="width: 200px;" rowspan="2">
+                    <div><img src="{!PostLogo}"
+                              width="160"/>
+                    </div>
+                </td>
+                <td style="width: 300px;" rowspan="2">
+                    <div><span style="font-weight: bold">Packstation:</span> Standort-Dokumentation</div>
+                    <div>- Lageplan mit Packstation -</div>
+                </td>
+                <td style="width: 200px;" rowspan="2">
+                    <div>
+                        <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+
+                            <apex:param value="{!Today()}"/>
+
+                        </apex:outputText>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+
+            </tr>
+        </table>
+        <table width="1000" border="1" cellspacing="0" style="margin-top: 5px;">
+            <tr>
+                <td style="width: 1000px;" rowspan="2">
+                    <div><a href="{!Link}">{!Lead.Company}</a></div>
+                </td>
+            </tr>
+        </table>
+        <table width="1000" border="1" cellspacing="0" style="margin-top: 5px; font-size: small">
+            <tr>
+                <td style="width: 150px;">
+                    <div class="background-grey">PLZ</div>
+                </td>
+                <td style="width: 200px;">
+                    <div class="background-grey">Stadt</div>
+                </td>
+                <td style="width: 350px;">
+                    <div class="background-grey">Straße und Hausnummer</div>
+                </td>
+            </tr>
+            <tr >
+                <td style="width: 100px;">
+                    <div>{!Lead.PostalCode}</div>
+                </td>
+                <td style="width: 150px;">
+                    <div>{!Lead.City}</div>
+                </td>
+                <td style="width: 250px;">
+                    <div>{!Lead.Street}</div>
+                </td>
+            </tr>
+        </table>
+
+        <table width="1000" cellspacing="0" class="centered" style="margin-top: 5px;">
+            <tr>
+                <td class="image-border" style="width: 1000px; height: 550px">
+
+                    <apex:outputPanel rendered="{!PictureExists['pic11']}">
+
+                        <img
+                                src="{!Picture['pic11']}"
+                                height="100%"
+                        />
+                    </apex:outputPanel>
+                </td>
+            </tr>
+        </table>
+
+        <table width="1000" border="1" cellspacing="0" class="centered" style="margin-top: 5px;">
+            <tr>
+                <td style="width: 200px;">
+                    <div><img src="{!PackstationLogo}"
+                              width="150px"/>
+                    </div>
+                </td>
+                <td style="width: 300px;">
+                    <div style="font-weight: bold">Deutsche Post AG</div>
+                    <div>Multikanalvertrieb</div>
+                </td>
+                <td style="width: 200px;">
+                    <div>Vertriebsleitung</div>
+                    <div>{!VL}</div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- FOURTH PAGE -->
+    <apex:outputPanel rendered="{!PictureExists['pic12']}">
+        <div style="page-break-after:always;"/>
+
+        <div class="pageFont rotated">
+
+            <table width="1000" border="1" cellspacing="0" class="centered">
+                <tr>
+                    <td style="width: 200px;" rowspan="2">
+                        <div><img src="{!PostLogo}"
+                                  width="160"/>
+                        </div>
+                    </td>
+                    <td style="width: 300px;" rowspan="2">
+                        <div><span style="font-weight: bold">Packstation:</span> Standort-Dokumentation</div>
+                        <div>- Lageplan mit Packstation -</div>
+                    </td>
+                    <td style="width: 200px;" rowspan="2">
+                        <div>
+                            <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+
+                                <apex:param value="{!Today()}"/>
+
+                            </apex:outputText>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+
+                </tr>
+            </table>
+            <table width="1000" border="1" cellspacing="0" style="margin-top: 5px;">
+                <tr>
+                    <td style="width: 1000px;" rowspan="2">
+                        <div><a href="{!Link}">{!Lead.Company}</a></div>
+                    </td>
+                </tr>
+            </table>
+            <table width="1000" border="1" cellspacing="0" style="margin-top: 5px; font-size: small">
+                <tr>
+                    <td style="width: 150px;">
+                        <div class="background-grey">PLZ</div>
+                    </td>
+                    <td style="width: 200px;">
+                        <div class="background-grey">Stadt</div>
+                    </td>
+                    <td style="width: 350px;">
+                        <div class="background-grey">Straße und Hausnummer</div>
+                    </td>
+                </tr>
+                <tr >
+                    <td style="width: 100px;">
+                        <div>{!Lead.PostalCode}</div>
+                    </td>
+                    <td style="width: 150px;">
+                        <div>{!Lead.City}</div>
+                    </td>
+                    <td style="width: 250px;">
+                        <div>{!Lead.Street}</div>
+                    </td>
+                </tr>
+            </table>
+
+            <table width="1000" cellspacing="0" class="centered" style="margin-top: 5px;">
+                <tr>
+                    <td class="image-border" style="width: 1000px; height: 550px">
+
+                        <apex:outputPanel rendered="{!PictureExists['pic12']}">
+
+                            <img
+                                    src="{!Picture['pic12']}"
+                                    height="100%"
+                            />
+                        </apex:outputPanel>
+                    </td>
+                </tr>
+            </table>
+
+            <table width="1000" border="1" cellspacing="0" class="centered" style="margin-top: 5px;">
+                <tr>
+                    <td style="width: 200px;">
+                        <div><img src="{!PackstationLogo}"
+                                  width="150px"/>
+                        </div>
+                    </td>
+                    <td style="width: 300px;">
+                        <div style="font-weight: bold">Deutsche Post AG</div>
+                        <div>Multikanalvertrieb</div>
+                    </td>
+                    <td style="width: 200px;">
+                        <div>Vertriebsleitung</div>
+                        <div>{!VL}</div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </apex:outputPanel>
+
+    <!-- FIFTH PAGE -->
+    <div style="page-break-after:always;"/>
+
+    <div class="pageFont rotated">
+
+        <table width="1000" border="1" cellspacing="0" class="centered">
+            <tr>
+                <td style="width: 200px;" rowspan="2">
+                    <div><img src="{!PostLogo}"
+                              width="160"/>
+                    </div>
+                </td>
+                <td style="width: 300px;" rowspan="2">
+                    <div><span style="font-weight: bold">Packstation:</span> Standort-Dokumentation</div>
+                    <div>- Skizze mit Modulen -</div>
+                </td>
+                <td style="width: 200px;" rowspan="2">
+                    <div>
+                        <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+
+                            <apex:param value="{!Today()}"/>
+
+                        </apex:outputText>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+
+            </tr>
+        </table>
+        <table width="1000" border="1" cellspacing="0" style="margin-top: 5px;">
+            <tr>
+                <td style="width: 1000px;" rowspan="2">
+                    <div><a href="{!Link}">{!Lead.Company}</a></div>
+                </td>
+            </tr>
+        </table>
+        <table width="1000" border="1" cellspacing="0" style="margin-top: 5px; font-size: small">
+            <tr>
+                <td style="width: 150px;">
+                    <div class="background-grey">PLZ</div>
+                </td>
+                <td style="width: 200px;">
+                    <div class="background-grey">Stadt</div>
+                </td>
+                <td style="width: 350px;">
+                    <div class="background-grey">Straße und Hausnummer</div>
+                </td>
+            </tr>
+            <tr >
+                <td style="width: 100px;">
+                    <div>{!Lead.PostalCode}</div>
+                </td>
+                <td style="width: 150px;">
+                    <div>{!Lead.City}</div>
+                </td>
+                <td style="width: 250px;">
+                    <div>{!Lead.Street}</div>
+                </td>
+            </tr>
+        </table>
+
+        <table width="1000" cellspacing="0" class="centered" style="margin-top: 5px;">
+            <tr>
+                <td class="image-border" style="width: 1000px; height: 550px">
+
+                    <apex:outputPanel rendered="{!PictureExists['pic13']}">
+
+                        <img
+                                src="{!Picture['pic13']}"
+                                height="100%"
+                        />
+                    </apex:outputPanel>
+                </td>
+            </tr>
+        </table>
+
+        <table width="1000" border="1" cellspacing="0" class="centered" style="margin-top: 5px;">
+            <tr>
+                <td style="width: 200px;">
+                    <div><img src="{!PackstationLogo}"
+                              width="150px"/>
+                    </div>
+                </td>
+                <td style="width: 300px;">
+                    <div style="font-weight: bold">Deutsche Post AG</div>
+                    <div>Multikanalvertrieb</div>
+                </td>
+                <td style="width: 200px;">
+                    <div>Vertriebsleitung</div>
+                    <div>{!VL}</div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    </body>
+</apex:page>

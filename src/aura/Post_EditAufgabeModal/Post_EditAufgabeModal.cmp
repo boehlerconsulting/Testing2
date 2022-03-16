@@ -1,0 +1,39 @@
+<!--
+/**
+ *@author       Mats Böhler <mats.boehler@boehlerconsulting.com>
+ *@created      05.12.2018
+ *@version      1.0
+ *@since        44.0
+ *
+ *
+ *@description  Post_EditAufgabeModal
+ *
+ *
+ *@changelog    05.12.2018 Mats Böhler <mats.boehler@boehlerconsulting.com> - Created
+ *              
+ * 
+ */
+ -->
+
+<aura:component description="Post_EditAufgabeModal">
+
+    <aura:attribute name="taskId" type="String"/>
+    <aura:attribute name="task" type="Task" default="{'sobjectType':'Account','Status':'Erledigt', 'Typ' : 'Besuch' }"/>
+    <aura:attribute name="multiple" type="Boolean" default="true"/>
+
+    <lightning:notificationsLibrary aura:id="notificationsLibrary"/>
+
+    <lightning:card iconName="standard:task"
+                    title="Aufgabe abschließen">
+
+
+
+
+        <lightning:fileUpload  name="fileUploader"
+                               label= "Anhänge hochladen"
+                               multiple="{!v.multiple}"
+                               recordId="{!v.taskId}"
+                               onuploadfinished="{! c.handleUploadFinished }"/>
+    </lightning:card>
+
+</aura:component>

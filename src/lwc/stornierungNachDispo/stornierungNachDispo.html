@@ -1,0 +1,57 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      21.07.2021
+ *
+ *
+ *@description  stornierungNachDispo
+ *
+ *
+ *@changelog    21.07.2021 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<!-- Stornierung Nach Dispo -->
+<template>
+
+    <template if:true={recordId}>
+        <div class="slds-is-relative">
+            <lightning-quick-action-panel header="Stornierung nach Dispo">
+
+                <template if:true={showSpinner}>
+                    <lightning-spinner
+                            variant="brand"
+                            alternative-text="Loading"
+                    ></lightning-spinner>
+                </template>
+
+
+                <lightning-textarea
+                        class="slds-p-around_medium"
+                        label="Stornierungsgrund:"
+                        value={stornierungsgrund}
+                        max-length="255"
+                        required="true"
+                        onchange={handleStorierungsgrundChange}
+                ></lightning-textarea>
+
+                <div slot="footer">
+                    <lightning-button
+                            variant="neutral"
+                            label="Abbrechen"
+                            onclick={closeAction}
+                    ></lightning-button>
+                    <lightning-button
+                            disabled={stornoDisabled}
+                            variant="brand"
+                            label="Stornieren"
+                            class="slds-m-left_x-small"
+                            onclick={sendEmail}
+                    ></lightning-button>
+                </div>
+            </lightning-quick-action-panel>
+        </div>
+    </template>
+</template>

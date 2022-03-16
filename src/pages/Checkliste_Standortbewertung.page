@@ -1,0 +1,38 @@
+<apex:page showHeader="false" sidebar="false" standardStylesheets="true">
+  <!-- Begin Default Content REMOVE THIS -->
+  <apex:pageBlock title="Nehmen Sie folgende Kriterien als Hilfe zur Standortbewertung">
+      <apex:pageBlockSection title="Platzangebot">
+          <ul>
+              <li>Ist die Gr&ouml;&szlig;e des Ladenlokals ausreichend?</li>
+              <li>Ist Platz f&uuml;r die Posttheke vorhanden?</li>
+              <li>Ist Platz f&uuml;r wartende Postkunden vorhanden?</li>
+              <li>Gibt es gesicherte Lagerm&ouml;glichkeit für angenommene Pakete?</li>
+              <li>Gibt es ausreichend Lagerfl&auml;chen f&uuml;r Ausgabepakete?</li>
+          </ul>
+      </apex:pageBlockSection>
+      <apex:pageBlockSection title="Äußere Bedingungen">
+          <ul>
+              <li>Ist ein barrierefreie Zugang f&uuml;r Kunden m&ouml;glich?</li>
+              <li>Sind Stufen im Eingangsbereich vorhanden?</li>
+              <li>Existieren entgeltfreie Parkpl&auml;tze bzw. eine Kurzparkzone?</li>
+          </ul>
+      </apex:pageBlockSection>
+      <apex:pageBlockSection title="Ver- und Entsorgung des Ladenlokals">
+          <ul>
+              <li>Existiert eine gesicherte Stellm&ouml;glichkeit f&uuml;r den Rollbeh&auml;lter?</li> 
+              <li>Existiert eine Parkm&ouml;glichkeit f&uuml;r das Entsorgungsfahrzeug?</li>
+              <li>Ist ein ungehinderter Transport des Rollbeh&auml;lters zwischen Fahrzeug und Filiale m&ouml;glich?</li>
+          </ul>
+      </apex:pageBlockSection>
+      <apex:pageBlockSection title="Sonstiges">
+          <ul>
+              <li>Ist das Ladenlokal Eigentum oder gemietet?</li>
+              <li>Kann ein Tresor aufgestellt werden?</li>
+              <li>Werden die Brandschutzbestimmungen eingehalten?</li>
+              <li>Sind weitere Paketdienstleister im Laden?</li>
+              <li>Passen die &Ouml;ffnungszeiten des Gesch&auml;ftes zu den Anforderungen an das Postgesch&auml;ft?</li>
+          </ul>
+      </apex:pageBlockSection>
+  </apex:pageBlock>
+  <!-- End Default Content REMOVE THIS -->
+</apex:page>

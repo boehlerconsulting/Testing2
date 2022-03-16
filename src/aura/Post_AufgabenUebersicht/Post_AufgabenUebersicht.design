@@ -1,0 +1,20 @@
+<!--
+/**
+ *@author       Mats Böhler <mats.boehler@boehlerconsulting.com>
+ *@created      03.12.2018
+ *@version      1.0
+ *@since        44.0
+ *
+ *
+ *@description  Post_AufgabenUebersicht.design
+ *
+ *
+ *@changelog    03.12.2018 Mats Böhler <mats.boehler@boehlerconsulting.com> - Created
+ *              
+ * 
+ */
+ -->
+
+<design:component>
+    <design:attribute name="userType" label="Usertyp" description="Entweder 'AG' oder 'AN' eintragen." />
+</design:component>

@@ -1,0 +1,69 @@
+<!--
+ - @author      Stefan Richter (stefan.richter@hundw.de)
+ -              H+W CONSULT GmbH
+ -              Bahnhofstr. 3
+ -              21244 Buchholz i. d. Nordheide
+ -              Germany
+ -              https://www.hundw.de
+ -
+ - @description class for <insert-description-here>
+ -
+ - TIMELINE
+ - 11.11.20      Stefan Richter  Initial release.
+ -->
+<aura:component description="VertragsErsteller_ConfirmationModal" controller="VertragsErstellerCtrl">
+
+    <aura:attribute name="lead" type="Lead" access="public"/>
+
+    <aura:attribute name="mietzins" type="Double"/>
+    <aura:attribute name="strompauschale" type="Double"/>
+    <aura:attribute name="isLoading" type="Boolean" default="false"/>
+    <aura:attribute name="downloadPdf" type="String" default="false"/>
+    <aura:attribute name="pdfFileName" type="String" default="false"/>
+    <aura:attribute name="isPdfRendered" type="Boolean" default="false"/>
+    <aura:attribute name="sendAsMail" type="Boolean" default="false"/>
+
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+    <lightning:layout class="slds-p-bottom--medium" verticalAlign="stretch" horizontalAlign="center">
+        <lightning:layoutItem>
+            <div class="slds-text-heading_medium slds-p-bottom_x-small">Möchten sie den Vertrag jetzt erzeugen?</div>
+            <aura:if isTrue="{!v.isLoading}">
+                <lightning:spinner alternativeText="Loading" size="large"/>
+            </aura:if>
+            <lightning:layout>
+                <lightning:layoutItem>
+                    <lightning:input type="checkbox"
+                                     class="slds-m-top_xx-small"
+                                     variant="label-hidden"
+                                     name="mailCheck"
+                                     checked="{!v.sendAsMail}"
+                                     disabled="{!v.isPdfRendered}"/>
+                </lightning:layoutItem>
+                <lightning:layoutItem>
+                    <div class="slds-text-body_regular slds-form-element__label">Sende mir den Vertrag via
+                        E-Mail (steht innerhalb eines halben
+                        Tages zur Verfügung).
+                    </div>
+                    <div class="slds-text-body_regular slds-form-element__label">Hinweis: Bei iPad-Nutzung
+                        dringend empfohlen, da
+                        der Vertrag auf dem iPad nicht angezeigt werden kann.
+                    </div>
+                </lightning:layoutItem>
+            </lightning:layout>
+        </lightning:layoutItem>
+    </lightning:layout>
+
+    <aura:if isTrue="{!not(v.isPdfRendered)}">
+        <lightning:button tabindex="-1" type="submit" class="slds-m-top--large slds-text-align--left"
+                          onclick="{!c.redirectToContractPdf}">Ja
+        </lightning:button>
+        <lightning:button tabindex="1" type="reset" class="slds-m-top--large slds-text-align--left"
+                          onclick="{!c.closeModal}">Nein
+        </lightning:button>
+        <aura:set attribute="else">
+            <br/>
+            <a download="{!v.pdfFileName}" href="{!v.downloadPdf}" onclick="{!c.gotoObject}">Vertrag herunterladen</a>
+        </aura:set>
+    </aura:if>
+</aura:component>

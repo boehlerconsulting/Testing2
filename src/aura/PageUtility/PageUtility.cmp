@@ -1,0 +1,26 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      06.01.2022
+ *
+ *
+ *@description  PageUtility
+ *
+ *
+ *@changelog    06.01.2022 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<aura:component description="PageUtility" implements="force:hasRecordId,flexipage:availableForAllPageTypes" access="global">
+    <lightning:messageChannel
+            type="FilePreview__c"
+            onMessage="{!c.handleFilePreview}"
+    />
+    <lightning:messageChannel
+            type="Refresh__c"
+            onMessage="{!c.handleRefresh}"
+    />
+    <lightning:navigation aura:id="navigate"/>
+</aura:component>

@@ -1,0 +1,48 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      24.05.2021
+ *
+ *
+ *@description  EinrichtungsprozessZusatzWrapper
+ *
+ *
+ *@changelog    24.05.2021 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<aura:component description="EinrichtungsprozessZusatzWrapper"
+                implements="force:lightningQuickActionWithoutHeader,force:hasRecordId">
+
+    <aura:html tag="style">
+        .slds-spinner_container{
+        background: transparent !important;
+        }
+        .modal-body {
+        background: transparent !important;
+        box-shadow: none !important;
+        }
+        .slds-modal__header--empty {
+        display: none !important;
+        }
+        .modal-container{
+        width: 100% !important;
+        max-width: initial !important;
+        }
+        .slds-modal__content{
+        background: transparent;
+        }
+    </aura:html>
+
+    <c:einrichtungsprozess
+            recordId="{!v.recordId}"
+            isErsatzZusatz="true"
+            isZusatz="true"
+            process="Zusätzliche Bestellung"
+            oncloseModal="{!c.closeModal}"
+            onrefreshView="{!c.refreshView}"
+    ></c:einrichtungsprozess>
+
+</aura:component>

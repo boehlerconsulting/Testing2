@@ -1,0 +1,58 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      11.11.2020
+ *
+ *
+ *@description  DurchschnittlicheMiete
+ *
+ *
+ *@changelog    11.11.2020 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<aura:component description="DurchschnittlicheMiete"
+                controller="DurchschnittlicheMieteCtrl"
+                implements="force:lightningQuickActionWithoutHeader,force:hasRecordId">
+
+    <aura:html tag="style">
+
+        .slds-modal__container {
+        min-width: 40vw;
+        }
+    </aura:html>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+
+    <aura:attribute name="showSpinner" type="Boolean" default="true"/>
+    <aura:attribute name="miete" type="Decimal" default="0"/>
+    <aura:attribute name="message" type="String" default=""/>
+
+    <aura:if isTrue="{!v.showSpinner}">
+        <lightning:spinner alternativeText="Loading" size="large"/>
+    </aura:if>
+
+    <header class="slds-modal__header">
+        <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Anzeige des Ø Mietpreises einer Packstation
+            mit 12 Modulen</h2>
+    </header>
+
+    <aura:if isTrue="{!v.miete == null}">
+        <div class="slds-m-around_large">
+           <lightning:formattedText value="{!v.message}"/>
+        </div>
+    </aura:if>
+    <aura:if isTrue="{!v.miete != null}">
+        <div class="slds-m-around_large">
+            <b>Miete: <lightning:formattedNumber value="{!v.miete}" style="currency" currencyCode="EUR"
+                                                 currencyDisplayAs="symbol"/></b>
+        </div>
+    </aura:if>
+
+    <footer class="slds-modal__footer">
+        <button class="slds-button slds-button_brand" onclick="{! c.handleClose }">Schließen</button>
+    </footer>
+</aura:component>

@@ -1,0 +1,350 @@
+<!--
+/**
+ *@author       Karsten Maaß
+ *@created      12.04.2019
+ *@version      1.0
+ *@since        45.0
+ *
+ *
+ *@description  Einverständniserklärung zur Einrichtung einer Partner-Filiale
+ *
+ *
+ *@changelog    12.04.2019 Karsten Maaß - Created
+ *              
+ * 
+ */
+ -->
+
+<apex:page id="HW_Einverstaendniserklaerung" controller="HW_Document_C" renderAs="{!RenderAs}"
+           applyHtmlTag="false" applyBodyTag="false" showHeader="false" standardStylesheets="false" cache="true">
+
+    <html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+
+        <style type="text/css" media="print,all">
+            @page {
+                size: 21.0cm 29.7cm !important;
+                margin-top: 1cm;
+                margin-bottom: 1cm;
+                margin-left: 1.98cm;
+                margin-right: 1.98cm;
+                @bottom-right {
+                    font-size: 11px;
+                    content: "Seite " counter(page) " von " counter(pages);
+                }
+            }
+            .header {
+                font-size: 19px;
+                font-weight: bold;
+                margin-bottom: 20px;
+            }
+            .header-sub {
+                font-size: 16px;
+                margin-bottom: 20px;
+            }
+            .text {
+                font-size: 12px;
+            }
+            .text-bold {
+                font-size: 12px;
+                font-weight: bold;
+            }
+            .space-top {
+                margin-top: 20px;
+            }
+            .check,
+            .check-white {
+                border-style: solid;
+                border-width: medium;
+                border-color: black;
+                width: 10px;
+                height: 10px;
+                min-height: 10px;
+            }
+            .checkbox-padding{
+                padding-left: 10px;
+            }
+            .checkbox-start{
+                width: 50px;
+            }
+            div.absolute {
+                position: absolute;
+                top: 930px;
+                right: 0;
+                width: 150px;
+                height: 100px;
+            }
+        </style>
+    </head>
+
+    <body>
+
+    <!--PAGE 1 -->
+    <div>
+        <div class="header">Einverständniserklärung zur Einrichtung einer Partner-Filiale für die Deutsche Post AG
+        </div>
+        <table width="600px" class="text-bold">
+            <tr>
+                <th width="400">Name Filiale Deutsche Post AG:</th>
+                <th >{!Feld['EE_Filialname']}</th>
+            </tr>
+            <tr>
+                <th >Debitor Filiale Deutsche Post AG:
+                </th>
+                <th >{!Feld['EE_Debitor']}</th>
+            </tr>
+            <tr>
+                <th >Firmenbezeichnung Betreiber:
+                </th>
+                <th >{!Feld['EE_JuristischerName']}</th>
+            </tr>
+            <tr>
+                <th >Straße, Hausnummer Betreiber (Geschäftsadresse):
+                </th>
+                <th >{!Feld['EE_Strasse']} {!Feld['EE_Hausnummer']}</th>
+            </tr>
+            <tr>
+                <th >PLZ, Ort Betreiber (Geschäftsadresse):
+                </th>
+                <th >{!Feld['EE_PLZ']} {!Feld['EE_Ort']}</th>
+            </tr>
+        </table>
+        <div class="space-top text">
+            1. Die Möbel und Einrichtungsgegenstände werden gemäß <b>Anlage Grundrissplan</b> aufgestellt.
+        </div>
+        <div class="space-top text">
+            2. Der Wertschutzschrank wird gemäß <b>Anlage Grundrissplan</b> wie folgt im Boden / an der Wand verschraubt:
+        </div>
+        <table class="text" style="margin-top: 10px;">
+            <tr>
+                <td class="checkbox-start"></td>
+                <td class="check-white"></td>
+                <td class="checkbox-padding">Bodenverankerung</td>
+                <td class="checkbox-start"></td>
+                <td class="check-white"></td>
+                <td class="checkbox-padding">Wandverankerung</td>
+            </tr>
+        </table>
+        <div class="space-top text">
+            3. Die Außenkennzeichnung wird gemäß <b>Anlage Außenansicht Fassade</b> an der Fassade verschraubt.
+        </div>
+        <div class="space-top text">
+            4. Nur bei ausgewählten Filialen mit Postbankleistungen:
+        </div>
+        <table class="text" style="margin-top: 10px;">
+            <tr>
+                <td class="checkbox-start"></td>
+                <td class="check-white"></td>
+                <td class="checkbox-padding">Die Außenbauteile der Alarmanlage werden gemäß <b>Anlage Außenansicht Fassade</b></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td class="checkbox-padding">an der Fassade verschraubt.</td>
+            </tr>
+        </table>
+        <table class="text" style="margin-top: 10px;">
+            <tr>
+                <td class="checkbox-start"></td>
+                <td class="check-white"></td>
+                <td class="checkbox-padding">Der Banknotenautomat (BBA) oder der Cash Recycler (CR) wird gemäß <b>Anlage</b></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td class="checkbox-padding"><b>Grundrissplan</b> im Boden verschraubt.</td>
+            </tr>
+        </table>
+        <table class="text" style="margin-top: 10px;">
+            <tr>
+                <td class="checkbox-start"></td>
+                <td class="check-white"></td>
+                <td class="checkbox-padding">Der Geldautomat (ec-GAA) wird gemäß <b>Anlage Grundrissplan</b> im Boden</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td class="checkbox-padding">verschraubt.</td>
+            </tr>
+        </table>
+        <table class="text" style="margin-top: 10px;">
+            <tr>
+                <td class="checkbox-start"></td>
+                <td class="check-white"></td>
+                <td class="checkbox-padding">Das Multifunktionsterminal (MFT) wird gemäß <b>Anlage Grundrissplan</b> im Boden</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td class="checkbox-padding">verschraubt.</td>
+            </tr>
+        </table>
+        <div class="space-top text">
+            Ich bin / Wir sind als Betreiber der vorbezeichneten Filiale der Deutschen Post AG damit einverstanden, dass die
+        </div>
+        <div class="text">
+            Deutsche Post AG oder ein von ihr beauftragter Dritter Betriebsmittel zum Betrieb einer Partner-Filiale nach
+        </div>
+        <div class="text">
+            Maßgabe der vorstehenden Ziff. 1 bis 4 installiert in dem Gebäude
+        </div>
+        <div class="space-top text">
+            <b>{!Feld['EE_Strasse']} {!Feld['EE_Hausnummer']}, {!Feld['EE_PLZ']} {!Feld['EE_Ort']}</b>
+        </div>
+        <div style="font-size: 7px; font-weight: bold">
+        ________________________________________________________________________________________________________________________
+        </div>
+        <div class="text" style="margin-top: 3px;">
+            <i>(Straße, Hausnr., PLZ, Ort)</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <i>(Gebäudeteil)</i>
+        </div>
+        <div class="space-top text">
+            Soweit öffentlich-rechtliche Genehmigungen für die Installation der Betriebsmittel erforderlich sind,
+        </div>
+        <div class="text">
+            werde ich / werden wir diese vor deren Montage einholen.
+        </div>
+        <div class="space-top text">
+            Soweit meiner / unserer Nutzung des vorgenannten Gebäudes für die Partner-Filiale ein Mietvertrag zugrunde
+        </div>
+        <div class="text">
+            liegt, versichere ich / versichern wir, dass die Installation der Betriebsmittel entweder nach den mietvertraglichen
+        </div>
+        <div class="text">
+            Vereinbarungen zulässig ist oder der Vermieter deren Installation zugestimmt hat.
+        </div>
+        <div class="space-top text">
+            Die Haftung der die Installation fachgerecht ausführenden Unternehmen wird durch diese Einverständnis-
+        </div>
+        <div class="text">
+            erklärung nicht berührt.
+        </div>
+        <div class="space-top text">
+            Ich habe / Wir haben die <b>Anlage Grundrissplan</b> und die <b>Anlage Außenansicht Fassade</b> als solche
+        </div>
+        <div class="text">
+            bezeichnet, mit dem Filialnamen der Deutschen Post AG und dem Datum dieser Einverständniserklärung
+        </div>
+        <div class="text">
+            versehen und rechtsgültig unterzeichnet. Sämtliche Anlagen dieser Einverständniserklärung sind
+        </div>
+        <div class="text">
+            Bestandteil dieser Einverständniserklärung.
+        </div>
+        <div class="space-top text" style="margin-top: 30px;">
+
+        </div>
+        <div style="font-size: 7px; font-weight: bold">
+            ____________________________________________________&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;______________________________________________________________
+        </div>
+        <div class="text" style="margin-top: 3px;">
+            <i>(Ort)</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <i>(Datum)</i>
+        </div>
+        <div class="space-top text" style="margin-top: 30px;">
+
+        </div>
+        <div style="font-size: 7px; font-weight: bold">
+            _____________________________________________________________________________________________________________________
+        </div>
+        <div class="text" style="margin-top: 3px;">
+            <i>(Firmenstempelabdruck, Unterschrift[en])</i>
+        </div>
+        <div class="absolute">
+            <div class="text-bold">Anlagen:</div>
+            <div class="text">Grundrissplan</div>
+            <div class="text">Außenansicht Fassade</div>
+        </div>
+    </div>
+    <!--PAGE 2 -->
+    <div style="page-break-before: always;">
+        <div class="header-sub">
+            <div>
+                Anlage zur Einverständniserklärung vom:
+            </div>
+            <div>
+                für die Einrichtung der Partner-Filiale der Deutschen Post AG:
+            </div>
+            <div>
+                <b>{!Feld['EE_Filialname']}, Deb. {!Feld['EE_Debitor']}, {!Feld['EE_Strasse']} {!Feld['EE_Hausnummer']}, {!Feld['EE_PLZ']} {!Feld['EE_Ort']}</b>
+            </div>
+        </div>
+        <div class="space-top header-sub">
+            <b>Grundrissplan</b>
+        </div>
+        <div class="text">
+            <table>
+                <tr>
+                    <th style="min-width: 600px;min-height: 800px;  border: 1px solid black;">
+                    </th>
+                </tr>
+            </table>
+        </div>
+        <div class="space-top text" style="margin-top: 30px;">
+
+        </div>
+        <div style="font-size: 7px; font-weight: bold">
+            ____________________________________________________&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;______________________________________________________________
+        </div>
+        <div class="text" style="margin-top: 3px;">
+            <i>(Ort)</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <i>(Datum)</i>
+        </div>
+        <div class="space-top text" style="margin-top: 30px;">
+
+        </div>
+        <div style="font-size: 7px; font-weight: bold">
+            _____________________________________________________________________________________________________________________
+        </div>
+        <div class="text" style="margin-top: 3px;">
+            <i>(Firmenstempelabdruck, Unterschrift[en])</i>
+        </div>
+    </div>
+    <!--PAGE 3 -->
+    <div style="page-break-before: always;">
+        <div class="header-sub">
+            <div>
+                Anlage zur Einverständniserklärung vom:
+            </div>
+            <div>
+                für die Einrichtung der Partner-Filiale der Deutschen Post AG:
+            </div>
+            <div>
+                <b>{!Feld['EE_Filialname']}, Deb. {!Feld['EE_Debitor']}, {!Feld['EE_Strasse']} {!Feld['EE_Hausnummer']}, {!Feld['EE_PLZ']} {!Feld['EE_Ort']}</b>
+            </div>
+        </div>
+        <div class="space-top header-sub">
+            <b>Außenansicht Fassade</b>
+        </div>
+        <div class="text">
+            <table>
+                <tr>
+                    <th style="min-width: 600px;min-height: 800px;  border: 1px solid black;">
+                    </th>
+                </tr>
+            </table>
+        </div>
+        <div class="space-top text" style="margin-top: 30px;">
+
+        </div>
+        <div style="font-size: 7px; font-weight: bold">
+            ____________________________________________________&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;______________________________________________________________
+        </div>
+        <div class="text" style="margin-top: 3px;">
+            <i>(Ort)</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <i>(Datum)</i>
+        </div>
+        <div class="space-top text" style="margin-top: 30px;">
+
+        </div>
+        <div style="font-size: 7px; font-weight: bold">
+            _____________________________________________________________________________________________________________________
+        </div>
+        <div class="text" style="margin-top: 3px;">
+            <i>(Firmenstempelabdruck, Unterschrift[en])</i>
+        </div>
+    </div>
+    </body>
+    </html>
+</apex:page>

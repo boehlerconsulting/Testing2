@@ -1,0 +1,41 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      01.07.2021
+ *
+ *
+ *@description  aktivitaetsDetail
+ *
+ *
+ *@changelog    01.07.2021 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<!-- Aktivitaets Detail -->
+<template>
+
+    <lightning-spinner if:true={showSpinner} alternative-text="Loading" size="medium"
+                       variant="brand"></lightning-spinner>
+
+    <template if:true={isInitialized}>
+        <lightning-card title="Aufgabendetails (Vorschau)" icon-name="standard:procedure_detail">
+            <lightning-accordion>
+                <template for:each={details} for:item="detail" for:index="detailIndex">
+                    <lightning-accordion-section name={detail.title} label={detail.title} key={detail.Id}>
+                        <template for:each={detail.details} for:item="question" for:index="detailIndex">
+
+                            <c-aktivitaets-detail-feld
+                                    key={detail.Id}
+                                    field={question}
+                            ></c-aktivitaets-detail-feld>
+
+                        </template>
+                    </lightning-accordion-section>
+                </template>
+            </lightning-accordion>
+        </lightning-card>
+    </template>
+
+</template>

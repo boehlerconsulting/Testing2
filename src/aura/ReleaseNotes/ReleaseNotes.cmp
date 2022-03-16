@@ -1,0 +1,29 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      03.11.2020
+ *
+ *
+ *@description  ReleaseNotes
+ *
+ *
+ *@changelog    03.11.2020 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<aura:component description="ReleaseNotes"
+                implements="flexipage:availableForAllPageTypes,lightning:backgroundUtilityItem"
+                controller="ReleaseNoteCtrl">
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <aura:attribute name="channel" type="String" default="/event/ReleaseNoteEvent__e"/>
+    <aura:attribute name="subscription" type="Map"/>
+
+    <lightning:empApi aura:id="empApi"/>
+    <lightning:utilityBarAPI aura:id="utilityBarAPI"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+</aura:component>

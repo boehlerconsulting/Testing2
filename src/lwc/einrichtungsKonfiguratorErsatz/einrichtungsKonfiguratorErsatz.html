@@ -1,0 +1,120 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      05.04.2021
+ *
+ *
+ *@description  einrichtungsKonfiguratorErsatz
+ *
+ *
+ *@changelog    05.04.2021 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<!-- Einrichtungs Konfigurator Ersatz -->
+<template>
+
+
+    <lightning-spinner if:true={showSpinner} alternative-text="Loading" size="medium"
+                       variant="base"></lightning-spinner>
+
+    <template if:true={isInitialized}>
+
+        <lightning-layout>
+
+            <lightning-layout-item size="12">
+
+                <lightning-accordion allow-multiple-sections-open active-section-name={activeSections}>
+
+
+                    <template for:each={categories} for:item="category" for:index="categoryIndex">
+
+                        <template if:false={category.hide}>
+
+                            <lightning-accordion-section name={category.title}
+                                                         label={category.title} key={category.Id}>
+
+                                <c-einrichtungs-bundle
+                                        key={category.Id}
+                                        category-index={categoryIndex}
+                                        options={category.products}
+                                        option-by-ids={optionByIds}
+                                        account={account}
+                                        initial-selection-by-id={initialSelectionById}
+                                        category-title={category.title}
+                                        is-einrichtungskoordinator={isEinrichtungskoordinator}
+                                        is-ersatz={isErsatz}
+                                        is-zusatz={isZusatz}
+                                        onselected={handleOptionChange}
+                                        onchanged={handleChange}
+                                ></c-einrichtungs-bundle>
+
+                            </lightning-accordion-section>
+
+                        </template>
+
+                    </template>
+
+                    <template if:true={isEinrichtungskoordinator}>
+
+                        <lightning-accordion-section
+                                name="Lager"
+                                label="Lager"
+                        >
+
+                            <lightning-layout>
+
+                                <lightning-layout-item size="12">
+
+                                    <lightning-accordion allow-multiple-sections-open>
+
+                                        <template for:each={categories} for:item="category" for:index="categoryIndex">
+
+                                            <template if:false={category.hide}>
+
+                                                <lightning-accordion-section name={category.title}
+                                                                             label={category.title} key={category.Id}>
+
+                                                    <c-einrichtungs-bundle
+                                                            key={category.Id}
+                                                            category-index={categoryIndex}
+                                                            options={category.products}
+                                                            option-by-ids={optionByIds}
+                                                            account={account}
+                                                            initial-selection-by-id={initialSelectionById}
+                                                            category-title={category.title}
+                                                            is-einrichtungskoordinator={isEinrichtungskoordinator}
+                                                            is-lager=true
+                                                            is-ersatz={isErsatz}
+                                                            is-zusatz={isZusatz}
+                                                            onselected={handleOptionChange}
+                                                            onchanged={handleChange}
+                                                    ></c-einrichtungs-bundle>
+
+                                                </lightning-accordion-section>
+
+                                            </template>
+
+                                        </template>
+
+                                    </lightning-accordion>
+
+                                </lightning-layout-item>
+
+                            </lightning-layout>
+
+                        </lightning-accordion-section>
+
+                    </template>
+
+                </lightning-accordion>
+
+            </lightning-layout-item>
+
+        </lightning-layout>
+
+    </template>
+
+</template>

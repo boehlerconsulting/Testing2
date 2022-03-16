@@ -1,0 +1,145 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      15.05.2020
+ *
+ *
+ *@description  EmailDispatcherWrapper
+ *
+ *
+ *@changelog    15.05.2020 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<aura:component description="EmailDispatcherWrapper"
+                controller="EmailDispatcherCtrl"
+                implements="force:lightningQuickActionWithoutHeader,force:hasRecordId">
+
+    <aura:html tag="style">
+
+        .slds-modal__container {
+        min-width: 95vw;
+        }
+
+        .slds-modal__close {
+        visibility: hidden !important;
+        }
+    </aura:html>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="lead" type="Lead"/>
+    <aura:attribute name="fromAddress" type="String"/>
+    <aura:attribute name="toAddress" type="String"/>
+    <aura:attribute name="ccAddress" type="String"/>
+    <aura:attribute name="emailTemplate" type="String"/>
+    <aura:attribute name="isSaving" type="Boolean" default="false"/>
+    <aura:attribute name="isInitialized" type="Boolean" default="false"/>
+    <aura:attribute name="isSent" type="Boolean" default="false"/>
+    <aura:attribute name="isPageOne" type="Boolean" default="true"/>
+    <aura:attribute name="contentDocumentIds" type="List" default="[]"/>
+    <aura:attribute name="contentDocuments" type="List" default="[]"/>
+    <aura:attribute name="uploadedContentDocumentIds" type="List" default="[]"/>
+    <aura:attribute name="selectedByDocumentId" type="Map" default="{}"/>
+    <aura:attribute name="numberOfSelectedFilesByPage" type="Map" default="{ 1:0,2:0,3:0,4:0 }"/>
+    <aura:attribute name="selectedFilesByPage" type="Map" default="{ 1:'',2:'',3:'',4:'' }"/>
+    <aura:attribute name="showSpinner" type="Boolean" default="true"/>
+
+
+    <aura:if isTrue="{!v.showSpinner}">
+        <lightning:spinner alternativeText="Loading" size="large"/>
+    </aura:if>
+
+    <aura:if isTrue="{!v.isPageOne}">
+        <header class="slds-modal__header">
+            <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Beauftragung CSG</h2>
+            <p class="slds-m-top_x-small">Hinweis: Bitte wählen Sie mindestens einen Anhang aus.
+                Die Anhänge dürfen in Summe eine Größe von 20 MB nicht überschreiten um den fehlerfreien Emailversand zu gewährleisten.</p>
+        </header>
+
+        <aura:if isTrue="{!v.isInitialized}">
+
+            <aura:if isTrue="{!v.lead.Vertrag_unterschrieben__c != 'Ja'}">
+                <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning slds-m-top_large slds-m-bottom_large"
+                     role="alert">
+                    <span class="slds-assistive-text">warning</span>
+                    <span class="slds-icon_container slds-icon-utility-warning slds-m-right_x-small"
+                          title="Description of icon when needed">
+                        <lightning:icon iconName="utility:warning" alternativeText="Warning!" title="Warning"/>
+                    </span>
+                    <h2>Der Mietvertrag kann erst versendet werden, wenn der Vertrag vom Vertragspartner unterschrieben
+                        wurde.
+
+                    </h2>
+                </div>
+
+                <footer>
+                    <div class="modal-footer slds-modal__footer attach-to-bottom">
+                        <button class="slds-button slds-button_brand" onclick="{! c.handleClose }">Schließen</button>
+                    </div>
+                </footer>
+            </aura:if>
+            <aura:if isTrue="{!v.isSent &amp;&amp; v.isSaving == false}">
+                <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning slds-m-top_large slds-m-bottom_large"
+                     role="alert">
+                    <span class="slds-assistive-text">warning</span>
+                    <span class="slds-icon_container slds-icon-utility-warning slds-m-right_x-small"
+                          title="Description of icon when needed">
+                        <lightning:icon iconName="utility:warning" alternativeText="Warning!" title="Warning"/>
+                    </span>
+                    <h2>Der Mietvertrag wurde bereits versendet und kann nicht erneut versandt werden.
+
+                    </h2>
+                </div>
+
+                <footer>
+                    <div class="modal-footer slds-modal__footer attach-to-bottom">
+                        <button class="slds-button slds-button_brand" onclick="{! c.handleClose }">Schließen</button>
+                    </div>
+                </footer>
+            </aura:if>
+            <aura:if isTrue="{!v.lead.Vertrag_unterschrieben__c == 'Ja'}">
+                <aura:if isTrue="{!not(v.isSent)}">
+
+                    <lightning:layout horizontalAlign="left" verticalAlign="end" multipleRows="true">
+                        <lightning:layoutItem flexibility="auto, no-grow" padding="around-small">
+                            <lightning:fileUpload label="Weitere Bilder hochladen"
+                                                  name="fileUploader"
+                                                  multiple="true"
+                                                  recordId="{!v.recordId}"
+                                                  onuploadfinished="{!c.handleUploadFinished}"/>
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                    <lightning:layout horizontalAlign="left" verticalAlign="end" multipleRows="true">
+                        <aura:iteration items="{!v.contentDocuments}" var="contentDocument">
+                            <aura:if isTrue="{!!contentDocument.hidden}">
+                                <lightning:layoutItem flexibility="auto, no-grow" padding="around-small">
+                                    <lightning:fileCard hideDescription="true" fileId="{!contentDocument.id}"/>
+                                    <input type="checkbox"
+                                           style="zoom:2; alignment: center"
+                                           class="slds-m-top_xx-small"
+                                           name="{!contentDocument.id}"
+                                           checked="{!contentDocument.selected}"
+                                           onchange="{!c.handlePictureSelect}"/>
+                                </lightning:layoutItem>
+                            </aura:if>
+                        </aura:iteration>
+                    </lightning:layout>
+
+                    <footer>
+                        <div class="modal-footer slds-modal__footer attach-to-bottom">
+                            <button class="slds-button slds-button_neutral" onclick="{! c.handleClose }">Schließen
+                            </button>
+                            <button class="slds-button slds-button_brand"
+                                    onclick="{! c.handleSendEmail }"
+                                    disabled="{!lessthan(v.numberOfSelectedFilesByPage[1],1)}"
+                            >Email versenden
+                            </button>
+                        </div>
+                    </footer>
+                </aura:if>
+            </aura:if>
+        </aura:if>
+    </aura:if>
+</aura:component>

@@ -1,0 +1,1288 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      05.02.2021
+ *
+ *
+ *@description  einrichtungsprozess
+ *
+ *
+ *@changelog    05.02.2021 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<!-- Einrichtungsprozess -->
+<template>
+
+    <lightning-spinner if:true={showSpinner} alternative-text="Loading" size="medium"
+                       variant="brand"></lightning-spinner>
+
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+             aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_medium">
+        <div class="slds-modal__container">
+            <template if:true={isInitialized}>
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close"
+                            title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close" size="medium" variant="inverse">
+                        </lightning-icon>
+                        <span class="slds-assistive-text">Schließen</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">
+                        {activeScreen.title}</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning-layout>
+
+                        <lightning-layout-item size="12">
+
+                            <lightning-accordion allow-multiple-sections-open
+                                                 active-section-name={activeScreen.activeSections}
+                                                 key={activeScreen.key}>
+
+                                <template if:true={isPageOne}>
+
+                                    <template if:false={hideCopyButton}>
+                                        <lightning-button variant="brand"
+                                                          class="slds-float_left slds-p-around_x-small"
+                                                          label="Daten aus Auftrag Ver-/Entsorgung übernehmen"
+                                                          title="Daten aus Auftrag Ver-/Entsorgung übernehmen"
+                                                          onclick={handleCopyFields}
+                                        ></lightning-button>
+                                    </template>
+                                </template>
+
+                                <template if:true={activeScreen.hasSections}>
+                                    <lightning-layout vertical-align="end">
+                                        <lightning-layout-item size="12" class="slds-m-bottom_x-small">
+                                            <lightning-button-icon
+                                                    class="slds-float_right slds-p-around_x-small"
+                                                    size="medium"
+                                                    icon-name="utility:jump_to_top"
+                                                    alternative-text="Alle Sektionen schließen"
+                                                    title="Alle Sektionen schließen"
+                                                    onclick={handleCloseAllSections}
+                                            ></lightning-button-icon>
+                                            <lightning-button-icon
+                                                    class="slds-float_right slds-p-around_x-small"
+                                                    size="medium"
+                                                    icon-name="utility:jump_to_bottom"
+                                                    alternative-text="Alle Sektionen öffnen"
+                                                    title="Alle Sektionen öffnen"
+                                                    onclick={handleOpenAllSections}
+                                            ></lightning-button-icon>
+                                        </lightning-layout-item>
+                                    </lightning-layout>
+                                </template>
+
+                                <template for:each={activeScreen.sections} for:item="section" for:index="sectionIndex">
+
+                                    <lightning-accordion-section name={section.title}
+                                                                 label={section.title} key={section.Id}>
+                                        <lightning-layout horizontal-align="left" vertical-align="end"
+                                                          multiple-rows="true">
+                                            <!--FIELDS-->
+                                            <template for:each={section.fields} for:item="field" for:index="fieldIndex">
+
+                                                <lightning-layout-item flexibility="auto, no-grow" size="6"
+                                                                       class="slds-p-around_xx-small"
+                                                                       key={field.Id}>
+
+                                                    <template if:false={field.isHidden}>
+
+                                                        <lightning-layout>
+                                                            <lightning-layout-item flexibility="auto"
+                                                                                   size={field.layoutItemSize}
+                                                                                   key={field.Id}>
+
+                                                                <template if:true={field.isText}>
+
+                                                                    <lightning-input
+                                                                            name={field}
+                                                                            type="text"
+                                                                            key={field.Id}
+                                                                            label={field.label}
+                                                                            value={field.value}
+                                                                            maxlength={field.maximumLength}
+                                                                            disabled={field.isDisabled}
+                                                                            required={field.isRequired}
+                                                                            field-level-help={field.helptext}
+                                                                            onchange={handleDataChange}
+                                                                    ></lightning-input>
+
+                                                                </template>
+
+                                                                <template if:true={field.isCheckbox}>
+
+                                                                    <lightning-input
+                                                                            name={field}
+                                                                            type="checkbox"
+                                                                            key={field.Id}
+                                                                            class={fieldStyle}
+                                                                            label={field.label}
+                                                                            checked={field.value}
+                                                                            maxlength={field.maximumLength}
+                                                                            field-level-help={field.helptext}
+                                                                            required={field.isRequired}
+                                                                            disabled={field.isDisabled}
+                                                                            onchange={handleDataChange}
+                                                                    ></lightning-input>
+
+                                                                </template>
+
+                                                                <template if:true={field.isNumber}>
+                                                                    <lightning-input
+                                                                            name={field}
+                                                                            type="number"
+                                                                            key={field.Id}
+                                                                            class={fieldStyle}
+                                                                            label={field.label}
+                                                                            value={field.value}
+                                                                            maxlength={field.maximumLength}
+                                                                            max={field.maximumLength}
+                                                                            min="0"
+                                                                            field-level-help={field.helptext}
+                                                                            required={field.isRequired}
+                                                                            disabled={field.isDisabled}
+                                                                            onchange={handleDataChange}
+                                                                    ></lightning-input>
+                                                                </template>
+
+                                                                <template if:true={field.isPercent}>
+
+                                                                    <lightning-input
+                                                                            name={field}
+                                                                            type="number"
+                                                                            formatter="percent"
+                                                                            step="0.01"
+                                                                            key={field.Id}
+                                                                            class={fieldStyle}
+                                                                            label={field.label}
+                                                                            value={field.value}
+                                                                            maxlength={field.maximumLength
+                                                                            field-level-help={field.helptext}
+                                                                            required={field.isRequired}
+                                                                            disabled={field.isDisabled}
+                                                                            onchange={handleDataChange}
+                                                                    ></lightning-input>
+
+                                                                </template>
+
+                                                                <template if:true={field.isCurrency}>
+
+                                                                    <lightning-input
+                                                                            name={field}
+                                                                            type="number"
+                                                                            formatter="currency"
+                                                                            step="0.01"
+                                                                            key={field.Id}
+                                                                            class={fieldStyle}
+                                                                            label={field.label}
+                                                                            value={field.value}
+                                                                            maxlength={field.maximumLength}
+                                                                            max="1000000000"
+                                                                            min="0"
+                                                                            field-level-help={field.helptext}
+                                                                            required={field.isRequired}
+                                                                            disabled={field.isDisabled}
+                                                                            onchange={handleDataChange}
+                                                                    ></lightning-input>
+
+                                                                </template>
+
+                                                                <template if:true={field.isPhone}>
+
+                                                                    <lightning-input
+                                                                            name={field}
+                                                                            type="tel"
+                                                                            key={field.Id}
+                                                                            class={fieldStyle}
+                                                                            label={field.label}
+                                                                            value={field.value}
+                                                                            maxlength={field.maximumLength}
+                                                                            field-level-help={field.helptext}
+                                                                            required={field.isRequired}
+                                                                            disabled={field.isDisabled}
+                                                                            onchange={handleDataChange}
+                                                                    ></lightning-input>
+
+                                                                </template>
+
+                                                                <template if:true={field.isDate}>
+
+                                                                    <lightning-input
+                                                                            name={field}
+                                                                            type="date"
+                                                                            key={field.Id}
+                                                                            class={fieldStyle}
+                                                                            label={field.label}
+                                                                            value={field.value}
+                                                                            field-level-help={field.helptext}
+                                                                            required={field.isRequired}
+                                                                            disabled={field.isDisabled}
+                                                                            onchange={handleDataChange}
+                                                                    ></lightning-input>
+
+                                                                </template>
+
+                                                                <template if:true={field.isDateTime}>
+
+                                                                    <lightning-input
+                                                                            name={field}
+                                                                            type="datetime"
+                                                                            key={field.Id}
+                                                                            class={fieldStyle}
+                                                                            label={field.label}
+                                                                            value={field.value}
+                                                                            field-level-help={field.helptext}
+                                                                            required={field.isRequired}
+                                                                            disabled={field.isDisabled}
+                                                                            onchange={handleDataChange}
+                                                                    ></lightning-input>
+
+                                                                </template>
+
+                                                                <template if:true={field.isTime}>
+
+                                                                    <lightning-input
+                                                                            name={field}
+                                                                            type="time"
+                                                                            key={field.Id}
+                                                                            class={fieldStyle}
+                                                                            label={field.label}
+                                                                            value={field.value}
+                                                                            field-level-help={field.helptext}
+                                                                            required={field.isRequired}
+                                                                            disabled={field.isDisabled}
+                                                                            onchange={handleDataChange}
+                                                                    ></lightning-input>
+
+                                                                </template>
+
+                                                                <template if:true={field.isEmail}>
+
+                                                                    <lightning-input
+                                                                            name={field}
+                                                                            type="email"
+                                                                            key={field.Id}
+                                                                            class={fieldStyle}
+                                                                            label={field.label}
+                                                                            value={field.value}
+                                                                            maxlength={field.maximumLength}
+                                                                            field-level-help={field.helptext}
+                                                                            required={field.isRequired}
+                                                                            disabled={field.isDisabled}
+                                                                            onchange={handleDataChange}
+                                                                    ></lightning-input>
+
+                                                                </template>
+
+                                                                <template if:true={field.isPicklist}>
+
+                                                                    <lightning-combobox
+                                                                            dropdown-alignment="auto"
+                                                                            name={field}
+                                                                            key={field.Id}
+                                                                            class={fieldStyle}
+                                                                            label={field.label}
+                                                                            value={field.value}
+                                                                            options={field.picklistValues}
+                                                                            field-level-help={field.helptext}
+                                                                            required={field.isRequired}
+                                                                            disabled={field.isDisabled}
+                                                                            onchange={handleDataChange}
+                                                                    >
+                                                                    </lightning-combobox>
+
+                                                                </template>
+
+                                                                <template if:true={field.isTextarea}>
+                                                                    <lightning-textarea
+                                                                            name={field}
+                                                                            key={field.Id}
+                                                                            class={fieldStyle}
+                                                                            label={field.label}
+                                                                            value={field.value}
+                                                                            field-level-help={field.helptext}
+                                                                            disabled={field.isDisabled}
+                                                                            required={field.isRequired}
+                                                                            maxlength={field.maximumLength}
+                                                                            onchange={handleDataChange}
+                                                                    ></lightning-textarea>
+                                                                </template>
+                                                            </lightning-layout-item>
+                                                            <template if:true={field.hasPicture}>
+                                                                <lightning-layout-item flexibility="auto, no-grow"
+                                                                                       size="1"
+                                                                                       key={field.Id}>
+                                                                    <div class=slds-p-top_large>
+
+                                                                    </div>
+                                                                    <lightning-button-icon
+                                                                            name={field}
+                                                                            class="slds-m-left_small"
+                                                                            size="large"
+                                                                            icon-name="utility:image"
+                                                                            alternative-text="Vorschau anzeigen"
+                                                                            title="Vorschau anzeigen"
+                                                                            variant="bare"
+                                                                            onclick={openFilePreview}
+                                                                    ></lightning-button-icon>
+                                                                </lightning-layout-item>
+                                                            </template>
+                                                        </lightning-layout>
+
+                                                    </template>
+
+                                                </lightning-layout-item>
+
+                                            </template>
+
+                                        </lightning-layout>
+
+                                    </lightning-accordion-section>
+
+                                </template>
+
+                            </lightning-accordion>
+
+                            <template if:true={activeScreen.showBestand}>
+
+                                <c-einrichtungs-bestandskonfigurator
+                                        account={account}
+                                        einrichtungsprozess={einrichtungsprozess}
+                                        onprocesschanged={handleProcessChanged}
+                                ></c-einrichtungs-bestandskonfigurator>
+                            </template>
+
+                            <template if:true={activeScreen.showKonfigurator}>
+
+                                <c-einrichtungs-konfigurator
+                                        account={account}
+                                        einrichtungsprozess={einrichtungsprozess}
+                                ></c-einrichtungs-konfigurator>
+                            </template>
+
+                            <template if:true={activeScreen.showErsatzZusatz}>
+
+                                <lightning-layout>
+                                    <lightning-layout-item size="6" padding="around-small">
+
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6" padding="around-small">
+                                        <lightning-button-icon
+                                                class="slds-float_right slds-p-around_x-small"
+                                                size="medium"
+                                                icon-name="utility:jump_to_top"
+                                                alternative-text="Alle Sektionen schließen"
+                                                title="Alle Sektionen schließen"
+                                                onclick={handleCloseAllSectionsKonfigurator}
+                                        ></lightning-button-icon>
+                                        <lightning-button-icon
+                                                class="slds-float_right slds-p-around_x-small"
+                                                size="medium"
+                                                icon-name="utility:jump_to_bottom"
+                                                alternative-text="Alle Sektionen öffnen"
+                                                title="Alle Sektionen öffnen"
+                                                onclick={handleOpenAllSectionsKonfigurator}
+                                        ></lightning-button-icon>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+
+                                <template if:true={isErsatz}>
+
+                                    <c-einrichtungs-konfigurator-ersatz
+                                            account={account}
+                                            einrichtungsprozess={einrichtungsprozess}
+                                            is-ersatz={isErsatz}
+                                    >
+                                    </c-einrichtungs-konfigurator-ersatz>
+
+                                </template>
+                                <template if:true={isZusatz}>
+
+                                    <c-einrichtungs-konfigurator-ersatz
+                                            account={account}
+                                            einrichtungsprozess={einrichtungsprozess}
+                                            is-zusatz={isZusatz}
+                                    >
+                                    </c-einrichtungs-konfigurator-ersatz>
+
+                                </template>
+
+                            </template>
+                            <template if:true={activeScreen.showAbbau}>
+
+                                <lightning-layout>
+                                    <lightning-layout-item size="6" padding="around-small">
+                                        <lightning-combobox
+                                                dropdown-alignment="auto"
+                                                label="Abbau"
+                                                value={abbauValue}
+                                                name="Abbau"
+                                                variant="label-hidden"
+                                                options={abbauOptions}
+                                                onchange={handleAbbauOptionChange}
+                                        >
+                                        </lightning-combobox>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6" padding="around-small">
+                                        <lightning-button-icon
+                                                class="slds-float_right slds-p-around_x-small"
+                                                size="medium"
+                                                icon-name="utility:jump_to_top"
+                                                alternative-text="Alle Sektionen schließen"
+                                                title="Alle Sektionen schließen"
+                                                onclick={handleCloseAllSectionsKonfigurator}
+                                        ></lightning-button-icon>
+                                        <lightning-button-icon
+                                                class="slds-float_right slds-p-around_x-small"
+                                                size="medium"
+                                                icon-name="utility:jump_to_bottom"
+                                                alternative-text="Alle Sektionen öffnen"
+                                                title="Alle Sektionen öffnen"
+                                                onclick={handleOpenAllSectionsKonfigurator}
+                                        ></lightning-button-icon>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+
+                                <c-einrichtungs-konfigurator-abbau
+                                        account={account}
+                                        einrichtungsprozess={einrichtungsprozess}
+                                        process={abbauValue}
+                                ></c-einrichtungs-konfigurator-abbau>
+                                <lightning-layout>
+                                    <lightning-layout-item size="6" padding="around-small">
+
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6" padding="around-small">
+                                        <lightning-button-icon
+                                                class="slds-float_right slds-p-around_x-small"
+                                                size="medium"
+                                                icon-name="utility:jump_to_top"
+                                                alternative-text="Alle Sektionen schließen"
+                                                title="Alle Sektionen schließen"
+                                                onclick={handleCloseAllSectionsKonfiguratorZusatz}
+                                        ></lightning-button-icon>
+                                        <lightning-button-icon
+                                                class="slds-float_right slds-p-around_x-small"
+                                                size="medium"
+                                                icon-name="utility:jump_to_bottom"
+                                                alternative-text="Alle Sektionen öffnen"
+                                                title="Alle Sektionen öffnen"
+                                                onclick={handleOpenAllSectionsKonfiguratorZusatz}
+                                        ></lightning-button-icon>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                                <c-einrichtungs-konfigurator-abbau
+                                        account={account}
+                                        einrichtungsprozess={einrichtungsprozess}
+                                        process={abbauValue}
+                                        is-abbau-zusatz="true"
+                                ></c-einrichtungs-konfigurator-abbau>
+
+                            </template>
+
+                        </lightning-layout-item>
+
+                    </lightning-layout>
+                    <!--BUTTONS NEUBESTELLUNG-->
+                    <template if:true={isNeubestellungPageThree}>
+                        <lightning-layout>
+                            <lightning-layout-item size="8" padding="around-small">
+                                <lightning-textarea
+                                        label="Kommentar VM"
+                                        max-length="500"
+                                        field-level-help="Besonderheiten zur Filiale oder zur Filialausstattung"
+                                        value={einrichtungsprozess.Kommentar_VM__c}
+                                        onchange={handleKommentarChange}
+                                ></lightning-textarea>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        <template if:true={isEinrichtungskoordinator}>
+
+                            <lightning-layout>
+
+                                <lightning-layout-item size="4" padding="around-small">
+
+                                    <lightning-input
+                                            type="text"
+                                            label="Abweichende Kostenstelle"
+                                            value={einrichtungsprozess.AbweichendeKostenstelle__c}
+                                            maxlength="8"
+                                            onchange={handleKostenstelleChange}
+                                    ></lightning-input>
+
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="4" padding="around-small">
+
+                                    <lightning-input
+                                            type="text"
+                                            label="Lieferantentext - Zusatz"
+                                            value={einrichtungsprozess.LieferantentextZusatz__c}
+                                            maxlength="500"
+                                            onchange={handleLieferantentextChange}
+                                    ></lightning-input>
+
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="4" padding="around-small">
+
+
+                                </lightning-layout-item>
+
+                            </lightning-layout>
+
+                            <lightning-layout>
+
+                                <lightning-layout-item size="12" padding="around-small">
+
+
+                                </lightning-layout-item>
+
+                            </lightning-layout>
+
+                            <lightning-layout>
+
+                                <lightning-layout-item size="6" padding="around-small">
+
+                                    <a class="slds-button slds-button_neutral slds-float_left"
+                                       href="javascript:void(0);"
+                                       title="Vorschau anzeigen"
+                                       onclick={handleDocumentCreation}>
+                                        Vorschau anzeigen
+                                        <template if:true={isSaving}>
+                                            <div class="slds-spinner_container">
+                                                <div role="status" class="slds-spinner slds-spinner_x-small">
+                                                    <span class="slds-assistive-text">Loading</span>
+                                                    <div class="slds-spinner__dot-a"></div>
+                                                    <div class="slds-spinner__dot-b"></div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </a>
+                                    <lightning-combobox
+                                            dropdown-alignment="auto"
+                                            class="slds-float_left"
+                                            label="Für"
+                                            variant="label-hidden"
+                                            value={variant}
+                                            name="variant"
+                                            options={variantOptions}
+                                            onchange={handleVariantChange}
+                                    >
+                                    </lightning-combobox>
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="6" padding="around-small">
+
+
+                                </lightning-layout-item>
+
+                            </lightning-layout>
+                            <lightning-layout>
+
+                                <lightning-layout-item size="4" padding="around-small">
+
+                                    <a class="slds-button slds-button_neutral"
+                                       href="javascript:void(0);"
+                                       title="Dokument versenden"
+                                       onclick={handleDocumentCreation}>
+                                        Bestellblätter generieren
+                                        <template if:true={isSaving}>
+                                            <div class="slds-spinner_container">
+                                                <div role="status" class="slds-spinner slds-spinner_x-small">
+                                                    <span class="slds-assistive-text">Loading</span>
+                                                    <div class="slds-spinner__dot-a"></div>
+                                                    <div class="slds-spinner__dot-b"></div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </a>
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="8" padding="around-small"
+                                >
+
+                                    <c-einrichtungsprozess-nachbesserung
+                                            account-id={account.Id}
+                                            einrichtungsprozess-id={einrichtungsprozess.Id}
+                                            onrefresh={handleRefreshView}
+                                    ></c-einrichtungsprozess-nachbesserung>
+
+                                </lightning-layout-item>
+
+                            </lightning-layout>
+                        </template>
+                        <template if:false={isEinrichtungskoordinator}>
+                            <lightning-layout>
+
+                                <lightning-layout-item size="4" padding="around-small">
+
+                                    <a class="slds-button slds-button_neutral slds-m-left_large"
+                                       href="javascript:void(0);"
+                                       title="Bestellvorschau anzeigen"
+                                       onclick={previewDocument}>
+                                        Bestellvorschau anzeigen
+                                        <template if:true={isSaving}>
+                                            <div class="slds-spinner_container">
+                                                <div role="status" class="slds-spinner slds-spinner_x-small">
+                                                    <span class="slds-assistive-text">Loading</span>
+                                                    <div class="slds-spinner__dot-a"></div>
+                                                    <div class="slds-spinner__dot-b"></div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </a>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                            <lightning-layout>
+
+                                <lightning-layout-item size="4" padding="around-small">
+
+                                    <a class="slds-button slds-button_neutral slds-m-left_large"
+                                       href="javascript:void(0);"
+                                       title="Bestellung auslösen"
+                                       onclick={handleBestellungAusloesen}>
+                                        Bestellung auslösen
+                                        <template if:true={isSaving}>
+                                            <div class="slds-spinner_container">
+                                                <div role="status" class="slds-spinner slds-spinner_x-small">
+                                                    <span class="slds-assistive-text">Loading</span>
+                                                    <div class="slds-spinner__dot-a"></div>
+                                                    <div class="slds-spinner__dot-b"></div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </a>
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="8" padding="around-small"
+                                                       class="slds-float_left slds-m-top_x-small">
+
+                                </lightning-layout-item>
+
+                            </lightning-layout>
+                        </template>
+                    </template>
+                    <!-- BUTTONS ERSATZ -->
+                    <template if:true={isErsatzPageTwo}>
+                        <lightning-layout>
+                            <lightning-layout-item size="8" padding="around-small">
+                                <lightning-textarea
+                                        label="Kommentar VM"
+                                        max-length="500"
+                                        field-level-help="Besonderheiten zur Filiale oder zur Filialausstattung"
+                                        value={einrichtungsprozess.Kommentar_VM__c}
+                                        onchange={handleKommentarChange}
+                                ></lightning-textarea>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        <template if:true={isEinrichtungskoordinator}>
+
+                            <lightning-layout>
+
+                                <lightning-layout-item size="4" padding="around-small">
+
+                                    <lightning-input
+                                            type="text"
+                                            label="Abweichende Kostenstelle"
+                                            value={einrichtungsprozess.AbweichendeKostenstelle__c}
+                                            maxlength="8"
+                                            onchange={handleKostenstelleChange}
+                                    ></lightning-input>
+
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="4" padding="around-small">
+
+                                    <lightning-input
+                                            type="text"
+                                            label="Lieferantentext - Zusatz"
+                                            value={einrichtungsprozess.LieferantentextZusatz__c}
+                                            maxlength="500"
+                                            onchange={handleLieferantentextChange}
+                                    ></lightning-input>
+
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="4" padding="around-small">
+
+
+                                </lightning-layout-item>
+
+                            </lightning-layout>
+
+                            <lightning-layout>
+
+                                <lightning-layout-item size="12" padding="around-small">
+
+
+                                </lightning-layout-item>
+
+                            </lightning-layout>
+
+                            <lightning-layout>
+
+                                <lightning-layout-item size="6" padding="around-small">
+
+                                    <a class="slds-button slds-button_neutral slds-float_left"
+                                       href="javascript:void(0);"
+                                       title="Vorschau anzeigen"
+                                       onclick={handleDocumentCreation}>
+                                        Vorschau anzeigen
+                                        <template if:true={isSaving}>
+                                            <div class="slds-spinner_container">
+                                                <div role="status" class="slds-spinner slds-spinner_x-small">
+                                                    <span class="slds-assistive-text">Loading</span>
+                                                    <div class="slds-spinner__dot-a"></div>
+                                                    <div class="slds-spinner__dot-b"></div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </a>
+                                    <lightning-combobox
+                                            dropdown-alignment="auto"
+                                            class="slds-float_left"
+                                            label="Für"
+                                            variant="label-hidden"
+                                            value={variant}
+                                            name="variant"
+                                            options={variantOptions}
+                                            onchange={handleVariantChange}
+                                    >
+                                    </lightning-combobox>
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="6" padding="around-small">
+
+
+                                </lightning-layout-item>
+
+                            </lightning-layout>
+                            <lightning-layout>
+
+                                <lightning-layout-item size="4" padding="around-small">
+
+                                    <a class="slds-button slds-button_neutral"
+                                       href="javascript:void(0);"
+                                       title="Bestellblatt generieren"
+                                       onclick={handleDocumentCreation}>
+                                        Bestellblatt generieren
+                                        <template if:true={isSaving}>
+                                            <div class="slds-spinner_container">
+                                                <div role="status" class="slds-spinner slds-spinner_x-small">
+                                                    <span class="slds-assistive-text">Loading</span>
+                                                    <div class="slds-spinner__dot-a"></div>
+                                                    <div class="slds-spinner__dot-b"></div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </a>
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="8" padding="around-small"
+                                >
+
+                                    <c-einrichtungsprozess-nachbesserung
+                                            account-id={account.Id}
+                                            einrichtungsprozess-id={einrichtungsprozess.Id}
+                                            is-ersatz={isErsatz}
+                                            is-zusatz={isZusatz}
+                                            is-ersatz-zusatz={isErsatzZusatz}
+                                            onrefresh={handleRefreshView}
+                                    ></c-einrichtungsprozess-nachbesserung>
+
+                                </lightning-layout-item>
+
+                            </lightning-layout>
+                        </template>
+                        <template if:false={isEinrichtungskoordinator}>
+                            <lightning-layout>
+
+                                <lightning-layout-item size="4" padding="around-small">
+
+                                    <a class="slds-button slds-button_neutral slds-m-left_large"
+                                       href="javascript:void(0);"
+                                       title="Bestellvorschau anzeigen"
+                                       onclick={previewDocument}>
+                                        Bestellvorschau anzeigen
+                                        <template if:true={isSaving}>
+                                            <div class="slds-spinner_container">
+                                                <div role="status" class="slds-spinner slds-spinner_x-small">
+                                                    <span class="slds-assistive-text">Loading</span>
+                                                    <div class="slds-spinner__dot-a"></div>
+                                                    <div class="slds-spinner__dot-b"></div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </a>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                            <lightning-layout>
+
+                                <lightning-layout-item size="4" padding="around-small">
+
+                                    <a class="slds-button slds-button_neutral slds-m-left_large"
+                                       href="javascript:void(0);"
+                                       title="Ersatzbestellung auslösen"
+                                       onclick={handleBestellungAusloesen}>
+                                        Ersatzbestellung auslösen
+                                        <template if:true={isSaving}>
+                                            <div class="slds-spinner_container">
+                                                <div role="status" class="slds-spinner slds-spinner_x-small">
+                                                    <span class="slds-assistive-text">Loading</span>
+                                                    <div class="slds-spinner__dot-a"></div>
+                                                    <div class="slds-spinner__dot-b"></div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </a>
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="8" padding="around-small"
+                                                       class="slds-float_left slds-m-top_x-small">
+
+                                </lightning-layout-item>
+
+                            </lightning-layout>
+                        </template>
+                    </template>
+                    <!-- BUTTONS ZUSATZ -->
+                    <template if:true={isZusatzPageTwo}>
+                        <lightning-layout>
+                            <lightning-layout-item size="8" padding="around-small">
+                                <lightning-textarea
+                                        label="Kommentar VM"
+                                        max-length="500"
+                                        field-level-help="Besonderheiten zur Filiale oder zur Filialausstattung"
+                                        value={einrichtungsprozess.Kommentar_VM__c}
+                                        onchange={handleKommentarChange}
+                                ></lightning-textarea>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        <template if:true={isEinrichtungskoordinator}>
+
+                            <lightning-layout>
+
+                                <lightning-layout-item size="4" padding="around-small">
+
+                                    <lightning-input
+                                            type="text"
+                                            label="Abweichende Kostenstelle"
+                                            value={einrichtungsprozess.AbweichendeKostenstelle__c}
+                                            maxlength="8"
+                                            onchange={handleKostenstelleChange}
+                                    ></lightning-input>
+
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="4" padding="around-small">
+
+                                    <lightning-input
+                                            type="text"
+                                            label="Lieferantentext - Zusatz"
+                                            value={einrichtungsprozess.LieferantentextZusatz__c}
+                                            maxlength="500"
+                                            onchange={handleLieferantentextChange}
+                                    ></lightning-input>
+
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="4" padding="around-small">
+
+
+                                </lightning-layout-item>
+
+                            </lightning-layout>
+
+                            <lightning-layout>
+
+                                <lightning-layout-item size="12" padding="around-small">
+
+
+                                </lightning-layout-item>
+
+                            </lightning-layout>
+
+                            <lightning-layout>
+
+                                <lightning-layout-item size="6" padding="around-small">
+
+                                    <a class="slds-button slds-button_neutral slds-float_left"
+                                       href="javascript:void(0);"
+                                       title="Vorschau anzeigen"
+                                       onclick={handleDocumentCreation}>
+                                        Vorschau anzeigen
+                                        <template if:true={isSaving}>
+                                            <div class="slds-spinner_container">
+                                                <div role="status" class="slds-spinner slds-spinner_x-small">
+                                                    <span class="slds-assistive-text">Loading</span>
+                                                    <div class="slds-spinner__dot-a"></div>
+                                                    <div class="slds-spinner__dot-b"></div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </a>
+                                    <lightning-combobox
+                                            dropdown-alignment="auto"
+                                            class="slds-float_left"
+                                            label="Für"
+                                            variant="label-hidden"
+                                            value={variant}
+                                            name="variant"
+                                            options={variantOptions}
+                                            onchange={handleVariantChange}
+                                    >
+                                    </lightning-combobox>
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="6" padding="around-small">
+
+
+                                </lightning-layout-item>
+
+                            </lightning-layout>
+                            <lightning-layout>
+
+                                <lightning-layout-item size="4" padding="around-small">
+
+                                    <a class="slds-button slds-button_neutral"
+                                       href="javascript:void(0);"
+                                       title="Bestellblatt generieren"
+                                       onclick={handleDocumentCreation}>
+                                        Bestellblatt generieren
+                                        <template if:true={isSaving}>
+                                            <div class="slds-spinner_container">
+                                                <div role="status" class="slds-spinner slds-spinner_x-small">
+                                                    <span class="slds-assistive-text">Loading</span>
+                                                    <div class="slds-spinner__dot-a"></div>
+                                                    <div class="slds-spinner__dot-b"></div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </a>
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="8" padding="around-small"
+                                >
+
+                                    <c-einrichtungsprozess-nachbesserung
+                                            account-id={account.Id}
+                                            einrichtungsprozess-id={einrichtungsprozess.Id}
+                                            is-ersatz={isErsatz}
+                                            is-zusatz={isZusatz}
+                                            is-ersatz-zusatz={isErsatzZusatz}
+                                            onrefresh={handleRefreshView}
+                                    ></c-einrichtungsprozess-nachbesserung>
+
+                                </lightning-layout-item>
+
+                            </lightning-layout>
+                        </template>
+                        <template if:false={isEinrichtungskoordinator}>
+                            <lightning-layout>
+
+                                <lightning-layout-item size="4" padding="around-small">
+
+                                    <a class="slds-button slds-button_neutral slds-m-left_large"
+                                       href="javascript:void(0);"
+                                       title="Bestellvorschau anzeigen"
+                                       onclick={previewDocument}>
+                                        Bestellvorschau anzeigen
+                                        <template if:true={isSaving}>
+                                            <div class="slds-spinner_container">
+                                                <div role="status" class="slds-spinner slds-spinner_x-small">
+                                                    <span class="slds-assistive-text">Loading</span>
+                                                    <div class="slds-spinner__dot-a"></div>
+                                                    <div class="slds-spinner__dot-b"></div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </a>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                            <lightning-layout>
+
+                                <lightning-layout-item size="4" padding="around-small">
+
+                                    <a class="slds-button slds-button_neutral slds-m-left_large"
+                                       href="javascript:void(0);"
+                                       title="Zusatzbestellung auslösen"
+                                       onclick={handleBestellungAusloesen}>
+                                        Zusatzbestellung auslösen
+                                        <template if:true={isSaving}>
+                                            <div class="slds-spinner_container">
+                                                <div role="status" class="slds-spinner slds-spinner_x-small">
+                                                    <span class="slds-assistive-text">Loading</span>
+                                                    <div class="slds-spinner__dot-a"></div>
+                                                    <div class="slds-spinner__dot-b"></div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </a>
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="8" padding="around-small"
+                                                       class="slds-float_left slds-m-top_x-small">
+
+                                </lightning-layout-item>
+
+                            </lightning-layout>
+                        </template>
+                    </template>
+                    <!-- BUTTONS ABBAU -->
+                    <template if:true={isAbbauPageTwo}>
+                        <lightning-layout>
+                            <lightning-layout-item size="8" padding="around-small">
+                                <lightning-textarea
+                                        label="Kommentar VM"
+                                        max-length="500"
+                                        field-level-help="Besonderheiten zur Filiale oder zur Filialausstattung"
+                                        value={einrichtungsprozess.Kommentar_VM__c}
+                                        onchange={handleKommentarChange}
+                                ></lightning-textarea>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        <template if:true={isEinrichtungskoordinator}>
+
+                            <lightning-layout>
+
+                                <lightning-layout-item size="4" padding="around-small">
+
+                                    <lightning-input
+                                            type="text"
+                                            label="Abweichende Kostenstelle"
+                                            value={einrichtungsprozess.AbweichendeKostenstelle__c}
+                                            maxlength="8"
+                                            onchange={handleKostenstelleChange}
+                                    ></lightning-input>
+
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="4" padding="around-small">
+
+                                    <lightning-input
+                                            type="text"
+                                            label="Lieferantentext - Zusatz"
+                                            value={einrichtungsprozess.LieferantentextZusatz__c}
+                                            maxlength="500"
+                                            onchange={handleLieferantentextChange}
+                                    ></lightning-input>
+
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="4" padding="around-small">
+
+                                    <lightning-input
+                                            type="text"
+                                            label="Lagerstandort"
+                                            value={einrichtungsprozess.Lagerstandort__c}
+                                            maxlength="500"
+                                            onchange={handleLagerstandortChange}
+                                    ></lightning-input>
+
+                                </lightning-layout-item>
+
+                            </lightning-layout>
+
+                            <lightning-layout>
+
+                                <lightning-layout-item size="12" padding="around-small">
+
+
+                                </lightning-layout-item>
+
+                            </lightning-layout>
+
+                            <lightning-layout>
+
+                                <lightning-layout-item size="6" padding="around-small">
+
+                                    <a class="slds-button slds-button_neutral slds-float_left"
+                                       href="javascript:void(0);"
+                                       title="Vorschau anzeigen"
+                                       onclick={handleDocumentCreation}>
+                                        Vorschau anzeigen
+                                        <template if:true={isSaving}>
+                                            <div class="slds-spinner_container">
+                                                <div role="status" class="slds-spinner slds-spinner_x-small">
+                                                    <span class="slds-assistive-text">Loading</span>
+                                                    <div class="slds-spinner__dot-a"></div>
+                                                    <div class="slds-spinner__dot-b"></div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </a>
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="6" padding="around-small">
+
+
+                                </lightning-layout-item>
+
+                            </lightning-layout>
+                            <lightning-layout>
+
+                                <lightning-layout-item size="4" padding="around-small">
+
+                                    <a class="slds-button slds-button_neutral"
+                                       href="javascript:void(0);"
+                                       title="Auftrag Rückbau generieren"
+                                       onclick={handleDocumentCreation}>
+                                        Auftrag Rückbau generieren
+                                        <template if:true={isSaving}>
+                                            <div class="slds-spinner_container">
+                                                <div role="status" class="slds-spinner slds-spinner_x-small">
+                                                    <span class="slds-assistive-text">Loading</span>
+                                                    <div class="slds-spinner__dot-a"></div>
+                                                    <div class="slds-spinner__dot-b"></div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </a>
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="8" padding="around-small"
+                                >
+
+                                    <c-einrichtungsprozess-nachbesserung
+                                            account-id={account.Id}
+                                            einrichtungsprozess-id={einrichtungsprozess.Id}
+                                            is-abbau={isAbbau}
+                                            onrefresh={handleRefreshView}
+                                    ></c-einrichtungsprozess-nachbesserung>
+
+                                </lightning-layout-item>
+
+                            </lightning-layout>
+                        </template>
+                        <template if:false={isEinrichtungskoordinator}>
+                            <lightning-layout>
+
+                                <lightning-layout-item size="4" padding="around-small">
+
+                                    <a class="slds-button slds-button_neutral slds-m-left_large"
+                                       href="javascript:void(0);"
+                                       title="Abbauvorschau anzeigen"
+                                       onclick={previewDocument}>
+                                        Abbauvorschau anzeigen
+                                        <template if:true={isSaving}>
+                                            <div class="slds-spinner_container">
+                                                <div role="status" class="slds-spinner slds-spinner_x-small">
+                                                    <span class="slds-assistive-text">Loading</span>
+                                                    <div class="slds-spinner__dot-a"></div>
+                                                    <div class="slds-spinner__dot-b"></div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </a>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                            <lightning-layout>
+
+                                <lightning-layout-item size="4" padding="around-small">
+
+                                    <a class="slds-button slds-button_neutral slds-m-left_large"
+                                       href="javascript:void(0);"
+                                       title="Beräumung beauftragen"
+                                       onclick={handleAbbauAusloesen}>
+                                        Beräumung beauftragen
+                                        <template if:true={isSaving}>
+                                            <div class="slds-spinner_container">
+                                                <div role="status" class="slds-spinner slds-spinner_x-small">
+                                                    <span class="slds-assistive-text">Loading</span>
+                                                    <div class="slds-spinner__dot-a"></div>
+                                                    <div class="slds-spinner__dot-b"></div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </a>
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="8" padding="around-small"
+                                                       class="slds-float_left slds-m-top_x-small">
+
+                                </lightning-layout-item>
+
+                            </lightning-layout>
+                        </template>
+                    </template>
+                </div>
+            </template>
+
+            <footer class="slds-modal__footer slds-modal__footer_directional">
+                <lightning-layout>
+
+                    <lightning-layout-item size="2">
+
+                        <template if:true={showBackButton}>
+
+                            <lightning-button class="slds-float_left" variant="brand" label="Zurück" title="Zurück"
+                                              onclick={handlePrevious}></lightning-button>
+
+                        </template>
+
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="8">
+
+                        <div class="slds-progress slds-progress_shade">
+                            <ol class="slds-progress__list">
+                                <template if:true={isInitialized}>
+                                    <template for:each={steps} for:item="step" for:index="stepIndex">
+                                        <template if:true={step.isOpen}>
+                                            <li key={step.label} class="slds-progress__item">
+                                                <button
+                                                        name={stepIndex}
+                                                        class="slds-button slds-progress__marker"
+                                                        onclick={handleStepChange}
+                                                >
+                                                    <span class="slds-assistive-text">{step.label}</span>
+                                                </button>
+                                            </li>
+                                        </template>
+                                        <template if:true={step.isActive}>
+                                            <li key={step.label} class="slds-progress__item slds-is-active">
+                                                <button name={stepIndex}
+                                                        class="slds-button slds-progress__marker"
+                                                        onclick={handleStepChange}
+                                                >
+                                                    <span class="slds-assistive-text">{step.label}</span>
+                                                </button>
+                                            </li>
+                                        </template>
+                                    </template>
+                                </template>
+                            </ol>
+                            <div class="slds-progress-bar slds-progress-bar_x-small" aria-valuemin="0"
+                                 aria-valuemax="100"
+                                 aria-valuenow="100" role="progressbar">
+                <span class="slds-progress-bar__value">
+                  <span class="slds-assistive-text"></span>
+                </span>
+                            </div>
+                        </div>
+
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="2">
+
+                        <template if:true={showNextButton}>
+
+                            <lightning-button variant="brand" label="Weiter" title="Weiter"
+                                              onclick={handleNext}></lightning-button>
+
+                        </template>
+
+                    </lightning-layout-item>
+
+                </lightning-layout>
+            </footer>
+
+        </div>
+    </section>
+</template>

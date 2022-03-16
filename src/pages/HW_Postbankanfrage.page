@@ -1,0 +1,274 @@
+<!--
+/**
+ *@author       Karsten Maaß
+ *@created      05.04.2019
+ *@version      1.0
+ *@since        45.0
+ *
+ *
+ *@description  Postbankanfrage
+ *
+ *
+ *@changelog    05.04.2019 Karsten Maaß - Created
+ *              16.05.2019 Karsten Maaß - Dokumenten Field Mapping aktualisiert
+ * 
+ */
+ -->
+
+<apex:page id="HW_Postbankanfrage" controller="HW_Document_C" contentType="{!contentType}" renderAs="{!renderAs}"
+           applyHtmlTag="false" applyBodyTag="false" showHeader="false" standardStylesheets="false" cache="true">
+
+    <html xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+          xmlns:v="urn:schemas-microsoft-com:vml"
+          xmlns:o="urn:schemas-microsoft-com:office:office"
+          xmlns:x="urn:schemas-microsoft-com:office:excel"
+          xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">
+        <head>
+            <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+            <apex:outputText value="{!sheetName}" escape="false"/>
+            
+            <style type="text/css" media="print,all">
+                @page {
+                    size:landscape;
+                }
+            
+                body {
+                    font-family: sans-serif;
+                    text-align: left;
+                }
+                
+                table {
+                    border-collapse: collapse;
+                    table-layout: fixed;
+                }
+                
+                tr {
+                    height: 13pt;
+                    vertical-align: bottom;
+                    font-size: 10pt;
+                }
+
+                td {
+                    border-style: solid;
+                    border-width: thin;
+                    border-color: black;
+                }
+                
+                .header {
+                    text-align: center;
+                    font-size: 16pt;
+                }
+                
+                .no-wrap,
+                .header,
+                .label-gesendet-am, 
+                .label-senden-an {
+                    white-space: nowrap;
+                    text-overflow: clip;
+                }
+                
+                .info {
+                    font-size: 11pt;
+                }
+                
+                .info-important {
+                    color: red;
+                }
+                
+                .vertical-center,
+                .header, 
+                .label-gesendet-am {
+                    vertical-align: middle;
+                }
+                
+                .align-right {
+                    text-align: right;
+                }
+                
+                .bg-grey, 
+                .label-gesendet-am, 
+                .label-senden-an, 
+                .info {
+                    background-color: RGB(192,192,192);
+                }
+                
+                .bg-yellow,
+                .header {
+                    background-color: RGB(255,255,0);
+                }
+                
+                .bold,
+                .header,
+                .info {
+                    font-weight: bold;
+                }
+            </style>
+        </head>
+
+        <body>
+        <table>
+            <col style="width:058px" /> 
+            <col style="width:109px" />
+            <col style="width:162px" />
+            <col style="width:109px" />
+            <col style="width:122px" />
+            <col style="width:102px" />
+            <col style="width:185px" />
+            <col style="width:070px" />
+            <col style="width:080px" />
+            <col style="width:113px" />
+            <col style="width:172px" />
+            <col style="width:103px" />
+            <col style="width:127px" />
+            <col style="width:127px" />
+            <col style="width:127px" />
+            <col style="width:082px" />
+            <tbody>
+                <tr style="height:32.5pt">
+                    <td colspan="16" class="header">
+                        Potenzielle Partner Prüfung Deutsche Postbank AG
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="label-gesendet-am">
+                        An Postbank gesendet am:
+                    </td>
+                    <td class="no-wrap">
+                        <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+                            <apex:param value="{!TODAY()}" /> 
+                        </apex:outputText>
+                    </td>
+                    <td rowspan="2"/>
+                    <td rowspan="2" colspan="10"/>
+                </tr>
+                <tr style="height:41.5pt" class="vertical-center">
+                    <td colspan="4" class="label-senden-an">
+                        Rückmeldung des Ergebnisses an folgende E-Mail-Adresse:
+                    </td>
+                    <td style="mso-number-format:'@'">
+                        {!Feld['Postbankanfrage_VK_Email']}
+                    </td>
+                </tr>
+                <tr style="height:43.5pt" class="vertical-center">
+                    <td colspan="16" class="info">
+                        Workflow: VD füllt Spalten A-M mit Daten potentieller Partner, Sendedatum und Rückmelde-Mail-Adresse aus und übermittelt die Liste an Postbank; <span class="info-important">E-Mail: fdlpostkooperation@postbank.de</span>. Die Postbank bearbeitet die Liste, füllt die Spalte N aus und sendet die Liste an benannten E-Mail-Adresse zurück.
+                    </td>
+                </tr>
+                <tr style="height:34.5pt" class="bold">
+                    <td>Lfd. Nr.</td>
+                    <td>VGL</td>
+                    <td>Firmenname</td>
+                    <td>Funktion</td>
+                    <td>Vorname</td>
+                    <td>Nachname</td>
+                    <td>Straße der Wohnung</td>
+                    <td>PLZ Wohnort</td>
+                    <td>Wohnort</td>
+                    <td>Geburtsdatum</td>
+                    <td>Straße Agenturstandort</td>
+                    <td>PLZ Agentur-standort</td>
+                    <td>Ort der Agentur</td>
+                    <td>Neupartner / Bestandspartner</td>
+                    <td>Bonitätsauskunft</td>
+                    <td class="bg-yellow">Prüfer-gebnis </td>
+                </tr>
+                <tr>
+                    <td class="align-right">1</td>
+                    <td style="mso-number-format:'@'">{!Feld['Postbankanfrage_VL']}</td>
+                    <td style="mso-number-format:'@'">{!Feld['Postbankanfrage_Firmenname']}</td>
+                    <td>Inhaber</td>
+                    <td style="mso-number-format:'@'">{!Feld['Postbankanfrage_Vorname']}</td>
+                    <td style="mso-number-format:'@'">{!Feld['Postbankanfrage_Nachname']}</td>
+                    <td style="mso-number-format:'@'">{!Feld['Postbankanfrage_Strasse']} {!Feld['Postbankanfrage_Hausnummer']}</td>
+                    <td class="align-right" style="mso-number-format:'@'">{!Feld['Postbankanfrage_PLZ']}</td>
+                    <td style="mso-number-format:'@'">{!Feld['Postbankanfrage_Ort']}</td>
+                    <td class="align-right"><apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+                            <apex:param value="{!Feld['Postbankanfrage_Geburtsdatum']}" /> 
+                        </apex:outputText></td>
+                    <td style="mso-number-format:'@'">{!Feld['Postbankanfrage_Filiale_Strasse']} {!Feld['Postbankanfrage_Filiale_Hausnummer']}</td>
+                    <td class="align-right" style="mso-number-format:'@'">{!Feld['Postbankanfrage_Filiale_PLZ']}</td>
+                    <td style="mso-number-format:'@'">{!Feld['Postbankanfrage_Filiale_Ort']}</td>
+                    <td style="mso-number-format:'@'">{!Feld['Postbankanfrage_Neupartner_Bestandspartn']}</td>
+                    <td style="mso-number-format:'@'">{!Feld['Postbankanfrage_Bonitaetsauskunft']}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td />
+                </tr>
+                <tr>
+                    <td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td />
+                </tr>
+                <tr>
+                    <td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td />
+                </tr>
+                <tr>
+                    <td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td />
+                </tr>
+                <tr>
+                    <td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td />
+                </tr>
+                <tr>
+                    <td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td />
+                </tr>
+                <tr>
+                    <td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td />
+                </tr>
+                <tr>
+                    <td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td />
+                </tr>
+                <tr>
+                    <td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td />
+                </tr>
+                <tr>
+                    <td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td />
+                </tr>
+                <tr>
+                    <td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td />
+                </tr>
+                <tr>
+                    <td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td />
+                </tr>
+                <tr>
+                    <td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td />
+                </tr>
+                <tr>
+                    <td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td />
+                </tr>
+                <tr>
+                    <td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td />
+                </tr>
+                <tr>
+                    <td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td />
+                </tr>
+                <tr>
+                    <td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td />
+                </tr>
+                <tr>
+                    <td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td />
+                </tr>
+                <tr>
+                    <td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td />
+                </tr>
+                <tr>
+                    <td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td />
+                </tr>
+                <tr>
+                    <td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td />
+                </tr>
+                <tr>
+                    <td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td />
+                </tr>
+                <tr>
+                    <td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td />
+                </tr>
+                <tr>
+                    <td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td />
+                </tr>
+                <tr>
+                    <td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td /><td />
+                </tr>
+            </tbody>
+        </table>
+        </body>
+    </html>        
+</apex:page>

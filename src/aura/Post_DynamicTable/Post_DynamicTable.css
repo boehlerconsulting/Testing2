@@ -1,0 +1,30 @@
+/**
+ *@author       Mats Böhler <mats.boehler@boehlerconsulting.com>
+ *@created      06.12.2018
+ *@version      1.0
+ *@since        44.0
+ *
+ *
+ *@description  Post_DynamicTable.css
+ *
+ *
+ *@changelog    06.12.2018 Mats Böhler <mats.boehler@boehlerconsulting.com> - Created
+ *              
+ * 
+ */
+.THIS .small-picklist {
+    width: 55px;
+}
+
+.THIS .slds-checkbox_faux:before {
+    background: none;
+}
+
+.THIS .slds-checkbox_faux:after {
+    background: none;
+}
+
+.THIS .slds-checkbox_faux {
+    width: 1.5rem;
+    height: 1.5rem;
+}

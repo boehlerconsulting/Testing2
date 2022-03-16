@@ -1,0 +1,19 @@
+/**
+ *@author       Mats Böhler
+ *@created      01.04.2019
+ *@version      1.0
+ *@since        45.0
+ *
+ *
+ *@description  hwStammdatensammlerFenster
+ *
+ *
+ *@changelog    01.04.2019 Mats Böhler - Created
+ *              
+ * 
+ */
+
+.slds-theme_info {
+    color: white;
+    background-color: rgb(21, 137, 238);
+}

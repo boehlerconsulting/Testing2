@@ -1,0 +1,305 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      30.01.2020
+ *
+ *
+ *@description  HW_Zuverlaessigkeitspruefung
+ *
+ *
+ *@changelog    29.01.2020 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<apex:page id="HW_Zuverlaessigkeitspruefung" controller="HW_Document_C" contentType="{!contentType}"
+           renderAs="{!renderAs}"
+           applyHtmlTag="false" applyBodyTag="false" showHeader="false" standardStylesheets="false" cache="true">
+
+    <html xmlns:v="urn:schemas-microsoft-com:vml"
+          xmlns:o="urn:schemas-microsoft-com:office:office"
+          xmlns:x="urn:schemas-microsoft-com:office:excel">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+
+        <style type="text/css" media="print,all">
+            @page {
+                size: 21.0cm 29.7cm !important;
+                margin-top: 4.0cm;
+                margin-bottom: 1cm;
+                margin-left: 1.5cm;
+                margin-right: 1cm;
+                font-family: Helvetica;
+            }
+
+            .address {
+                font-size: 18px;
+            }
+
+            .header {
+                font-size: 20px;
+                font-weight: bold;
+            }
+
+            .subHeader {
+                font-size: 12px;
+                font-weight: normal;
+            }
+
+            .text {
+                font-size: 18px;
+            }
+
+            .smallText {
+                font-size: 16px;
+            }
+
+            .signatureDate {
+                font-size: 22px;
+            }
+
+            .signature {
+                font-size: 10px;
+            }
+
+        </style>
+    </head>
+
+    <body>
+    <div class="address">
+        <div>Deutsche Post AG,</div>
+        <div>ZORA-Card-Administration</div>
+        <div>60380 Frankfurt</div>
+    </div>
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    <div class="header">
+        Zuverlässigkeitsprüfung gem. Geldwäschegesetz (GwG)
+    </div>
+    <div class="subHeader">
+        (Für die Beurteilung des Betreibers einer Partner-Filiale)
+    </div>
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    <div class="text">
+        <div>Nach den mir zugänglichen Informationen/Unterlagen und dem mir im Rahmen der</div>
+        <div>Zusammenarbeit bekannt gewordenen Verhalten ist der/die nachfolgend genannte</div>
+        <div>Vertragspartner/in persönlich und/oder dienstlich als <b>zuverlässig</b> i. S. d.</div>
+        <div>Geldwäschegesetzes anzusehen.</div>
+    </div>
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    <table>
+        <tr>
+            <td width="180">
+                <div class="text">Name, Vorname:</div>
+                <div class="text">(Partner/in)</div>
+            </td>
+            <td width="350">
+                <div class="smallText"><b>{!Feld['Zuv_AnsprechpartnerNachname']}, {!Feld['Zuv_AnsprechpartnerVorname']}</b></div>
+                <div >&nbsp;</div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div>&nbsp;</div>
+            </td>
+            <td>
+                <div>&nbsp;</div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="text">Partner-Filiale:</div>
+            </td>
+            <td>
+                <div class="smallText"><b>{!Feld['Zuv_JuristischerName']}</b></div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div>&nbsp;</div>
+            </td>
+            <td>
+                <div>&nbsp;</div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div >&nbsp;</div>
+            </td>
+            <td>
+                <div class="smallText"><b>{!Feld['Zuv_Filialname']}</b></div>
+                <div class="smallText"><b>{!Feld['Zuv_FilialeStrasse']} {!Feld['Zuv_FilialeHausnummer']}, {!Feld['Zuv_FilialePLZ']} {!Feld['Zuv_FilialeOrt']}</b></div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div>&nbsp;</div>
+            </td>
+            <td>
+                <div>&nbsp;</div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="text">Debitorennummer:</div>
+            </td>
+            <td>
+                <div class="smallText" >{!Feld['Zuv_Debitorennummer']}</div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="text">Außenstellen-ID:</div>
+            </td>
+            <td>
+                <div class="smallText" >{!Feld['Zuv_AussenstellenID']}</div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div>&nbsp;</div>
+            </td>
+            <td>
+                <div>&nbsp;</div>
+            </td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td width="180">
+                <div class="text">Datum:</div>
+            </td>
+            <td width="80" style="border-bottom: 1px solid black">
+                <div class="signatureDate">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.&nbsp;20&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+            </td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td>
+                <div>&nbsp;</div>
+            </td>
+            <td>
+                <div>&nbsp;</div>
+            </td>
+            <td>
+                <div>&nbsp;</div>
+            </td>
+            <td>
+                <div>&nbsp;</div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div>&nbsp;</div>
+            </td>
+            <td style="border-bottom: 1px solid black">
+                <div>&nbsp;</div>
+            </td>
+            <td>
+                <div>&nbsp;</div>
+            </td>
+            <td style="border-bottom: 1px solid black">
+                <div class="subHeader">{!Feld['Zuv_NameVM']}</div>
+            </td>
+        </tr>
+        <tr>
+            <td width="180">
+                <div>&nbsp;</div>
+            </td>
+            <td width="200">
+                <div class="signature">Unterschrift des Beurteilers (DP AG)</div>
+            </td>
+            <td width="10">
+                <div>&nbsp;</div>
+            </td>
+            <td width="220">
+                <div class="signature">Name, Vorname des Beurteilers in Druckbuchstaben</div>
+            </td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td>
+                <div>&nbsp;</div>
+                <div>&nbsp;</div>
+            </td>
+            <td>
+                <div>&nbsp;</div>
+                <div>&nbsp;</div>
+            </td>
+        </tr>
+        <tr>
+            <td width="180">
+                <div class="text" style="text-align: center" >Datum:</div>
+            </td>
+            <td width="80" style="border-bottom: 1px solid black">
+                <div class="signatureDate">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.&nbsp;20&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+            </td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td>
+                <div>&nbsp;</div>
+            </td>
+            <td>
+                <div>&nbsp;</div>
+            </td>
+            <td>
+                <div>&nbsp;</div>
+            </td>
+            <td>
+                <div>&nbsp;</div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div>&nbsp;</div>
+            </td>
+            <td style="border-bottom: 1px solid black">
+                <div>&nbsp;</div>
+            </td>
+            <td>
+                <div>&nbsp;</div>
+            </td>
+            <td style="border-bottom: 1px solid black">
+                <div class="subHeader">{!Feld['Zuv_AnsprechpartnerNachname']}, {!Feld['Zuv_AnsprechpartnerVorname']}</div>
+            </td>
+        </tr>
+        <tr>
+            <td width="180">
+                <div>&nbsp;</div>
+            </td>
+            <td width="200">
+                <div class="signature">Zur Kenntnis genommen</div>
+                <div class="signature">Unterschrift  des Beurteilten (Partner/in)</div>
+            </td>
+            <td width="10">
+                <div>&nbsp;</div>
+            </td>
+            <td width="220">
+                <div class="signature">Name, Vorname des Beurteilten in Druckbuchstaben</div>
+            </td>
+        </tr>
+    </table>
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    <div class="text" style="margin-left: 5px;">
+        <div><b>Archivierung:</b> Original an Deutsche Post AG, ZORA-Card-Administration, 60380 Frankfurt</div>
+        <div>&nbsp;</div>
+        <div>Sachstand: 05/2019</div>
+    </div>
+    <table>
+    <tr>
+    <td width="700" style="border-bottom: 2px solid black">
+    </td>
+    </tr>
+    </table>
+    </body>
+    </html>
+</apex:page>

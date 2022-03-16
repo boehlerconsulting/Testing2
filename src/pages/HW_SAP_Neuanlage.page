@@ -1,0 +1,802 @@
+<!--
+/**
+ *@author       Karsten Maaß
+ *@created      12.04.2019
+ *@version      1.0
+ *@since        45.0
+ *
+ *
+ *@description  SAP165 Neuanlage
+ *
+ *
+ *@changelog    12.04.2019 Karsten Maaß - Created
+ *              
+ * 
+ */
+ -->
+
+<apex:page id="HW_SAP_Neuanlage" controller="HW_Document_C" contentType="{!contentType}" renderAs="{!renderAs}"
+           applyHtmlTag="false" applyBodyTag="false" showHeader="false" standardStylesheets="false" cache="true">
+
+    <html xmlns:v="urn:schemas-microsoft-com:vml"
+          xmlns:o="urn:schemas-microsoft-com:office:office"
+          xmlns:x="urn:schemas-microsoft-com:office:excel">
+        <head>
+            <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+            <apex:outputText value="{!sheetName}" escape="false"/>
+
+            <style type="text/css" media="print,all">
+            
+            body {
+                font-family: sans-serif;
+                text-align: left;
+                margin: 0px;
+            }            
+        
+            table {
+                border-collapse: collapse;
+                table-layout: fixed;
+            }
+            
+            tr {
+                height: 15pt;
+                vertical-align: bottom;
+                font-size: 10pt;
+                white-space: nowrap;
+            }
+            
+            br {
+                mso-data-placement:same-cell;
+            }
+            
+            .border-bottom,
+            .border-bottom-bold {
+                 border-bottom-style: solid;
+            }
+            
+            .border-bottom {
+                border-width: thin;
+            }
+            
+            
+            .border {
+                border-width: thin;
+                border-style: solid;
+            }
+            
+            
+            .bold {
+                font-weight: bold;
+            }
+            
+            .label {
+                font-weight: bold;
+                font-size: 10pt;
+            }
+            
+            .label_bold_bottom_border {
+                font-weight: bold;
+                border-bottom-style: solid;
+                border-width: thin;
+                font-size: 8pt;
+            }
+            
+            .input-label {
+                background-color: RGB(255,242,204);
+            }
+            
+            .dropdown-label {
+                background-color: RGB(255,192,0);
+            }
+            
+            .dropdown-input {
+                background-color: RGB(255,192,0);
+                border-width: thin;
+                border-style: solid;
+            }
+            
+            .currency {
+                background-color: RGB(255,242,204);
+                border-width: thin;
+                border-style: solid;
+                text-align: center;
+            }
+            
+            .read-only-currency {
+                background-color: RGB(166,166,166);
+                border-width: thin;
+                border-style: solid;
+                text-align: center;
+            }
+            
+            .read-only,
+            .read-only-label {
+                background-color: RGB(166,166,166);
+            }
+            
+            .read-only-border {
+                background-color: RGB(166,166,166);
+                border-style: solid;
+                border-width: thin;
+            }
+                                 
+            .section-header{
+                font-weight: bold;
+                vertical-align: top;
+                font-size: 12pt;
+            }
+            
+            .input {
+                background-color: RGB(255,242,204);
+                border-width: thin;
+                border-style: solid;
+            }
+            
+            .header {
+                font-size: 14pt;
+                font-weight: bold;
+            }
+            
+            .explanation_small {
+                font-size: 6pt;
+            }
+            
+            .explanation-number {
+                vertical-align: super;
+                text-align: center;
+            }
+            
+            .explanation {
+                font-size: 8pt;
+            }
+    
+            </style>
+        </head>
+        
+        <body>
+        
+            <table>
+                <col style="width:205px" />
+                <col style="width:274px" />
+                <col style="width:073px" />
+                <col style="width:309px" />
+                <col style="width:45px"  />
+        
+                <tr style="height:18pt">
+                    <td class="header">Stammdatenbelege Debitoren Filialen, Anlage</td>
+                    <td/><td/><td/><td/>
+                </tr>
+                <tr>
+                    <td class="border-bottom"></td>
+                    <td class="border-bottom"></td>
+                    <td class="border-bottom"></td>
+                    <td class="border-bottom"></td>
+                    <td/>
+                </tr>
+                <tr>
+                    <td class="section-header">Empfänger</td>
+                    <td/><td/>
+                    <td>Deutsche Post AG</td>
+                    <td/>
+                </tr>
+                <tr>
+                    <td/><td/><td/>
+                    <td>Finance &amp; HR Operations Deutschland</td>
+                    <td/>
+                </tr>
+                <tr>
+                    <td/><td/><td/>
+                    <td>Shared Services Accounting</td>
+                    <td/>
+                </tr>
+                <tr>
+                    <td class="label">Erläuterungen</td>
+                    <td/><td/>
+                    <td>Master Data/Duty</td>
+                    <td/>
+                </tr>
+                <tr>
+                    <td class="input-label">Eingabefeld</td>
+                    <td/><td/>
+                    <td>Postfach 10 10 51</td>
+                    <td/>
+                </tr>
+                <tr>
+                    <td class="dropdown-label">Eingabefeld über Dropdownliste</td>
+                    <td/><td/>
+                    <td>70009 Stuttgart</td>
+                    <td/>
+                </tr>
+                <tr>
+                    <td class="read-only-label">Eintrag ist nicht änderbar</td>
+                    <td/><td/><td/><td/>
+                </tr>
+                <tr>
+                    <td/><td/><td/>
+                    <td><a href="stammdaten.debitorensscacc@dpdhl.com">stammdaten.debitorensscacc@dpdhl.com</a></td>
+                </tr>
+                <tr>
+                    <td/><td/><td/><td/><td/>
+                </tr>
+                <tr>
+                    <td class="border-bottom"></td>
+                    <td class="border-bottom"></td>
+                    <td class="border-bottom"></td>
+                    <td class="border-bottom"></td>
+                    <td/>
+                </tr>
+                <tr>
+                    <td class="section-header">Absender</td>
+                    <td/><td/>
+                    <td class="input" style="mso-number-format: '@'">{!Feld['Kontraktpflege_Firma']}</td>
+                    <td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td>Zentrale/NL etc</td>
+                    <td/>
+                    <td class="input" style="mso-number-format: '@'">{!Feld['Kontraktpflege_NL']}</td>
+                    <td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td>Ansprechpartner</td>
+                    <td/>
+                    <td class="input" style="mso-number-format: '@'">{!Feld['Kontraktpflege_Name_VM']}</td>
+                    <td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td>VL/SG etc.</td>
+                    <td/>
+                    <td class="input" style="mso-number-format: '@'">{!Feld['Kontraktpflege_VL']}</td>
+                    <td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td>Straße</td>
+                    <td/>
+                    <td class="input" style="mso-number-format: '@'">{!Feld['Kontraktpflege_Str_VGL']}</td>
+                    <td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td>Ort</td>
+                    <td/>
+                    <td class="input" style="mso-number-format: '@'">{!Feld['Kontraktpflege_PLZ_Ort_VGL']}</td>
+                    <td/>
+                </tr>
+                <tr>
+                    <td/><td/><td/><td/><td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td>Telefon</td>
+                    <td/>
+                    <td class="input" style="mso-number-format: '@'">{!Feld['Kontraktpflege_Tel_VM']}</td>
+                    <td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td>E-Mail</td>
+                    <td/>
+                    <td class="input" style="mso-number-format: '@'"><a href="{!Feld['Kontraktpflege_Email_VM']}">{!Feld['Kontraktpflege_Email_VM']}</a></td>
+                    <td/>
+                </tr>
+                <tr>
+                    <td/><td/><td/><td/><td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td>Datum Antragsstellung</td>
+                    <td/>
+                    <td class="input">
+                        <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+                            <apex:param value="{!Feld['Kontraktpflege_X7740']}"/>
+                        </apex:outputText>
+                    </td>
+                    <td/>
+                </tr>
+                <tr>
+                    <td/><td/><td/><td/><td/>
+                </tr>
+                <tr>
+                    <td class="border-bottom"></td>
+                    <td class="border-bottom"></td>
+                    <td class="border-bottom"></td>
+                    <td class="border-bottom"></td>
+                    <td/>
+                </tr>
+                <tr>
+                    <td class="bold">01: Antrag auf</td>
+                    <td class="border-bottom">Antragsart</td>
+                    <td class="border-bottom"></td>
+                    <td class="dropdown-input">{!antragsart}</td>
+                    <td/>
+                </tr>
+                <tr style="height:32pt">
+                    <td/><td/><td/><td/><td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="border-bottom">Debitoren-Nr.</td>
+                    <td class="border-bottom"></td>
+                    <td class="input" style="mso-number-format: '@'">{!Feld['Kontraktpflege_Debitor']}</td>
+                    <td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="border-bottom">Name des Vertragspartners</td>
+                    <td class="border-bottom"></td>
+                    <td class="input" style="mso-number-format: '@'">{!Feld['Kontraktpflege_Firma_2']}</td>
+                    <td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="border-bottom">Filialstandort</td>
+                    <td class="border-bottom"></td>
+                    <td class="input" style="mso-number-format: '@'">{!Feld['Kontraktpflege_Filialname']}</td>
+                    <td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="border-bottom">Gültig ab</td>
+                    <td class="border-bottom"></td>
+                    <td class="input">
+                        <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+                            <apex:param value="{!Feld['Kontraktpflege_EoeDatum']}"/>
+                        </apex:outputText>
+                    </td>
+                    <td/>
+                </tr>
+                <tr style="height:45pt">
+                    <td/>
+                    <td class="border-bottom" style="white-space: normal;">Bei Antragsart <span class="bold">Änderung</span> wegen<br/>
+                                                                            <span class="bold">Wegfall Befristeter Individualzuschuss</span><br/>
+                                                                            Gültig bis<span class="explanation-number">9</span></td>
+                    <td class="border-bottom"></td>
+                    <td class="input"></td>
+                    <td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="border-bottom">Bei Antragsart <span class="bold">Schließung</span> letzter Öffnungstag</td>
+                    <td class="border-bottom"></td>
+                    <td class="input"></td>
+                    <td/>
+                </tr>
+                <tr>
+                    <td/><td/><td/><td/><td/>
+                </tr>
+                <tr>
+                    <td class="border-bottom"></td>
+                    <td class="border-bottom"></td>
+                    <td class="border-bottom"></td>
+                    <td class="border-bottom"></td>
+                    <td/>
+                </tr>
+                <tr>
+                    <td class="bold">02: Filialdaten</td>
+                    <td class="border-bottom">Preisliste_Vertragstyp_Filialformat</td>
+                    <td class="border-bottom"></td>
+                    <td class="dropdown-input" style="mso-number-format: '@'">{!Feld['Kontraktpflege_Filialtyp_OZ']}</td>
+                    <td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="border-bottom">Vertragsversion<span class="explanation-number">6</span></td>
+                    <td class="border-bottom"></td>
+                    <td class="dropdown-input" style="mso-number-format:'@'">{!Feld['Kontraktpflege_X5280']}</td>
+                    <td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="border-bottom">Filialkennung (12stellig)</td>
+                    <td class="border-bottom"></td>
+                    <td class="input" style="mso-number-format: '@'">{!Feld['Kontraktpflege_Aussenstellen_Nummer']}</td>
+                    <td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="border-bottom">Kostenstelle</td>
+                    <td class="border-bottom"></td>
+                    <td class="input" style="mso-number-format: '@'">{!Feld['Kontraktpflege_X5330']}</td>
+                    <td/>
+                </tr>
+                <tr>
+                    <td/><td/><td/><td/><td/>
+                </tr>
+                <tr>
+                    <td class="border-bottom"></td>
+                    <td class="border-bottom"></td>
+                    <td class="border-bottom"></td>
+                    <td class="border-bottom"></td>
+                    <td/>
+                </tr>
+                <tr>
+                    <td class="bold">03: Nachrichtlich</td>
+                    <td><span class="bold">62885</span> Berechnete Pauschale Basis</td>
+                    <td></td>
+                    <td class="input" rowspan="2">{!Feld['Kontraktpflege_X7750']}</td>
+                    <td class="currency" rowspan="2">€</td>
+                </tr>
+                <tr style="height:7pt" class="explanation_small">
+                    <td/>
+                    <td  class="border-bottom">Berechnete Pauschale Basis aus mitgeteilter Vergütungsberechnung</td>
+                    <td  class="border-bottom"></td>
+                </tr>
+                <tr>
+                    <td/>
+                    <td><span class="bold">62886</span> Berechnete Pauschale FDL</td>
+                    <td></td>
+                    <td class="input" rowspan="2">{!Feld['Kontraktpflege_X7760']}</td>
+                    <td class="currency" rowspan="2">€</td>
+                </tr>
+                <tr style="height:7pt" class="explanation_small">
+                    <td/>
+                    <td class="border-bottom">Berechnete Pauschale FDL aus mitgeteilter Vergütungsberechnung</td>
+                    <td  class="border-bottom"></td>
+                </tr>
+                <tr>
+                    <td/><td/><td/><td/><td/>
+                </tr>
+                <tr>
+                    <td class="border-bottom"></td>
+                    <td class="border-bottom"></td>
+                    <td class="border-bottom"></td>
+                    <td class="border-bottom"></td>
+                    <td/>
+                </tr>
+                <tr style="height: 36pt;">
+                    <td class="bold" style="white-space: normal;">03a: Pauschalvergütungen<br/>
+                                      ohne Postfach</td>
+                    <td class="border-bottom" colspan="2">
+                        <span class="bold">62585</span> Pauschale Basis<br/>
+                        <span class="explanation_small">Vertraglich vereinbarte Pauschale Basis ggf. inkl. unbefristeter IZ</span><br/>
+                        <span class="explanation_small">(Automatische Übernahme aus Berechnete Pauschale Basis. Überschreiben bei Bedarf möglich)</span>
+                    </td>
+                    <td class="input">{!Feld['Kontraktpflege_X7770']}</td>
+                    <td class="currency">€</td>
+                </tr>
+                <tr>
+                    <td>(Eingabe Monatsbeträge)</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr style="height: 36pt;">
+                    <td></td>
+                    <td class="border-bottom" colspan="2">
+                        <span class="bold">60963</span> Pauschale FDL<br/>
+                        <span class="explanation_small">Vertraglich vereinbarte Pauschale FDL</span><br/>
+                        <span class="explanation_small">(Automatische Übernahme aus Berechnete Pauschale FDL. Überschreiben bei Bedarf möglich)</span>
+                    </td>
+                    <td class="input">{!Feld['Kontraktpflege_X7780']}</td>
+                    <td class="currency">€</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="border-bottom"><span class="bold">62551</span> Pauschale Betrieb GAA<span class="explanation-number">2</span></td>
+                    <td class="border-bottom"></td>
+                    <td class="input">{!Feld['Kontraktpflege_X7790']}</td>
+                    <td class="currency">€</td>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="border-bottom"><span class="bold">62552</span> Pauschale Betrieb KAD Service-Terminal<span class="explanation-number">2</span></td>
+                    <td class="border-bottom"></td>
+                    <td class="input">{!Feld['Kontraktpflege_X7800']}</td>
+                    <td class="currency">€</td>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="border-bottom"><span class="bold">60960</span> Pauschale BMA ohne Betreuung</td>
+                    <td class="border-bottom"></td>
+                    <td class="input">{!Feld['Kontraktpflege_X7810']}</td>
+                    <td class="currency">€</td>
+                </tr>
+                <tr>
+                    <td/><td/><td/><td/><td/>
+                </tr>
+                <tr>
+                    <td class="border-bottom"></td>
+                    <td class="border-bottom"></td>
+                    <td class="border-bottom"></td>
+                    <td class="border-bottom"></td>
+                    <td/>
+                </tr>
+                <tr style="height: 30pt;">
+                    <td class="bold" style="white-space: normal;">03b: Pauschalvergütungen Postfach<span class="explanation-number">3</span></td>
+                    <td class="border-bottom" style="white-space: normal;"><span class="bold">62570</span> Pauschale Dienstleistungen Postfach für Einzelempfänger</td>
+                    <td class="border-bottom"></td>
+                    <td class="input">{!Feld['Kontraktpflege_X7820']}</td>
+                    <td class="currency">Stück<span class="explanation-number">4</span></td>
+                </tr>
+                <tr style="height: 49pt;">
+                    <td style="vertical-align: top;">(Eingabe Monatsbeträge)</td>
+                    <td class="label_bold_bottom_border" style="white-space: normal;">Bitte nebenstehend den für die Pauschale Dienstleistungen Postfach für Einzelempfänger berechneten Betrag auf Übereinstimmung mit Ausweisung im Partnervertrag überprüfen</td>
+                    <td class="border">{!Feld['Kontraktpflege_X7830']}</td>
+                    <td class="border"></td>
+                    <td class="border-bottom"></td>
+                </tr>
+                <tr style="height: 29pt;">
+                    <td/>
+                    <td class="border-bottom" style="white-space: normal;"><span class="bold">62549</span> Pauschale Dienstleistungen Postfach für Großempfänger</td>
+                    <td class="border-bottom"></td>
+                    <td class="input">{!Feld['Kontraktpflege_X7840']}</td>
+                    <td class="currency">Stück<span class="explanation-number">4</span></td>
+                </tr>
+                <tr style="height: 49pt;">
+                    <td/>
+                    <td class="label_bold_bottom_border" style="white-space: normal;">Bitte nebenstehend den für die Pauschale Dienstleistungen Postfach für Großempfänger berechneten Betrag auf Übereinstimmung mit Ausweisung im Partnervertrag überprüfen</td>
+                    <td class="border">{!Feld['Kontraktpflege_X7850']}</td>
+                    <td class="border"></td>
+                    <td class="border-bottom"></td>
+                </tr>
+                <tr style="height: 31pt;">
+                    <td/>
+                    <td class="border-bottom" style="white-space: normal;"><span class="bold">62550</span> Ausgleichsbetrag zur Mindestvergütung Postfach<span class="explanation-number">5</span></td>
+                    <td class="border-bottom"></td>
+                    <td class="read-only-border">{!Feld['Kontraktpflege_X7860']}</td>
+                    <td class="read-only-currency">€</td>
+                </tr>
+                <tr>
+                    <td/><td/><td/><td/><td/>
+                </tr>
+                <tr>
+                    <td class="border-bottom"></td>
+                    <td class="border-bottom"></td>
+                    <td class="border-bottom"></td>
+                    <td class="border-bottom"></td>
+                    <td/>
+                </tr>
+                <tr>
+                    <td class="bold" style="white-space: normal;">03c: Befr. Individualzuschuss<span class="explanation-number">7</span></td>
+                    <td class="border-bottom"><span class="bold">62510</span> Befristeter Individualzuschuss 1 Jahr<span class="explanation-number">8 9</span></td>
+                    <td class="border-bottom"></td>
+                    <td class="input">{!Feld['Kontraktpflege_X7870']}</td>
+                    <td class="currency">€</td>
+                </tr>
+                <tr>
+                    <td>(Eingabe Monatsbeträge)</td>
+                    <td class="border-bottom"><span class="bold">62511</span> Befristeter Individualzuschuss 2 Jahre<span class="explanation-number">8 9</span></td>
+                    <td class="border-bottom"></td>
+                    <td class="input">{!Feld['Kontraktpflege_X7880']}</td>
+                    <td class="currency">€</td>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="border-bottom"><span class="bold">62512</span> Befristeter Individualzuschuss 3 Jahre<span class="explanation-number">8 9</span></td>
+                    <td class="border-bottom"></td>
+                    <td class="input">{!Feld['Kontraktpflege_X7890']}</td>
+                    <td class="currency">€</td>
+                </tr>
+                <tr>
+                    <td/><td/><td/><td/><td/>
+                </tr>
+                <tr>
+                    <td class="border-bottom"></td>
+                    <td class="border-bottom"></td>
+                    <td class="border-bottom"></td>
+                    <td class="border-bottom"></td>
+                    <td/>
+                </tr>
+                <tr>
+                    <td class="bold" style="white-space: normal;">04: Steuerungsdaten</td>
+                    <td class="border-bottom" colspan="2">Umsatzsteuer-Identifikationsnummer (USt-IdNr.) <span class="explanation-number">10</span></td>
+                    <td class="input" style="mso-number-format: '@'">{!Feld['Debitoren_beantragen_Umsatzsteuer_IdNr']}</td>
+                </tr>
+                <tr>
+                    <td ></td>
+                    <td class="border-bottom" colspan="2">Umsatzsteuer-Nr. <span class="explanation-number">11</span></td>
+                    <td class="input" style="mso-number-format: '@'">{!Feld['Debitoren_beantragen_Steuer_Nummer']}</td>
+                </tr>
+                <tr>
+                    <td/><td/><td/><td/><td/>
+                </tr>
+                <tr>
+                    <td class="border-bottom"></td>
+                    <td class="border-bottom"></td>
+                    <td class="border-bottom"></td>
+                    <td class="border-bottom"></td>
+                    <td/>
+                </tr>
+                <tr>
+                    <td class="bold" style="white-space: normal;">05a: Bankdaten 01</td>
+                    <td class="border-bottom" colspan="2">SEPA-Mandatseinholung (Mandatstyp DPAG B2C) <span class="explanation-number">12</span></td>
+                    <td class="read-only-border">{!IF(LEN(Feld['Debitoren_beantragX08a_Bankdaten_01_IBAN'])!=0,'Ja','')}</td>
+                </tr>
+                <tr>
+                    <td >(wenn Treuhandabrede existiert,</td>
+                    <td class="border-bottom" colspan="2">IBAN</td>
+                    <td class="input">{!Feld['Debitoren_beantragX08a_Bankdaten_01_IBAN']}</td>
+                </tr>
+                <tr>
+                    <td >angeben)</td>
+                    <td/><td/><td/><td/>
+                </tr>
+                <tr>
+                    <td/><td/><td/><td/><td/>
+                </tr>
+                <tr>
+                    <td class="bold" style="white-space: normal;">05b: Bankdaten 02</td>
+                    <td class="border-bottom" colspan="2">SEPA-Mandatseinholung (Mandatstyp DPAG B2C) <span class="explanation-number">12</span></td>
+                    <td class="read-only-border">{!IF(LEN(Feld['Debitoren_beantragX08b_Bankdaten_02_IBAN'])!=0,'Ja','')}</td>
+                </tr>
+                <tr>
+                    <td >(wenn Treuhandabrede existiert,</td>
+                    <td class="border-bottom" colspan="2">IBAN</td>
+                    <td class="input">{!Feld['Debitoren_beantragX08b_Bankdaten_02_IBAN']}</td>
+                </tr>
+                <tr>
+                    <td >der Treuhandabrede angeben;</td>
+                    <td/><td/><td/><td/>
+                </tr>
+                <tr>
+                    <td >wenn keine Treuhandabrede, hier leer)</td>
+                    <td/><td/><td/><td/>
+                </tr>
+                <tr>
+                    <td/><td/><td/><td/><td/>
+                </tr>
+                <tr>
+                    <td/><td/><td/><td/><td/>
+                </tr>
+                <tr>
+                    <td/><td/><td/><td/><td/>
+                </tr>
+                <tr>
+                    <td class="bold" style="text-align: center">Erläuterungen</td>
+                    <td/><td/><td/><td/>
+                </tr>
+                <tr>
+                    <td/><td/><td/><td/><td/>
+                </tr>
+                <tr>
+                    <td class="explanation-number">1</td>
+                    <td class="explanation">Bei Änderung immer Art und Grund der Änderung angeben</td>
+                    <td/><td/><td/>
+                </tr>
+                <tr>
+                    <td class="explanation-number">2</td>
+                    <td class="explanation">Nur ausfüllen, soweit Automaten vorhanden sind, die vom Debitor auf Basis eines Partnervertrags V 9.X mit der DP AG betrieben werden</td>
+                    <td/><td/><td/>
+                </tr>
+                <tr>
+                    <td class="explanation-number">3</td>
+                    <td class="explanation">Nur ausfüllen, wenn Postfachanlagen vorhanden sind</td>
+                    <td/><td/><td/>
+                </tr>
+                <tr>
+                    <td class="explanation-number">4</td>
+                    <td class="explanation">Eingabe der durchschnittlichen monatlichen Verkehrsmenge in die Postfächer zu sortierender Sendungen</td>
+                    <td/><td/><td/>
+                </tr>
+                <tr>
+                    <td class="explanation-number">5</td>
+                    <td class="explanation">Automatische Berechnung, wenn die Summe der Vergütungen Pauschale Dienstleistungen Postfach für Einzel- und Goßempfänger </td>
+                    <td/><td/><td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="explanation">nicht monatlich mind. 100 Euro beträgt.</td>
+                    <td/><td/><td/>
+                </tr>
+                <tr>
+                    <td class="explanation-number">6</td>
+                    <td class="explanation">Bei Auswahl Post Service unter Abschn 02 keine weitere Eingabe unter Abschn. 03a und 03b notwendig.</td>
+                    <td/><td/><td/>
+                </tr>
+                <tr>
+                    <td class="explanation-number">7</td>
+                    <td class="explanation">Einzelheiten zur Vereinbarung von Befristeten Individualzuschüssen,</td>
+                    <td/><td/><td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="explanation">siehe Partnerportal/ Forderungsmanagement/ 1 Verträge und Vergütung/2 Partnervergütung/ 4 Individualzuschuss</td>
+                    <td/><td/><td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="explanation">Hinweis: Dieser Stammdatenbeleg kann auch zur Datenerfassung für Unbefristete Individualzuschüsse genutzt werden,</td>
+                    <td/><td/><td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="explanation">Einzelheiten siehe ebenfalls vorstehender Pfad Partnerportal.</td>
+                    <td/><td/><td/>
+                </tr>
+                <tr>
+                    <td class="explanation-number">8</td>
+                    <td class="explanation">Bei Einrichtung eines Befristeten Individualzuschusses ist immer ein Monatserster als "Gültig ab-Datum", siehe Abschn. 01, festzulegen.</td>
+                    <td/><td/><td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="explanation">Die Wahl eines untermonatigen Starttermins bei Bestandspartnern hätte zur Folge, dass im ersten Abrechnungsmonat zwei verschiedene</td>
+                    <td/><td/><td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="explanation">Kontrakte für die Vergütungsabrechnung gelten und damit alle Vergütungsbestandteile doppelt angedruckt werden.</td>
+                    <td/><td/><td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="explanation">Aus Gründen der Gleichbehandlung ist bei Neupartnern ebenso zu verfahren.</td>
+                    <td/><td/><td/>
+                </tr>
+                <tr>
+                    <td class="explanation-number">9</td>
+                    <td class="explanation">ACHTUNG: Das "Gültig bis-Datum" kann im Abrechnungssystem nicht zur Beendigung der Zahlung des IZ vorgemerkt werden. </td>
+                    <td/><td/><td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="explanation">Daher ist 15 Arbeitstage vor Ende des Monats, für den die letzte Zahlung geleistet werden soll, dieser Beleg mit der Antragsart</td>
+                    <td/><td/><td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="explanation"> "Änderung", siehe unter Abschn. 01, dem SSC Acc vorzulegen. Für die Einträge gilt dabei folgendes:</td>
+                    <td/><td/><td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="explanation">- Abchn. 01:  "Gültig bis-Datum"   --> Zur Beendigung der Zahlung eines Befristeten Individualzuschusses ist hier der letzte Tag</td>
+                    <td/><td/><td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="explanation">des Monats einzutragen, für den die Zahlung letztmalig geleistet werden soll.</td>
+                    <td/><td/><td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="explanation">- Abschn. 03c:  Bisher gezahlter Betrag unter der zutreffenden Befristung des Zuschusses</td>
+                    <td/><td/><td/>
+                </tr>
+                <tr>
+                    <td class="explanation-number">10</td>
+                    <td class="explanation">Die USt-IdNr. wird auf den Vergütungsabrechnungen angedruckt und ist zwingend erforderlich.</td>
+                    <td/><td/><td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="explanation">Sie kann bereits mit der Debitorenanlage (Beleg 166) gemeldet werden</td>
+                    <td/><td/><td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="explanation">Eine deutsche USt-IdNr. beginnt mit dem Länderkennzeichen DE und hat neun Ziffern.</td>
+                    <td/><td/><td/>
+                </tr>
+                <tr>
+                    <td class="explanation-number">11</td>
+                    <td class="explanation">Die Steuer-Nr. ist anzugeben, wenn keine USt-IdNr. vorhanden ist. Sie kann ebenfalls bereits mit der Debitorenanlage (Beleg 166) gemeldet werden</td>
+                    <td/><td/><td/>
+                </tr>
+                <tr>
+                    <td class="explanation-number">12</td>
+                    <td class="explanation">Automatischer Versand SEPA-Mandatseinholung durch Zentrale Mandatsverwaltung (FHD) bei Neu/Änd Bankdaten (FHD-FULLSERVICE)</td>
+                    <td/><td/><td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="explanation">Automatischer Feldeintrag "JA" wenn IBAN-Eintrag</td>
+                    <td/><td/><td/>
+                </tr>
+            </table>
+        </body>
+    </html>
+
+</apex:page>

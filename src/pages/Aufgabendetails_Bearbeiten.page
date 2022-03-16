@@ -1,0 +1,5 @@
+<apex:page standardController="Task">
+<flow:interview name="Standardvorlage_Aufgabendetails" finishLocation="/{!Task.Id}">
+        <apex:param name="varAktivitaetsId" value="{!Task.Id}"/>
+</flow:interview>
+</apex:page>

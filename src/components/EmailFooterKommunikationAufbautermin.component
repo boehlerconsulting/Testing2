@@ -1,0 +1,61 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      16.12.2020
+ *
+ *
+ *@description  EmailFooterKommunikationAufbautermin
+ *
+ *
+ *@changelog    16.12.2020 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<apex:component id="EmailFooterKommunikationAufbautermin" access="global">
+
+    <html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+
+        <style type="text/css" media="print,all">
+
+            .greyStyle {
+                font-size: 12px;
+                color: #AAAAAA;
+            }
+            .greenStyle {
+                font-size: 12px;
+                color: forestgreen;
+            }
+        </style>
+    </head>
+
+    <body>
+
+    <div>Ihr Team Baumanagement Packstation</div>
+    <div>&nbsp;</div>
+    <div><b>Deutsche Post AG</b></div>
+    <div>Multikanalvertrieb</div>
+    <div>Postfach 60 03 66 </div>
+    <div>60333 Frankfurt</div>
+    <div>&nbsp;</div>
+    <div><a href="mailto:Baumanagement-Packstation@deutschepost.de">Baumanagement-Packstation@deutschepost.de</a></div>
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    <div class="greyStyle">Deutsche Post DHL Group</div>
+    <div>&nbsp;</div>
+    <div class="greyStyle">Deutsche Post AG; Sitz Bonn; Registergericht Bonn; HRB 6792</div>
+    <div>&nbsp;</div>
+    <div class="greyStyle">Vorstand: Dr. Frank Appel, Vorsitzender; Ken Allen, Oscar de Bok, Melanie Kreis, Dr. Tobias Meyer, Dr. Thomas Ogilvie, John Pearson, Tim Scharwath</div>
+    <div>&nbsp;</div>
+    <div class="greyStyle">Vorsitzender des Aufsichtsrates:  Dr. Nikolaus von Bomhard</div>
+    <div>&nbsp;</div>
+    <div class="greyStyle">Dies ist eine Nachricht der Deutsche Post AG und kann vertrauliche firmeninterne Informationen enthalten. Sie ist ausschließlich für die oben adressierte Einzelperson bestimmt. Sind Sie nicht der beabsichtigte Empfänger, bitten wir Sie, den Sender zu informieren und die Nachricht sowie deren Anhänge zu löschen. Unzulässige Veröffentlichungen, Verwendungen, Verbreitung, Weiterleitung, sowie das Drucken oder Kopieren dieser Mail und ihrer verknüpften Anhänge sind strikt untersagt.</div>
+    <div>&nbsp;</div>
+    <div class="greyStyle">Bitte denken Sie über Ihre Verantwortung gegenüber der Umwelt nach, bevor Sie diese E-Mail ausdrucken!</div>
+    </body>
+    </html>
+
+</apex:component>

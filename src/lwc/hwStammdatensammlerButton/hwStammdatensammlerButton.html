@@ -1,0 +1,84 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      22.04.2019
+ *@version      1.0
+ *@since        45.0
+ *
+ *
+ *@description  hwStammdatensammlerButton
+ *
+ *
+ *@changelog    22.04.2019 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<!-- HW_StammdatensammlerButton -->
+<template>
+
+    <template if:false={hideButton}>
+
+        <lightning-layout key={button.iv_Label}>
+
+            <lightning-layout-item size="4" padding="around-small">
+                <template if:true={disableButton}>
+                    <template if:true={isZuverlaessigkeitspruefung}>
+                        <a class="slds-button slds-button_neutral slds-m-left_large"
+                           href="javascript:void(0);"
+                           title={button.iv_Label}
+                           onclick={handleDocumentCreation}>
+                            {button.iv_Label}
+                            <template if:true={showSpinner}>
+                                <div class="slds-spinner_container">
+                                    <div role="status" class="slds-spinner slds-spinner_x-small">
+                                        <span class="slds-assistive-text">Loading</span>
+                                        <div class="slds-spinner__dot-a"></div>
+                                        <div class="slds-spinner__dot-b"></div>
+                                    </div>
+                                </div>
+                            </template>
+                        </a>
+                    </template>
+                    <template if:false={isZuverlaessigkeitspruefung}>
+                        <lightning-button
+                                name={button}
+                                class=slds-m-left_large
+                                label={button.iv_Label}
+                                title={button.iv_Label}
+                                onclick={handleDocumentCreation}
+                                disabled={disableButton} >
+
+                        </lightning-button>
+                    </template>
+                </template>
+                <template if:false={disableButton}>
+                    <a class="slds-button slds-button_neutral slds-m-left_large"
+                       href="javascript:void(0);"
+                       title={button.iv_Label}
+                       onclick={handleDocumentCreation}>
+                        {button.iv_Label}
+                        <template if:true={showSpinner}>
+                            <div class="slds-spinner_container">
+                                <div role="status" class="slds-spinner slds-spinner_x-small">
+                                    <span class="slds-assistive-text">Loading</span>
+                                    <div class="slds-spinner__dot-a"></div>
+                                    <div class="slds-spinner__dot-b"></div>
+                                </div>
+                            </div>
+                        </template>
+                    </a>
+                </template>
+            </lightning-layout-item>
+
+            <lightning-layout-item size="8" padding="around-small">
+
+
+            </lightning-layout-item>
+
+        </lightning-layout>
+
+    </template>
+
+</template>

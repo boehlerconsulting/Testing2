@@ -1,0 +1,31 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      14.09.2021
+ *
+ *
+ *@description  EnhancedRelatedListWrapper.design
+ *
+ *
+ *@changelog    14.09.2021 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<design:component>
+    <design:attribute name="relatedListName" label="Related List Name" default="AccountContactRelation" />
+    <design:attribute name="displayType" label="Records Display Type" default="Tile 1" dataSource="Tile 1,List,Tile 2" />
+    <design:attribute name="layoutType" label="Fields Layout Type" default="1 Column" dataSource="1 Column,2 Columns" />
+    <design:attribute name="filter" label="Filter" default="" />
+    <design:attribute name="sort" label="Sort" default="CreatedDate DESC" />
+    <design:attribute name="defaultNumberofRecordsToDisplay" label="Default Number of Records to Display" default="4" />
+    <design:attribute name="maxNumberOfRecordsToDisplay" label="Max. Number of Records to Display" default="50" />
+    <design:attribute name="title" label="Title" default="Contacts" />
+    <design:attribute name="iconName" label="Icon Name" default="standard:contact" />
+    <design:attribute name="newRecord" label="New Record" default="NewAccountContactRelation" />
+    <design:attribute name="showHeader" label="Show Header?" default="true" />
+    <design:attribute name="showRefreshButton" label="Show Refresh Button?" default="true" />
+    <design:attribute name="showMenuAction" label="Show Menu Action?" default="true" />
+    <design:attribute name="hideOnNoRecord" label="Hide on No Record?" default="false" />
+</design:component>

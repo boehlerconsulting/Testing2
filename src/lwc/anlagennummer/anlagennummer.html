@@ -1,0 +1,72 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      13.06.2020
+ *
+ *
+ *@description  anlagennummer
+ *
+ *
+ *@changelog    13.06.2020 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<!-- Anlagennummer -->
+<template>
+    <div class=slds-p-around_small></div>
+
+    <lightning-card title={title} icon-name={iconName}><br/>
+
+        <lightning-spinner if:true={showSpinner} alternative-text="Loading" size="medium"
+                           variant="brand"></lightning-spinner>
+
+        <div style="width: auto;">
+            <lightning-layout horizontal-align="space">
+
+                <lightning-layout-item padding="around-small" size=2>
+                    <div class="slds-text-align_left slds-m-bottom_medium">
+
+                        <lightning-input
+                                name="Startnummer"
+                                label="Startnummer"
+                                type="text"
+                                value={startNumber}
+                                onchange={handleOnChangeStartnummer}
+                        ></lightning-input>
+                    </div>
+
+                </lightning-layout-item>
+                <lightning-layout-item padding="around-small" size=2>
+                    <div class="slds-text-align_left slds-m-bottom_medium">
+
+                        <lightning-input
+                                name="Endnummer"
+                                label="Endnummer"
+                                type="text"
+                                value={endNumber}
+                                onchange={handleOnChangeEndnummer}
+                        ></lightning-input>
+                    </div>
+
+                </lightning-layout-item>
+
+                <lightning-layout-item padding="around-medium" flexibility="auto">
+                    <div class=slds-m-top_xxx-small>
+
+                    </div>
+                    <div class=slds-m-top_medium>
+
+                        <lightning-button title="Generieren"
+                                          label="Generieren"
+                                          onclick={handleOnGenerate}
+                        >
+                        </lightning-button>
+                    </div>
+
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+    </lightning-card>
+</template>

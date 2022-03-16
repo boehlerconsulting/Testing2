@@ -1,0 +1,141 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      18.09.2020
+ *
+ *
+ *@description  massenzuweisungAufgaben
+ *
+ *
+ *@changelog    18.09.2020 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<!-- Massenzuweisung Aufgaben -->
+<template>
+
+    <lightning-card title={title} icon-name={iconName}>
+
+        <lightning-spinner if:true={showSpinner} alternative-text="Loading" size="medium"
+                           variant="brand"></lightning-spinner>
+
+        <div style="width: auto;">
+            <lightning-layout horizontal-align="space">
+                <lightning-layout-item padding="around-small" flexibility="auto">
+                    <div class="slds-text-align_left slds-m-bottom_medium">
+
+                        <lightning-input
+                                name="Aufgabenart"
+                                label="Aufgabenart"
+                                type="search"
+                                onchange={handleOnChangeAufgabenart}
+                        ></lightning-input>
+                    </div>
+
+                </lightning-layout-item>
+                <lightning-layout-item padding="around-small" flexibility="auto">
+                    <div class="slds-text-align_left slds-m-bottom_large">
+
+                        <lightning-input
+                                name="Ast-Name / PODID"
+                                label="Ast-Name / PODID"
+                                type="search"
+                                onchange={handleOnChangeAstName}
+                        ></lightning-input>
+                    </div>
+
+                </lightning-layout-item>
+                <lightning-layout-item padding="around-small" flexibility="auto">
+                    <div class="slds-text-align_left slds-m-bottom_medium">
+
+                        <lightning-input
+                                name="Debitor/ASt-Id"
+                                label="Debitor/ASt-Id"
+                                type="search"
+                                onchange={handleOnChangeDebitor}
+                        ></lightning-input>
+                    </div>
+
+                </lightning-layout-item>
+                <lightning-layout-item padding="around-medium" flexibility="auto">
+                    <div class="slds-text-align_left slds-m-bottom_medium">
+
+                        <lightning-input
+                                name="Erledigung bis/zum"
+                                label="Erledigung bis/zum"
+                                type="date"
+                                onchange={handleOnChangeErledigungBisZum}
+                        ></lightning-input>
+                    </div>
+
+                </lightning-layout-item>
+                <lightning-layout-item padding="around-small" flexibility="auto">
+                    <div class="slds-text-align_left slds-m-bottom_medium">
+
+                        <lightning-input
+                                name="Zugeordnet zu"
+                                label="Zugeordnet zu"
+                                type="search"
+                                onchange={handleOnChangeZugeordnetZu}
+                        ></lightning-input>
+                    </div>
+
+                </lightning-layout-item>
+                <lightning-layout-item padding="around-medium" flexibility="auto">
+                    <div class=slds-m-top_xxx-small>
+
+                    </div>
+                    <div class=slds-m-top_medium>
+                        <lightning-button-stateful
+                                label-when-off="Alle Aufgaben"
+                                label-when-on="Meine Aufgaben"
+                                icon-name-when-off="utility:check"
+                                icon-name-when-on="utility:close"
+                                variant={variantShowAll}
+                                selected={isShowAllSelected}
+                                onclick={handleShowAll}>
+                        </lightning-button-stateful>
+
+                    </div>
+
+                </lightning-layout-item>
+                <lightning-layout-item padding="around-medium" flexibility="auto">
+                    <div class=slds-m-top_xxx-small>
+
+                    </div>
+                    <div class=slds-m-top_medium>
+
+                        <lightning-button title="Speichern"
+                                          label="Speichern"
+                                          onclick={handleSave}
+                        >
+                        </lightning-button>
+                    </div>
+
+                </lightning-layout-item>
+            </lightning-layout>
+            <template if:true={initialized}>
+                <c-hw-lightning-datatable
+                        table-data={tableData}
+                        table-columns={columns}
+                        sort-by={sortBy}
+                        sort-direction={sortDirection}
+                        max-records={maxRecords}
+                        initial-selection-by-id={initialSelectionById}
+                        show-checkbox-column=true
+                        is-massenzuweisung=true
+                        onownerchanged={handleOnOwnerChanged}
+                        onsort={handleOnSort}
+                        onselected={handleOnSelected}
+                        is-selected-by-lead-id={isSelectedByLeadId}
+                        onallselected={handleOnAllSelected}
+                        show-select-all=true
+                        is-all-selected={isAllSelected}
+                >
+                </c-hw-lightning-datatable>
+            </template>
+        </div>
+    </lightning-card>
+</template>

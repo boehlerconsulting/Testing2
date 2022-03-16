@@ -1,0 +1,1160 @@
+<!--
+/**
+ *@author       Karsten Maaß
+ *@created      12.04.2019
+ *@version      1.0
+ *@since        45.0
+ *
+ *
+ *@description  HW_SAP_Debitoren_beantragen
+ *
+ *
+ *@changelog    12.04.2019 Karsten Maaß - Created
+ *
+ *
+ */
+ -->
+
+<apex:page id="HW_SAP_Debitoren_beantragen" controller="HW_Document_C" contentType="{!contentType}"
+           renderAs="{!renderAs}"
+           applyHtmlTag="false" applyBodyTag="false" showHeader="false" standardStylesheets="false" cache="true">
+
+    <html xmlns:v="urn:schemas-microsoft-com:vml"
+          xmlns:o="urn:schemas-microsoft-com:office:office"
+          xmlns:x="urn:schemas-microsoft-com:office:excel">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+        <apex:outputText value="{!sheetName}" escape="false"/>
+
+        <style type="text/css" media="print,all">
+
+            @page {
+                size: 21.0cm 29.7cm !important;
+                margin: .08in .08in .08in .08in;
+            }
+
+            br {
+                mso-data-placement: same-cell;
+            }
+
+            body {
+                font-family: sans-serif;
+                text-align: left;
+                margin: 0px;
+            }
+
+            table {
+                border-collapse: collapse;
+                table-layout: fixed;
+            }
+
+            tr {
+                height: 14.5pt;
+                vertical-align: middle;
+                font-size: 10pt;
+                white-space: nowrap;
+            }
+
+            td {
+            }
+
+            .header {
+                font-size: 14pt;
+            }
+
+            .section-header {
+                font-size: 12pt;
+            }
+
+            .explanation {
+                font-size: 8pt;
+            }
+
+            .bold,
+            .header,
+            .section-header,
+            .label-header,
+            .explanation-header {
+                font-weight: bold;
+            }
+
+            .align-top,
+            .section-header,
+            .label-header {
+                vertical-align: top;
+            }
+
+            .align-bottom,
+            .read-only {
+                vertical-align: bottom;
+            }
+
+            .align-center,
+            .explanation-header,
+            .explanation-label {
+                text-align: center;
+            }
+
+            .explanation-label {
+                vertical-align: super;
+            }
+
+            .border,
+            .input,
+            .dropdown,
+            .read-only {
+                border-style: solid;
+            }
+
+            .border-bottom,
+            .border-bottom-bold {
+                border-bottom-style: solid;
+            }
+
+            .border,
+            .border-bottom,
+            .input,
+            .dropdown,
+            .read-only {
+                border-width: thin;
+            }
+
+            .border-bottom-bold {
+                border-width: medium;
+            }
+
+            .input,
+            .input-label {
+                background-color: RGB(255, 242, 204);
+            }
+
+            .dropdown,
+            .dropdown-label {
+                background-color: RGB(255, 192, 0);
+            }
+
+            .read-only,
+            .read-only-label {
+                background-color: RGB(166, 166, 166);
+            }
+
+            .required,
+            .required-label {
+                background-color: RGB(255, 0, 0);
+            }
+
+        </style>
+    </head>
+
+    <body>
+    <table>
+
+        <col style="width:6.33cm"/>
+        <col style="width:11.06cm"/>
+        <col style="width:10.51cm"/>
+
+        <!--
+            <col style="width:350px" />
+            <col style="width:611px" />
+            <col style="width:581px" />
+
+            <col style="width:286px" />
+            <col style="width:500px" />
+            <col style="width:475px" />
+        -->
+
+        <tr style="height:18pt">
+            <td class="header">Stammdatenbeleg Debitoren Filialen</td>
+            <td/>
+            <td/>
+        </tr>
+
+        <!-- //** Empfänger **// -->
+
+        <tr>
+            <td class="border-bottom"/>
+            <td class="border-bottom"/>
+            <td class="border-bottom"/>
+        </tr>
+        <tr style="height:16pt">
+            <td class="section-header">Empfänger</td>
+            <td/>
+            <td>Deutsche Post AG</td>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td>Finance &amp; HR Operations Deutschland</td>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td>SSC Accounting Debitoren</td>
+        </tr>
+        <tr>
+            <td class="bold">Erläuterungen</td>
+            <td/>
+            <td>Stammdatenmanagement</td>
+        </tr>
+        <tr>
+            <td class="input-label">Eingabefeld</td>
+            <td/>
+            <td>Postfach 10 10 51</td>
+        </tr>
+        <tr>
+            <td class="dropdown-label">Eingabefeld über Dropdownliste</td>
+            <td/>
+            <td>70009 Stuttgart</td>
+        </tr>
+        <tr>
+            <td class="read-only-label">Eintrag ist nicht änderbar</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td class="required-label">Ust-IDNr. oder USt-Nr. zwingend</td>
+            <td/>
+            <td><a href="Stammdaten.DebitorenSSCAcc@deutschepost.de">Stammdaten.DebitorenSSCAcc@deutschepost.de</a></td>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+
+        <!-- //** Absender **// -->
+
+        <tr>
+            <td class="border-bottom"/>
+            <td class="border-bottom"/>
+            <td class="border-bottom"/>
+        </tr>
+        <tr style="height:16pt">
+            <td class="section-header">Absender</td>
+            <td/>
+            <td class="input" style="mso-number-format: '@'">{!Feld['Debitoren_beantragen_Firma']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Zentrale/NL etc.</td>
+            <td class="input" style="mso-number-format: '@'">{!Feld['Debitoren_beantragen_NL']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Ansprechpartner</td>
+            <td class="input" style="mso-number-format: '@'">{!Feld['Debitoren_beantragen_Name_VM']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">VGL/VD/SG</td>
+            <td class="input" style="mso-number-format: '@'">{!Feld['Debitoren_beantragen_VL']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Straße</td>
+            <td class="input" style="mso-number-format: '@'">{!Feld['Debitoren_beantragen_Str_VGL']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Ort</td>
+            <td class="input" style="mso-number-format: '@'">{!Feld['Debitoren_beantragen_PLZ_Ort_VGL']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Telefon</td>
+            <td class="input" style="mso-number-format: '@'">{!Feld['Debitoren_beantragen_Tel_VM']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">E-Mail</td>
+            <td class="input" style="mso-number-format: '@'">{!Feld['Debitoren_beantragen_Email_VM']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Datum Auftragsstellung</td>
+            <td class="input">
+                <apex:outputText value="{0, date, dd.MM.yyyy}">
+                    <apex:param value="{!NOW()}"/>
+                </apex:outputText>
+            </td>
+        </tr>
+
+        <!-- //** Allgemeines **// -->
+
+        <tr>
+            <td class="border-bottom"/>
+            <td class="border-bottom"/>
+            <td class="border-bottom"/>
+        </tr>
+        <tr style="height:16pt">
+            <td class="section-header">Allgemeines</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td class="label-header">03: Allgemeine Daten</td>
+            <td class="border-bottom">Geschäftskunde 1a</td>
+            <td class="read-only">Geschäftskunde</td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Unternehmensverbund 1b</td>
+            <td class="dropdown"></td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Filialformat</td>
+            <td class="dropdown" style="mso-number-format: '@'">{!IF(Feld['Debitoren_beantragen_Filialtyp_OZ'] == '84','Partner-Fil mit ZORA light (OZ 84)','Partner-Fil (OZ 76, 79, 95)')}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:38.5pt">
+            <td class="label-header">03b Ausgabe von ben. Expr. Sdg</td>
+            <td class="border-bottom" style="white-space: normal;">Express-Ausgabe findet in allen Partner-Filialen mit
+                ZORA-Endgerät statt, die ebenfalls benachrichtigte Pakete ausgeben – (ohne Postbank und Paketshops)
+            </td>
+            <td class="dropdown" style="mso-number-format: '@'">{!IF(Feld['Debitoren_Paketausgabe_alt_Frachtausgabe'] == 'Ja','Ja','')}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td class="label-header">04: Anlegen auf</td>
+            <td/>
+            <td class="read-only">NPS</td>
+        </tr>
+
+        <!-- //** Debitor I **// -->
+
+        <tr>
+            <td class="border-bottom"/>
+            <td class="border-bottom"/>
+            <td class="border-bottom"/>
+        </tr>
+        <tr style="height:16pt">
+            <td class="section-header">Debitor I für Filialstandort</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td class="label-header">05: Antrag auf</td>
+            <td class="border-bottom">Antragsart</td>
+            <td class="dropdown">Neuanlage</td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Art des Debitors</td>
+            <td class="read-only"><span class="bold">Debitor des Filialstandortes</span></td>
+        </tr>
+        <tr style="height:38.5pt">
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Debitoren-Nr., sofern vorhanden</td>
+            <td class="input" style="mso-number-format: '@'">{!Feld['Debitoren_beantragen_Debitor']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Gültig ab:</td>
+            <td class="input">
+                <apex:outputText value="{0, date, dd.MM.yyyy}">
+                    <apex:param value="{!Feld['Debitoren_beantragen_Gueltig_ab']}"/>
+                </apex:outputText>
+            </td>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td class="align-top">Ausfüllen nur im Bedarfsfall:</td>
+            <td class="border-bottom">Filialstandort hat abweichenden Rechnungsempfänger</td>
+            <td class="dropdown" style="mso-number-format: '@'">{!Feld['Filialstandort_hat_abweichenden_Rechnung']}</td>
+        </tr>
+        <tr style="height:26.5pt">
+            <td/>
+            <td class="border-bottom" style="white-space: normal;">Debitoren-Nr. des abweichenden
+                Rechnungsempfängers<br/>
+                (sofern bereits vorhanden, sonst siehe Debitor II)
+            </td>
+            <td class="input" style="mso-number-format: '@'">{!Feld['Debitoren_Nr_des_abweichenden_Rechnungs']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Filialstandort hat abweichenden Zahlungsregulierer</td>
+            <td class="dropdown" style="mso-number-format: '@'">{!Feld['Filialstandort_hat_abweichenden_Zahlungs']}</td>
+        </tr>
+        <tr style="height:26.5pt">
+            <td/>
+            <td class="border-bottom" style="white-space: normal;">Debitoren-Nr. des abweichenden
+                Zahlungsregulierers<br/>
+                (sofern bereits vorhanden, sonst siehe Debitor III)
+            </td>
+            <td class="input" style="mso-number-format: '@'">{!Feld['Debitoren_Nr_des_abweichenden_Zahlungsr']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td class="label-header">06: Adressdaten</td>
+            <td class="border-bottom">Rechtsform 3</td>
+            <td class="input" style="mso-number-format: '@'">{!Feld['Debitoren_beantragen_Rechtsform2']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Name Zeile 1 4</td>
+            <td class="read-only"></td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Name Zeile 2 5</td>
+            <td class="input" style="mso-number-format: '@'">{!Feld['DebJuristischer_Name_lt_Gewerbeanmeldung']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Name Zeile 3 5</td>
+            <td class="input" style="mso-number-format: '@'">{!Feld['DebJuristischer_Name_2']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Name Zeile 4 5</td>
+            <td class="input" style="mso-number-format: '@'">{!Feld['DebJuristischer_Name_3']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Straße</td>
+            <td class="input" style="mso-number-format: '@'">{!Feld['Debitoren_beantragen_Filiale_Strasse']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Hausnummer</td>
+            <td class="input" style="mso-number-format: '@'">{!Feld['Debitoren_beantragen_Filiale_Hausnummer']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">PLZ des Ortes</td>
+            <td class="input" style="mso-number-format: '@'">{!Feld['Debitoren_beantragen_Filiale_PLZ']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Ort</td>
+            <td class="input" style="mso-number-format: '@'">{!Feld['Debitoren_beantragen_Filiale_Ort']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Postfach</td>
+            <td class="input"></td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">PLZ Postfach</td>
+            <td class="input"></td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">PLZ Großkunde</td>
+            <td class="input"></td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Ort</td>
+            <td class="input"></td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Land (nur anzugeben bei Auslandsanschrift)</td>
+            <td class="input"></td>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td class="label-header">07: Steuerungsdaten</td>
+            <td class="border-bottom">Umsatzsteuer-Identifikationsnummer (USt-IdNr.) 7</td>
+            <td class="border" style="mso-number-format: '@'"></td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Umsatzsteuer-Nr. 8</td>
+            <td class="border" style="mso-number-format: '@'"></td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Währung</td>
+            <td class="read-only">EUR</td>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td class="label-header">08a: Bankdaten 01</td>
+            <td class="border-bottom">SEPA-Mandatseinholung (Mandatstyp DPAG B2C) 6</td>
+            <td class="read-only" style="mso-number-format: '@'"></td>
+        </tr>
+        <tr>
+            <td class="align-top">(wenn Treuhandabrede existiert,</td>
+            <td class="border-bottom">IBAN</td>
+            <td class="input" style="mso-number-format: '@'"></td>
+        </tr>
+        <tr>
+            <td class="align-top">hier Bankdaten zu Treuhandkonto</td>
+            <td class="border-bottom">BIC (Swift-Code)</td>
+            <td class="input" style="mso-number-format: '@'"></td>
+        </tr>
+        <tr>
+            <td class="align-top">angeben)</td>
+            <td class="border-bottom">Name der Bank</td>
+            <td class="input" style="mso-number-format: '@'"></td>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td class="label-header">08b: Bankdaten 02</td>
+            <td class="border-bottom">SEPA-Mandatseinholung (Mandatstyp DPAG B2C) 6</td>
+            <td class="read-only" style="mso-number-format: '@'"></td>
+        </tr>
+        <tr>
+            <td class="align-top">(wenn Treuhandabrede existiert,</td>
+            <td class="border-bottom">IBAN</td>
+            <td class="input" style="mso-number-format: '@'"></td>
+        </tr>
+        <tr>
+            <td class="align-top">hier Bankdaten zu Konto außerhalb</td>
+            <td class="border-bottom">BIC (Swift-Code)</td>
+            <td class="input" style="mso-number-format: '@'"></td>
+        </tr>
+        <tr>
+            <td class="align-top">der Treuhandabrede angeben;</td>
+            <td class="border-bottom">Name der Bank</td>
+            <td class="input" style="mso-number-format: '@'"></td>
+        </tr>
+        <tr>
+            <td class="align-top">wenn keine Treuhandabrede, hier leer)</td>
+            <td/>
+            <td/>
+        </tr>
+
+        <!-- //** Debitor II **// -->
+
+        <tr>
+            <td class="border-bottom"/>
+            <td class="border-bottom"/>
+            <td class="border-bottom"/>
+        </tr>
+        <tr style="height:15.75pt">
+            <td class="section-header">Debitor II für abweichenden Rechnungsempfänger (nur im Bedarfsfall)</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td class="label-header">05: Antrag auf</td>
+            <td class="border-bottom">Antragsart</td>
+            <td class="dropdown" style="mso-number-format: '@'">{!IF(LEN(Feld['Debitoren_beantragen_Rechtsform_Debi_II'])!=0,'Neuanlage','')}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Art des Debitors</td>
+            <td class="read-only"><span class="bold">Debitor für abweichenden Rechnungsempfänger</span></td>
+        </tr>
+        <tr style="height:39pt">
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Debitoren-Nr., sofern vorhanden</td>
+            <td class="input"></td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Debitor II ist abweichender Rechnungsempfänger für Debitoren-Nr. I</td>
+            <td class="input" style="mso-number-format: '@'">{!IF(LEN(Feld['Debitoren_beantragen_Rechtsform_Debi_II'])!=0,'Ja','')}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Gültig ab:</td>
+            <td class="input">
+                <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+                    <apex:param value="{!Feld['Debitoren_beantragen_Gueltig_ab_Debi_II']}"/>
+                </apex:outputText>
+            </td>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td class="label-header">06: Adressdaten</td>
+            <td class="border-bottom">Rechtsform 3</td>
+            <td class="input" style="mso-number-format: '@'">{!Feld['Debitoren_beantragen_Rechtsform_Debi_II']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Name Zeile 1 4</td>
+            <td class="read-only"></td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Name Zeile 2 5</td>
+            <td class="input" style="mso-number-format: '@'">{!Feld['Debitoren_beantragName_Debitor_II_abw_RE']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Name Zeile 3 5</td>
+            <td class="input"></td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Name Zeile 4 5</td>
+            <td class="input"></td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Straße</td>
+            <td class="input" style="mso-number-format: '@'">{!Feld['Debitoren_beantragStrasse_Debi_II_abw_RE']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Hausnummer</td>
+            <td class="input" style="mso-number-format: '@'">{!Feld['Debitoren_beantrageHausNr_Debi_II_abw_RE']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">PLZ des Ortes</td>
+            <td class="input" style="mso-number-format: '@'">{!Feld['Debitoren_beantragen_PLZ_Debi_II_abw_RE']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Ort</td>
+            <td class="input" style="mso-number-format: '@'">{!Feld['Debitoren_beantragen_Ort_Debi_II_abw_RE']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Postfach</td>
+            <td class="input"></td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">PLZ Postfach</td>
+            <td class="input"></td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">PLZ Großkunde</td>
+            <td class="input"></td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Ort</td>
+            <td class="input"></td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Land (nur anzugeben bei Auslandsanschrift)</td>
+            <td class="input"></td>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td class="label-header">08: Bankdaten</td>
+            <td class="border-bottom">bei abweichenden Rechnungsempfänger nicht notwendig</td>
+            <td class="read-only"></td>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+
+        <!-- //** Debitor III **// -->
+
+        <tr>
+            <td class="border-bottom"/>
+            <td class="border-bottom"/>
+            <td class="border-bottom"/>
+        </tr>
+        <tr style="height:15.75pt">
+            <td class="section-header">Debitor III für abweichenden Zahlungsregulierer (nur im Bedarfsfall)</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td class="label-header">05: Antrag auf</td>
+            <td class="border-bottom">Antragsart</td>
+            <td class="dropdown" style="mso-number-format: '@'">{!IF(LEN(Feld['Debitoren_beantragen_Rechtsform_Debi_III'])!=0,'Neuanlage','')}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Art des Debitors</td>
+            <td class="read-only"><span class="bold">Debitor für abweichenden Zahlungsregulierer</span></td>
+        </tr>
+        <tr style="height:39pt">
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Debitoren-Nr., sofern vorhanden</td>
+            <td class="input"></td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Debitor III ist abweichender Zahlungsregulierer für Debitoren-Nr. I</td>
+            <td class="input" style="mso-number-format: '@'">{!IF(LEN(Feld['Debitoren_beantragen_Rechtsform_Debi_III'])!=0,'Ja','')}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Gültig ab:</td>
+            <td class="input">
+                <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+                    <apex:param value="{!Feld['Debitoren_beantragen_Gueltig_ab_Debi_III']}"/>
+                </apex:outputText>
+            </td>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td class="label-header">06: Adressdaten</td>
+            <td class="border-bottom">Rechtsform 3</td>
+            <td class="input" style="mso-number-format: '@'">{!Feld['Debitoren_beantragen_Rechtsform_Debi_III']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Name Zeile 1 4</td>
+            <td class="input" style="mso-number-format: '@'">{!Feld['Debitoren_beantraName_Debitor_III_abw_ZR']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Name Zeile 2 5</td>
+            <td class="input"></td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Name Zeile 3 5</td>
+            <td class="input"></td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Name Zeile 4 5</td>
+            <td class="input"></td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Straße</td>
+            <td class="input" style="mso-number-format: '@'">{!Feld['Debitoren_beanStrasse_Debitor_III_abw_ZR']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Hausnummer</td>
+            <td class="input" style="mso-number-format: '@'">{!Feld['Debitoren_beantHausNr_Debitor_III_abw_ZR']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">PLZ des Ortes</td>
+            <td class="input" style="mso-number-format: '@'">{!Feld['Debitoren_beantragPLZ_Debitor_III_abw_ZR']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Ort</td>
+            <td class="input" style="mso-number-format: '@'">{!Feld['Debitoren_beantragOrt_Debitor_III_abw_ZR']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Postfach</td>
+            <td class="input"></td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">PLZ Postfach</td>
+            <td class="input"></td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">PLZ Großkunde</td>
+            <td class="input"></td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Ort</td>
+            <td class="input"></td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Land (nur anzugeben bei Auslandsanschrift)</td>
+            <td class="input"></td>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td class="label-header">08a: Bankdaten 01</td>
+            <td class="border-bottom">SEPA-Mandatseinholung (Mandatstyp DPAG B2C) 6</td>
+            <td class="read-only" style="mso-number-format: '@'">{!IF(LEN(Feld['DebitorenX08a_Bankdaten_01_IBAN_Debi_III'])!=0,'Ja','')}</td>
+        </tr>
+        <tr>
+            <td class="align-top">(wenn Treuhandabrede existiert,</td>
+            <td class="border-bottom">IBAN</td>
+            <td class="input" style="mso-number-format: '@'">{!Feld['DebitorenX08a_Bankdaten_01_IBAN_Debi_III']}</td>
+        </tr>
+        <tr>
+            <td class="align-top">hier Bankdaten zu Treuhandkonto</td>
+            <td class="border-bottom">BIC (Swift-Code)</td>
+            <td class="input" style="mso-number-format: '@'">{!Feld['Debitoren_X08a_Bankdaten_01_BIC_Debi_III']}</td>
+        </tr>
+        <tr>
+            <td class="align-top">angeben)</td>
+            <td class="border-bottom">Name der Bank</td>
+            <td class="input" style="mso-number-format: '@'">{!Feld['X08a_Bankdaten_01_Name_der_Bank_Debi_III']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td class="label-header">08b: Bankdaten 02</td>
+            <td class="border-bottom">SEPA-Mandatseinholung (Mandatstyp DPAG B2C) 6</td>
+            <td class="read-only" style="mso-number-format: '@'">{!IF(LEN(Feld['DebitorenX08b_Bankdaten_02_IBAN_Debi_III'])!=0,'Ja','')}</td>
+        </tr>
+        <tr>
+            <td class="align-top">(wenn Treuhandabrede existiert,</td>
+            <td class="border-bottom">IBAN</td>
+            <td class="input" style="mso-number-format: '@'">{!Feld['DebitorenX08b_Bankdaten_02_IBAN_Debi_III']}</td>
+        </tr>
+        <tr>
+            <td class="align-top">hier Bankdaten zu Konto außerhalb</td>
+            <td class="border-bottom">BIC (Swift-Code)</td>
+            <td class="input" style="mso-number-format: '@'">{!Feld['Debitoren_X08b_Bankdaten_02_BIC_Debi_III']}</td>
+        </tr>
+        <tr>
+            <td class="align-top">der Treuhandabrede angeben;</td>
+            <td class="border-bottom">Name der Bank</td>
+            <td class="input" style="mso-number-format: '@'">{!Feld['X08b_Bankdaten_02_Name_der_Bank_Debi_III']}</td>
+        </tr>
+        <tr>
+            <td class="align-top">wenn keine Treuhandabrede, hier leer)</td>
+            <td/>
+            <td/>
+        </tr>
+
+        <!-- //** Weitere Angaben **// -->
+
+        <tr>
+            <td class="border-bottom"/>
+            <td class="border-bottom"/>
+            <td class="border-bottom"/>
+        </tr>
+        <tr style="height:15.75pt">
+            <td class="section-header">Weitere Angaben</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td class="label-header">09: Sonstiges</td>
+            <td class="border-bottom">Umsatzsteuerpflicht des Debitoren I (Filialstandortes)</td>
+            <td class="dropdown" style="mso-number-format: '@'">{!Feld['DebitorUmsatzsteuerpflicht_Debitor_I_FSO']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td class="border-bottom">Werksnummer des Debitoren I</td>
+            <td class="dropdown" style="mso-number-format: '@'">{!Feld['Debitoren_beantrageWerksnummer_Debitor_I']}</td>
+        </tr>
+        <tr style="height:26.25pt">
+            <td/>
+            <td class="border-bottom" style="white-space: normal;">Zahlungsart des zutreffenden Debitoren I oder
+                III<br/>
+                (Filialstandortes oder Abw. Zahlungsregulierers)
+            </td>
+            <td class="read-only">Einzugsverfahren</td>
+        </tr>
+        <tr style="height:26.25pt">
+            <td/>
+            <td class="border-bottom" style="white-space: normal;">Mahnverfahren des zutreffenden Debitoren I oder
+                III<br/>
+                (Filialstandortes oder. Abw. Zahlungsregulierers)
+            </td>
+            <td class="read-only">SF_4 - 4-stufiges Mahnverfahren</td>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td class="label-header">10: Sonstige Mitteilung</td>
+            <td/>
+            <td class="input" style="mso-number-format: '@'">{!Feld['Debitoren_beantragen_Sonstige_Mitteilung']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:39pt">
+            <td class="label-header">11: Anzahl Anlagen</td>
+            <td class="border-bottom" style="white-space: normal;">Grundsätzlich ist jedem Antrag auf Neuanlage einer
+                Debitoren-Nr. ein Kopfbogen des entsprechenden Debitoren I, II oder III beizufügen
+            </td>
+            <td class="input"></td>
+        </tr>
+        <tr>
+            <td class="border-bottom-bold"/>
+            <td class="border-bottom-bold"/>
+            <td class="border-bottom-bold"/>
+        </tr>
+        <tr>
+            <td class="label-header">Nur von Stammdatenverwaltung auszufüllen</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td class="label-header">Vergebene EKP-Nr</td>
+            <td>Debitor I</td>
+            <td class="input"></td>
+        </tr>
+        <tr>
+            <td/>
+            <td>Debitor II</td>
+            <td class="input"></td>
+        </tr>
+        <tr>
+            <td/>
+            <td>Debitor III</td>
+            <td class="input"></td>
+        </tr>
+        <tr style="height:26.25pt">
+            <td/>
+            <td class="border-bottom" style="white-space: normal;">Immer bei OZ 76/79/95 oder wenn Ausg Expr Sdg "JA"
+                Anlage Kundennr. Express
+            </td>
+            <td class="input"></td>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Erledigt am</td>
+            <td class="input"></td>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Durch Sachbearbeiter</td>
+            <td class="input"></td>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+
+        <!-- //** Erläuterungen **// -->
+
+        <tr>
+            <td class="explanation-header">Erläuterungen</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td class="explanation-label">1a</td>
+            <td class="explanation">Geschäftskunden = Debitor/Kunde gegenüber dem eine Forderung (Anspruch) der DP AG
+                besteht.
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td class="explanation-label">1b</td>
+            <td class="explanation">Es handelt sich um ein verbundenes/assoziiertes Unternehmen oder ein Unternehmen mit
+                dem ein Beteiligungsverhältnis besteht
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td class="explanation-label">2</td>
+            <td class="explanation">Immer Art bzw. Grund der Änderung bzw. der Löschvormerkung und gültig ab-Datum
+                angegeben.
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td class="explanation-label"></td>
+            <td class="explanation"> Insbesondere bei Änderung von Bankdaten änderungsbegründende Unterlagen beifügen.
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td class="explanation-label">3</td>
+            <td class="explanation">Die Rechtsform muss immer angegeben werden.</td>
+            <td/>
+        </tr>
+        <tr>
+            <td class="explanation-label">4</td>
+            <td class="explanation">Zeile Name 1 wird automatisch in SAP aus den Inhalten der Zeilen 2 bis 4
+                zusammengesetzt.
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td class="explanation-label">5</td>
+            <td class="explanation">Bei natürlichen Personen: Vorname Nachname. Bei Firmen: Firmenbezeichnung</td>
+            <td/>
+        </tr>
+        <tr>
+            <td class="explanation-label"></td>
+            <td class="explanation">Weitere Zeilen: Fortsetzung des Datenfelds Name Zeile 2.</td>
+            <td/>
+        </tr>
+        <tr>
+            <td class="explanation-label">6</td>
+            <td class="explanation">Automatischer Versand SEPA-Mandatseinholung durch Zentrale Mandatsverwaltung (FHD)
+                bei Neu/Änd Bankdaten (FHD-FULLSERVICE)
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td class="explanation-label"></td>
+            <td class="explanation">Automatischer Feldeintrag "JA" wenn IBAN-Eintrag</td>
+            <td/>
+        </tr>
+        <tr>
+            <td class="explanation-label">7</td>
+            <td class="explanation">Sofern vorhanden bei Debitoren, die innerhalb des Gebiets der Europäischen Union am
+                Waren- und Dienstleistungsverkehr
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td class="explanation-label"></td>
+            <td class="explanation">zwischen den Mitgliedsstaaten teilnehmen</td>
+            <td/>
+        </tr>
+        <tr>
+            <td class="explanation-label">8</td>
+            <td class="explanation">Die Steuer-Nr. ist zwingend anzugeben, wenn keine USt-IdNr. vorhanden</td>
+            <td/>
+        </tr>
+    </table>
+    </body>
+    </html>
+</apex:page>

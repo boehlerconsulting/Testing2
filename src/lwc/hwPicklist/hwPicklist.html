@@ -1,0 +1,24 @@
+<!--
+ - Created by oliverpreuschl on 2019-03-26.
+ -->
+
+<!-- hwPicklist -->
+<template>
+
+    <lightning-combobox
+            name={name}
+            label={label}
+            value={value}
+            placeholder={placeholder}
+            options={io_PicklistValues}
+            onchange={handleChange_Value}
+            field-level-help={iv_InlineHelpText}
+            dropdown-alignment={dropdownAlignment}
+            message-when-value-missing={messageWhenValueMissing}
+            variant={variant}
+            disabled={disabled}
+            read-only={readOnly}
+            required={iv_Required}>
+    </lightning-combobox>
+
+</template>

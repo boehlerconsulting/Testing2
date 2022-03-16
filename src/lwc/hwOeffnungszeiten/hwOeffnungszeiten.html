@@ -1,0 +1,116 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      30.04.2019
+ *@version      1.0
+ *@since        45.0
+ *
+ *
+ *@description  hwOeffnungszeiten
+ *
+ *
+ *@changelog    30.04.2019 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<!-- HW_Oeffnungszeiten -->
+<template>
+
+    <lightning-card  title={oeffnungszeit.iv_Kategorie}>
+
+
+        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered " aria-hidden="true">
+            <thead>
+            <tr class="slds-line-height_reset">
+                <th class="" scope="col">
+                    <div class="slds-truncate" title=""></div>
+                </th>
+                <th class="" scope="col">
+                    <div class="slds-truncate" title="Von">Von</div>
+                </th>
+                <th class="" scope="col">
+                    <div class="slds-truncate" title="Bis">Bis</div>
+                </th>
+                <th class="" scope="col">
+                    <div class="slds-truncate" title="Von">Von</div>
+                </th>
+                <th class="" scope="col">
+                    <div class="slds-truncate" title="Bis">Bis</div>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <template for:each={oeffnungszeit.pl_Oeffnungszeitens}
+                      for:item="eintrag" for:index="oeffnungszeitIndex">
+
+                <tr class="slds-hint-parent" key={eintrag.Wochentag__c}>
+                    <th data-label="" scope="row">
+                        {eintrag.Wochentag__c}
+                    </th>
+                    <td data-label="Von">
+                        <div class="slds-truncate">
+                            <c-hw-oeffnungszeiten-wochentag oeffnungszeit-wochentag={eintrag}
+                                                            field-name="vm_von__c"
+                                                            screen-index={screenIndex}
+                                                            section-index={sectionIndex}
+                                                            index={index}
+                                                            screen-locked={screenLocked}
+                                                            category-index= {oeffnungszeitIndex}
+
+                            >
+                            </c-hw-oeffnungszeiten-wochentag>
+                        </div>
+                    </td>
+                    <td data-label="Bis">
+                        <div class="slds-truncate">
+                            <c-hw-oeffnungszeiten-wochentag oeffnungszeit-wochentag={eintrag}
+                                                            field-name="vm_bis__c"
+                                                            screen-index={screenIndex}
+                                                            section-index={sectionIndex}
+                                                            index={index}
+                                                            screen-locked={screenLocked}
+                                                            category-index= {oeffnungszeitIndex}
+
+                            >
+                            </c-hw-oeffnungszeiten-wochentag>
+                        </div>
+                    </td>
+                    <td data-label="Von">
+                        <div class="slds-truncate">
+                            <c-hw-oeffnungszeiten-wochentag oeffnungszeit-wochentag={eintrag}
+                                                            field-name="nm_von__c"
+                                                            screen-index={screenIndex}
+                                                            section-index={sectionIndex}
+                                                            index={index}
+                                                            screen-locked={screenLocked}
+                                                            category-index= {oeffnungszeitIndex}
+
+                            >
+                            </c-hw-oeffnungszeiten-wochentag>
+                        </div>
+                    </td>
+                    <td data-label="Bis">
+                        <div class="slds-truncate">
+                            <c-hw-oeffnungszeiten-wochentag oeffnungszeit-wochentag={eintrag}
+                                                            field-name="nm_bis__c"
+                                                            screen-index={screenIndex}
+                                                            section-index={sectionIndex}
+                                                            index={index}
+                                                            screen-locked={screenLocked}
+                                                            category-index= {oeffnungszeitIndex}
+
+                            >
+                            </c-hw-oeffnungszeiten-wochentag>
+                        </div>
+                    </td>
+                </tr>
+
+            </template>
+            </tbody>
+        </table>
+
+    </lightning-card>
+
+</template>

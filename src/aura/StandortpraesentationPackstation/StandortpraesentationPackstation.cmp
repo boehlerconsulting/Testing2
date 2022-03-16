@@ -1,0 +1,226 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      26.06.2020
+ *
+ *
+ *@description  StandortpraesentationPackstation
+ *
+ *
+ *@changelog    26.06.2020 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<aura:component description="StandortpraesentationPackstation"
+                controller="StandortpraesentationPackstationAuraCtrl"
+                implements="force:lightningQuickActionWithoutHeader,force:hasRecordId">
+
+
+    <aura:html tag="style">
+
+        .slds-modal__container {
+        min-width: 95vw;
+        }
+
+        .slds-modal__close {
+        visibility: hidden !important;
+        }
+    </aura:html>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <aura:attribute name="contentDocumentIds" type="List" default="[]"/>
+    <aura:attribute name="contentDocuments" type="List" default="[]"/>
+    <aura:attribute name="uploadedContentDocumentIds" type="List" default="[]"/>
+    <aura:attribute name="selectedByDocumentId" type="Map" default="{}"/>
+    <aura:attribute name="numberOfSelectedFilesByPage" type="Map" default="{ 1:0,2:0,3:0,4:0 }"/>
+    <aura:attribute name="selectedFilesByPage" type="Map" default="{ 1:'',2:'',3:'',4:'' }"/>
+    <aura:attribute name="isPageOne" type="Boolean" default="true"/>
+    <aura:attribute name="isPageTwo" type="Boolean" default="false"/>
+    <aura:attribute name="isPageThree" type="Boolean" default="false"/>
+    <aura:attribute name="isPageFour" type="Boolean" default="false"/>
+    <aura:attribute name="showSpinner" type="Boolean" default="true"/>
+    <aura:attribute name="filetype" type="List"
+                    default="['.jpeg', '.jpg', '.jpe', '.tiff', '.tif', '.bmp', '.gif', '.png']"/>
+
+    <aura:if isTrue="{!v.showSpinner}">
+        <lightning:spinner alternativeText="Loading" size="large"/>
+    </aura:if>
+
+    <!--PAGE ONE-->
+    <aura:if isTrue="{!v.isPageOne}">
+        <header class="slds-modal__header">
+            <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Bitte max. 8 Fotos "Standort vor Aufbau"
+                auswählen (Seite 1)</h2>
+            <p class="slds-m-top_x-small">Hinweis: Bilder dürfen nur im Querformat aufgenommen werden und das Einzelbild darf nicht größer als 5 MB sein!</p>
+        </header>
+
+        <lightning:layout horizontalAlign="left" verticalAlign="end" multipleRows="true">
+            <lightning:layoutItem flexibility="auto, no-grow" padding="around-small">
+                <lightning:fileUpload label="Weitere Bilder hochladen"
+                                      name="fileUploader"
+                                      multiple="true"
+                                      accept="{!v.filetype}"
+                                      recordId="{!v.recordId}"
+                                      onuploadfinished="{!c.handleUploadFinished}"/>
+            </lightning:layoutItem>
+        </lightning:layout>
+        <lightning:layout horizontalAlign="left" verticalAlign="end" multipleRows="true">
+            <aura:iteration items="{!v.contentDocuments}" var="contentDocument">
+                <aura:if isTrue="{!!contentDocument.hidden}">
+                    <lightning:layoutItem flexibility="auto, no-grow" padding="around-small">
+                        <lightning:fileCard hideDescription="true" fileId="{!contentDocument.id}"/>
+                        <input type="checkbox"
+                               style="zoom:2; alignment: center"
+                               class="slds-m-top_xx-small"
+                               name="{!contentDocument.id}"
+                               checked="{!contentDocument.selected}"
+                               onchange="{!c.handlePictureSelect}"/>
+                    </lightning:layoutItem>
+                </aura:if>
+            </aura:iteration>
+        </lightning:layout>
+    </aura:if>
+
+    <!--PAGE TWO-->
+    <aura:if isTrue="{!v.isPageTwo}">
+        <header class="slds-modal__header">
+            <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Bitte max. 2 Fotos "Geplanter
+                Mikrostandort" auswählen (Seite 2)</h2>
+            <p class="slds-m-top_x-small">Hinweis: Bilder dürfen nur im Querformat aufgenommen werden und das Einzelbild darf nicht größer als 5 MB sein!</p>
+        </header>
+
+        <lightning:layout horizontalAlign="left" verticalAlign="end" multipleRows="true">
+            <lightning:layoutItem flexibility="auto, no-grow" padding="around-small">
+                <lightning:fileUpload label="Weitere Bilder hochladen"
+                                      name="fileUploader"
+                                      multiple="true"
+                                      accept="{!v.filetype}"
+                                      recordId="{!v.recordId}"
+                                      onuploadfinished="{!c.handleUploadFinished}"/>
+            </lightning:layoutItem>
+        </lightning:layout>
+        <lightning:layout horizontalAlign="left" verticalAlign="end" multipleRows="true">
+            <aura:iteration items="{!v.contentDocuments}" var="contentDocument">
+                <aura:if isTrue="{!!contentDocument.hidden}">
+                    <lightning:layoutItem flexibility="auto, no-grow" padding="around-small">
+                        <lightning:fileCard hideDescription="true" fileId="{!contentDocument.id}"/>
+                        <input type="checkbox"
+                               style="zoom:2; alignment: center"
+                               class="slds-m-top_xx-small"
+                               name="{!contentDocument.id}"
+                               checked="{!contentDocument.selected}"
+                               onchange="{!c.handlePictureSelect}"/>
+                    </lightning:layoutItem>
+                </aura:if>
+            </aura:iteration>
+        </lightning:layout>
+    </aura:if>
+
+    <!--PAGE THREE-->
+    <aura:if isTrue="{!v.isPageThree}">
+        <header class="slds-modal__header">
+            <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Bitte max. 2 Fotos "Lageplan mit Packstation"
+                auswählen (Seite 3)</h2>
+            <p class="slds-m-top_x-small">Hinweis: Bilder dürfen nur im Querformat aufgenommen werden und das Einzelbild darf nicht größer als 5 MB sein!</p>
+        </header>
+
+        <lightning:layout horizontalAlign="left" verticalAlign="end" multipleRows="true">
+            <lightning:layoutItem flexibility="auto, no-grow" padding="around-small">
+                <lightning:fileUpload label="Weitere Bilder hochladen"
+                                      name="fileUploader"
+                                      multiple="true"
+                                      accept="{!v.filetype}"
+                                      recordId="{!v.recordId}"
+                                      onuploadfinished="{!c.handleUploadFinished}"/>
+            </lightning:layoutItem>
+        </lightning:layout>
+        <lightning:layout horizontalAlign="left" verticalAlign="end" multipleRows="true">
+            <aura:iteration items="{!v.contentDocuments}" var="contentDocument">
+                <aura:if isTrue="{!!contentDocument.hidden}">
+                    <lightning:layoutItem flexibility="auto, no-grow" padding="around-small">
+                        <lightning:fileCard hideDescription="true" fileId="{!contentDocument.id}"/>
+                        <input type="checkbox"
+                               style="zoom:2; alignment: center"
+                               class="slds-m-top_xx-small"
+                               name="{!contentDocument.id}"
+                               checked="{!contentDocument.selected}"
+                               onchange="{!c.handlePictureSelect}"/>
+                    </lightning:layoutItem>
+                </aura:if>
+            </aura:iteration>
+        </lightning:layout>
+    </aura:if>
+
+    <!--PAGE FOUR-->
+    <aura:if isTrue="{!v.isPageFour}">
+        <header class="slds-modal__header">
+            <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Bitte 1 Foto "Skizze mit Modulen"
+                auswählen (Seite 4)</h2>
+            <p class="slds-m-top_x-small">Hinweis: Bilder dürfen nur im Querformat aufgenommen werden und das Einzelbild darf nicht größer als 5 MB sein!</p>
+        </header>
+
+        <lightning:layout horizontalAlign="left" verticalAlign="end" multipleRows="true">
+            <lightning:layoutItem flexibility="auto, no-grow" padding="around-small">
+                <lightning:fileUpload label="Weitere Bilder hochladen"
+                                      name="fileUploader"
+                                      multiple="true"
+                                      accept="{!v.filetype}"
+                                      recordId="{!v.recordId}"
+                                      onuploadfinished="{!c.handleUploadFinished}"/>
+            </lightning:layoutItem>
+        </lightning:layout>
+        <lightning:layout horizontalAlign="left" verticalAlign="end" multipleRows="true">
+            <aura:iteration items="{!v.contentDocuments}" var="contentDocument">
+                <aura:if isTrue="{!!contentDocument.hidden}">
+                    <lightning:layoutItem flexibility="auto, no-grow" padding="around-small">
+                        <lightning:fileCard hideDescription="true" fileId="{!contentDocument.id}"/>
+                        <input type="checkbox"
+                               style="zoom:2; alignment: center"
+                               class="slds-m-top_xx-small"
+                               name="{!contentDocument.id}"
+                               checked="{!contentDocument.selected}"
+                               onchange="{!c.handlePictureSelect}"/>
+                    </lightning:layoutItem>
+                </aura:if>
+            </aura:iteration>
+        </lightning:layout>
+    </aura:if>
+
+    <footer>
+        <div class="modal-footer slds-modal__footer attach-to-bottom">
+            <button class="slds-button slds-button_neutral" onclick="{! c.handleClose }">Schließen</button>
+            <aura:if isTrue="{!v.isPageOne}">
+                <button class="slds-button slds-button_brand"
+                        onclick="{! c.handleNext }"
+                        disabled="{!lessthan(v.numberOfSelectedFilesByPage[1],1) || greaterthan(v.numberOfSelectedFilesByPage[1],8)}"
+                >Weiter
+                </button>
+            </aura:if>
+            <aura:if isTrue="{!v.isPageTwo}">
+                <button class="slds-button slds-button_brand"
+                        onclick="{! c.handleNext }"
+                        disabled="{!lessthan(v.numberOfSelectedFilesByPage[2],1) || greaterthan(v.numberOfSelectedFilesByPage[2],2)}"
+                >Weiter
+                </button>
+            </aura:if>
+            <aura:if isTrue="{!v.isPageThree}">
+                <button class="slds-button slds-button_brand"
+                        onclick="{! c.handleNext }"
+                        disabled="{!lessthan(v.numberOfSelectedFilesByPage[3],1) || greaterthan(v.numberOfSelectedFilesByPage[3],2)}"
+                >Weiter
+                </button>
+            </aura:if>
+            <aura:if isTrue="{!v.isPageFour}">
+                <button class="slds-button slds-button_brand"
+                        onclick="{! c.handleNext }"
+                        disabled="{!lessthan(v.numberOfSelectedFilesByPage[4],1) || greaterthan(v.numberOfSelectedFilesByPage[4],1)}"
+                >Präsentation generieren
+                </button>
+            </aura:if>
+        </div>
+    </footer>
+
+</aura:component>

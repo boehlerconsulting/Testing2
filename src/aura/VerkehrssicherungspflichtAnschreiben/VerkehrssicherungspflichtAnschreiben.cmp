@@ -1,0 +1,186 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      20.10.2020
+ *
+ *
+ *@description  VerkehrssicherungspflichtAnschreiben
+ *
+ *
+ *@changelog    20.10.2020 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<aura:component description="VerkehrssicherungspflichtAnschreiben"
+                controller="VerkehrssicherungspflichtAnschreibenCtrl"
+                implements="force:lightningQuickActionWithoutHeader,force:hasRecordId">
+
+    <aura:html tag="style">
+
+        .slds-modal__container {
+        min-width: 95vw;
+        }
+
+        .slds-modal__close {
+        visibility: hidden !important;
+        }
+    </aura:html>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="isPageOne" type="Boolean" default="false"/>
+    <aura:attribute name="isPageZero" type="Boolean" default="true"/>
+    <aura:attribute name="contentDocumentIds" type="List" default="[]"/>
+    <aura:attribute name="contentDocuments" type="List" default="[]"/>
+    <aura:attribute name="uploadedContentDocumentIds" type="List" default="[]"/>
+    <aura:attribute name="selectedByDocumentId" type="Map" default="{}"/>
+    <aura:attribute name="numberOfSelectedFilesByPage" type="Map" default="{ 1:0,2:0,3:0,4:0 }"/>
+    <aura:attribute name="selectedFilesByPage" type="Map" default="{ 1:'',2:'',3:'',4:'' }"/>
+    <aura:attribute name="showSpinner" type="Boolean" default="true"/>
+    <aura:attribute name="hasAccess" type="Boolean" default="false"/>
+    <aura:attribute name="hasMissingFields" type="Boolean" default="false"/>
+    <aura:attribute name="isVollstaendig" type="Boolean" default="false"/>
+    <aura:attribute name="isWerktags" type="Boolean" default="false"/>
+    <aura:attribute name="isSonntag" type="Boolean" default="false"/>
+    <aura:attribute name="isSonstiges" type="Boolean" default="false"/>
+    <aura:attribute name="angaben" type="String" default=""/>
+    <aura:attribute name="bemerkungen" type="String" default=""/>
+    <aura:attribute name="filetype" type="List"
+                    default="['.jpeg', '.jpg', '.jpe', '.tiff', '.tif', '.bmp', '.gif', '.png']"/>
+
+    <aura:if isTrue="{!v.showSpinner}">
+        <lightning:spinner alternativeText="Loading" size="large"/>
+    </aura:if>
+    <aura:if isTrue="{!v.hasAccess}">
+        <aura:if isTrue="{!v.isPageZero}">
+            <header class="slds-modal__header">
+                <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Beauftragung
+                    Verkehrssicherungspflicht /
+                    Winterdienst (VSP)</h2>
+            </header>
+
+            <div class="slds-m-top_xx-large">
+                <aura:if isTrue="{!v.hasMissingFields}">
+                    <lightning:layout horizontalAlign="left" verticalAlign="end" multipleRows="true">
+                        <lightning:layoutItem size="6" padding="around-small">
+                            <div class="slds-text-heading_small">
+                                <div class="slds-m-bottom_small">Bitte stellen Sie sicher, dass folgende Felder gepflegt sind und wiederholen Sie den Vorgang:</div>
+                                <ul class="slds-list_dotted">
+                                    <li>PLZ</li>
+                                    <li>...</li>
+                                </ul>
+                            </div>
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                </aura:if>
+                <aura:if isTrue="{!!v.hasMissingFields}">
+                    <lightning:layout horizontalAlign="left" verticalAlign="end" multipleRows="true">
+                        <lightning:layoutItem size="6" padding="around-small">
+                            <div class="slds-text-heading_small">Die Dienstleistung ist im Rahmen der Ortsatzung wie folgt
+                                zu erbringen:
+                            </div>
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                    <lightning:layout horizontalAlign="left" verticalAlign="end" multipleRows="true">
+                        <lightning:layoutItem size="6" padding="around-small">
+
+                            <lightning:input type="checkbox" label="vollständig"
+                                             checked="{!v.isVollstaendig}"
+                                             disabled="{!v.isWerktags || v.isSonstiges || v.isSonntag}"
+                                             onchange="{!c.handleCheckboxChange}"/>
+                            <lightning:input type="checkbox" label="werktags außerhalb der Öffnungszeiten"
+                                             checked="{!v.isWerktags}" disabled="{!v.isVollstaendig}"
+                                             onchange="{!c.handleCheckboxChange}"
+                            />
+                            <lightning:input type="checkbox" label="an Sonn- und Feiertagen"
+                                             checked="{!v.isSonntag}"
+                                             disabled="{!v.isVollstaendig}"
+                                             onchange="{!c.handleCheckboxChange}"
+                            />
+                            <lightning:input type="checkbox" label="zu sonstigen Zeiten:"
+                                             checked="{!v.isSonstiges}"
+                                             disabled="{!v.isVollstaendig}"
+                                             onchange="{!c.handleCheckboxChange}"
+                            />
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                    <aura:if isTrue="{!v.isSonstiges}">
+                        <lightning:layout horizontalAlign="left" verticalAlign="end" multipleRows="true">
+                            <lightning:layoutItem size="6" padding="around-small">
+                                <lightning:textarea label="Angaben" maxlength="500" value="{!v.angaben}"/>
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                    </aura:if>
+                    <lightning:layout horizontalAlign="left" verticalAlign="end" multipleRows="true">
+                        <lightning:layoutItem size="6" padding="around-small">
+                            <lightning:textarea label="Sonstige Bemerkungen oder Aufträge" maxlength="500"
+                                                value="{!v.bemerkungen}"/>
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                </aura:if>
+            </div>
+
+            <footer>
+                <div class="modal-footer slds-modal__footer attach-to-bottom">
+                    <button class="slds-button slds-button_neutral" onclick="{! c.handleClose }">Schließen</button>
+                    <button class="slds-button slds-button_brand"
+                            disabled="{!!v.isVollstaendig &amp;&amp; !v.isSonntag &amp;&amp; !v.isWerktags &amp;&amp; !v.isSonstiges}"
+                            onclick="{! c.handleNext }"
+                    >Weiter
+                    </button>
+                </div>
+            </footer>
+        </aura:if>
+        <aura:if isTrue="{!v.isPageOne}">
+            <header class="slds-modal__header">
+                <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Bitte max. 1 Foto "Anlage
+                    Beauftragung
+                    Winterdienst"
+                    auswählen</h2>
+                <p class="slds-m-top_x-small">Hinweis: Bilder dürfen nur im Querformat aufgenommen werden und das
+                    Einzelbild
+                    darf nicht größer als 5 MB sein!</p>
+                <p class="slds-m-top_x-small">Hinweis: Bitte laden Sie das Bild mit der markierten Fläche (ohne Kopf- und Fußzeile) hoch.</p>
+            </header>
+
+            <lightning:layout horizontalAlign="left" verticalAlign="end" multipleRows="true">
+                <lightning:layoutItem flexibility="auto, no-grow" padding="around-small">
+                    <lightning:fileUpload label="Weitere Bilder hochladen"
+                                          name="fileUploader"
+                                          multiple="true"
+                                          accept="{!v.filetype}"
+                                          recordId="{!v.recordId}"
+                                          onuploadfinished="{!c.handleUploadFinished}"/>
+                </lightning:layoutItem>
+            </lightning:layout>
+            <lightning:layout horizontalAlign="left" verticalAlign="end" multipleRows="true">
+                <aura:iteration items="{!v.contentDocuments}" var="contentDocument">
+                    <aura:if isTrue="{!!contentDocument.hidden}">
+                        <lightning:layoutItem flexibility="auto, no-grow" padding="around-small">
+                            <lightning:fileCard hideDescription="true" fileId="{!contentDocument.id}"/>
+                            <input type="checkbox"
+                                   style="zoom:2; alignment: center"
+                                   class="slds-m-top_xx-small"
+                                   name="{!contentDocument.id}"
+                                   checked="{!contentDocument.selected}"
+                                   onchange="{!c.handlePictureSelect}"/>
+                        </lightning:layoutItem>
+                    </aura:if>
+                </aura:iteration>
+            </lightning:layout>
+
+            <footer>
+                <div class="modal-footer slds-modal__footer attach-to-bottom">
+                    <button class="slds-button slds-button_neutral" onclick="{! c.handleClose }">Schließen</button>
+                    <button class="slds-button slds-button_brand"
+                            onclick="{! c.handleNext }"
+                            disabled="{!lessthan(v.numberOfSelectedFilesByPage[1],1) || greaterthan(v.numberOfSelectedFilesByPage[1],1)}"
+                    >Anschreiben generieren
+                    </button>
+                </div>
+            </footer>
+        </aura:if>
+    </aura:if>
+
+</aura:component>

@@ -1,0 +1,126 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      03.04.2019
+ *@version      1.0
+ *@since        45.0
+ *
+ *
+ *@description  hwProgressIndicator
+ *
+ *
+ *@changelog    03.04.2019 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<!-- HW_ProgressIndicator -->
+<template>
+
+    <lightning-layout>
+
+        <lightning-layout-item size="2">
+
+            <template if:true={showBackButton}>
+
+                <lightning-button class="slds-float_left" variant="brand" label="Zurück" title="Zurück" onclick={handlePrevious} ></lightning-button>
+
+            </template>
+
+        </lightning-layout-item>
+
+        <lightning-layout-item size="8">
+
+            <div class="slds-progress slds-progress_shade">
+                <ol class="slds-progress__list">
+
+                    <template for:each={steps} for:item="step" for:index="stepIndex">
+
+                        <template if:true={step.isDone}>
+
+                            <li key={step.iv_Label} class="slds-progress__item slds-is-completed">
+
+                                <button class="slds-button slds-button_icon slds-button_icon slds-progress__marker slds-progress__marker_icon"
+                                        title={step.iv_Label} onclick={handleChange}>
+                                    <lightning-icon title={step.iv_Label} icon-name="utility:success"  alternative-text={stepIndex}
+                                                    size="xx-small" >{step.iv_Label}</lightning-icon>
+                                    <span class="slds-assistive-text">{step.iv_Label}</span>
+                                </button>
+
+                            </li>
+
+                        </template>
+
+                        <template if:true={step.isOpen}>
+
+                            <li key={step.iv_Label} class="slds-progress__item">
+                                <button name={stepIndex} class="slds-button slds-progress__marker" title={step.iv_Label} onclick={handleChange} >
+                                    <span class="slds-assistive-text">{step.iv_Label}</span>
+                                </button>
+                            </li>
+
+                        </template>
+
+                        <template if:true={step.isSkipped}>
+
+                            <li key={step.iv_Label} class="slds-progress__item slds-has-error">
+                                <button class="slds-button slds-button_icon slds-button_icon slds-progress__marker slds-progress__marker_icon"
+                                        title={step.iv_Label} onclick={handleChange}>
+                                    <lightning-icon title={step.iv_Label} icon-name="utility:error" alternative-text={stepIndex} variant="error"
+                                                    size="xx-small"></lightning-icon>
+                                    <span class="slds-assistive-text" >{step.iv_Label}</span>
+                                </button>
+                            </li>
+
+                        </template>
+
+                        <template if:true={step.isActive}>
+
+                            <li key={step.iv_Label} class="slds-progress__item slds-is-active">
+                                <button name={stepIndex} class="slds-button slds-progress__marker" title={step.iv_Label} onclick={handleChange}>
+                                    <span class="slds-assistive-text" >{step.iv_Label}</span>
+                                </button>
+                            </li>
+
+                        </template>
+
+                        <template if:true={step.isDoneAndActive}>
+
+                            <li key={step.iv_Label} class="slds-progress__item slds-is-completed">
+                                <button class="slds-button slds-button_icon slds-button_icon slds-progress__marker slds-progress__marker_icon"
+                                        title={step.iv_Label} onclick={handleChange}>
+                                    <lightning-icon title={step.iv_Label} icon-name="utility:success"  alternative-text={stepIndex}
+                                                    size="xx-small" >{step.iv_Label}</lightning-icon>
+                                    <span class="slds-assistive-text">{step.iv_Label}</span>
+                                </button>
+                            </li>
+
+                        </template>
+
+                    </template>
+
+                </ol>
+                <div class="slds-progress-bar slds-progress-bar_x-small" aria-valuemin="0" aria-valuemax="100"
+                     aria-valuenow="100" role="progressbar">
+                <span class="slds-progress-bar__value">
+                  <span class="slds-assistive-text"></span>
+                </span>
+                </div>
+            </div>
+
+        </lightning-layout-item>
+
+        <lightning-layout-item size="2">
+
+            <template if:true={showNextButton}>
+
+                <lightning-button  variant="brand" label="Weiter" title="Weiter" onclick={handleNext} ></lightning-button>
+
+            </template>
+
+        </lightning-layout-item>
+
+    </lightning-layout>
+
+</template>

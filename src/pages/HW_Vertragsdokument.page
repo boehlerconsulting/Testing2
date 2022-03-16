@@ -1,0 +1,170 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      02.05.2019
+ *@version      1.0
+ *@since        45.0
+ *
+ *
+ *@description  HW_Vertragsdokument
+ *
+ *
+ *@changelog    02.05.2019 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<apex:page id="HW_Vertragsdokument" controller="HW_Document_C"
+           applyHtmlTag="false" applyBodyTag="false" showHeader="false" standardStylesheets="false" cache="true"
+           >
+
+    <apex:outputPanel rendered="{!ErrorMessage != ''}">
+        <div style="font-weight: bold; color: red">{!ErrorMessage}</div>
+        <div>&nbsp;</div>
+        <div style="font-weight: bold; color: red"> Das Dokument wurde nicht versendet! Bitte kontaktieren Sie Ihren Systemadministrator mit der Fehlermeldung.</div>
+    </apex:outputPanel>
+
+    <div>[Vertragsdaten]</div>
+    <div>Vertrags-ID={!Feld['HW_Vertragsdokument_Vertrags_ID']}</div>
+    <div>Strasse_Partneransch={!Feld['HW_Vertragsdokument_Strasse']}</div>
+    <div>DEBITORBETREIBER={!Feld['HW_Vertragsdokument_Debitor_Betreiber']}</div>
+    <div>Rechtsform={!Feld['HW_Vertragsdokument_Rechtsform']}</div>
+    <div>Plz_Partneranschrift={!Feld['HW_Vertragsdokument_PLZ']}</div>
+    <div>Unternehmen={!Feld['HW_Vertragsdokument_Firmenbezeichnung_Be']}</div>
+    <div>hnr_Partneranschrift={!Feld['HW_Vertragsdokument_Hausnummer']}</div>
+    <div>ANRBetreiber={!if(Feld['HW_Vertragsdokument_Anrede'] = 'Herr', 'Herrn', Feld['HW_Vertragsdokument_Anrede'])}</div>
+    <div>Anrede={!if(Feld['HW_Vertragsdokument_Vertreten_durch'] = 'Herr', 'Herrn', Feld['HW_Vertragsdokument_Vertreten_durch'])}</div>
+    <div>DEBITORFILIALE={!Feld['HW_Vertragsdokument_Debitor_Filiale']}</div>
+    <div>V9_WIRKSAM_AB=<apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+            <apex:param value="{!Feld['HW_Vertragsdokument_Vertragswirksamkeit']}" />
+        </apex:outputText></div>
+    <div>cbxUntEndeMonat={!if(Feld['HW_Vertragsdokument_Vereinbarung_zur_nic'] = 'Ja', 'Wahr', 'Falsch')}</div>
+    <div>Ort_Partneranschrift={!Feld['HW_Vertragsdokument_Ort']}</div>
+    <div>Vorname_Name={!Feld['HW_Vertragsdokument_FirmenEinr1']}</div>
+    <div>NameVertreter2={!Feld['HW_Vertragsdokument_FirmenEinr2']}</div>
+    <div>ANRVertreter2={!if(Feld['HW_Vertragsdokument_und_vertreten_durch'] = 'Herr', 'Herrn', Feld['HW_Vertragsdokument_und_vertreten_durch'])}</div>
+    <div>Str_Filialschrift={!Feld['HW_Vertragsdokument_Filiale_Strasse']}</div>
+    <div>PLZ_Filialanschrift={!Feld['HW_Vertragsdokument_Filiale_PLZ']}</div>
+    <div>hnr_Filialanschrift={!Feld['HW_Vertragsdokument_Filiale_Hausnummer']}</div>
+    <div>Ort_Filialanschrift={!Feld['HW_Vertragsdokument_Filiale_Ort']}</div>
+    <div>UntInhalt=</div>
+    <div>BESR_Wertlogistik={!if(Feld['HW_Vertragsdokument_Filialtyp_OZ'] = '95', 'Wahr', 'Falsch')}</div>
+    <div>Schalterzahl={!Feld['HW_Vertragsdokument_Anzahl_Schalter_ZORA']}</div>
+    <div>NV_AB=<apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+            <apex:param value="{!Feld['HW_Vertragsdokument_Nachtragsvereinbarun']}" />
+        </apex:outputText></div>
+    <div>cbxBriefannahme={!if(Feld['HW_Vertragsdokument_Annahme_Brief'] = 'Ja', 'Wahr', 'Falsch')}</div>
+    <div>cbxBriefausgabe={!if(Feld['HW_Vertragsdokument_Ausgabe_Brief'] = 'Ja', 'Wahr', 'Falsch')}</div>
+    <div>cbxPostfachanlage={!if(Feld['HW_Vertragsdokument_Postfach'] = 'Ja', 'Wahr', 'Falsch')}</div>
+    <div>cbxBESONDEREAUFTRÄGE={!if(Feld['HW_Vertragsdokument_Besondere_Auftr_ge'] = 'Ja', 'Wahr', 'Falsch')}</div>
+    <div>cbxBMA_MITBETREUUNG={!if(Feld['HW_Vertragsdokument_BMA_mit_Betreuung'] = 'Ja', 'Wahr', 'Falsch')}</div>
+    <div>cbxBMA_OHNEBETREUUNG={!if(Feld['HW_Vertragsdokument_BMA_ohne_Betreuung'] = 'Ja', 'Wahr', 'Falsch')}</div>
+    <div>cbxPaketannahme={!if(Feld['HW_Vertragsdokument_Annahme_Paket'] = 'Ja', 'Wahr', 'Falsch')}</div>
+    <div>cbxVERKAUFPAKET={!if(Feld['HW_Vertragsdokument_Verkauf_Paket'] = 'Ja', 'Wahr', 'Falsch')}</div>
+    <div>cbxPaketausgabe={!if(Feld['HW_Vertragsdokument_Ausg_Paket_f_r_benac'] = 'Ja', 'Wahr', 'Falsch')}</div>
+    <div>cbxPAKETBOX={!if(Feld['HW_Vertragsdokument_Paketbox'] = 'Ja', 'Wahr', 'Falsch')}</div>
+    <div>cbxBESTELLSERVICE={!if(Feld['HW_Vertragsdokument_Bestellservice'] = 'Ja', 'Wahr', 'Falsch')}</div>
+    <div>cbxExpress_national={!if(Feld['HW_Vertragsdokument_Annahme_Express_Nati'] = 'Ja', 'Wahr', 'Falsch')}</div>
+    <div>cbxVERKAUFEXPRESS={!if(Feld['HW_Vertragsdokument_Verkauf_Express'] = 'Ja', 'Wahr', 'Falsch')}</div>
+    <div>cbxExpress_internat={!if(Feld['HW_Vertragsdokument_Annahme_Express_Inte'] = 'Ja', 'Wahr', 'Falsch')}</div>
+    <div>cbxKundenbildschirm={!if(Feld['HW_Vertragsdokument_Kundenbildschirm'] = 'Ja', 'Wahr', 'Falsch')}</div>
+    <div>cbxSONSTIGESERVICES={!if(Feld['HW_Vertragsdokument_Sonstige_Services'] = 'Ja', 'Wahr', 'Falsch')}</div>
+    <div>cbxVERKAUFBRIEF={!if(Feld['HW_Vertragsdokument_Verkauf_Brief'] = 'Ja', 'Wahr', 'Falsch')}</div>
+    <div>V9_PF_EE={!Feld['HW_Vertragsdokument_Pausch_DL_Postfach_E']}</div>
+    <div>V9_PF_MIND={!Feld['HW_Vertragsdokument_Ausgl_Mindestverg_tu']}</div>
+    <div>V9_PF_EE_MENGE={!Feld['HW_Vertragsdokument_Postfachsendungen_Ei']}</div>
+    <div>V9_PF_GE={!Feld['Vertrag_Pausch_DL_Postfach_Gro_empf_nger']}</div>
+    <div>V9_PF_GE_MENGE={!Feld['Vertrag_Postfachsendungen_Gro_empf_nger']}</div>
+    <div>V9_PDL={!Feld['Vertrag_Pauschale_Basis_berechnet']}</div>
+    <div>V9_BMA={!Feld['Vertrag_Pauschale_f_r_BMA_o_Betreuung']}</div>
+    <div>BesR_Pilotprojekt_AB=<apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+            <apex:param value="{!Feld['Vertrag_BesR_Pilotprojekte_wirksam_ab']}" />
+        </apex:outputText></div>
+    <div>WM_PF_GESAMT={!Feld['Vertrag_Pausch_DL_Postfach_Gesamt']}</div>
+    <div>V9_Kundenbildschirm={!if(Feld['HW_Vertragsdokument_Kundenbildschirm'] = 'Ja', Feld['Vertrag_Pausch_Kundenbildschirm'], '')}</div>
+    <div>cbxExpress_Ausgabe={!if(Feld['Vertrag_Ausgabe_Express'] = 'Ja', 'Wahr', 'Falsch')}</div>
+    <div>cbxWERBUNG={!if(Feld['Vertrag_Werbung_Sampling'] = 'Ja', 'Wahr', 'Falsch')}</div>
+    <div>cbxVERTRAGANBAHN_VERMIT={!if(Feld['Vertrag_Vertragsanbahnung'] = 'Ja', 'Wahr', 'Falsch')}</div>
+    <div>cbxVERTRAGSABSCHL_VERK={!if(Feld['Vertrag_Vertragsabschluss_Verkauf'] = 'Ja', 'Wahr', 'Falsch')}</div>
+    <div>cbxKONTAKTANBAHNUNG={!if(Feld['Vertrag_Kontaktanbahnung'] = 'Ja', 'Wahr', 'Falsch')}</div>
+    <div>cbxWESTERNUNION={!if(Feld['Vertrag_Western_Union_Geldtransfer'] = 'Ja', 'Wahr', 'Falsch')}</div>
+    <div>cbxRENTENSERVICE={!if(Feld['Vertrag_Rentenservice_Zahlvorg_nge'] = 'Ja', 'Wahr', 'Falsch')}</div>
+    <div>cbxPOSTBANKSPAR={!if(Feld['Vertrag_Postbank_Spar'] = 'Ja', 'Wahr', 'Falsch')}</div>
+    <div>cbxPOSTBANKGIRO={!if(Feld['Vertrag_Postbank_Giro'] = 'Ja', 'Wahr', 'Falsch')}</div>
+    <div>V9_FDL={!Feld['Vertrag_Pauschale_FDL_berechnet']}</div>
+    <div>cbxGAA_CHECKBOX={!if(Feld['Vertrag_Geldausgabeautomat_GAA'] = 'Ja', 'Wahr', 'Falsch')}</div>
+    <div>cbxKAD_CHECKBOX={!if(Feld['Vertrag_Kontoauszugsdrucker_KAD'] = 'Ja', 'Wahr', 'Falsch')}</div>
+    <div>V9_FDL_GAA={!Feld['Vertrag_Pauschale_Geldausgabeautomat_GAA']}</div>
+    <div>V9_FDL_KAD={!Feld['Vertrag_Pauschale_Kontoauszugsdrucker_KA']}</div>
+    <div>BMA={!Feld['Vertrag_Anz_BMA']}</div>
+    <div>Paketbox_Anz={!Feld['Vertrag_Anz_Paketbox']}</div>
+    <div>GAA={!Feld['Vertrag_Anz_GAA']}</div>
+    <div>KAD={!Feld['Vertrag_Anz_KAD']}</div>
+    <div>Kundenbildsch_Anzahl={!if(Feld['HW_Vertragsdokument_Kundenbildschirm'] = 'Ja', Feld['Vertrag_Anz_Kundenbildschirm'], '')}</div>
+    <div>Kundeanaut2_Objekt={!Feld['Vertrag_Sonstiger_Kundenautomat_2_Name']}</div>
+    <div>Kundeanaut2_Anzahl={!Feld['Vertrag_Sonstiger_Kundenautomat_2_Anzahl']}</div>
+    <div>Datenendgerät_Anzahl={!Feld['Vertrag_Anz_Datenendger_t_ZORA']}</div>
+    <div>Wertgelass={!Feld['Vertrag_Anz_Wertgelass']}</div>
+    <div>Kassenlade={!Feld['Vertrag_Anz_Kassenlade_zeitverz_gert']}</div>
+    <div>GMA={!Feld['Vertrag_Anz_GMA']}</div>
+    <div>BBA={!Feld['Vertrag_Anz_BBA']}</div>
+    <div>Sicherheitbehält_Anz={!Feld['Vertrag_Anz_Sicherheitsbeh_ltnis']}</div>
+    <div>Datenendgerät_Typ={!if(Feld['Vertrag_Datenendger_t_ZORA'] = 'ZORA Light', 'ZORA light', Feld['Vertrag_Datenendger_t_ZORA'])}</div>
+    <div>GMA_Typ={!Feld['Vertrag_Gefahrenmeldeanlage_GMA']}</div>
+    <div>Sicherheitbehält_Typ={!Feld['Vertrag_Sicherheitsbeh_ltnis']}</div>
+    <div>BESR1_OEZ_AB=<apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+            <apex:param value="{!Feld['Vertrag_ffnungszeiten_wirksam_ab']}" />
+        </apex:outputText></div>
+    <div>BESR2_IZ_EZ_AB=<apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+            <apex:param value="{!Feld['Vertrag_Einmaliger_IZ_g_ltig_ab']}" />
+        </apex:outputText></div>
+    <div>BESR2_IZ_EZ_BETRAG={!Feld['Vertrag_Individualzuschuss']}</div>
+    <div>BESR3_BFR_IZ1J_AB=<apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+            <apex:param value="{!Feld['Vertrag_Befr_IZ_wirksam_ab']}" />
+        </apex:outputText></div>
+    <div>BESR3_IZ1J_JBTR={!Feld['Vertrag_Befr_IZ_Gesamtbetrag']}</div>
+    <div>BESR3_IZ1J_MOBTR_1HJ={!Feld['Vertrag_Befr_IZ_monatl_Beitrag_1_HJ']}</div>
+    <div>BESR3_IZ1J_MOBTR_2HJ={!Feld['Vertrag_Befr_IZ_monatl_Beitrag_2_HJ']}</div>
+    <div>BESR4_BFRIZ_AB=<apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+            <apex:param value="{!Feld['Vertrag_Befr_IZ_g_ltig_ab']}" />
+        </apex:outputText></div>
+    <div>BESR4_BFRIZ_BIS=<apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+            <apex:param value="{!Feld['Vertrag_Befr_IZ_g_ltig_bis']}" />
+        </apex:outputText></div>
+    <div>BESR4_BFRIZ_MTL_BETR={!Feld['Vertrag_Befr_IZ_monatl_Betrag']}</div>
+    <div>BESR4_BFRIZ_J_BETR={!Feld['Vertrag_Befr_IZ_j_hrlicher_Beitrag']}</div>
+    <div>BESR6_HZ_AB=<apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+            <apex:param value="{!Feld['Vertrag_Herstellungszuschuss_g_ltig_ab']}" />
+        </apex:outputText></div>
+    <div>BESR6_HZ_BETRAG={!Feld['Vertrag_Herstellungszuschuss']}</div>
+    <div>BESR6_SONST1_AB=</div>
+    <div>BESR6_SONST1_BIS=</div>
+    <div>BESR6_SONST1_MTLBTR=</div>
+    <div>BESR6_SONST1_NAME=</div>
+    <div>BESR7_SONST2_AB=</div>
+    <div>BESR7_SONST2_BIS=</div>
+    <div>BESR7_SONST2_MTLBTR=</div>
+    <div>BESR7_SONST2_NAME=</div>
+    <div>BESR8_SONST3_AB=</div>
+    <div>BESR8_SONST3_BIS=</div>
+    <div>BESR8_SONST3_MTLBTR=</div>
+    <div>BESR8_SONST3_NAME=</div>
+    <div>BESR9_SONST4_AB=</div>
+    <div>BESR9_SONST4_BIS=</div>
+    <div>BESR9_SONST4_MTLBTR=</div>
+    <div>BESR9_SONST4_NAME=</div>
+    <div>BESR10_SONST5_AB=</div>
+    <div>BESR10_SONST5_BIS=</div>
+    <div>BESR10_SONST5_MTLBTR=</div>
+    <div>BESR10_SONST5_NAME=</div>
+    <div>BESR11_SONST6_AB=</div>
+    <div>BESR11_SONST6_BIS=</div>
+    <div>BESR11_SONST6_MTLBTR=</div>
+    <div>BESR11_SONST6_NAME=</div>
+    <div>Name_Post1={!Feld['Vertrag_X1_Unterzeichner_DPAG']}</div>
+    <div>VertretungsberechtDP={!Feld['Vertrag_Unterzeichner_DPAG']}</div>
+    <div>Name_Post2={!Feld['Vertrag_Unterzeichner_Name']}</div>
+    <div>Vertragsbetreuend={!Feld['Vertrag_Vertragsunterzeichner_DPAG']}</div>
+
+</apex:page>

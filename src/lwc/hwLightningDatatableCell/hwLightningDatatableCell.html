@@ -1,0 +1,196 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      28.09.2019
+ *@version      1.0
+ *@since        45.0
+ *
+ *
+ *@description  hwLightningDatatableCell
+ *
+ *
+ *@changelog    28.09.2019 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<!-- hwLightningDatatableCell -->
+<template>
+
+    <template if:true={isCheckboxCell}>
+
+        <lightning-input type="checkbox"
+                         label="Checkbox"
+                         variant="label-hidden"
+                         disabled={isCheckboxCellDisabled}
+                         checked={selected}
+                         onchange={handleOnChange}
+        ></lightning-input>
+    </template>
+    <template if:false={isCheckboxCell}>
+        <template if:true={isErledigungstyp}>
+
+            <lightning-combobox
+                    name="Erledigungstyp"
+                    label="Erledigungstyp"
+                    variant="label-hidden"
+                    dropdown-alignment="bottom-left"
+                    value={erledigungstypValue}
+                    options={options}
+                    onchange={handleChange}></lightning-combobox>
+
+        </template>
+        <template if:true={isTerminiertZum}>
+
+            <input type="date" value={terminiertZumValue} class="slds-input" onchange={handleTerminiertZumChange}>
+
+        </template>
+        <template if:true={isUnplanned}>
+            <input type="date" value={plannedDate} class="slds-input" onchange={handlePlannedDateChange}>
+
+        </template>
+        <template if:true={isStandard}>
+            <div class=slds-truncate>
+                <template if:true={text}>
+                    <template if:true={editAktivitaetsstatus}>
+                        <lightning-input type="checkbox"
+                                         label="Checkbox"
+                                         variant="label-hidden"
+                                         checked={statusFieldValue}
+                                         onchange={handleFieldChange}
+                        ></lightning-input>
+                    </template>
+                    <template if:false={editAktivitaetsstatus}>
+                        <template if:true={edit}>
+                            <lightning-input type="text"
+                                             label="text"
+                                             variant="label-hidden"
+                                             value={fieldValue}
+                                             onchange={handleFieldChange}
+                            ></lightning-input>
+                        </template>
+                        <template if:false={edit}>
+
+                            <lightning-formatted-text class=slds-truncate title={fieldValue}
+                                                      value={fieldValue}></lightning-formatted-text>
+                        </template>
+                    </template>
+                </template>
+                <template if:true={textarea}>
+                    <lightning-textarea variant="label-hidden" name={fieldValue} value={fieldValue}
+                                        readonly></lightning-textarea>
+                </template>
+                <template if:true={richtext}>
+                    <lightning-formatted-rich-text class="slds-truncate" title={fieldValue}
+                                                   value={fieldValue}></lightning-formatted-rich-text>
+                </template>
+                <template if:true={picklist}>
+                    <template if:true={isDriawa}>
+                        <select class="slds-input slds-combobox__input" onchange={handleFieldChange}>
+                            <template for:each={statusOptions} for:item="status">
+                                <template if:true={status.isSelected}>
+                                    <option key={status.Id} value={status.value} selected>{status.label}</option>
+                                </template>
+                                <template if:false={status.isSelected}>
+                                    <option key={status.Id} value={status.value}>{status.label}</option>
+                                </template>
+                            </template>
+                        </select>
+                    </template>
+                    <template if:true={isBewertungVM}>
+                        <select class="slds-input slds-combobox__input" onchange={handleFieldChange}>
+                            <template for:each={bewertungOptions} for:item="status">
+                                <template if:true={status.isSelected}>
+                                    <option key={status.Id} value={status.value} selected>{status.label}</option>
+                                </template>
+                                <template if:false={status.isSelected}>
+                                    <option key={status.Id} value={status.value}>{status.label}</option>
+                                </template>
+                            </template>
+                        </select>
+                    </template>
+                </template>
+                <template if:true={date}>
+                    <template if:true={edit}>
+                        <input type="date" value={fieldValue} class="slds-input" onchange={handleDateChange}>
+                    </template>
+                    <template if:false={edit}>
+                        <lightning-formatted-date-time value={fieldValue}></lightning-formatted-date-time>
+                    </template>
+
+                </template>
+                <template if:true={checkbox}>
+                    <lightning-input type="checkbox"
+                                     label="Checkbox"
+                                     variant="label-hidden"
+                                     disabled
+                                     checked={fieldValue}></lightning-input>
+                </template>
+                <template if:true={lookup}>
+
+                        <template if:true={showLookup}>
+                            <template if:true={hasInitialSelection}>
+                                <c-lookup
+                                        selection={initialSelection}
+                                        errors={errors}
+                                        onsearch={handleSearch}
+                                        onselectionchange={handleSelectionChange}
+                                        placeholder=""
+                                >
+                                </c-lookup>
+                            </template>
+                            <template if:false={hasInitialSelection}>
+                                <c-lookup
+                                        errors={errors}
+                                        onsearch={handleSearch}
+                                        onselectionchange={handleSelectionChange}
+                                        placeholder=""
+                                >
+                                </c-lookup>
+                            </template>
+                        </template>
+                        <template if:false={showLookup}>
+                            <div class=slds-truncate>
+                            <lightning-formatted-url value={lookupFieldValue} label={fieldLabel} title={fieldLabel}
+                                                     target="_blank"></lightning-formatted-url>
+                            </div>
+                        </template>
+
+                </template>
+                <template if:true={number}>
+                    <lightning-formatted-number value={fieldValue}
+                                                maximum-fraction-digits="2"></lightning-formatted-number>
+                </template>
+                <template if:true={currency}>
+                    <template if:true={edit}>
+                        <lightning-input
+                                type="number"
+                                name="Currency"
+                                label="Currency"
+                                variant="label-hidden"
+                                value={fieldValue}
+                                formatter="currency"
+                                step="0.01"
+                                onchange={handleFieldChange}
+                        ></lightning-input>
+                    </template>
+                    <template if:false={edit}>
+                        <lightning-formatted-number
+                                value={fieldValue}
+                                format-style="currency"
+                                currency-code="EUR"
+                                class={redText}
+                        ></lightning-formatted-number>
+                    </template>
+                </template>
+                <template if:true={email}>
+                    <lightning-formatted-email value={fieldValue}></lightning-formatted-email>
+                </template>
+                <template if:true={phone}>
+                    <lightning-formatted-phone value={fieldValue}></lightning-formatted-phone>
+                </template>
+            </div>
+        </template>
+    </template>
+</template>

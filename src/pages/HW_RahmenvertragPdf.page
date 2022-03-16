@@ -1,0 +1,176 @@
+<!--
+ - @author      Stefan Richter (stefan.richter@hundw.de)
+ -              H+W CONSULT GmbH
+ -              Bahnhofstr. 3
+ -              21244 Buchholz i. d. Nordheide
+ -              Germany
+ -              https://www.hundw.de
+ -
+ - @description class for <insert-description-here>
+ -
+ - TIMELINE
+ - 14.10.20      Stefan Richter  Initial release.
+ -->
+<apex:page id="HW_RahmenvertragPdf"
+           renderAs="pdf"
+           controller="HW_RahmenvertragPdfCtrl"
+           showHeader="false"
+           applyHtmlTag="false"
+           applyBodyTag="false"
+           action="{!dmlExecHook}">
+    <html>
+        <head>
+            <style>
+                @page
+                {
+                    size: A4;
+                    margin-right: 1.1cm;
+                    margin-top: 1.4cm;
+                    margin-left: 1.1cm;
+                    @bottom-right {
+                        font-family: Arial, Helvetica, sans-serif;
+                        font-size: 11px;
+                        content: "Seite " counter(page) " von " counter(pages);
+                    }
+                    position: running(logo) !important;
+                }
+                @page:first{
+                    @bottom-right{content: '';}
+                }
+
+                body{
+                    font-size:11pt;
+                    font-family:arial;
+                }
+
+                .parahead::before {
+                    content: "§ ";
+                }
+
+                .headText {
+                    font-weight: bold;
+                }
+
+                .centerElement {
+                    text-align: center;
+                    vertical-align: center;
+                }
+
+                .rightElement {
+                    text-align: right;
+                    vertical-align: center;
+                }
+
+                .parablock { }
+                .parabody { }
+
+                .debug{
+                    background: #555;
+                    border: #AA5555 4px solid;
+                    font-weight: bold;
+                    margin: 6px;
+                    padding: 6px;
+                    color: #97DD98;
+                }
+
+
+                table {
+                    width: 100% !important;
+                }
+
+                table * {
+                    font-size: 11pt !important;
+                }
+
+                .endLeft {
+                    float: left;
+                    width: 50%;
+                    background-color: #fff;
+                }
+
+                .endblock {
+                    text-align: end;
+                    vertical-align: bottom;
+                }
+
+                .endRight {
+                    background-color: #fff;
+                }
+
+                .endColumnContent {
+                    float: inside;
+                    margin-right: 30px;
+                    border-bottom: 2px solid black;
+                }
+
+            </style>
+        </head>
+
+        <body>
+            <div class="main">
+                <div style="page-break-after:always;" class="startblock">
+                    <div class="headText centerElement" style="font-size: 16pt;">
+                        Mietvertrag für die Aufstellung und das Betreiben einer Packstation
+                    </div>
+                    <br /><br /><br /><br />
+                    <p>Zwischen {!currentLead.Company}</p>
+                    <br />
+                    <p class="centerElement">{!currentLead.Name}</p>
+                    <p class="centerElement">{!currentLead.Street}</p>
+                    <p class="centerElement">{!currentLead.PostalCode}&nbsp;{!currentLead.City}</p>
+                    <br />
+                    <p class="rightElement">-nachfolgend “Standortgeber“ genannt-</p>
+                    <br />
+                    <p>und</p>
+                    <br />
+                    <p class="centerElement">Deutsche Post Immobilien GmbH</p>
+                    <p class="centerElement">Charles-de-Gaulle-Straße 20</p>
+                    <p class="centerElement">53113 Bonn</p>
+                    <br />
+                    <p>vertreten durch</p>
+                    <p class="centerElement">Deutsche Post AG</p>
+                    <p class="centerElement">Abt. 1T1</p>
+                    <p class="centerElement">Charles-de-Gaulle-Straße 20</p>
+                    <p class="centerElement">53113 Bonn</p>
+                    <p class="rightElement">- nachfolgend “Standortnehmer“ genannt -</p>
+                    <br /><br />
+                    <p>wird bezüglich des Objektes:&nbsp;&nbsp;[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]</p>
+                    <p>folgender Mietvertrag geschlossen.</p>
+                    <p>Mit dem Mietvertrag sind als wesentliche Vertragsbestandteile folgende Anlagen fest verbunden:</p>
+                    <p><span style="font-weight: bold">Anlage 1:&nbsp;&nbsp;</span>Aufstellungsbeschreibung und Benennung des Packstationstyps mit Angabe des Stromverbrauchs</p>
+                    <p><span style="font-weight: bold">Anlage 2:&nbsp;&nbsp;</span>Lageplan und / oder Freiflächenplan mit eingezeichneter Aufstellfläche inkl. Packstation</p>
+                    <p><span style="font-weight: bold">Anlage 3:&nbsp;&nbsp;</span>Fotodokumentation des Standortes vor Beginn der Baumaßnahmen</p>
+                </div>
+                <div class="parablock">
+                    <apex:repeat value="{!orderedVertragsTexte}" var="tx">
+                        <div class="headText">{!tx.orderNumber}-<apex:outputText value="{!tx.heading}" escape="false" /></div>
+                        <div class="parabody"><apex:outputText value="{!tx.body}" escape="false"/></div>
+                    </apex:repeat>
+                </div>
+                <div class="endblock">
+                    <div class="endLeft">
+                        <div class="endColumnContent">
+                            [&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]<br/>
+                            Unterschrift Standortgeber
+                        </div>
+                    </div>
+                    <div class="endRight">
+                        <div class="endColumnContent">
+                            [&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]<br/>
+                            Unterschrift Standortnehmer
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="debug" style="display: none;page-break-before:always;">
+                <p>#---------DEBUG---------#</p>
+                <apex:outputLabel value="{!$ObjectType.Lead.fields['ADM_Typ__c'].label}" />:&nbsp;
+                <apex:outputField value="{!currentLead.ADM_Typ__c}" /><br />
+                <apex:outputLabel value="{!$ObjectType.Lead.fields['ZuordnungZuRahmenvertrag__c'].label}" />:&nbsp;
+                <apex:outputField value="{!currentLead.ZuordnungZuRahmenvertrag__c}" /><br />
+                <apex:outputLabel value="{!$ObjectType.Lead.fields['Summe_aller_Module__c'].label}" />:&nbsp;
+                <apex:outputField value="{!currentLead.Summe_aller_Module__c}" /><br />
+            </div>
+        </body>
+    </html>
+</apex:page>

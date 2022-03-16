@@ -1,0 +1,21 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      21.09.2020
+ *
+ *
+ *@description  MassenzuweisungFilialenWrapper
+ *
+ *
+ *@changelog    21.09.2020 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<aura:component description="MassenzuweisungFilialenWrapper" implements="flexipage:availableForAllPageTypes">
+
+    <lightning:unsavedChanges aura:id="unsaved"/>
+
+    <c:massenzuweisungFilialen onchanged="{!c.handleOnChanged}" ></c:massenzuweisungFilialen>
+</aura:component>

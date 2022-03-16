@@ -1,0 +1,122 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      22.07.2021
+ *
+ *
+ *@description  packstationDatenaenderung
+ *
+ *
+ *@changelog    22.07.2021 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<!-- Packstation Datenaenderung -->
+<template>
+
+    <template if:true={recordId}>
+        <template if:true={recordTypeId}>
+            <lightning-record-edit-form
+                    record-id={recordId}
+                    record-type-id={recordTypeId}
+                    object-api-name="Lead"
+                    onloadedmetadata= {handleOnLoad}
+                    onload= {handleOnLoad}
+                    onsubmit={handleOnSubmit}
+            >
+                <div class="slds-is-relative">
+                    <lightning-quick-action-panel header="Datenänderung">
+
+                        <template if:true={showSpinner}>
+                            <lightning-spinner
+                                    variant="brand"
+                                    alternative-text="Loading"
+                            ></lightning-spinner>
+                        </template>
+
+                        <lightning-messages>
+                        </lightning-messages>
+
+                        <lightning-layout>
+                            <lightning-layout-item size="6" padding="around-small">
+                                <lightning-input-field field-name="Download_LTE_Messung_MBit__c">
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="around-small">
+                                <lightning-input-field field-name="Upload_LTE_Messung_MBit__c">
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        <lightning-layout>
+                            <lightning-layout-item size="6" padding="around-small">
+                                <lightning-input-field field-name="ADM_Typ__c">
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="around-small">
+                                <lightning-input-field field-name="ADM_Hersteller__c">
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        <lightning-layout>
+                            <lightning-layout-item size="6" padding="around-small">
+                                <lightning-input-field field-name="Fundament__c">
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="around-small">
+                                <lightning-input-field field-name="Aufbauform__c">
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        <lightning-layout>
+                            <lightning-layout-item size="6" padding="around-small">
+                                <lightning-input-field field-name="Fachmodule__c">
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="around-small">
+                                <lightning-input-field field-name="Unterbrechung__c">
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        <lightning-layout>
+                            <lightning-layout-item size="6" padding="around-small">
+                                <lightning-input-field field-name="Steuermodule__c">
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="around-small">
+                                <lightning-input-field field-name="Eckmodule__c">
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        <lightning-layout>
+                            <lightning-layout-item size="6" padding="around-small">
+                                <lightning-input-field field-name="Anmerkungen_zum_Bau__c">
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="around-small">
+                                <lightning-input-field field-name="Bemerkungen_zur_Dispo__c">
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                        </lightning-layout>
+
+                        <div slot="footer">
+                            <lightning-button
+                                    variant="neutral"
+                                    label="Abbrechen"
+                                    onclick={closeAction}
+                            ></lightning-button>
+                            <lightning-button
+                                    variant="brand"
+                                    label="Speichern"
+                                    class="slds-m-left_x-small"
+                                    type="submit"
+                            ></lightning-button>
+                        </div>
+                    </lightning-quick-action-panel>
+                </div>
+            </lightning-record-edit-form>
+        </template>
+    </template>
+
+</template>

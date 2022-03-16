@@ -1,0 +1,25 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      17.11.2020
+ *
+ *
+ *@description  Stoerung
+ *
+ *
+ *@changelog    17.11.2020 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<aura:component description="Stoerung" implements="flexipage:availableForAllPageTypes" controller="StoerungCtrl">
+
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    <lightning:utilityBarAPI aura:id="utilityBarAPI"/>
+
+    <aura:attribute name="richText" type="String" default=""/>
+
+    <lightning:formattedRichText aura:id="modalBody" value="{!v.richText}"/>
+
+</aura:component>

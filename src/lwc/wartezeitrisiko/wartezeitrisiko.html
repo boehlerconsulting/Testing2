@@ -1,0 +1,89 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      18.08.2020
+ *
+ *
+ *@description  wartezeitrisiko
+ *
+ *
+ *@changelog    18.08.2020 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<!-- Wartezeitrisiko -->
+<template>
+    <div class="slds-box slds-theme_default">
+
+        <lightning-spinner if:true={showSpinner} alternative-text="Loading" size="medium"
+                           variant="brand"></lightning-spinner>
+        <template if:true={initialized}>
+            <lightning-layout horizontal-align="space">
+                <lightning-layout-item padding="around-small" flexibility="auto">
+                    <div class="slds-text-align_left slds-m-bottom_medium">
+
+                        <lightning-combobox
+                                name="Von KW"
+                                label="Von KW"
+                                value={kwVon}
+                                options={calendarWeeks}
+                                onchange={handleChangeKwVon}></lightning-combobox>
+                    </div>
+
+                </lightning-layout-item>
+                <lightning-layout-item padding="around-small" flexibility="auto">
+                    <div class="slds-text-align_left slds-m-bottom_medium">
+
+                        <lightning-combobox
+                                name="Bis KW"
+                                label="Bis KW"
+                                value={kwBis}
+                                options={calendarWeeks}
+                                onchange={handleChangeKwBis}></lightning-combobox>
+                    </div>
+
+                </lightning-layout-item>
+                <lightning-layout-item padding="around-small" flexibility="auto">
+                    <div class="sld_text-align--left slds-m-bottom_medium">
+
+                        <lightning-combobox
+                                name="Zeige Daten von"
+                                label="Zeige Daten von"
+                                value={startingYear}
+                                options={yearOptions}
+                                onchange={handleChangeSelectedYearOption}></lightning-combobox>
+                    </div>
+
+                </lightning-layout-item>
+            </lightning-layout>
+            <c-chart type="line" responsive="true">
+                <c-dataset labels={dataset.labels}>
+                    <template for:each={dataset.datas} for:item="data">
+                        <c-data label={data.label}
+                                detail={data.detail}
+                                backgroundcolor={data.backgroundColor}
+                                bordercolor={data.borderColor}
+                                fill="false"
+                                order="2"
+                                key={data.Id}></c-data>
+                    </template>
+                </c-dataset>
+                <c-tooltip position="nearest" mode="index" enabled="true"></c-tooltip>
+                <c-legend position="bottom"></c-legend>
+                <c-cartesian-linear-axis axis="y"
+                                         position="left"
+                                         title-labelstring="Wartezeitrisiko in %"
+                                         title-display="true"
+                                         tick-suggestedmin="0"></c-cartesian-linear-axis>
+                <c-cartesian-linear-axis axis="x"
+                                         position="bottom"
+                                         title-labelstring="Kalenderwoche"
+                                         title-display="true"
+                                         type="category"
+                ></c-cartesian-linear-axis>
+            </c-chart>
+        </template>
+    </div>
+</template>

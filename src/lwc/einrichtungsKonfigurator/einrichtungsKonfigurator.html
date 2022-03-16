@@ -1,0 +1,200 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      22.02.2021
+ *
+ *
+ *@description  einrichtungsKonfigurator
+ *
+ *
+ *@changelog    22.02.2021 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<!-- Einrichtungs Konfigurator -->
+<template>
+
+    <lightning-spinner if:true={showSpinner} alternative-text="Loading" size="medium"
+                       variant="base"></lightning-spinner>
+
+
+    <template if:true={noProcessDefined}>
+
+        <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning"
+             role="alert">
+            <span class="slds-assistive-text">warning</span>
+            <span class="slds-icon_container slds-icon-utility-warning slds-m-right_x-small"
+                  title="Description of icon when needed">
+                        <lightning-icon icon-name="utility:warning" alternative-text="Warning!"
+                                        variant="warning"></lightning-icon>
+                    </span>
+            <h2>Sie müssen die Übernahme aus der Vorgängerfiliale abschließen, bevor Sie die Bestellung der Filialausstattung fortsetzen
+                können.
+
+            </h2>
+        </div>
+
+    </template>
+
+    <template if:false={noProcessDefined}>
+
+        <template if:true={isInitialized}>
+
+            <lightning-layout>
+
+                <lightning-layout-item size="2" padding="around-small">
+                    <lightning-combobox
+                            label="OZ"
+                            value={oz}
+                            name="oz"
+                            options={ozOptions}
+                            read-only=true
+                            onchange={handleSearch}
+                    >
+                    </lightning-combobox>
+                </lightning-layout-item>
+                <lightning-layout-item size="2" padding="around-small">
+                    <lightning-combobox
+                            label="Vertriebssegment"
+                            value={vertriebssegment}
+                            name="vertriebssegment"
+                            options={vertriebssegmentOptions}
+                            read-only=true
+                            onchange={handleSearch}
+                    >
+                    </lightning-combobox>
+                </lightning-layout-item>
+                <lightning-layout-item size="2" padding="around-small">
+                    <lightning-combobox
+                            label="Anzahl Schalter"
+                            value={anzahlSchalter}
+                            name="anzahlSchalter"
+                            options={anzahlSchalterOptions}
+                            read-only=true
+                            onchange={handleSearch}
+                    >
+                    </lightning-combobox>
+                </lightning-layout-item>
+                <lightning-layout-item size="2" padding="around-small">
+                    <template if:true={showVariants}>
+                        <lightning-combobox
+                                label="Thekengröße"
+                                value={variant}
+                                name="variant"
+                                options={variantOptions}
+                                onchange={handleVariantChange}
+                        >
+                        </lightning-combobox>
+                    </template>
+                </lightning-layout-item>
+
+                <lightning-layout-item size="4" padding="around-small">
+                    <lightning-button-icon
+                            class="slds-float_right slds-p-around_x-small"
+                            size="medium"
+                            icon-name="utility:jump_to_top"
+                            alternative-text="Alle Sektionen schließen"
+                            title="Alle Sektionen schließen"
+                            onclick={handleCloseAllSections}
+                    ></lightning-button-icon>
+                    <lightning-button-icon
+                            class="slds-float_right slds-p-around_x-small"
+                            size="medium"
+                            icon-name="utility:jump_to_bottom"
+                            alternative-text="Alle Sektionen öffnen"
+                            title="Alle Sektionen öffnen"
+                            onclick={handleOpenAllSections}
+                    ></lightning-button-icon>
+                </lightning-layout-item>
+
+            </lightning-layout>
+
+            <lightning-layout>
+
+                <lightning-layout-item size="12">
+
+                    <lightning-accordion allow-multiple-sections-open active-section-name={activeSections}>
+
+                        <template for:each={categories} for:item="category" for:index="categoryIndex">
+
+                            <template if:false={category.hide}>
+
+                                <lightning-accordion-section name={category.title}
+                                                             label={category.title} key={category.Id}>
+
+                                    <c-einrichtungs-bundle
+                                            key={category.Id}
+                                            category-index={categoryIndex}
+                                            options={category.products}
+                                            option-by-ids={optionByIds}
+                                            is-einrichtungskoordinator={isEinrichtungskoordinator}
+                                            onselected={handleOptionChange}
+                                            onchanged={handleChange}
+                                    ></c-einrichtungs-bundle>
+
+                                </lightning-accordion-section>
+
+                            </template>
+
+                        </template>
+
+                        <template if:true={isEinrichtungskoordinator}>
+
+                            <lightning-accordion-section
+                                    name="Lager"
+                                    label="Lager"
+                            >
+
+                                <lightning-layout>
+
+                                    <lightning-layout-item size="12">
+
+                                        <lightning-accordion allow-multiple-sections-open>
+
+                                            <template for:each={categories} for:item="category" for:index="categoryIndex">
+
+                                                <template if:false={category.hide}>
+
+                                                    <lightning-accordion-section name={category.title}
+                                                                                 label={category.title} key={category.Id}>
+
+                                                        <c-einrichtungs-bundle
+                                                                key={category.Id}
+                                                                category-index={categoryIndex}
+                                                                options={category.products}
+                                                                option-by-ids={optionByIds}
+                                                                is-einrichtungskoordinator={isEinrichtungskoordinator}
+                                                                is-lager=true
+                                                                onselected={handleOptionChange}
+                                                                onchanged={handleChange}
+                                                        ></c-einrichtungs-bundle>
+
+                                                    </lightning-accordion-section>
+
+                                                </template>
+
+                                            </template>
+
+                                        </lightning-accordion>
+
+                                    </lightning-layout-item>
+
+                                </lightning-layout>
+
+                            </lightning-accordion-section>
+
+                        </template>
+
+                    </lightning-accordion>
+
+                </lightning-layout-item>
+
+            </lightning-layout>
+
+        </template>
+
+    </template>
+
+</template>

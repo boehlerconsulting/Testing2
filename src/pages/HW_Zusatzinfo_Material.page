@@ -1,0 +1,257 @@
+<!--
+/**
+ *@author       Karsten Maaß
+ *@created      09.08.2019
+ *@version      1.0
+ *@since        45.0
+ *
+ *
+ *@description  Zusatzinformation Materialerstausstattung für Filialen und Verkaufsstellen
+ *
+ *
+ *@changelog    09.08.2019 Karsten Maaß - Created
+ *              
+ * 
+ */
+ -->
+
+<apex:page id="HW_Matwi_Stamm" controller="HW_Document_C" contentType="{!contentType}" renderAs="{!renderAs}"
+           applyHtmlTag="false" applyBodyTag="false" showHeader="false" standardStylesheets="false" cache="true">
+
+    <html xmlns:v="urn:schemas-microsoft-com:vml"
+          xmlns:o="urn:schemas-microsoft-com:office:office"
+          xmlns:x="urn:schemas-microsoft-com:office:excel">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+        <apex:outputText value="{!sheetName}" escape="false"/>
+        <style type="text/css" media="print,all">
+
+            br {
+                mso-data-placement: same-cell;
+            }
+
+            body {
+                font-family: sans-serif;
+                text-align: left;
+                margin: 0px;
+            }
+
+            table {
+                border-collapse: collapse;
+                table-layout: fixed;
+            }
+
+            tr {
+                vertical-align: bottom;
+                height: 0.53cm;
+                font-size: 10pt;
+                white-space: nowrap;
+            }
+
+            td {
+                background-color: RGB(255, 255, 255);
+            }
+
+            .bold,
+            .header {
+                font-weight: bold;
+            }
+            
+            .border,
+            .header {
+                border-width: thin;
+                border-style: solid;
+            }
+
+            .bg-yellow,
+            .header,
+            .text {
+                background-color: RGB(255, 255, 0);
+            }
+
+        </style>
+    </head>
+    
+    <body>
+        <table>
+            <col style="width:6.30cm"/>
+            <col style="width:4.40cm"/>
+            
+            <tr>
+                <td class="header">Feldbezeichnung</td>
+                <td class="header">Feldinhalt</td>
+            </tr>
+            <tr>
+                <td class="text">Filialname</td>
+                <!--
+                <td class="text">{!Feld['Zusatzinfo_Material_Filialname']} - {!Feld['Zusatzinfo_Material_TransactionTest']}</td>
+                -->
+                <td class="text">{!Feld['Zusatzinfo_Material_Filialname']} </td>
+            </tr>
+            <tr>
+                <td class="text">Eröffnung</td>
+                <td class="text">
+                    <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+                        <apex:param value="{!Feld['Zusatzinfo_Material_Eroeffnung']}" /> 
+                    </apex:outputText>
+                </td>
+            </tr>
+            <tr>
+                <td class="text">Einrichtungstermin Interim</td>
+                <td class="text">
+                    <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+                        <apex:param value="{!if(Feld['Zusatzinfo_Material_Interimsfiliale'] = 'Nein', '', Feld['Zusatzinfo_Material_Eroeffnung'])}" />
+                    </apex:outputText>
+                </td>
+            </tr>
+            <tr>
+                <td/><td/>
+            </tr>
+            <tr>
+                <td class="text">Straße</td>
+                <td class="text" style="mso-number-format: '@'">{!Feld['Zusatzinfo_Material_Strasse']}</td>
+            </tr>
+            <tr>
+                <td class="text">Hausnummer</td>
+                <td class="text" style="mso-number-format: '@'">{!Feld['Zusatzinfo_Material_Hausnummer']}</td>
+            </tr>
+            <tr>
+                <td class="text">PLZ</td>
+                <td class="text" style="mso-number-format: '@'" >{!RIGHT(Feld['Zusatzinfo_Material_PLZ'], 5)}</td>
+            </tr>
+            <tr>
+                <td class="text">Ort</td>
+                <td class="text" style="mso-number-format: '@'">{!Feld['Zusatzinfo_Material_Ort']}</td>
+            </tr>
+            <tr>
+                <td class="text">Telefon</td>
+                <td class="text" style="mso-number-format: '@'">{!Feld['Zusatzinfo_Material_Telefon']}</td>
+            </tr>
+            <tr>
+                <td/><td/>
+            </tr>
+            <tr>
+                <td class="text">ASTNr</td>
+                <td class="text">{!Feld['Zusatzinfo_Material_AST_ID']}</td>
+            </tr>
+            <tr>
+                <td class="text">Debitor</td>
+                <td class="text">{!Feld['Zusatzinfo_Material_Debitor']}</td>
+            </tr>
+            <tr>
+                <td class="text">WaWi-Nummer</td>
+                <td class="text">{!Feld['Zusatzinfo_Material_WaWi_Nummer']}</td>
+            </tr>
+            <tr>
+                <td class="text">Filialtyp</td>
+                <td class="text">{!Feld['Zusatzinfo_Material_Filialtyp']}</td>
+            </tr>
+            <tr>
+                <td class="text">Filialtyp Vorgängerfiliale</td>
+                <td class="text">{!Feld['Zusatzinfo_Material_Filialtyp_Vorgaenger']}</td>
+            </tr>
+            <tr>
+                <td class="text">Vertriebsleitung</td>
+                <td class="text">{!Feld['Zusatzinfo_Material_VL']}</td>
+            </tr>
+            <tr>
+                <td class="text">Interim</td>
+                <td class="text">{!Feld['Zusatzinfo_Material_Interim']}</td>
+            </tr>
+            <tr>
+                <td/><td/>
+            </tr>
+            <tr>
+                <td class="text">Öffnungszeiten Post Montag</td>
+                <td class="text">{!Filialoeffnungszeiten[0].vm_von__c} - {!Filialoeffnungszeiten[0].vm_bis__c} &nbsp; {!Filialoeffnungszeiten[0].nm_von__c} - {!Filialoeffnungszeiten[0].nm_bis__c}</td>
+            </tr>
+            <tr>
+                <td class="text">Öffnungszeiten Post Dienstag</td>
+                <td class="text">{!Filialoeffnungszeiten[1].vm_von__c} - {!Filialoeffnungszeiten[1].vm_bis__c} &nbsp; {!Filialoeffnungszeiten[1].nm_von__c} - {!Filialoeffnungszeiten[1].nm_bis__c}</td>
+            </tr>
+            <tr>
+                <td class="text">Öffnungszeiten Post Mittwoch</td>
+                <td class="text">{!Filialoeffnungszeiten[2].vm_von__c} - {!Filialoeffnungszeiten[2].vm_bis__c} &nbsp; {!Filialoeffnungszeiten[2].nm_von__c} - {!Filialoeffnungszeiten[2].nm_bis__c}</td>
+            </tr>
+            <tr>
+                <td class="text">Öffnungszeiten Post Donnerstag</td>
+                <td class="text">{!Filialoeffnungszeiten[3].vm_von__c} - {!Filialoeffnungszeiten[3].vm_bis__c} &nbsp; {!Filialoeffnungszeiten[3].nm_von__c} - {!Filialoeffnungszeiten[3].nm_bis__c}</td>
+            </tr>
+            <tr>
+                <td class="text">Öffnungszeiten Post Freitag</td>
+                <td class="text">{!Filialoeffnungszeiten[4].vm_von__c} - {!Filialoeffnungszeiten[4].vm_bis__c} &nbsp; {!Filialoeffnungszeiten[4].nm_von__c} - {!Filialoeffnungszeiten[4].nm_bis__c}</td>
+            </tr>
+            <tr>
+                <td/><td/>
+            </tr>
+            <tr>
+                <td class="text">Grundausstattung Material</td>
+                <td class="text">{!Feld['Zusatzinfo_Material_Grundausstattung']}</td>
+            </tr>
+            <tr>
+                <td class="text">Upgrade (nur 79->95)</td>
+                <td class="text">{!Feld['Zusatzinfo_Lieferung_der_zusatzlichen']}</td>
+            </tr>
+            <tr>
+                <td class="text">Anzahl Schalter</td>
+                <td class="text">{!Feld['Zusatzinfo_Material_Anzahl_der_Schalter']}</td>
+            </tr>
+            <tr>
+                <td/><td/>
+            </tr>
+            <tr>
+                <td class="text">Postfach</td>
+                <td class="text">{!Feld['Zusatzinfo_Material_Postfach']}</td>
+            </tr>
+            <tr>
+                <td class="text">express</td>
+                <td class="text">{!Feld['Zusatzinfo_Material_Ausgabe_Express']}</td>
+            </tr>
+            <tr>
+                <td class="text">brief</td>
+                <td class="text">{!Feld['Zusatzinfo_Material_Ausgabe_Brief']}</td>
+            </tr>
+            <tr>
+                <td/><td/>
+            </tr>
+            <tr>
+                <td class="text">Kontoauszugsdrucker</td>
+                <td class="text">{!Feld['Zusatzinfo_Material_Kontoauszugsdrucker']}</td>
+            </tr>
+            <tr>
+                <td class="text">Briefmarkenautomat</td>
+                <td class="text">{!Feld['Zusatzinfo_Material_Briefmarkenautomat']}</td>
+            </tr>
+            <tr>
+                <td class="text">KKZ</td>
+                <td class="text">{!Feld['Zusatzinfo_Material_KKZ_Masterkasse']}</td>
+            </tr>
+            <tr>
+                <td class="text">TagesStempel</td>
+                <td class="text">{!Feld['Zusatzinfo_Material_Tagesstempel']}</td>
+            </tr>
+            <tr>
+                <td class="text">Tagesstempelinschrift</td>
+                <td class="text">{!Feld['Zusatzinfo_Material_Tagesstempelinschrif']}</td>
+            </tr>
+            <tr>
+                <td/><td/>
+            </tr>
+            <tr>
+                <td class="text">Angebotstafel</td>
+                <td class="text">{!if(Feld['Zusatzinfo_Material_Angebotstafel'] == '0'
+                    || LEN(Feld['Zusatzinfo_Material_Angebotstafel']) == 0
+                    || Feld['Zusatzinfo_Material_Angebotstafel'] == null, 'Nein', 'Ja')}</td>
+            </tr>
+            <tr>
+                <td/><td/>
+            </tr>
+            <tr>
+                <td class="text">Sonstiges</td>
+                <td class="text">{!Feld['Zusatzinfo_Material_Sonstige_Info']}</td>
+            </tr>
+        </table>
+    </body>
+
+    </html>
+</apex:page>

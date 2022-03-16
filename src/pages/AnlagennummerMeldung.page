@@ -1,0 +1,115 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      16.06.2020
+ *
+ *
+ *@description  AnlagennummerMeldung
+ *              MYPM-402
+ *
+ *@changelog    16.06.2020 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<apex:page id="AnlagennummerMeldung"
+           controller="AnlagennummerMeldungCtrl"
+           contentType="application/vnd.ms-excel#Template.xls"
+           renderAs="HTML"
+           applyHtmlTag="false"
+           applyBodyTag="false"
+           showHeader="false"
+           standardStylesheets="false"
+           cache="true">
+
+    <html xmlns:v="urn:schemas-microsoft-com:vml"
+          xmlns:o="urn:schemas-microsoft-com:office:office"
+          xmlns:x="urn:schemas-microsoft-com:office:excel">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+        <style type="text/css" media="print,all">
+
+            body {
+                font-family: sans-serif;
+                text-align: left;
+                margin: 0px;
+            }
+
+            table {
+                border-collapse: collapse;
+                table-layout: fixed;
+            }
+
+            tr {
+                height: 0.53cm;
+                vertical-align: bottom;
+                font-size: 10pt;
+                white-space: nowrap;
+            }
+
+            br {
+                mso-data-placement: same-cell;
+            }
+
+            .title {
+                font-weight: bold;
+                font-size: 11pt;
+            }
+
+            .rowHeightDouble {
+                height: 1.06cm;
+            }
+
+            .rowHeight {
+                height: 0.64cm
+            }
+
+            br {
+                mso-data-placement:same-cell;
+            }
+
+        </style>
+    </head>
+    <body>
+
+    <table>
+        <col style="width:3.5cm"/>
+        <col style="width:3.5cm"/>
+        <col style="width:3.5cm"/>
+        <col style="width:3cm"/>
+        <col style="width:9cm"/>
+        <col style="width:3.5cm"/>
+        <col style="width:3cm"/>
+        <col style="width:11cm"/>
+        <col style="width:4cm"/>
+
+        <tr class="rowHeight">
+            <td class="title">Anlagennummer</td>
+            <td class="title">Kostenstelle</td>
+            <td class="title">PSP-Element</td>
+            <td class="title">ADM-Typ</td>
+            <td class="title">Adresse</td>
+            <td class="title">ADM-Hersteller</td>
+            <td class="title">PODID</td>
+            <td class="title">Ansprechpartner</td>
+            <td class="title">Grund der Meldung</td>
+        </tr>
+        <apex:repeat value="{!meldungWrappers}" var="meldung">
+            <tr class="rowHeightDouble">
+                <td style="mso-number-format: '@'">{!meldung.anlagennummer}</td>
+                <td style="mso-number-format: '@'">{!meldung.kostenstelle}</td>
+                <td style="mso-number-format: '@'">{!meldung.pspElement}</td>
+                <td style="mso-number-format: '@'">{!meldung.admTyp}</td>
+                <td style="mso-number-format: '@'">{!meldung.adresse}</td>
+                <td style="mso-number-format: '@'">{!meldung.admHersteller}</td>
+                <td style="mso-number-format: '@'">{!meldung.podId}</td>
+                <td style="mso-number-format: '@'; mso-data-placement:same-cell">{!meldung.ansprechpartner}</td>
+                <td style="mso-number-format: '@'">{!meldung.grund}</td>
+            </tr>
+        </apex:repeat>
+    </table>
+    </body>
+    </html>
+
+</apex:page>

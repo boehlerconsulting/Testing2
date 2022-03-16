@@ -1,0 +1,107 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      07.10.2020
+ *
+ *
+ *@description  StandortpraesentationAbnahme
+ *
+ *
+ *@changelog    07.10.2020 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<aura:component description="StandortpraesentationAbnahme"
+                controller="StandortpraesentationAbnahmeCtrl"
+                implements="force:lightningQuickActionWithoutHeader,force:hasRecordId">
+
+    <aura:html tag="style">
+        .slds-modal__container {
+        min-width: 40vw;
+        }
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+        .slds-p-around–medium {
+        padding: 0rem !important;
+        }
+        .slds-modal__content{
+        overflow-y:hidden !important;
+        height:unset !important;
+        max-height:unset !important;
+        }
+    </aura:html>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="isInitialized" type="Boolean" default="false"/>
+    <aura:attribute name="isAllowed" type="Boolean" default="false"/>
+    <aura:attribute name="isLoading" type="Boolean" default="true"/>
+    <aura:attribute name="hasPermission" type="Boolean" default="false"/>
+    <aura:attribute name="alreadyApproved" type="Boolean" default="false"/>
+    <aura:attribute name="reasons" type="String" default=""/>
+    <aura:attribute name="showReasons" type="Boolean"/>
+    <aura:attribute name="showSave" type="Boolean"/>
+    <aura:attribute name="lead" type="Lead"/>
+
+    <aura:if isTrue="{!v.isLoading}">
+        <lightning:spinner alternativeText="Loading" size="large"/>
+    </aura:if>
+    <header class="slds-modal__header">
+        <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Standortdokumentation abnehmen</h2>
+    </header>
+    <aura:if isTrue="{!v.isInitialized}">
+
+        <aura:if isTrue="{!!v.isAllowed}">
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning slds-m-top_large slds-m-bottom_large"
+                 role="alert">
+                <span class="slds-assistive-text">warning</span>
+                <span class="slds-icon_container slds-icon-utility-warning slds-m-right_x-small"
+                      title="Description of icon when needed">
+                        <lightning:icon iconName="utility:warning" alternativeText="Warning!" title="Warning"/>
+                    </span>
+                <h2>Die Funktion ist nur ausführbar, wenn das Feld "Dokumentation erstellt (Datum)" gefüllt ist.
+
+                </h2>
+            </div>
+
+            <footer>
+                <div class="modal-footer slds-modal__footer attach-to-bottom">
+                    <button class="slds-button slds-button_neutral" onclick="{! c.handleClose }">Schließen</button>
+                </div>
+            </footer>
+        </aura:if>
+        <aura:if isTrue="{!v.isAllowed}">
+
+            <div class="slds-p-around_small">
+                <lightning:select aura:id="select" label="Freigabe" onchange="{!c.handleOnChangeFreigabe}">
+                    <option value=""></option>
+                    <aura:if isTrue="{!!v.alreadyApproved}">
+                        <option value="Ja">Ja</option>
+                        <option value="Nein, Nachbesserung erforderlich">Nein, Nachbesserung erforderlich</option>
+                        <option value="Nein, neue Standortaufnahme erforderlich">Nein, neue Standortaufnahme erforderlich</option>
+                    </aura:if>
+                    <aura:if isTrue="{!v.alreadyApproved}">
+                        <option value="Nachbesserung nach Abnahme">Nachbesserung nach Abnahme</option>
+                    </aura:if>
+                </lightning:select>
+
+                <aura:if isTrue="{!v.showReasons}">
+                    <lightning:textarea label="Gründe" value="{!v.reasons}" maxlength="1500"/>
+                </aura:if>
+            </div>
+
+            <footer>
+                <div class="modal-footer slds-modal__footer attach-to-bottom">
+                    <button class="slds-button slds-button_neutral" onclick="{! c.handleClose }">Schließen</button>
+                    <aura:if isTrue="{!v.showSave}">
+                        <button class="slds-button slds-button_brand" onclick="{! c.handleSave }">Speichern
+                        </button>
+                    </aura:if>
+                </div>
+            </footer>
+        </aura:if>
+    </aura:if>
+
+</aura:component>

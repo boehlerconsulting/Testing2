@@ -1,0 +1,636 @@
+<!--
+/**
+ *@author       Karsten Maaß
+ *@created      18.04.2019
+ *@version      1.1
+ *@since        45.0
+ *
+ *
+ *@description  Partner Selbstauskunft
+ *
+ *
+ *@changelog    09.04.2019 Karsten Maaß - Created
+ *              30.04.2019 Karsten Maaß - Felder "Geschlecht" und "Familienstand" entfernt
+ *              16.05.2019 Karsten Maaß - Fiel Mapping aktualisiert, Logo auf Apex umgestellt, damit es auch in Excel angezeigt wird
+ * 
+ */
+ -->
+<apex:page id="HW_Selbstauskunft" controller="HW_Document_C" contentType="{!contentType}" renderAs="{!renderAs}"
+           applyHtmlTag="false" applyBodyTag="false" showHeader="false" standardStylesheets="false" cache="true">
+           
+    <html xmlns:v="urn:schemas-microsoft-com:vml"
+          xmlns:o="urn:schemas-microsoft-com:office:office"
+          xmlns:x="urn:schemas-microsoft-com:office:excel">
+        <head>
+            <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+
+            <style type="text/css" media="print,all">
+                @page {
+                    size: 21.0cm 29.7cm !important;
+                    margin-top: 2.3cm;
+                    margin-bottom: 1cm;
+                    margin-left: 1.98cm;
+                    margin-right: 1.98cm;
+                }
+                br {
+                    mso-data-placement:same-cell;
+                }
+            
+                body {
+                    font-family: sans-serif;
+                    text-align: left;
+                    margin: 0px;
+                }
+
+                table {
+                    border-collapse: collapse;
+                    table-layout: fixed;
+                }
+                
+                td {
+                    background-color: RGB(255,255,153);
+                }
+                
+                tr {
+                    height: 15.75pt;
+                    vertical-align: bottom;
+                    font-size: 10pt;
+                    white-space: nowrap;
+                }
+
+                ul {
+                    margin-left: 1em;
+                }
+                
+                li {
+                    margin-bottom: 1em;
+                    margin-left: 1em;
+                }
+                
+                .header,
+                .header-border-bottom {
+                    font-size: 12pt;
+                }
+                
+                .info {
+                    font-size: 8pt;
+                }
+                
+                .info-header {
+                    font-size: 9pt;
+                }
+                
+                .sub-label,
+                .hint {
+                    font-size: 10.5pt;
+                }
+                
+                .text-white {
+                    white-space: normal;
+                }
+                                
+                .bg-white,
+                .text-white,
+                .number-white,
+                .check-white {
+                    background-color: RGB(255,255,255);
+                }
+                
+                .bold,
+                .header,
+                .header-border-bottom,
+                .info-header,
+                .label {
+                    font-weight: bold;
+                }
+                
+                .gray-border-top {
+                    border-top-style: solid;
+                    border-top-width: thin;
+                    border-top-color: RGB(192,192,192);
+                }
+                
+                .gray-border-bottom {
+                    border-bottom-style: solid;
+                    border-bottom-width: thin;
+                    border-bottom-color: RGB(192,192,192);
+                }
+                
+                .border-bottom,
+                .header-border-bottom {
+                    border-bottom-style: solid;
+                    border-bottom-width: thin;
+                    border-bottom-color: black;
+                }
+                
+                .border,
+                .text-white,
+                .number-white,
+                .check-white {
+                    border-style: solid;
+                    border-width: thin;
+                    border-color: black;
+                }
+                
+                .border-bold,
+                table {
+                    border-style: solid;
+                    border-width: thick;
+                    border-color: black;
+                }
+                
+                .check,
+                .check-white {
+                    border-style: solid;
+                    border-width: medium;
+                    border-color: black;
+                }
+                
+                .align-top,
+                .info-header,
+                .text-white,
+                .number-white,
+                .check-white {
+                    vertical-align: top;
+                }
+                
+                .align-middle,
+                .header,
+                .header-border-bottom {
+                    vertical-align: middle;
+                }
+                
+                .align-bottom {
+                    vertical-align: bottom;
+                }
+                
+                .align-right {
+                    text-align: right;
+                }
+                
+                .align-center,
+                .number-white,
+                .check-white {
+                    text-align: center;
+                }
+            </style>
+        </head>
+
+        <body>
+        <div class="border-bold">
+            <table>
+                <col style="width:077px" />
+                <col style="width:103px" />
+                <col style="width:050px" />
+                <col style="width:088px" />
+                <col style="width:022px" />
+                <col style="width:022px" />
+                <col style="width:24px" />
+                <col style="width:200px" />
+                <col style="width:008px" />
+                
+                <tr style="height:39.75pt">
+                    <td colspan="7" class="header-border-bottom" style="white-space: normal;">
+                        Partner Selbstauskunft / Einverständniserklärung<br/>
+                        Stand: 16.06.2021
+                    </td>
+                    <td colspan="2" class="header-border-bottom"><apex:outputtext escape="false" value="{!LogoSelbstauskunft}"/></td>
+                </tr>
+                <tr style="height:6pt">
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                </tr>
+                <tr style="height:15pt">
+                    <td class="header">Debitor Partner-Filiale</td>
+                    <td/>
+                    <td colspan="3" class="text-white">{!Feld['Selbstauskunft_Debitor']}</td>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                </tr>
+                <tr style="height:4.5pt">
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                </tr>
+                <tr style="height:18pt">
+                    <td class="header">Demografische Daten</td>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                </tr>
+                <tr style="height:6pt">
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                </tr>
+                <tr style="height:6pt">
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="label">Name</td>
+                    <td colspan="3" class="text-white">{!Feld['Selbstauskunft_Name']}</td>
+                    <td/>
+                    <td colspan="2" rowspan="23" class="text-white">
+                        <span class="info-header">Ich bin damit einverstanden, dass</span>
+                        <ul class="info">
+                            <li>
+                                die Deutsche Post AG meine Daten an die
+                                Postbank - eine Niederlassung der Deutsche
+                                Bank AG - und deren
+                                Beteiligungsgesellschaften zur Prüfung dieser
+                                Selbstauskunft und Einholung von Auskünften
+                                (s.u.) weiterleitet, insbesondere bei Filialen mit
+                                Finanzdienstleistungen ergänzend zu dieser
+                                Selbstauskunft eine Auskunft über die zu
+                                meiner Person gespeicherten Daten bei der
+                                SCHUFA HOLDING AG in Wiesbaden, sowie
+                                bei den Auskunfteien INFOSCORE AG in Baden
+                                Baden und CEG Creditreform Consumer GmbH
+                                in Neuss einholt.
+                            </li>
+                            <li>
+                                die Deutsche Post AG zum Zwecke der
+                                Bonitätsprüfung die zu meiner Person bei
+                                Bürgel Wirtschaftsinformationen GmbH &amp; Co.
+                                KG, Postfach 500 166, 22701 Hamburg
+                                gespeicherten Adress- und Bonitätsdaten
+                                einschließlich solcher, die auf der Basis
+                                mathematisch-statistischer Verfahren
+                                ermittelt werden, einholt und diese Daten an
+                                die Postbank - eine Niederlassung der
+                                Deutsche Bank AG - und deren
+                                Beteiligungsgesellschaften zur Prüfung
+                                weiterleitet.
+                            </li>
+                        </ul>
+                    </td>
+                    <td/>
+                </tr>
+                <tr style="height:6pt">
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="label">Vorname</td>
+                    <td colspan="3" class="text-white">{!Feld['Selbstauskunft_Vorname']}</td>
+                    <td/>
+                    <td/>
+                </tr>
+                <tr style="height:6pt">
+                    <td class="gray-border-bottom"/>
+                    <td class="gray-border-bottom"/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="label">Strasse</td>
+                    <td colspan="3" class="text-white">{!Feld['Selbstauskunft_Strasse']}</td>
+                    <td/>
+                    <td/>
+                </tr>
+                <tr style="height:6pt">
+                    <td/><td/><td/><td/><td/><td/><td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="label">Hausnr.</td>
+                    <td colspan="3" class="text-white">{!Feld['Selbstauskunft_Hausnummer']}</td>
+                    <td/><td/>
+                </tr>
+                <tr style="height:6pt">
+                    <td/><td/><td/><td/><td/><td/><td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="label">PLZ</td>
+                    <td colspan="3" class="text-white">{!Feld['Selbstauskunft_PLZ']}</td>
+                    <td/><td/>
+                </tr>
+                <tr style="height:6pt">
+                    <td/><td/><td/><td/><td/><td/><td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="label">Ort</td>
+                    <td colspan="3" class="text-white">{!Feld['Selbstauskunft_Ort']}</td>
+                    <td/><td/>
+                </tr>
+                <tr style="height:15.75pt">
+                    <td class="gray-border-top"/><td class="gray-border-top"/><td/><td/><td/><td/><td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="label">E-Mail-Adresse</td>
+                    <td colspan="3" class="text-white">{!Feld['Selbstauskunft_Email']}</td>
+                    <td/><td/>
+                </tr>
+                <tr style="height:5.25pt">
+                    <td/><td/><td/><td/><td/><td/><td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="label">Handy-Nr. </td>
+                    <td colspan="3" class="text-white">{!Feld['Selbstauskunft_Mobil_Telefon']}</td>
+                    <td/><td/>
+                </tr>
+                <tr style="height:8.25pt">
+                    <td/><td/><td/><td/><td/><td/><td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="label">Geburtsdatum</td>
+                    <td/>
+                    <td colspan="2" class="text-white">
+                        <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+                            <apex:param value="{!Feld['Selbstauskunft_Geb_Datum']}" /> 
+                        </apex:outputText>
+                    </td>
+                    <td/><td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="hint">(tt.mm.jjjj)</td>
+                    <td/><td/><td/><td/><td/>
+                </tr>
+                <tr>
+                    <td/><td/><td/><td/><td/><td/><td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="label">Wie möchten Sie ange-</td>
+                    <td/>
+                    <td class="sub-label">männlich</td>
+                    <td class="check-white">{!IF(Feld['Selbstauskunft_Anrede'] == 'Herr','x','')}</td>
+                    <td/><td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="label">sprochen werden?</td>
+                    <td/>
+                    <td class="sub-label">weiblich</td>
+                    <td class="check-white">{!IF(Feld['Selbstauskunft_Anrede'] == 'Frau','x','')}</td>
+                    <td/><td/>
+
+                </tr>
+                <tr>
+                    <td/><td/><td/>
+                    <td class="sub-label">divers</td>
+                    <td class="check-white">{!IF(Feld['Selbstauskunft_Anrede'] == 'Divers','x','')}</td>
+                    <td/><td/>
+                </tr>
+                <tr style="height:6pt">
+                    <td class="gray-border-bottom"/>
+                    <td class="gray-border-bottom"/>
+                    <td class="gray-border-bottom"/>
+                    <td class="gray-border-bottom"/>
+                    <td class="gray-border-bottom"/>
+                    <td class="gray-border-bottom"/>
+                    <td/>
+                </tr>
+                <tr style="height:15pt">
+                    <td/><td/><td/><td/><td/><td/><td/><td/><td/>
+                </tr>
+                <tr>
+                    <td class="header">Gewerbe</td>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td colspan="2" class="text-white"><span class="info-header">Datenschutzhinweis</span></td>
+                    <td/>
+                </tr>
+                <tr style="height:6pt">
+                    <td/><td/><td/><td/><td/><td/><td/><td/><td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="sub-label">Branche/</td>
+                    <td colspan="3" class="text-white">{!Feld['Selbstauskunft_Branche']}</td>
+                    <td/>
+                    <td colspan="2" rowspan="8" class="text-white">
+                        <span class="info">
+                            Die Deutsche Post AG, die Postbank - eine Niederlassung der Deutsche Bank AG - und die PB Factoring GmbH speichern meine Daten soweit dies zur Prüfung dieser Selbstauskunft erforderlich ist.
+                        </span>
+                    </td>
+                    <td/>
+                </tr>
+                <tr >
+                    <td/>
+                    <td class="sub-label">Art des Betriebes</td>
+                    <td/>
+                    <td/><td/><td/><td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                </tr>
+                <tr >
+                    <td/>
+                    <td class="sub-label">Alter des Gewerbe-</td>
+                    <td/>
+                    <td colspan="2" class="number-white">{!Feld['Selbstauskunft_Alter_Gewerbebetrieb']}</td>
+                    <td/>
+                    <td/>
+                </tr>
+                <tr style="height:6pt">
+                    <td/>
+                    <td class="sub-label">betriebes (jj)</td>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="sub-label">Dauer der Partner-</td>
+                    <td/>
+                    <td colspan="2" class="number-white">{!Feld['Selbstauskunft_Dauer_Partnerbeziehung']}</td>
+                    <td/>
+                    <td/>
+                </tr>
+                <tr style="height:6pt">
+                    <td/>
+                    <td class="sub-label">beziehung mit Deutsche Post (jj)</td>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="label">Rechtsform</td>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td colspan="2" class="text-white"><span class="info-header">Richtigkeit der Angaben/Zustimmung</span>
+                    </td>
+                    <td/>
+                </tr>
+                <tr style="height:6pt">
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                </tr>
+                <tr style="height:6pt">
+                    <td/>
+                    <td colspan="4" class="number-white" style="text-align: left">{!Feld['Selbstauskunft_Rechtsform']}</td>
+                    <td/>
+                    <td colspan="2" rowspan="7" class="text-white">
+                        <span class="info">
+                            Mit meiner Unterschrift bestätige ich die Richtigkeit und Vollständigkeit obiger Angaben über meine persönlichen Verhältnisse und bestätige das Einverständnis mit den vorstehenden Regelungen.
+                        </span>
+                    </td>
+                    <td/>
+                </tr>
+                <tr style="height:6pt">
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="sub-label">Einzelunternehmen /</td>
+                    <td/>
+                    <td/>
+                    <td class="check-white">{!IF(Feld['Selbstauskunft_Einzelunternehmen'],'x','')}</td>
+                    <td/>
+                    <td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td class="sub-label">Wirtschaftlich Selbständiger</td>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                </tr>
+                <tr style="height:6pt">
+                    <td/>
+                    <td/>
+                    <td/><td/><td/><td/><td/>
+                </tr>
+                <tr style="height:6pt">
+                    <td/><td/><td/><td/><td/><td/><td/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                </tr>
+                <tr style="height:6pt">
+                    <td/>
+                    <td/>
+                    <td/><td/><td/><td/><td/><td/><td/>
+                </tr>
+                <tr style="height:6pt">
+                    <td/><td/><td/><td/><td/><td/><td/><td/><td/>
+                </tr>
+                <tr style="height:60pt">
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td/>
+                    <td colspan="2" class="text-white"><span class="info-header">Datum/Unterschrift:</span></td>
+                    <td/>
+                </tr>
+                <tr style="height:10pt">
+                    <td/>
+                    <td/>
+                    <td/><td/><td/><td/><td/><td/><td/>
+                </tr>
+            </table>
+            </div>
+        </body>
+    </html>
+</apex:page>

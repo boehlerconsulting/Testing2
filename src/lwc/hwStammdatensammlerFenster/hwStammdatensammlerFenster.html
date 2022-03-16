@@ -1,0 +1,218 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      01.04.2019
+ *@version      1.0
+ *@since        45.0
+ *
+ *
+ *@description  hwStammdatensammAnslerFenster
+ *
+ *
+ *@changelog    01.04.2019 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<!-- HW_StammdatensammlerFenster -->
+<template>
+
+    <div class="slds-m-around_medium" key={screen.key}>
+
+        <template if:false={isMAEFOnly}>
+
+            <template if:true={isFactsLocked}>
+
+                <lightning-layout>
+
+                    <lightning-layout-item size="12" padding="around-small">
+
+                        <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning"
+                             role="alert">
+                            <span class="slds-assistive-text">warning</span>
+                            <span class="slds-icon_container slds-icon-utility-warning slds-m-right_x-small"
+                                  title="Description of icon when needed">
+                        <lightning-icon icon-name="utility:warning" alternative-text="Warning!"
+                                        variant="warning"></lightning-icon>
+                    </span>
+                            <h2>Zur Änderungen von Daten der Filiale nutzen Sie bitte die MAEF bzw. senden Sie eine Mail
+                                an ...
+
+                            </h2>
+                        </div>
+
+                    </lightning-layout-item>
+
+                </lightning-layout>
+
+            </template>
+
+            <template if:true={isFormataenderung}>
+
+                <lightning-layout>
+
+                    <lightning-layout-item size="12" padding="around-small">
+
+                        <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_info"
+                             role="alert">
+                            <span class="slds-assistive-text">warning</span>
+                            <span class="slds-icon_container slds-icon-utility-warning slds-m-right_x-small"
+                                  title="Description of icon when needed">
+                                <lightning-icon icon-name="utility:warning"  alternative-text="Warning!" variant="inverse"></lightning-icon>
+                            </span>
+                            <h1>Formatänderung! (Up- /Downgrade) - automatische Befüllung. Bitte alle Angaben kontrollieren!</h1>
+
+                        </div>
+
+                    </lightning-layout-item>
+
+                </lightning-layout>
+
+            </template>
+
+            <template if:true={screen.showFirstWarning}>
+
+                <lightning-layout>
+
+                    <lightning-layout-item size="12" padding="around-small">
+
+                        <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning"
+                             role="alert">
+                            <span class="slds-assistive-text">warning</span>
+                            <span class="slds-icon_container slds-icon-utility-warning slds-m-right_x-small"
+                                  title="Description of icon when needed">
+                        <lightning-icon icon-name="utility:warning" alternative-text="Warning!"
+                                        variant="warning"></lightning-icon>
+                    </span>
+                            <h2>Es muss noch der Handelsregisterauszug/Gewerbeschein angefordert werden!
+
+                            </h2>
+                            <div class="slds-notify__close">
+                                <button class="slds-button slds-button_icon slds-button_icon-small" title="Close">
+                                    <lightning-button-icon
+                                            icon-name="utility:close"
+                                            variant="bare"
+                                            size="large"
+                                            icon-class="large"
+                                            onclick={handleFirstWarningClose}>
+                                    </lightning-button-icon>
+                                </button>
+
+                            </div>
+                        </div>
+
+                    </lightning-layout-item>
+
+                </lightning-layout>
+
+            </template>
+
+            <template if:true={screen.showSecondWarning}>
+
+                <lightning-layout>
+
+                    <lightning-layout-item size="12" padding="around-small">
+
+                        <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning"
+                             role="alert">
+                            <span class="slds-assistive-text">warning</span>
+                            <span class="slds-icon_container slds-icon-utility-warning slds-m-right_x-small"
+                                  title="Description of icon when needed">
+                        <lightning-icon icon-name="utility:warning" alternative-text="Warning!"
+                                        variant="warning"></lightning-icon>
+                    </span>
+                            <h2>Es muss noch das Polizeiliche Führungszeugnis angefordert werden!
+
+                            </h2>
+                            <div class="slds-notify__close">
+                                <button class="slds-button slds-button_icon slds-button_icon-small" title="Close">
+                                    <lightning-button-icon
+                                            icon-name="utility:close"
+                                            variant="bare"
+                                            size="large"
+                                            icon-class="large"
+                                            onclick={handleSecondWarningClose}>
+                                    </lightning-button-icon>
+                                </button>
+
+                            </div>
+                        </div>
+
+                    </lightning-layout-item>
+
+                </lightning-layout>
+
+            </template>
+
+        </template>
+
+        <lightning-layout>
+
+            <lightning-layout-item size="12" padding="around-small">
+
+                <lightning-accordion allow-multiple-sections-open active-section-name={screen.activeSections}
+                                     key={screen.key}>
+
+                        <lightning-layout vertical-align="end">
+                            <lightning-layout-item size="12" class="slds-m-bottom_x-small">
+                                <lightning-button-icon
+                                        class="slds-float_right slds-p-around_x-small"
+                                        size="medium"
+                                        icon-name="utility:jump_to_top"
+                                        alternative-text="Alle Sektionen schließen"
+                                        title="Alle Sektionen schließen"
+                                        onclick={handleCollapseAll}
+                                ></lightning-button-icon>
+                                <lightning-button-icon
+                                        class="slds-float_right slds-p-around_x-small"
+                                        size="medium"
+                                        icon-name="utility:jump_to_bottom"
+                                        alternative-text="Alle Sektionen öffnen"
+                                        title="Alle Sektionen öffnen"
+                                        onclick={handleOpenAll}
+                                ></lightning-button-icon>
+                            </lightning-layout-item>
+                        </lightning-layout>
+
+                    <template for:each={screen.sections} for:item="section"
+                              for:index="sectionIndex">
+
+                        <c-hw-stammdatensammler-sektion
+                                section={section}
+                                record-id={recordId}
+                                screen-locked={isLocked}
+                                is-facts-sent={isFactsSent}
+                                key={section.Id}
+                                screen-index={index}
+                                section-index={sectionIndex}
+                                is-existing-maef={isExistingMaef}
+                        ></c-hw-stammdatensammler-sektion>
+
+                    </template>
+
+                </lightning-accordion>
+
+            </lightning-layout-item>
+
+        </lightning-layout>
+
+        <template for:each={screen.buttons} for:item="button"
+                  for:index="buttonIndex">
+
+            <c-hw-stammdatensammler-button
+                    button={button}
+                    record-id={recordId}
+                    is-filiale-95={isFiliale95}
+                    is-vorgaengerfiliale-present={isVorgaengerfilialePresent}
+                    screen={screen}
+                    screen-locked={isLocked}
+                    is-existing-maef={isExistingMaef}
+                    maef-url={maefUrl}
+                    key={button.key}></c-hw-stammdatensammler-button>
+
+        </template>
+
+    </div>
+
+</template>

@@ -1,0 +1,19 @@
+/**
+ *@author       Mats Böhler
+ *@created      02.04.2019
+ *@version      1.0
+ *@since        45.0
+ *
+ *
+ *@description  hwStammdatensammler
+ *
+ *
+ *@changelog    02.04.2019 Mats Böhler - Created
+ *              
+ * 
+ */
+
+.slds-modal__content{
+    height : 95vh;
+    background: white;
+}

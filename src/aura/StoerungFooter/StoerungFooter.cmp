@@ -1,0 +1,26 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      17.11.2020
+ *
+ *
+ *@description  StoerungFooter
+ *
+ *
+ *@changelog    17.11.2020 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<aura:component description="StoerungFooter" controller="StoerungCtrl">
+
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+    <lightning:button
+            class="slds-text-align_right"
+            variant="brand"
+            label="Nicht mehr anzeigen"
+            title="Nicht mehr anzeigen"
+            onclick="{! c.handleDoNotShowAgain }" />
+</aura:component>

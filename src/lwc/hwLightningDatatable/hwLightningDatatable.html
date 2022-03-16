@@ -1,0 +1,183 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      28.09.2019
+ *@version      1.0
+ *@since        45.0
+ *
+ *
+ *@description  hwLightningDatatable
+ *
+ *
+ *@changelog    28.09.2019 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<!-- hwLightningDatatable -->
+<template>
+    <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_fixed-layout" aria-hidden="true">
+        <thead>
+        <tr class="slds-line-height_reset">
+            <template if:true={showCheckboxColumn}>
+
+                <template if:true={showSelectAll}>
+                    <th scope="col" style="width:3.25rem">
+                        <template if:true={isFirstPage}>
+                            <lightning-input type="checkbox"
+                                             label="Checkbox"
+                                             variant="label-hidden"
+                                             checked={isAllSelected}
+                                             onchange={handleAllSelected}
+                            ></lightning-input>
+                        </template>
+                    </th>
+                </template>
+                <template if:false={showSelectAll}>
+                    <th scope="col" style="width:3.25rem">
+
+                    </th>
+                </template>
+            </template>
+            <template if:true={showActionColumn}>
+
+                <th scope="col" style="width:6.25rem">
+
+                </th>
+
+            </template>
+            <template for:each={columns} for:item="column" for:index="columnIndex">
+                <th scope="col" key={column.label} style={column.style}>
+                    <a data-item={columnIndex}
+                       class="slds-th__action slds-text-link_reset slds-m-around--none slds-p-around--none"
+                       onclick={handleSortdata}>
+
+                        <div class="slds-truncate">
+                            <span data-item={columnIndex} title={column.label}>{column.label}</span>
+                            <template if:true={column.showSortIcon}>
+                                <lightning-icon icon-name={sortArrow} size="xx-small"></lightning-icon>
+                            </template>
+                        </div>
+                    </a>
+                </th>
+            </template>
+        </tr>
+        </thead>
+        <tbody>
+        <template for:each={recordsToShow} for:item="rowData" for:index="rowIndex">
+
+            <tr class="slds-hint-parent" key={rowData.Id}>
+                <template if:true={showCheckboxColumn}>
+
+                    <td>
+                        <c-hw-lightning-datatable-cell
+                                key={rowData.Id}
+                                row-data={rowData}
+                                columns={columns}
+                                row-index={rowIndex}
+                                is-checkbox-cell=true
+                                onselected={handleOnSelected}
+                                is-selected-by-id={isSelectedByLeadId}
+                                >
+                        </c-hw-lightning-datatable-cell>
+                    </td>
+
+                </template>
+                <template if:true={showActionColumn}>
+                    <template if:true={isStandardAction}>
+                        <td>
+                            <lightning-button-menu alternative-text="Show menu" variant="border-filled" icon-name="utility:settings" onselect={handleAction}>
+                                <lightning-menu-item value={rowData.Id} label={actionName}></lightning-menu-item>
+                            </lightning-button-menu>
+                        </td>
+                    </template>
+                    <template if:false={isStandardAction}>
+                        <td>
+                            <lightning-button-menu alternative-text="Show menu" variant="border-filled" icon-name="utility:settings" onselect={handleShowTasks}>
+                                <lightning-menu-item value={rowIndex} label="Zeige Aufgaben"></lightning-menu-item>
+                            </lightning-button-menu>
+                        </td>
+                    </template>
+                </template>
+                <template for:each={columns} for:item="column" for:index="columnIndex">
+
+                    <td data-label={column.style} key={rowData.Id} style={column.style}>
+
+                            <c-hw-lightning-datatable-cell
+                                    key={rowData.Id}
+                                    row-data={rowData}
+                                    column={column}
+                                    row-index={rowIndex}
+                                    column-index={columnIndex}
+                                    is-selected={rowData.isSelected}
+                                    planned-date-by-lead-id={plannedDateByLeadId}
+                                    erledigungstyp-picklist-values={erledigungstypPicklistValues}
+                                    is-termin={isTermin}
+                                    ontypchanged={handleOnTypChanged}
+                                    onterminiertchanged={handleOnTerminiertChanged}
+                                    onplannedchanged={handleOnPlannedChanged}
+                                    is-massenzuweisung={isMassenzuweisung}
+                                    initial-selection-by-id={initialSelectionById}
+                                    onownerchanged={handleOnOwnerChanged}
+                                    ondatechanged={handleOnDateChanged}
+                                    onfieldchanged={handleFieldChanged}
+                            >
+                            </c-hw-lightning-datatable-cell>
+
+                    </td>
+                </template>
+
+            </tr>
+        </template>
+
+        </tbody>
+    </table>
+    <template if:true={noData}>
+        <div class="slds-align--absolute-center slds-m-around--large"> Es sind keine Datensätze zur Anzeige
+            vorhanden.
+        </div>
+    </template>
+    <div class="slds-card__footer">
+        <div class="slds-grid">
+            <div class="slds-p-horizontal_small slds-size_4-of-12 slds-text-align--left">
+                <div style="margin-top: 8px;">
+                    <template if:true={noData}>
+                        Zeige {lastRecordOnPage} von {totalRecordsDisplay}
+                    </template>
+                    <template if:false={noData}>
+                        Zeige {firstRecordOnPage} - {lastRecordOnPage} von {totalRecordsDisplay}
+                    </template>
+                </div>
+            </div>
+            <div class="slds-p-horizontal_small slds-size_4-of-12 slds-text-align--center">
+                <div class="slds-align--absolute-center">
+                    <div class="slds-button-group" role="group">
+                        <lightning-button label="Erste" onclick={firstPage}
+                                          disabled={firstDisabled}></lightning-button>
+                        <lightning-button label="Vorherige" onclick={previousPage}
+                                          disabled={previousDisabled}></lightning-button>
+                        <lightning-button label="Nächste" onclick={nextPage}
+                                          disabled={nextDisabled}></lightning-button>
+                        <lightning-button label="Letzte" onclick={lastPage}
+                                          disabled={lastDisabled}></lightning-button>
+
+                    </div>
+                </div>
+            </div>
+            <div class="slds-size_3-of-12 slds-text-align--right slds-m-top--x-small slds-m-right--small">
+                Zeige:
+            </div>
+            <div class="slds-size_1-of-12 slds-text-align--left slds-m-right--small slds-p-right--small">
+
+                <lightning-combobox
+                        label="Zeige:"
+                        variant="label-hidden"
+                        value={picklistValue}
+                        options={options}
+                        onchange={handleChange}></lightning-combobox>
+
+            </div>
+        </div>
+    </div>
+</template>

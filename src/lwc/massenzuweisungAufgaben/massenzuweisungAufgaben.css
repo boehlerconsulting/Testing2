@@ -1,0 +1,19 @@
+/**
+ *@author       Mats Böhler
+ *@created      18.09.2020
+ *
+ *
+ *@description  massenzuweisungAufgaben
+ *
+ *
+ *@changelog    18.09.2020 Mats Böhler - Created
+ *              
+ * 
+ */
+.overflow-visible {
+    overflow: visible
+}
+
+.slds-modal__content{
+    height: 70%
+}

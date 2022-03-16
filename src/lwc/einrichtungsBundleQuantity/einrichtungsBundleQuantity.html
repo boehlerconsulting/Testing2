@@ -1,0 +1,30 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      11.03.2021
+ *
+ *
+ *@description  einrichtungsBundleQuantity
+ *
+ *
+ *@changelog    11.03.2021 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<!-- Einrichtungs Bundle Quantity -->
+<template>
+    <template if:true={showQuantity}>
+        <lightning-input
+                type="number"
+                label=""
+                variant="label-hidden"
+                value={quantity}
+                max={maximumValue}
+                min={minValue}
+                disabled={disabled}
+                onchange={handleChange}
+        ></lightning-input>
+    </template>
+</template>

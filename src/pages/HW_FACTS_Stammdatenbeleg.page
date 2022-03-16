@@ -1,0 +1,304 @@
+<!--
+/**
+ *@author       Karsten Maaß
+ *@created      12.04.2019
+ *@version      1.0
+ *@since        45.0
+ *
+ *
+ *@description  FACTS Stammdatenbeleg
+ *
+ *
+ *@changelog    12.04.2019 Karsten Maaß - Created
+ *              
+ * 
+ */
+ -->
+
+<apex:page id="HW_FACTS_Stammdatenbeleg" controller="HW_Document_C" contentType="{!contentType}" renderAs="{!renderAs}"
+           applyHtmlTag="false" applyBodyTag="false" showHeader="false" standardStylesheets="false" cache="true">
+
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+          xmlns:o="urn:schemas-microsoft-com:office:office"
+          xmlns:x="urn:schemas-microsoft-com:office:excel">
+        <head>
+            <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+
+            <style type="text/css" media="print,all">
+                @page {
+                    size: 29.7cm 21.0cm !important;
+                    margin-top: 0.2cm;
+                    margin-bottom: 0.2cm;
+                    margin-left: 1cm;
+                    margin-right: 1cm;
+                }
+                br {
+                    mso-data-placement:same-cell;
+                }
+            
+                body {
+                    font-family: sans-serif;
+                    text-align: left;
+                    margin: 0px;
+                }
+
+                table {
+                    border-collapse: collapse;
+                    table-layout: fixed;
+                }
+                
+                td {
+                    background-color: RGB(255,255,255);
+                }
+                
+                tr {
+                    height: 14.5pt;
+                    vertical-align: middle;
+                    font-size: 10pt;
+                    white-space: nowrap;
+                    page-break-inside: avoid;
+                }
+                
+                .header,
+                .header-center {
+                    background-color: RGB(255,192,0);
+                }
+                
+                .align-right {
+                    text-align: right;
+                }
+                
+                .align-center,
+                .header-center {
+                    text-align: center;
+                }
+                
+                .border {
+                    text-align: left;
+                    border-style: solid;
+                    border-width: 1px;
+                    border-color: black;
+                    width
+                }
+                                
+                .border-center {
+                    text-align: center;
+                    border-style: solid;
+                    border-width: thin;
+                    border-color: black;
+                }
+            </style>
+        </head>
+
+        <body>
+
+            <table>
+                <apex:repeat value="{!FACTS}" var="sektion">
+
+                    <apex:outputPanel rendered="{!
+                            (sektion.Label == 'Veränderungsmeldung zu Postfachanlagen (PfA)' && Contract.PostfachanlageVorhanden__c)
+                            || (sektion.Label == 'Änderungen' && Contract.AenderungAnKassenErforderlich__c)
+                            || (sektion.Label != 'Veränderungsmeldung zu Postfachanlagen (PfA)' && sektion.Label != 'Änderungen')}">
+
+                        <apex:variable id="PageBreakAfter" value="{!sektion.Label == 'Öffnungszeiten'}" var="PageBreakAfter" />
+
+
+                        <apex:variable value="" var="TRdummy" rendered="{!IF(PageBreakAfter == true, true, false)}">
+                            <tr style="page-break-after: always;">
+
+                            </tr>
+                        </apex:variable>
+                        <apex:variable value="" var="TRdummy" rendered="{!IF(PageBreakAfter == true, false, true)}">
+                            <tr>
+                                
+                            </tr>
+                        </apex:variable>
+
+                        <tr>
+                            <td class="header" colspan="8">{!sektion.Label}</td>
+                        </tr>
+                    <tr>
+                        <td colspan="8"></td>
+                    </tr>
+                        <apex:variable id="Oeffnungszeiten" rendered="{!sektion.Label == 'Öffnungszeiten'}" value="" var="ZeiteunDummy">
+                            <tr class="header">
+                                <td class="header">Filialöffnungszeiten</td>
+                                <td class="header-center"/>
+                                <td class="header-center">Von</td>
+                                <td class="header-center">Bis</td>
+                                <td class="header-center">Von</td>
+                                <td class="header-center">Bis</td>
+                                <td class="header-center"/>
+                                <td class="header-center"/>
+                            </tr>
+                            <tr/>
+                            <apex:repeat value="{!Filialoeffnungszeiten}" var="eintrag">
+                                <tr>
+                                    <td/>
+                                    <td class="align-right">{!eintrag.Wochentag__c}</td>
+                                    <td class="border-center">{!eintrag.vm_von__c}</td>
+                                    <td class="border-center">{!eintrag.vm_bis__c}</td>
+                                    <td class="border-center">{!eintrag.nm_von__c}</td>
+                                    <td class="border-center">{!eintrag.nm_bis__c}</td>
+                                    <td/>
+                                    <td/>
+                                </tr>
+                            </apex:repeat>
+
+                            <tr/>
+                            <tr>
+                                <td class="header">Öffnungszeiten Hauptgeschäft</td>
+                                <td class="header-center"/>
+                                <td class="header-center">Von</td>
+                                <td class="header-center">Bis</td>
+                                <td class="header-center">Von</td>
+                                <td class="header-center">Bis</td>
+                                <td class="header-center"/>
+                                <td class="header-center"/>
+                            </tr>
+                            <tr/>
+                            <apex:repeat value="{!OeffnungszeitenHauptgeschaeft}" var="eintrag">
+                                <tr>
+                                    <td/>
+                                    <td class="align-right">{!eintrag.Wochentag__c}</td>
+                                    <td class="border-center">{!eintrag.vm_von__c}</td>
+                                    <td class="border-center">{!eintrag.vm_bis__c}</td>
+                                    <td class="border-center">{!eintrag.nm_von__c}</td>
+                                    <td class="border-center">{!eintrag.nm_bis__c}</td>
+                                    <td/>
+                                    <td/>
+                                </tr>
+                            </apex:repeat>
+
+                            <tr/>
+                            <tr>
+                                <td class="header">Zugangszeiten für SB</td>
+                                <td class="header-center"/>
+                                <td class="header-center">Von</td>
+                                <td class="header-center">Bis</td>
+                                <td class="header-center">Von</td>
+                                <td class="header-center">Bis</td>
+                                <td class="header-center"/>
+                                <td class="header-center"/>
+                            </tr>
+                            <tr/>
+                            <apex:repeat value="{!ZugangszeitenSB}" var="eintrag">
+                                <tr>
+                                    <td/>
+                                    <td class="align-right">{!eintrag.Wochentag__c}</td>
+                                    <td class="border-center">{!eintrag.vm_von__c}</td>
+                                    <td class="border-center">{!eintrag.vm_bis__c}</td>
+                                    <td class="border-center">{!eintrag.nm_von__c}</td>
+                                    <td class="border-center">{!eintrag.nm_bis__c}</td>
+                                    <td/>
+                                    <td/>
+                                </tr>
+                            </apex:repeat>
+
+                        </apex:variable>
+                        <apex:repeat value="{!sektion.Felder}" var="feld">
+                            <tr>
+                                <td colspan="3">{!feld.Label}</td>
+
+                                <td colspan="3" class="border">
+                                    <apex:outputPanel rendered="{!feld.Feldtyp == 'date'}">
+                                        <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+                                            <apex:param value="{!feld.Value}" />
+                                        </apex:outputText>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!feld.Feldtyp == 'checkbox'}">
+                                        <apex:outputText value="{!IF(feld.Value == true || feld.Value == 'true', 'Ja', 'Nein')}">
+                                        </apex:outputText>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!feld.Feldtyp != 'checkbox' && feld.Feldtyp != 'date'}">
+                                        <apex:outputText value="{!feld.Value}">
+                                        </apex:outputText>
+                                    </apex:outputPanel>
+                                </td>
+                            </tr>
+                        </apex:repeat>
+                        <apex:variable id="Postfachanlagen" rendered="{!sektion.Label == 'Veränderungsmeldung zu Postfachanlagen (PfA)'}" value="" var="ZeiteunDummy">
+                            <tr/>
+                            <tr>
+                                <td class="header">Sortierzeiten</td>
+                                <td class="header-center"/>
+                                <td class="header-center">Von</td>
+                                <td class="header-center">Bis</td>
+                                <td class="header-center">Von</td>
+                                <td class="header-center">Bis</td>
+                                <td class="header-center"/>
+                                <td class="header-center"/>
+                            </tr>
+                            <tr/>
+                            <apex:repeat value="{!Sortierzeiten}" var="eintrag">
+                                <tr>
+                                    <td/>
+                                    <td class="align-right">{!eintrag.Wochentag__c}</td>
+                                    <td class="border-center">{!eintrag.vm_von__c}</td>
+                                    <td class="border-center">{!eintrag.vm_bis__c}</td>
+                                    <td class="border-center">{!eintrag.nm_von__c}</td>
+                                    <td class="border-center">{!eintrag.nm_bis__c}</td>
+                                    <td/>
+                                    <td/>
+                                </tr>
+                            </apex:repeat>
+
+                            <tr/>
+                            <tr>
+                                <td class="header">Zugangszeiten</td>
+                                <td class="header-center"/>
+                                <td class="header-center">Von</td>
+                                <td class="header-center">Bis</td>
+                                <td class="header-center">Von</td>
+                                <td class="header-center">Bis</td>
+                                <td class="header-center"/>
+                                <td class="header-center"/>
+                            </tr>
+                            <tr/>
+                            <apex:repeat value="{!Zugangszeiten}" var="eintrag">
+                                <tr>
+                                    <td/>
+                                    <td class="align-right">{!eintrag.Wochentag__c}</td>
+                                    <td class="border-center">{!eintrag.vm_von__c}</td>
+                                    <td class="border-center">{!eintrag.vm_bis__c}</td>
+                                    <td class="border-center">{!eintrag.nm_von__c}</td>
+                                    <td class="border-center">{!eintrag.nm_bis__c}</td>
+                                    <td/>
+                                    <td/>
+                                </tr>
+                            </apex:repeat>
+
+                            <tr/>
+                            <tr>
+                                <td class="header">Ausgabezeiten</td>
+                                <td class="header-center"/>
+                                <td class="header-center">Von</td>
+                                <td class="header-center">Bis</td>
+                                <td class="header-center">Von</td>
+                                <td class="header-center">Bis</td>
+                                <td class="header-center"/>
+                                <td class="header-center"/>
+                            </tr>
+                            <tr/>
+                            <apex:repeat value="{!Ausgabezeiten}" var="eintrag">
+                                <tr>
+                                    <td/>
+                                    <td class="align-right">{!eintrag.Wochentag__c}</td>
+                                    <td class="border-center">{!eintrag.vm_von__c}</td>
+                                    <td class="border-center">{!eintrag.vm_bis__c}</td>
+                                    <td class="border-center">{!eintrag.nm_von__c}</td>
+                                    <td class="border-center">{!eintrag.nm_bis__c}</td>
+                                    <td/>
+                                    <td/>
+                                </tr>
+                            </apex:repeat>
+                        </apex:variable>
+                    </apex:outputPanel>
+
+
+
+                </apex:repeat>
+            </table>
+        </body>
+    </html>
+</apex:page>

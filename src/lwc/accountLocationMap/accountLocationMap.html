@@ -1,0 +1,30 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      21.06.2021
+ *
+ *
+ *@description  accountLocationMap
+ *
+ *
+ *@changelog    21.06.2021 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<!-- Account Location Map -->
+<template>
+    <template if:true={isLoaded}>
+        <lightning-card >
+            <lightning-map
+                    class=slds-p-around_small
+                    map-markers={mapMarkers}
+                    zoom-level={zoomLevel}>
+            </lightning-map>
+        </lightning-card>
+    </template>
+    <template if:true={error}>
+        {error}
+    </template>
+</template>

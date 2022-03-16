@@ -1,0 +1,47 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      17.11.2020
+ *
+ *
+ *@description  ReleaseNoteOverview
+ *
+ *
+ *@changelog    17.11.2020 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<aura:component description="ReleaseNoteOverview"
+                implements="force:appHostable"
+                controller="ReleaseNoteOverviewCtrl">
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <aura:attribute name="releases" type="List" default=""/>
+    <aura:attribute name="showSpinner" type="Boolean" default="true"/>
+    <aura:attribute name="activeSections" type="List" default="['0']" />
+
+    <aura:if isTrue="{!v.showSpinner}">
+        <lightning:spinner alternativeText="Loading" size="large"/>
+    </aura:if>
+    <lightning:card>
+        <aura:if isTrue="{!!v.showSpinner}">
+            <lightning:accordion activeSectionName="['0']">
+                <aura:iteration items="{!v.releases}" var="release" indexVar="i">
+                    <lightning:accordionSection name="{!i}" label="{!release.title}">
+                        <lightning:formattedRichText class="slds-m-around_large" value="{!release.description}"/>
+                        <lightning:layout horizontalAlign="left" verticalAlign="end" multipleRows="true" >
+                            <aura:iteration items="{!release.contentDocumentIds}" var="documentId">
+                                <lightning:layoutItem flexibility="auto, no-grow" padding="around-small">
+                                    <lightning:fileCard fileId="{!documentId}"/>
+                                </lightning:layoutItem>
+                            </aura:iteration>
+                        </lightning:layout>
+                    </lightning:accordionSection>
+                </aura:iteration>
+            </lightning:accordion>
+        </aura:if>
+    </lightning:card>
+</aura:component>

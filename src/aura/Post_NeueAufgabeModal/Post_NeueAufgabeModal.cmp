@@ -1,0 +1,43 @@
+<!--
+/**
+ *@author       Mats Böhler <mats.boehler@boehlerconsulting.com>
+ *@created      04.12.2018
+ *@version      1.0
+ *@since        44.0
+ *
+ *
+ *@description  Post_NeueAufgabeModal
+ *
+ *
+ *@changelog    04.12.2018 Mats Böhler <mats.boehler@boehlerconsulting.com> - Created
+ *              
+ * 
+ */
+ -->
+
+<aura:component description="Post_NeueAufgabeModal" controller="Post_UebersichtController">
+
+    <aura:attribute name="lstOfRecordType" type="String[]" />
+    <aura:attribute access="public" type="String" name="accountId" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.fetchListOfRecordTypes}"/>
+
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    <lightning:notificationsLibrary aura:id="notifLib"/>
+
+    <div class="slds-size--1-of-2 slds-large-size--1-of-2">
+        <div class="slds-text-align--left">{!$Label.c.Post_AuswahlDatensatztyp}</div>
+    </div>
+    <div class="slds-size--1-of-2 slds-large-size--1-of-2">
+        <ui:inputSelect aura:id="selectedId">
+            <aura:iteration items="{!v.lstOfRecordType}" var="recordType">
+                <ui:inputSelectOption text="{!recordType}" label="{!recordType}"  />
+            </aura:iteration>
+        </ui:inputSelect>
+    </div>
+
+    <lightning:button class="slds-m-top--large slds-text-align--right" onclick="{!c.closeModal}">{!$Label.c.Post_Schliessen}</lightning:button>
+    <lightning:button class="slds-m-top--large slds-button--brand slds-text-align--right" onclick="{!c.createRecord}">{!$Label.c.Post_Weiter}</lightning:button>
+
+
+</aura:component>

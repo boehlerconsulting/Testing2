@@ -1,0 +1,133 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      01.04.2019
+ *@version      1.0
+ *@since        45.0
+ *
+ *
+ *@description  hwStammdatensammlerSektion
+ *
+ *
+ *@changelog    01.04.2019 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<!-- HW_StammdatensammlerSektion -->
+<template>
+
+    <template if:false= {hideSection}>
+
+        <lightning-accordion-section name={section.iv_Title}
+                                     label={section.iv_Title} key={section.Id}>
+
+            <template if:true= {isSapFactsSectionLocked}>
+
+                <lightning-layout>
+
+                    <lightning-layout-item size="12" padding="around-small">
+
+                        <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning" role="alert">
+                            <span class="slds-assistive-text">warning</span>
+                            <span class="slds-icon_container slds-icon-utility-warning slds-m-right_x-small" title="Description of icon when needed">
+                        <lightning-icon icon-name="utility:warning" alternative-text="Warning!" variant="warning"></lightning-icon>
+                    </span>
+                            <h2>Zur Änderungen von Daten der Filiale nutzen Sie bitte die MAEF bzw. senden Sie eine Mail an ...
+
+                            </h2>
+                        </div>
+
+                    </lightning-layout-item>
+
+                </lightning-layout>
+
+            </template>
+
+            <lightning-layout>
+
+                <template if:true={section.recordsExist}>
+
+                    <lightning-layout-item size="6" padding="around-small">
+
+                        <template for:each={section.il_Fields}
+                                  for:item="field" for:index="fieldIndex">
+
+                            <template if:true={field.isFirstColumn}>
+
+                                <c-hw-stammdatensammler-feld
+                                        field={field}
+                                        record-id={recordId}
+                                        screen-locked={isLocked}
+                                        is-existing-maef={isExistingMaef}
+                                        key={field.Id}></c-hw-stammdatensammler-feld>
+
+                            </template>
+
+                        </template>
+
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="6" padding="around-small">
+
+                        <template for:each={section.il_Fields}
+                                  for:item="field" for:index="fieldIndex">
+
+                            <template if:true={field.isSecondColumn}>
+
+                                <c-hw-stammdatensammler-feld
+                                        field={field}
+                                        record-id={recordId}
+                                        screen-locked={isLocked}
+                                        is-existing-maef={isExistingMaef}
+                                        key={field.Id}></c-hw-stammdatensammler-feld>
+
+                            </template>
+
+                        </template>
+
+                    </lightning-layout-item>
+
+                </template>
+
+            </lightning-layout>
+
+            <lightning-layout>
+
+                <template if:true={section.iv_HasOeffnungszeiten}>
+
+                    <lightning-layout-item size="12" padding="around-small">
+
+                        <template for:each={section.il_Oeffnungszeits}
+                                  for:item="oeffnungszeit" for:index="oeffnungszeitIndex">
+
+                            <template if:false={oeffnungszeit.hide}>
+
+                                <c-hw-oeffnungszeiten
+                                        key={oeffnungszeit.iv_Kategorie}
+                                        oeffnungszeit={oeffnungszeit}
+                                        record-id={recordId}
+                                        screen-index={screenIndex}
+                                        section-index={sectionIndex}
+                                        screen-locked={screenLocked}
+                                        index={oeffnungszeitIndex}
+                                >
+
+                                </c-hw-oeffnungszeiten>
+
+                            </template>
+
+                        </template>
+
+                    </lightning-layout-item>
+
+                </template>
+
+            </lightning-layout>
+
+        </lightning-accordion-section>
+
+    </template>
+
+</template>

@@ -1,0 +1,65 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      08.09.2021
+ *
+ *
+ *@description  EnhancedRelatedListWrapper
+ *
+ *
+ *@changelog    08.09.2021 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<aura:component description="EnhancedRelatedListWrapper" controller="EnhancedRelatedListCtrl" implements="force:hasRecordId,flexipage:availableForAllPageTypes" access="global">
+
+    <aura:attribute name="dummyAccountExists" type="Boolean" default="false" />
+    <aura:attribute name="lead" type="Lead" />
+    <aura:attribute name="relatedListName" type="String" />
+    <aura:attribute name="displayType" type="String" />
+    <aura:attribute name="layoutType" type="String" />
+    <aura:attribute name="filter" type="String" />
+    <aura:attribute name="sort" type="String" />
+    <aura:attribute name="defaultNumberofRecordsToDisplay" type="String" />
+    <aura:attribute name="maxNumberOfRecordsToDisplay" type="String" />
+    <aura:attribute name="title" type="String" />
+    <aura:attribute name="iconName" type="String" />
+    <aura:attribute name="newRecord" type="String" />
+    <aura:attribute name="showHeader" type="Boolean" />
+    <aura:attribute name="showRefreshButton" type="Boolean" />
+    <aura:attribute name="showMenuAction" type="Boolean" />
+    <aura:attribute name="hideOnNoRecord" type="Boolean" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <aura:if isTrue="{!v.dummyAccountExists}">
+        <CMTD:EnhancedRelatedList
+                parentObjectIdField="Packstation__c"
+                objectAPIName="AccountContactRelation"
+                relatedListName="{!v.relatedListName}"
+                parentField="AccountId"
+                parentId="{!v.lead.Packstation__c}"
+                displayType="{!v.displayType}"
+                layoutType="{!v.layoutType}"
+                filter="{!v.filter}"
+                sort="{!v.sort}"
+                defaultNumberofRecordsToDisplay="{!v.defaultNumberofRecordsToDisplay}"
+                maxNumberOfRecordsToDisplay="{!v.maxNumberOfRecordsToDisplay}"
+                title="{!v.title}"
+                iconName="{!v.iconName}"
+                newRecord="{!v.newRecord}"
+                showHeader="{!v.showHeader}"
+                showRefreshButton="{!v.showRefreshButton}"
+                showMenuAction="{!v.showMenuAction}"
+                hideOnNoRecord="{!v.hideOnNoRecord}"
+        />
+    </aura:if>
+
+    <lightning:messageChannel
+            type="NewAccountContactRelationRecordChange__c"
+            onMessage="{!c.handleMessage}"
+    />
+
+</aura:component>

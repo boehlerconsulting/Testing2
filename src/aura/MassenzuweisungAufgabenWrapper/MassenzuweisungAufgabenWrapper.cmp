@@ -1,0 +1,22 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      18.09.2020
+ *
+ *
+ *@description  MassenzuweisungAufgabenWrapper
+ *
+ *
+ *@changelog    18.09.2020 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<aura:component description="MassenzuweisungAufgabenWrapper" implements="flexipage:availableForAllPageTypes">
+
+    <lightning:unsavedChanges aura:id="unsaved"/>
+
+    <c:massenzuweisungAufgaben onchanged="{!c.handleOnChanged}" ></c:massenzuweisungAufgaben>
+
+</aura:component>

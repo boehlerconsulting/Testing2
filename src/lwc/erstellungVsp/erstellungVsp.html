@@ -1,0 +1,294 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      04.01.2022
+ *
+ *
+ *@description  erstellungVsp
+ *
+ *
+ *@changelog    04.01.2022 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<!-- Erstellung Vsp -->
+<template>
+    <template if:true={recordId}>
+        <div class="slds-is-relative">
+            <template if:true={showPageOne}>
+                <lightning-quick-action-panel header="Erstellung Formular Verkehrssicherungspflicht (VSP)">
+
+                    <template if:true={showSpinner}>
+                        <lightning-spinner
+                                variant="brand"
+                                alternative-text="Loading"
+                        ></lightning-spinner>
+                    </template>
+
+                    <template if:true={isInitialized}>
+                        <lightning-accordion allow-multiple-sections-open="true" active-section-name={activeSections}>
+                            <lightning-accordion-section label="Es wird beauftragt:" name="A">
+                                <lightning-layout>
+
+                                    <lightning-layout-item size="6" padding="around-small">
+                                        <lightning-input
+                                                name="winterdienstValue"
+                                                checked={winterdienstValue}
+                                                type="checkbox"
+                                                label="Winterdienst"
+                                                onchange={handleValueChange}
+                                        >
+                                        </lightning-input>
+                                    </lightning-layout-item>
+
+                                    <lightning-layout-item size="6" padding="around-small">
+                                        <lightning-input
+                                                name="aussenreinigungValue"
+                                                checked={aussenreinigungValue}
+                                                type="checkbox"
+                                                label="Außenreinigung"
+                                                onchange={handleValueChange}
+                                        >
+                                        </lightning-input>
+                                    </lightning-layout-item>
+
+                                </lightning-layout>
+                                <lightning-layout>
+                                    <lightning-layout-item size="6" padding="around-small">
+                                        <lightning-input
+                                                name="winterdienstLPSValue"
+                                                checked={winterdienstLPSValue}
+                                                type="checkbox"
+                                                label="Winterdienst LPS mit Solarpanel"
+                                                onchange={handleValueChange}
+                                                disabled
+                                        >
+                                        </lightning-input>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+
+                            </lightning-accordion-section>
+                            <lightning-accordion-section
+                                    label="Die Dienstleistung ist im Rahmen der Ortssatzung wie folgt zu erbringen:"
+                                    name="B">
+                                <lightning-layout>
+
+                                    <lightning-layout-item size="6" padding="around-small">
+                                        <lightning-input
+                                                name="vollstaendigValue"
+                                                checked={vollstaendigValue}
+                                                type="checkbox"
+                                                label="vollständig"
+                                                onchange={handleValueChange}
+                                        >
+                                        </lightning-input>
+                                    </lightning-layout-item>
+
+                                    <lightning-layout-item size="6" padding="around-small">
+                                        <lightning-input
+                                                name="werktagsValue"
+                                                checked={werktagsValue}
+                                                type="checkbox"
+                                                label="werktags außerhalb der Öffnungszeiten"
+                                                onchange={handleValueChange}
+                                        >
+                                        </lightning-input>
+                                    </lightning-layout-item>
+
+                                </lightning-layout>
+
+                                <lightning-layout>
+
+                                <lightning-layout-item size="6" padding="around-small">
+                                    <lightning-input
+                                            name="feiertagenValue"
+                                            checked={feiertagenValue}
+                                            type="checkbox"
+                                            label="an Sonn- und Feiertagen"
+                                            onchange={handleValueChange}
+                                    >
+                                    </lightning-input>
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="6" padding="around-small">
+                                    <lightning-input
+                                            name="sonstigesValue"
+                                            checked={sonstigesValue}
+                                            type="checkbox"
+                                            label="zu sonstigen Zeiten"
+                                            onchange={handleValueChange}
+                                            field-level-help="Bitte geben Sie die sonstigen Zeiten im Feld 'Sonstige Bemerkungen oder Aufträge' an."
+                                    >
+                                    </lightning-input>
+                                </lightning-layout-item>
+
+                                </lightning-layout>
+
+                                <lightning-layout>
+
+                                    <lightning-layout-item size="6" padding="around-small">
+                                        <lightning-input
+                                                name="vollstaendigSolarValue"
+                                                checked={vollstaendigSolarValue}
+                                                type="checkbox"
+                                                label="vollständig (Solar)"
+                                                onchange={handleValueChange}
+                                                disabled
+                                        >
+                                        </lightning-input>
+                                    </lightning-layout-item>
+
+                                    <lightning-layout-item size="6">
+
+                                    </lightning-layout-item>
+
+                                </lightning-layout>
+
+                                <lightning-layout>
+                                    <lightning-layout-item size="12" padding="around-small">
+                                        <lightning-textarea
+                                                name="sonstigeBemerkungValue"
+                                                label="Sonstige Bemerkungen oder Aufträge:"
+                                                value={sonstigeBemerkungValue}
+                                                max-length="32000"
+                                                onchange={handleValueChange}
+                                        ></lightning-textarea>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+
+
+                            </lightning-accordion-section>
+                        </lightning-accordion>
+
+                    </template>
+
+                    <div slot="footer">
+                        <lightning-button
+                                variant="neutral"
+                                label="Abbrechen"
+                                onclick={closeAction}
+                        ></lightning-button>
+                        <lightning-button
+                                variant="brand"
+                                label="Weiter"
+                                class="slds-m-left_x-small"
+                                onclick={handleNext}
+                        ></lightning-button>
+                    </div>
+                </lightning-quick-action-panel>
+            </template>
+            <template if:true={showFiles}>
+                <lightning-quick-action-panel
+                        header="Die Verkehrssicherungspflicht bezieht sich auf die in der Anlage dieses Auftrages rot schraffierte Fläche.
+                        Bitte fügen Sie ein entsprechendes Bild ein.">
+
+                    <template if:true={showSpinner}>
+                        <lightning-spinner
+                                variant="brand"
+                                alternative-text="Loading"
+                        ></lightning-spinner>
+                    </template>
+
+                    <div class="slds-m-bottom_xx-large">
+                        <lightning-file-upload
+                                label="Datei hochladen (.jpeg oder .png)"
+                                name="fileUploader"
+                                record-id={recordId}
+                                onuploadfinished={handleFileUploadFinished}
+                                disabled={isUploadDisabled}
+                                accept="['.jpg', '.jpeg', '.png']"
+                        >
+                        </lightning-file-upload>
+                    </div>
+
+                    <template if:true={displayWarning}>
+                        <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning"
+                             role="alert">
+                            <span class="slds-assistive-text">warning</span>
+                            <span class="slds-icon_container slds-icon-utility-warning slds-m-right_x-small"
+                                  title="Description of icon when needed">
+                        <lightning-icon icon-name="utility:warning" alternative-text="Warning!"
+                                        variant="warning"></lightning-icon>
+                    </span>
+                            <h2>
+                                {displayText}
+                            </h2>
+                        </div>
+                    </template>
+                    <template if:false={noData}>
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_fixed-layout"
+                               aria-hidden="true">
+                            <thead>
+                            <tr class="slds-line-height_reset">
+                                <th scope="col" style="width:3.25rem">
+
+                                </th>
+                                <th class="" scope="col" style="width:80%">
+                                    <div class="slds-truncate" title="Name">Name</div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Typ">Typ</div>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <template for:each={files} for:item="record" for:index="rowIndex">
+
+                                <tr class="slds-hint-parent" key={record.Id}>
+                                    <td>
+                                        <lightning-input data-item={rowIndex}
+                                                         type="checkbox"
+                                                         label="Checkbox"
+                                                         variant="label-hidden"
+                                                         checked={record.isSelected}
+                                                         onchange={handleOnChange}
+                                        ></lightning-input>
+                                    </td>
+                                    <td data-label="Name">
+
+                                        <lightning-formatted-text key={rowIndex} class=slds-truncate
+                                                                  title={record.ContentDocument.Title}
+                                                                  value={record.ContentDocument.Title}></lightning-formatted-text>
+
+                                    </td>
+                                    <td data-label="Name">
+
+                                        <lightning-formatted-text key={rowIndex} class=slds-truncate
+                                                                  title={record.ContentDocument.FileExtension}
+                                                                  value={record.ContentDocument.FileExtension}></lightning-formatted-text>
+
+                                    </td>
+
+                                </tr>
+                            </template>
+
+                            </tbody>
+                        </table>
+                        <template if:true={noData}>
+                            <div class="slds-align_absolute-center slds-m-around_large"> Es sind keine Bilder zur
+                                Anzeige
+                                vorhanden.
+                            </div>
+                        </template>
+                    </template>
+                    <div slot="footer">
+                        <lightning-button
+                                variant="neutral"
+                                label="Abbrechen"
+                                onclick={closeAction}
+                        ></lightning-button>
+                        <lightning-button
+                                disabled={erstellenDisabled}
+                                variant="brand"
+                                label="VSP erstellen"
+                                class="slds-m-left_x-small"
+                                onclick={handleErstellen}
+                        ></lightning-button>
+                    </div>
+                </lightning-quick-action-panel>
+            </template>
+        </div>
+    </template>
+</template>

@@ -1,0 +1,118 @@
+<!--
+ - @author      Stefan Richter (stefan.richter@hundw.de)
+ -              H+W CONSULT GmbH
+ -              Bahnhofstr. 3
+ -              21244 Buchholz i. d. Nordheide
+ -              Germany
+ -              https://www.hundw.de
+ -
+ - @description MYPM-811 Vertragsersteller
+ -
+ - TIMELINE
+ - 28.10.20      Stefan Richter  Initial release.
+ -->
+<aura:component description="VertragsErsteller" controller="VertragsErstellerCtrl" implements="force:lightningQuickActionWithoutHeader,force:hasRecordId">
+    <ltng:require styles="{!$Resource.multilineAuraToastCSS}" />
+    <aura:html tag="style">
+        .slds-modal__container {
+        min-width: 60vw;
+        }
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+        .slds-p-around–medium {
+        padding: 0rem !important;
+        }
+        .slds-modal__content{
+        overflow-y:hidden !important;
+        height:unset !important;
+        max-height:unset !important;
+        }
+    </aura:html>
+
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+    <aura:attribute name="error_mietpreis" type="String"/>
+    <aura:attribute name="error_strompreis" type="String"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="isInitialized" type="Boolean" default="false"/>
+    <aura:attribute name="isAllowed" type="Boolean" default="false"/>
+    <aura:attribute name="isLoading" type="Boolean" default="true"/>
+    <aura:attribute name="hasPermission" type="Boolean" default="false"/>
+    <aura:attribute name="hasPartnerEntry" type="Boolean" default="false"/>
+    <aura:attribute name="contractType" type="String" default="single"/>
+
+    <aura:attribute name="lead" type="Lead" />
+
+    <aura:attribute name="mietkosten_eur" type="Double"/>
+    <aura:attribute name="strompreis_cnt" type="Double"/>
+    <aura:attribute name="mietzins" type="Double" default="0.0"/>
+    <aura:attribute name="stromverbrauch_cnt" type="Double" default="0.0"/>
+    <aura:attribute name="strompauschale_eur" type="Double" default="0.0"/>
+
+    <aura:if isTrue="{!v.isLoading}">
+        <lightning:spinner alternativeText="Loading" size="large" />
+    </aura:if>
+    <header class="slds-modal__header">
+        <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Vertrag erstellen</h2>
+    </header>
+
+    <aura:if isTrue="{!v.contractType=='frame'}">
+        <lightning:layout class="slds-p-bottom_medium" verticalAlign="stretch" horizontalAlign="center">
+            <lightning:layoutItem>
+                <div style="color: orangered;" class="slds-text-body_small slds-p-bottom_x-small">Die Erstellung von Rahmenverträgen ist zur Zeit leider noch nicht möglich.</div>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </aura:if>
+
+    <aura:if isTrue="{!v.contractType=='none'}">
+        <lightning:layout class="slds-p-bottom_medium" verticalAlign="stretch" horizontalAlign="center">
+            <lightning:layoutItem>
+                <div style="color: orangered;" class="slds-text-body_small slds-p-bottom_x-small">Die Zuordnung des Leads zu einem Einzel- bzw. Rahmenvertrag ist nicht möglich. Bitte wenden Sie sich an die regionale Vertriebsunterstützung.</div>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </aura:if>
+
+    <aura:if isTrue="{!v.isInitialized}">
+        <lightning:layout class="slds-p-bottom_medium" verticalAlign="stretch">
+            <lightning:layoutItem size="4" >
+
+                <ui:inputCurrency
+                        required="true"
+                        value="{!v.mietkosten_eur}"
+                        label="Monatliche Vergütung Miete in € je Modul"
+                        change="{!c.changeMietkosten}"
+                        updateOn="keyup" />
+                <br/>
+                <ui:inputCurrency
+                        required="true"
+                        value="{!v.strompreis_cnt}"
+                        label="Monatliche Vergütung Strom in Cent je kWh"
+                        change="{!c.changeStrompreis}"
+                        updateOn="keyup"
+                        format="#,##0.00 ¢"  />
+
+            </lightning:layoutItem>
+            <lightning:layoutItem size="8" padding="around-medium" alignmentBump="left">
+                <div class="slds-text-heading_small slds-p-bottom_x-small slds-p-top_xxx-small slds-text-align_right">
+                    monatlicher Mietzins <lightning:formattedNumber value="{!v.mietzins}" style="currency" currencyCode="EUR"/>
+                </div>
+                <br /><br />
+                <div class="slds-text-heading_small slds-p-bottom_x-small slds-p-top_xxx-small slds-text-align_right">
+                    monatliche Stromkostenpauschale   <lightning:formattedNumber value="{!v.strompauschale_eur}" style="currency" currencyCode="EUR" />
+                </div>
+                <br /><br />
+                <div class="slds-text-heading_small slds-p-bottom_x-small slds-p-top_xxx-small slds-text-align_right">
+                    monatliche Gesamtzahlung <lightning:formattedNumber value="{!add(v.mietzins,v.strompauschale_eur)}" style="currency" currencyCode="EUR"/>
+                </div>
+            </lightning:layoutItem>
+        </lightning:layout>
+        <footer>
+            <div class="modal-footer slds-modal__footer attach-to-bottom">
+                <button class="slds-button slds-button_brand" onclick="{! c.createContract }">Einzelmietvertrag erstellen</button>
+                <button class="slds-button slds-button_brand" onclick="{! c.handleClose }">Abbrechen</button>
+            </div>
+        </footer>
+    </aura:if>
+</aura:component>

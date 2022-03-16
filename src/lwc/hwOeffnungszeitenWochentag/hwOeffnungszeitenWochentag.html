@@ -1,0 +1,47 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      01.05.2019
+ *@version      1.0
+ *@since        45.0
+ *
+ *
+ *@description  hwOeffnungszeitenWochentag
+ *
+ *
+ *@changelog    01.05.2019 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<!-- HW_OeffnungszeitenWochentag -->
+<template>
+
+    <template if:true={required}>
+
+        <lightning-input type="text"
+                         name={categoryIndex}
+                         value={value}
+                         required={required}
+                         maxlength="8"
+                         disabled={screenLocked}
+                         onchange={handleDataChange}
+        ></lightning-input>
+
+    </template>
+
+    <template if:false= {required}>
+
+        <lightning-input type="text"
+                         variant="label-hidden"
+                         name={categoryIndex}
+                         value={value}
+                         maxlength="8"
+                         disabled={screenLocked}
+                         onchange={handleDataChange}
+        ></lightning-input>
+
+    </template>
+
+</template>

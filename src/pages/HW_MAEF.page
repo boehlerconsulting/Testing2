@@ -1,0 +1,2168 @@
+<!--
+/**
+ *@author       Karsten Maaß
+ *@created      09.04.2019
+ *@version      1.0
+ *@since        45.0
+ *
+ *
+ *@description  Mitteilung über Änderungen im Filialnetz
+ *
+ *
+ *@changelog    09.04.2019 Karsten Maaß - Created
+ *              
+ * 
+ */
+ -->
+<apex:page id="HW_MAEF" controller="HW_Document_C" contentType="{!contentType}" renderAs="{!renderAs}"
+           applyHtmlTag="false" applyBodyTag="false" showHeader="false" standardStylesheets="false" cache="true">
+
+    <html xmlns:v="urn:schemas-microsoft-com:vml"
+          xmlns:o="urn:schemas-microsoft-com:office:office"
+          xmlns:x="urn:schemas-microsoft-com:office:excel">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+        <apex:outputText value="{!sheetName}" escape="false"/>
+
+        <style type="text/css" media="print,all">
+            @page {
+                size: landscape;
+            }
+
+            br {
+                mso-data-placement: same-cell;
+            }
+
+            body {
+                font-family: sans-serif;
+                text-align: left;
+<!--                background-color: RGB(192, 192, 192); -->
+                margin: 0px;
+            }
+
+            div {
+                margin: 0px;
+            }
+
+            table {
+                border-collapse: collapse;
+                table-layout: fixed;
+            }
+
+            tr {
+                height: 12.75pt;
+                vertical-align: bottom;
+                font-size: 10pt;
+                white-space: nowrap;
+            }
+
+            td {
+                background-color: RGB(255, 255, 255);
+            }
+
+            .header {
+                font-size: 14pt;
+            }
+
+            .header-2 {
+                font-size: 12pt;
+            }
+
+            .info,
+            .info-important {
+                font-size: 6pt;
+            }
+
+            .info-important {
+                color: RGB(255, 0, 0);
+            }
+
+            .label,
+            .label-top,
+            .label-bottom {
+                font-size: 4pt;
+            }
+
+            .mini-label {
+                font-size: 3pt;
+            }
+
+            .hint {
+                font-size: 9pt;
+            }
+
+            .addition {
+                font-size: 8pt;
+            }
+
+            .comment {
+                font-family: Tahoma;
+                font-size: 8pt;
+            }
+
+            .bg-green,
+            .text-green,
+            .check-green {
+                background-color: RGB(204, 255, 204);
+            }
+
+            .text-blue{
+                background-color: RGB(218, 238, 243);
+            }
+
+            .bg-yellow,
+            .text-yellow,
+            .check-yellow,
+            .underlined-yellow {
+                background-color: RGB(255, 255, 153);
+            }
+
+            .bg-orange,
+            .text-orange {
+                background-color: RGB(255, 204, 153);
+            }
+
+            .bold,
+            .header,
+            .header-2 {
+                font-weight: bold;
+            }
+
+            .italic {
+                font-style: italic;
+            }
+
+            .border-top,
+            .border-top-left {
+                border-top-style: solid;
+                border-top-width: thin;
+                border-top-color: black;
+            }
+
+            .border-left,
+            .border-top-left {
+                border-left-style: solid;
+                border-left-width: thin;
+                border-left-color: black;
+            }
+
+            .border,
+            .text-green,
+            .text-blue,
+            .text-yellow,
+            .text-orange {
+                border-style: solid;
+                border-width: thin;
+                border-color: black;
+            }
+
+            .check,
+            .check-green,
+            .check-yellow {
+                border-style: solid;
+                border-width: medium;
+                border-color: black;
+            }
+
+            .align-top,
+            .label-top {
+                vertical-align: top;
+            }
+
+            .align-center,
+            .label {
+                vertical-align: middle;
+            }
+
+            .align-bottom,
+            .label-bottom {
+                vertical-align: bottom;
+            }
+
+            .align-right {
+                text-align: right;
+            }
+
+            .underlined,
+            .underlined-yellow {
+                border-bottom-style: solid;
+                border-bottom-width: thin;
+                border-bottom-color: black;
+            }
+
+            .dotted-top {
+                border-top-style: dotted;
+                border-top-width: thin;
+                border-top-color: black;
+            }
+
+            .dotted-left {
+                border-left-style: dotted;
+                border-left-width: thin;
+                border-left-color: black;
+            }
+        </style>
+    </head>
+
+    <body>
+    <table>
+        <col style="width:0.37cm"/>
+        <col style="width:0.56cm"/>
+        <col style="width:0.56cm"/>
+        <col style="width:0.56cm"/>
+        <col style="width:3.74cm"/>
+        <col style="width:3.69cm"/>
+        <col style="width:1.20cm"/>
+        <col style="width:0.37cm"/>
+        <col style="width:2.54cm"/>
+        <col style="width:0.35cm"/>
+        <col style="width:1.11cm"/>
+        <col style="width:2.22cm"/>
+        <col style="width:0.25cm"/>
+        <col style="width:1.89cm"/>
+        <col style="width:0.56cm"/>
+        <col style="width:0.25cm"/>
+        <col style="width:1.20cm"/>
+        <col style="width:0.56cm"/>
+        <col style="width:3.55cm"/>
+        <col style="width:0.35cm"/>
+        <col style="width:1.64cm"/>
+        <col style="width:2.20cm"/>
+        <col style="width:0.19cm"/>
+        <col style="width:2.15cm"/>
+        <col style="width:0.35cm"/>
+        <col style="width:0.56cm"/>
+        
+        <tr style="height:15.75pt">
+            <td class="header">Mitteilung über Änderungen im Filialnetz</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="header-2">Bereich</td>
+            <td/>
+            <td colspan="4" class="text-green" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_VL']}</td>
+            <td/>
+        </tr>
+        <tr style="height:8.25pt">
+            <td/>
+            <td class="info">Bitte nur ein Auswahlfeld ankreuzen</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td class="check-green"></td>
+            <td/>
+            <td>Ersatzlose Schließung mit Ablauf des</td>
+            <td/>
+            <td/>
+            <td colspan="3" class="text-green"></td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="check-yellow" style="mso-number-format:'@'">{!IF(Feld['MAEF_Beleg_Art_der_Anderung'] == 'Neueinrichtung','x','')}</td>
+            <td/>
+            <td>Eröffnung zum <span class="info-important">(Zweites Arbeitsblatt beachten!)</span></td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="4" class="text-yellow">
+                <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+                    <apex:param value="{!IF(Feld['MAEF_Beleg_Art_der_Anderung'] == 'Neueinrichtung', Feld['MAEF_Beleg_Termin'],'')}"/>
+                </apex:outputText>
+            </td>
+            <td/>
+        </tr>
+        <tr style="height:5.25pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label">Datum</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label">Datum</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td class="check-yellow"></td>
+            <td/>
+            <td>Vorübergehende <span class="bold">ganztägige</span> Schließung</td>
+            <td/>
+            <td/>
+            <td colspan="3" class="text-yellow"></td>
+            <td/>
+            <td colspan="3" class="text-yellow"></td>
+            <td/>
+            <td class="check-green"></td>
+            <td/>
+            <td>Änderung der Öffnungszeiten ab</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="4" class="text-green"></td>
+            <td/>
+        </tr>
+        <tr style="height:6.75pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label">vorübergehende Schließung ab</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label">vorübergehende Schließung bis</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label">Datum</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+            <td class="align-right">Grund&nbsp;</td>
+            <td class="underlined-yellow">
+            </td>
+            <td class="align-right">Ad-hoc-Vertretung&nbsp;</td>
+            <td colspan="2" class="underlined-yellow"></td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="align-right">Zustellung der Pf-Sdg&nbsp;</td>
+            <td class="underlined-yellow"></td>
+            <td/>
+            <td/>
+            <td>Änderung der Öffnungszeiten bis</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="4" class="text-green"></td>
+            <td/>
+        </tr>
+        <tr style="height:3.75pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td class="check-green"></td>
+            <td/>
+            <td rowspan="2" colspan="3" class="align-center">Schließung mit Ablauf des</td>
+            <td class="align-center">und Eröffnung zum <span
+                        class="info-important">(Zweites Arbeitsblatt beachten!)</span></td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="check-yellow"></td>
+            <td/>
+            <td>sonstige Änderung ab</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="4" class="text-yellow"></td>
+            <td/>
+        </tr>
+        <tr style="height:5.25pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="dotted-top"/>
+            <td class="dotted-top"/>
+            <td class="dotted-top"/>
+            <td class="dotted-top"/>
+            <td class="dotted-left"/>
+            <td class="label">Datum</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="2" class="text-green">
+                <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+                    <apex:param value="{!Feld['MAEF_Schliessungsdatum_Vorgangerfiliale']}"/>
+                </apex:outputText>
+            </td>
+            <td/>
+            <td colspan="3" class="text-green">
+                <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+                    <apex:param value="{!Feld['MAEF_Beleg_EO_Datum']}"/>
+                </apex:outputText>
+            </td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="check-green" style="mso-number-format:'@'">{!IF(Feld['MAEF_Beleg_Erstausstattung_Produkte']== 'Ja','x','')}</td>
+            <td/>
+            <td>Erstausstattung Produkte</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="dotted-left"/>
+            <td colspan="4" class="underlined-yellow"></td>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-top">Datum der Schließung</td>
+            <td/>
+            <td/>
+            <td class="label-top">Datum der Eröffnung</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="align-top">bei Betreiberwechsel</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="dotted-left"/>
+            <td class="label">Art der Änderung</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"><span class="bold">Angaben alt </span><span class="hint">(z.B. zu schließender Standort)</span>
+            </td>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top-left"/>
+            <td class="border-top"><span class="bold">Angaben neu </span><span class="hint">(z.B. zu eröffnender Standort)</span>
+            </td>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>ASt-Name <span class="addition">(Pflichtfeld)</span></td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="8" class="text-orange">{!Feld['MAEF_Beleg_Filialname_alt']}</td>
+            <td/>
+            <td class="border-left"/>
+            <td colspan="8" class="text-orange">{!Feld['MAEF_Beleg_Filialname']}</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:3.75pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Straße, Hsnr. <span class="addition">(Pflichtfeld)</span></td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="6" class="text-orange" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Strasse_Filiale_ALT']}</td>
+            <td/>
+            <td class="text-orange" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Hausnummer_Filiale_ALT']}</td>
+            <td/>
+            <td class="border-left"/>
+            <td colspan="6" class="text-orange" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Filiale_Strasse']}</td>
+            <td/>
+            <td class="text-orange" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Filiale_Hausnummer']}</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:6pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Straße</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Hsnr.</td>
+            <td/>
+            <td class="border-left"/>
+            <td class="label-bottom">Straße</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Hsnr.</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Ort-Ortsteil, PLZ <span class="addition">(Pflichtfeld)</span></td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="3" class="text-orange" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Ort_Filiale_ALT']}</td>
+            <td/>
+            <td colspan="2" class="text-orange" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Ortsteil_Filiale_ALT']}</td>
+            <td/>
+            <td class="text-orange" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_PLZ_Filiale_Alt']}</td>
+            <td/>
+            <td class="border-left"/>
+            <td colspan="3" class="text-orange" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Filiale_Ort']}</td>
+            <td/>
+            <td colspan="2" class="text-orange" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Filiale_Ortsteil']}</td>
+            <td/>
+            <td class="text-orange" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Filiale_PLZ']}</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:6pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Ort</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Ortsteil</td>
+            <td/>
+            <td/>
+            <td class="label-bottom">PLZ</td>
+            <td/>
+            <td class="border-left"/>
+            <td class="label-bottom">Ort</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Ortsteil</td>
+            <td/>
+            <td/>
+            <td class="label-bottom">PLZ</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Tel.Nr. / Fax Nr.</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="3" class="text-green"></td>
+            <td/>
+            <td colspan="4" class="text-green"></td>
+            <td/>
+            <td class="border-left"/>
+            <td colspan="3" class="text-green" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Filiale_Telefon']}</td>
+            <td/>
+            <td colspan="4" class="text-green" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Filiale_Fax']}</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:6pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Tel.Nr. (mit Vorwahl)</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Fax Nr. (mit Vorwahl)</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td class="label-bottom">Tel.Nr. (mit Vorwahl)</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Fax Nr. (mit Vorwahl)</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>ASt-Nr. <span class="addition">(Pflichtfeld) </span>/ Kostenstelle <span
+                        class="addition">(Pflichtfeld)</span></td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="3" class="text-orange" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Aussenstellen_Nummer_ALT']}</td>
+            <td/>
+            <td colspan="4" class="text-orange" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Kostenstelle_ALT']}</td>
+            <td/>
+            <td class="border-left"/>
+            <td colspan="3" class="text-orange" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Aussenstellen_Nummer']}</td>
+            <td/>
+            <td colspan="4" class="text-orange" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_DPAG_Kostenstelle']}</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:4.5pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td rowspan="3" colspan="4" class="label-top" style="white-space: normal;">
+                Kostenstelle:<br/>
+                <span class="italic">* </span>DPAG-Filialen, Partner, <span class="italic">POSTPOINT</span> und
+                Post-Service -> DPAG<br/>
+                * Postbank-Center -> PB Filialvertrieb
+            </td>
+            <td/>
+            <td class="border-left"/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td rowspan="3" colspan="4" class="label-top" style="white-space: normal;">
+                Kostenstelle:<br/>
+                * DPAG-Filialen, Partner, Postpoint und Post-Service -> DPAG <br/>
+                * Postbank-Center -> PB Filialvertrieb
+            </td>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:12.75pt">
+            <td/>
+            <td colspan="4">Debitorennr.</td>
+            <td/>
+            <td colspan="3" class="text-green" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Debitor_ALT']}</td>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td colspan="3" class="text-green" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Debitor']}</td>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:3.75pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td rowspan="2" colspan="5" class="align-top" style="white-space: normal;">WaWi-Nummer<span
+                        class="addition"> (Pflichtfeld) &nbsp;</span>/ ASt-Nr. Referenz-Filiale für Verkaufsprodukte
+            </td>
+            <td colspan="3" class="text-orange" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_WaWi_Nummer_ALT']}</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td colspan="3" class="text-orange" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_WaWi_Kundennummer']}</td>
+            <td/>
+            <td colspan="4" class="text-green" style="mso-number-format:'@'">{!Feld['MAEF_AstNrReferenzfilialefurVerkaufs']}</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:14.25pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-top">ASt-Nr. Referenz-Filiale für Verkaufsprodukte</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Filialtyp <span class="addition">(Pflichtfeld) </span>/ Regel/Interim<span class="addition"> (Pflichtfeld)</span>
+            </td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="6" class="text-orange" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_FiltypOZ_ALT']}</td>
+            <td/>
+            <td class="text-orange" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Regel_Interim']}</td>
+            <td/>
+            <td class="border-left"/>
+            <td colspan="6" class="text-orange" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Filialtyp_OZ']}</td>
+            <td/>
+            <td class="text-orange">Regel</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:5.25pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label">Filialtyp</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Regel/Interim</td>
+            <td/>
+            <td class="border-left"/>
+            <td class="label">Filialtyp</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Regel/Interim</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Anzahl Schalter / Branche im Hauptgeschäft</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="3" class="text-green"></td>
+            <td/>
+            <td colspan="4" class="text-green"></td>
+            <td/>
+            <td class="border-left"/>
+            <td colspan="3" class="text-green" style="mso-number-format:'@'">{!Feld['MAEFBeleg_Universalschalter_open_Service']}</td>
+            <td/>
+            <td colspan="4" class="text-green" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Branche']}</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:5.25pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Anzahl Schalter</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Branche im Hauptgeschäft</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td class="label-bottom">Anzahl Schalter (Pflichtfeld bei Eröffnung)</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Branche im Hauptgeschäft</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Anzahl Mitarbeiter</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="3" class="text-green"></td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td colspan="3" class="text-green">{!Feld['MAEF_Beleg_vorauss_Anzahl_Mitarbeiter']}</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:5.25pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Anzahl Mitarbeiter</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td class="label-bottom">Anzahl Mitarbeiter</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Juristischer Name des Partners / Anrede</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="6" class="text-green"></td>
+            <td/>
+            <td class="text-green"></td>
+            <td/>
+            <td class="border-left"/>
+            <td colspan="6" class="text-green" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Juristischer_Name_lt_Gewerbe']}</td>
+            <td/>
+            <td class="text-green" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_X1_Ansprechpartner_Anrede']}</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:3.75pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>KKZ Masterkasse / Steuernummer des Partners</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="3" class="text-green"></td>
+            <td/>
+            <td colspan="4" class="text-green"></td>
+            <td/>
+            <td class="border-left"/>
+            <td colspan="3" class="text-green" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_KKZ_Masterkasse']}</td>
+            <td/>
+            <td colspan="4" class="text-green" style="mso-number-format:'@'"></td>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:6pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">KKZ Masterkasse</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Steuernummer des Partners</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td class="label-bottom">KKZ Masterkasse</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Steuernummer des Partners</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Tagesstempelinschrift <span class="addition">(inkl. Unterscheidungsbuchstabe)</span></td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="8" class="text-green"></td>
+            <td/>
+            <td class="border-left"/>
+            <td colspan="8" class="text-green" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Tagesstempel']}</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:6pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">PLZ/Ort/Unterscheidungsbuchstabe</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td class="label-bottom">PLZ/Ort/Unterscheidungsbuchstabe</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Postfach/Betreiber <span class="addition">(Pflichtfeld)</span> / Verteilschluss Pf-Sdg</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="text-orange" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Postfach_ALT']}</td>
+            <td/>
+            <td class="text-orange" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Postfach_Betreiber_ALT']}</td>
+            <td/>
+            <td colspan="4" class="text-green"></td>
+            <td/>
+            <td class="border-left"/>
+            <td class="text-orange" style="mso-number-format:'@'">{!IF(Feld['MAEF_Beleg_Anderungsgrund'],'Ja','Nein')}</td>
+            <td/>
+            <td class="text-orange" style="mso-number-format:'@'">{!IF(Feld['MAEF_Beleg_Anderungsgrund'],Feld['MAEF_Betreiber'],'')}</td>
+            <td/>
+            <td colspan="4" class="text-green" style="mso-number-format:'@'">{!IF(Feld['MAEF_Beleg_Anderungsgrund'], Sortierzeiten[0].vm_bis__c + ' Uhr','')}</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:6pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Betreiber</td>
+            <td/>
+            <td class="label-bottom">Verteilschluss Pf-Sdg</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Betreiber</td>
+            <td/>
+            <td class="label-bottom">Verteilschluss Pf-Sdg</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td>Anlagen-Typ Pf-Schrank / Anzahl Pf-Schränke</td>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="3" class="text-green"></td>
+            <td/>
+            <td colspan="2" class="text-green"></td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td colspan="3" class="text-green" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Postfach_Anlagentyp_PF_Schran']}</td>
+            <td/>
+            <td colspan="2" class="text-green" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Anzahl_PF_Schranke']}</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:3.75pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Ausgabe PAKET / BRIEF <span class="addition">(Pflichtfelder)</span></td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="3" class="text-orange" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Ausgabe_Paket_ALT']}</td>
+            <td/>
+            <td colspan="2" class="text-orange" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Ausgabe_Brief_ALT']}</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td colspan="3" class="text-orange" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Ausgabe_Paket']}</td>
+            <td/>
+            <td colspan="2" class="text-orange" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Ausgabe_Brief']}</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:6pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-top">PAKET</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-top">BRIEF</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td class="label">PAKET</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label">BRIEF</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Postfiliale Direkt</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="3" class="text-orange" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Postfiliale_Direkt_ALT']}</td>
+            <td/>
+            <td colspan="2" class="text-green"></td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td colspan="3" class="text-orange">Ja</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:9pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-top">Postfiliale Direkt</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-top">ZS Id</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td class="label-bottom">Postfiliale Direkt</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">ZS Id</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:3.75pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td><span style="font-size: 8.5pt;">DHL Express Int. / Bfk am Standort vorhanden? (Pflichtfeld)</span></td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="3" class="text-orange" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Kundennr_Express_Int_ALT']}</td>
+            <td/>
+            <td class="text-orange" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Briefkasten_vorhanden_ALT']}</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td colspan="3" class="text-orange" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Kundennummer_Express']}</td>
+            <td/>
+            <td class="text-orange" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Briefkasten_am_Standort']}</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:6pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label">EKP-Nummer</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label">BRIEF</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td class="label">EKP-Nummer</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label">BRIEF</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Ast-ID</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="3" class="text-orange" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_AST_ID_Aussenstellen_ID']}</td>
+            <td/>
+            <td colspan="4" class="text-green"></td>
+            <td/>
+            <td class="border-left"/>
+            <td colspan="3" class="text-orange" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_AST_ID']}</td>
+            <td/>
+            <td colspan="4" class="text-green" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Filial_ILN']}</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:6pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label">Ast-ID</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label">Filial-ILN</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Externe Filial-Bezeichnung (ggf. vom Partner)</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="8" class="text-green"></td>
+            <td/>
+            <td class="border-left"/>
+            <td colspan="8" class="text-green" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Externe_Filial_Bezeichnung']}</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:3.75pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Ergänzender Hinweis zum Standort (falls zutreffend)</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-top-left"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td/>
+            <td colspan="8" class="text-green" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Erganzender_Hinweis_zum_Stand']}</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:3.75pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Schlussinventur am:</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="3" class="text-green">
+                <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+                    <apex:param value="{!Feld['MAEF_Beleg_Schlussinventur_am']}"/>
+                </apex:outputText>
+            </td>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:7.5pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-top">Pflichtfeld bei Schließung</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>E-Mail für Versand Inventurzählisten</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="3" class="text-green" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Zusendeanschrift_fur_Inventur']}</td>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td/>
+            <td class="align-right"><span class="bold">Öffnungszeiten:</span></td>
+            <td class="hint">Post (Benachrichtigungskarte)</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="hint">Hauptgeschäft</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td/>
+            <td class="align-right">{!Filialoeffnungszeiten[0].Wochentag__c}</td>
+            <td colspan="5" class="text-orange">{!Filialoeffnungszeiten[0].vm_von__c} - {!Filialoeffnungszeiten[0].vm_bis__c} &nbsp; {!Filialoeffnungszeiten[0].nm_von__c} - {!Filialoeffnungszeiten[0].nm_bis__c}</td>
+            <td/>
+            <td colspan="4" class="text-green">{!OeffnungszeitenHauptgeschaeft[0].vm_von__c} - {!OeffnungszeitenHauptgeschaeft[0].vm_bis__c} &nbsp; {!OeffnungszeitenHauptgeschaeft[0].nm_von__c} - {!OeffnungszeitenHauptgeschaeft[0].nm_bis__c}</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:3.75pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td class="border-top"/>
+            <td class="border-top"><span class="info">Pflichtfelder bei ersatzloser Schließung, nicht nahtloser Eröffnung der Nachfolge-Filiale UND / ODER Umleitungsfiliale für Packstation</span>
+            </td>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td/>
+            <td/>
+            <td class="align-right">{!Filialoeffnungszeiten[1].Wochentag__c}</td>
+            <td colspan="5" class="text-orange">{!Filialoeffnungszeiten[1].vm_von__c} - {!Filialoeffnungszeiten[1].vm_bis__c} &nbsp; {!Filialoeffnungszeiten[1].nm_von__c} - {!Filialoeffnungszeiten[1].nm_bis__c}</td>
+            <td/>
+            <td colspan="4" class="text-green">{!OeffnungszeitenHauptgeschaeft[1].vm_von__c} - {!OeffnungszeitenHauptgeschaeft[1].vm_bis__c} &nbsp; {!OeffnungszeitenHauptgeschaeft[1].nm_von__c} - {!OeffnungszeitenHauptgeschaeft[1].nm_bis__c}</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:3.75pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Neue Umleitungsfiliale</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="6" class="text-blue" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Umleitungsfiliale_Packstation']}</td>
+            <td/>
+            <td class="align-right">{!Filialoeffnungszeiten[2].Wochentag__c}</td>
+            <td colspan="5" class="text-orange">{!Filialoeffnungszeiten[2].vm_von__c} - {!Filialoeffnungszeiten[2].vm_bis__c} &nbsp; {!Filialoeffnungszeiten[2].nm_von__c} - {!Filialoeffnungszeiten[2].nm_bis__c}</td>
+            <td/>
+            <td colspan="4" class="text-green">{!OeffnungszeitenHauptgeschaeft[2].vm_von__c} - {!OeffnungszeitenHauptgeschaeft[2].vm_bis__c} &nbsp; {!OeffnungszeitenHauptgeschaeft[2].nm_von__c} - {!OeffnungszeitenHauptgeschaeft[2].nm_bis__c}</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:3.75pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td>für folgende Packstationen:</td>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="6" class="text-blue" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Fuer_Packstationen']}</td>
+            <td/>
+            <td class="align-right">{!Filialoeffnungszeiten[3].Wochentag__c}</td>
+            <td colspan="5" class="text-orange">{!Filialoeffnungszeiten[3].vm_von__c} - {!Filialoeffnungszeiten[3].vm_bis__c} &nbsp; {!Filialoeffnungszeiten[3].nm_von__c} - {!Filialoeffnungszeiten[3].nm_bis__c}</td>
+            <td/>
+            <td colspan="4" class="text-green">{!OeffnungszeitenHauptgeschaeft[3].vm_von__c} - {!OeffnungszeitenHauptgeschaeft[3].vm_bis__c} &nbsp; {!OeffnungszeitenHauptgeschaeft[3].nm_von__c} - {!OeffnungszeitenHauptgeschaeft[3].nm_bis__c}</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:3.75pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Ausgabe benachr. Sdg. Brief:</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="6" class="text-green" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Ausgabe_ben_Sendungen_in']}</td>
+            <td/>
+            <td class="align-right">{!Filialoeffnungszeiten[4].Wochentag__c}</td>
+            <td colspan="5" class="text-orange">{!Filialoeffnungszeiten[4].vm_von__c} - {!Filialoeffnungszeiten[4].vm_bis__c} &nbsp; {!Filialoeffnungszeiten[4].nm_von__c} - {!Filialoeffnungszeiten[4].nm_bis__c}</td>
+            <td/>
+            <td colspan="4" class="text-green">{!OeffnungszeitenHauptgeschaeft[4].vm_von__c} - {!OeffnungszeitenHauptgeschaeft[4].vm_bis__c} &nbsp; {!OeffnungszeitenHauptgeschaeft[4].nm_von__c} - {!OeffnungszeitenHauptgeschaeft[4].nm_bis__c}</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:3.75pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Ausgabe benachr. Sdg. Fracht:</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="6" class="text-green" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_AusgabebenSendungenFrachtin']}</td>
+            <td/>
+            <td class="align-right">{!Filialoeffnungszeiten[5].Wochentag__c}</td>
+            <td colspan="5" class="text-orange">{!Filialoeffnungszeiten[5].vm_von__c} - {!Filialoeffnungszeiten[5].vm_bis__c} &nbsp; {!Filialoeffnungszeiten[5].nm_von__c} - {!Filialoeffnungszeiten[5].nm_bis__c}</td>
+            <td/>
+            <td colspan="4" class="text-green">{!OeffnungszeitenHauptgeschaeft[5].vm_von__c} - {!OeffnungszeitenHauptgeschaeft[5].vm_bis__c} &nbsp; {!OeffnungszeitenHauptgeschaeft[5].nm_von__c} - {!OeffnungszeitenHauptgeschaeft[5].nm_bis__c}</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:3.75pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Einrichtung MoPS?</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="text-green">{!Feld['MAEF_Beleg_Einrichtung_MOPS']}</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="align-right">{!Filialoeffnungszeiten[6].Wochentag__c}</td>
+            <td colspan="5" class="text-orange">{!Filialoeffnungszeiten[6].vm_von__c} - {!Filialoeffnungszeiten[6].vm_bis__c} &nbsp; {!Filialoeffnungszeiten[6].nm_von__c} - {!Filialoeffnungszeiten[6].nm_bis__c}</td>
+            <td/>
+            <td colspan="4" class="text-green">{!OeffnungszeitenHauptgeschaeft[6].vm_von__c} - {!OeffnungszeitenHauptgeschaeft[6].vm_bis__c} &nbsp; {!OeffnungszeitenHauptgeschaeft[6].nm_von__c} - {!OeffnungszeitenHauptgeschaeft[6].nm_bis__c}</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:3.75pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:3.75pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td colspan="4" class="align-top" style="font-size:9pt;">Sonstiges/Grund Änderung Öffnz:</td>
+            <td colspan="19" class="text-orange"
+                style="border-right:none; mso-number-format:'@'" >{!Feld['MAEF_Beleg_Sonstige_Informationen']}</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:4.5pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Erstellt:</td>
+            <td/>
+            <td/>
+            <td colspan="3" class="underlined-yellow" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_VL'] + ', '
+                + Feld['MAEF_Beleg_Name_VM']}</td>
+            <td/>
+            <td class="align-right">Datum:</td>
+            <td colspan="3" class="underlined-yellow">
+                <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+                    <apex:param value="{!TODAY()}"/>
+                </apex:outputText>
+            </td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="align-right">Telefon:</td>
+            <td colspan="3" class="underlined-yellow" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_Tel_VM']}</td>
+            <td/>
+            <td class="align-right">Stelle:</td>
+            <td colspan="3" class="underlined-yellow" style="mso-number-format:'@'">{!Feld['MAEF_Beleg_VL']}</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:7.5pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="align-top"><span class="info">OrgE, Name</span></td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:15pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="align-right"><span class="bold">Weiterleiten per Mail an</span></td>
+            <td colspan="9" class="border" style="text-align:center"><a href="mailto:NetzMAEF@deutschepost.de">NetzMAEF@deutschepost.de</a>
+            </td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+    </table>
+    </body>
+    </html>
+</apex:page>

@@ -1,0 +1,45 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      27.11.2020
+ *
+ *
+ *@description  PackstationLeaduebernahme
+ *
+ *
+ *@changelog    27.11.2020 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<aura:component description="PackstationLeaduebernahme"
+                controller="PackstationLeaduebernahmeCtrl"
+                implements="force:lightningQuickActionWithoutHeader,force:hasRecordId" >
+
+    <aura:html tag="style">
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+        .slds-p-around--medium {
+        padding: 0rem !important;
+        }
+        .slds-modal__content{
+        overflow-y:hidden !important;
+        height:unset !important;
+        max-height:unset !important;
+        }
+        .slds-modal__container {
+        min-width: 95vw;
+        }
+    </aura:html>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <aura:attribute name="showSpinner" type="Boolean" default="true"/>
+
+    <aura:if isTrue="{!v.showSpinner}">
+        <lightning:spinner alternativeText="Loading" size="large"/>
+    </aura:if>
+
+</aura:component>

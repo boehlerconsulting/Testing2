@@ -1,0 +1,39 @@
+<!--
+/**
+ *@author       Marcel Schulz
+ *@created      18.01.2021
+ *
+ *
+ *@description  EMailHeader
+ *
+ *@changelog    18.01.2021 Marcel Schulz - Created
+ *              
+ * 
+ */
+ -->
+
+<apex:component id="EmailHeader" access="global">
+    <html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+
+        <style type="text/css" media="print,all">
+            .bodyHeader{
+                background-color: FFCC00;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <div class="bodyHeader">
+            <img src="" alt="LogoDHL" width="42" height="42" style="vertical-align:top;float:left" />
+            <img src="" alt="LogoDPAG" width="42" height="42" style="vertical-align:top;float:right" />
+            <div>&nbsp;</div>
+            <div>&nbsp;</div>
+            <div>&nbsp;</div>
+        </div>
+        <hr style="color:#000000;" />
+    </body>
+    </html>
+</apex:component>

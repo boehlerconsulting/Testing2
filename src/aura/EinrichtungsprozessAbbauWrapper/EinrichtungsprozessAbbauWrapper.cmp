@@ -1,0 +1,46 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      08.04.2021
+ *
+ *
+ *@description  EinrichtungsprozessAbbauWrapper
+ *
+ *
+ *@changelog    08.04.2021 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<aura:component description="EinrichtungsprozessAbbauWrapper"
+                implements="force:lightningQuickActionWithoutHeader,force:hasRecordId">
+
+    <aura:html tag="style">
+        .slds-spinner_container{
+        background: transparent !important;
+        }
+        .modal-body {
+        background: transparent !important;
+        box-shadow: none !important;
+        }
+        .slds-modal__header--empty {
+        display: none !important;
+        }
+        .modal-container{
+        width: 100% !important;
+        max-width: initial !important;
+        }
+        .slds-modal__content{
+        background: transparent;
+        }
+    </aura:html>
+
+    <c:einrichtungsprozess
+            recordId="{!v.recordId}"
+            isAbbau="true"
+            oncloseModal="{!c.closeModal}"
+            onrefreshView="{!c.refreshView}"
+    ></c:einrichtungsprozess>
+
+</aura:component>

@@ -1,0 +1,212 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      01.04.2019
+ *@version      1.0
+ *@since        45.0
+ *
+ *
+ *@description  hwStammdatensammlerFeld
+ *
+ *
+ *@changelog    01.04.2019 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<!-- HW_StammdatensammlerFeld -->
+<template>
+
+    <template if:false={hideField}>
+        <lightning-layout vertical-align="stretch">
+            <lightning-layout-item size="1" if:true={isExistingMaef}>
+                <template if:true={isExistingMaef}>
+                    <lightning-input type="checkbox-button"
+                                     key={field.Id}
+                                     class="marginTop"
+                                     checked={maefCheck}
+                                     maxlength={field.Maximale_Laenge}
+                                     disabled={maefCheckLocked}
+                                     onchange={handleMaefCheckChanged}
+                    ></lightning-input>
+                </template>
+            </lightning-layout-item>
+            <lightning-layout-item size={itemSize}>
+
+                <template if:true={field.isText}>
+
+                    <lightning-input type="text"
+                                     key={field.Id}
+                                     pattern={field.Validierung_Regex}
+                                     class={fieldStyle}
+                                     label={field.Label}
+                                     value={field.value}
+                                     maxlength={field.Maximale_Laenge}
+                                     field-level-help={iv_InlineHelpText}
+                                     required={field.Erforderlich}
+                                     disabled={fieldLocked}
+                                     onchange={handleDataChange}
+                    ></lightning-input>
+
+                </template>
+
+                <template if:true={field.isCheckbox}>
+
+                    <lightning-input type="checkbox"
+                                     variant="label-stacked"
+                                     key={field.Id}
+                                     class={fieldStyle}
+                                     label={field.Label}
+                                     checked={field.value}
+                                     maxlength={field.Maximale_Laenge}
+                                     field-level-help={iv_InlineHelpText}
+                                     required={field.Erforderlich}
+                                     disabled={fieldLocked}
+                                     onchange={handleDataChange}
+                    ></lightning-input>
+
+                </template>
+
+                <template if:true={field.isNumber}>
+
+                    <lightning-input type="number"
+                                     key={field.Id}
+                                     class={fieldStyle}
+                                     label={field.Label}
+                                     value={field.value}
+                                     maxlength={field.Maximale_Laenge}
+                                     max={field.Maximale_Laenge}
+                                     min="0"
+                                     field-level-help={iv_InlineHelpText}
+                                     required={field.Erforderlich}
+                                     disabled={fieldLocked}
+                                     onchange={handleDataChange}
+                    ></lightning-input>
+
+                </template>
+
+                <template if:true={field.isPercent}>
+
+                    <lightning-input type="number"
+                                     formatter="percent"
+                                     step="0.01"
+                                     key={field.Id}
+                                     class={fieldStyle}
+                                     label={field.Label}
+                                     value={field.value}
+                                     maxlength={field.Maximale_Laenge}
+                                     field-level-help={iv_InlineHelpText}
+                                     required={field.Erforderlich}
+                                     disabled={fieldLocked}
+                                     onchange={handleDataChange}
+                    ></lightning-input>
+
+                </template>
+
+                <template if:true={field.isCurrency}>
+
+                    <lightning-input type="number"
+                                     formatter="currency"
+                                     step="0.01"
+                                     key={field.Id}
+                                     class={fieldStyle}
+                                     label={field.Label}
+                                     value={field.value}
+                                     maxlength={field.Maximale_Laenge}
+                                     max="1000000000"
+                                     min="0"
+                                     field-level-help={iv_InlineHelpText}
+                                     required={field.Erforderlich}
+                                     disabled={fieldLocked}
+                                     onchange={handleDataChange}
+                    ></lightning-input>
+
+                </template>
+
+                <template if:true={field.isPhone}>
+
+                    <lightning-input type="tel"
+                                     key={field.Id}
+                                     pattern={field.Validierung_Regex}
+                                     class={fieldStyle}
+                                     label={field.Label}
+                                     value={field.value}
+                                     maxlength={field.Maximale_Laenge}
+                                     field-level-help={iv_InlineHelpText}
+                                     required={field.Erforderlich}
+                                     disabled={fieldLocked}
+                                     onchange={handleDataChange}
+                    ></lightning-input>
+
+                </template>
+
+                <template if:true={field.isDate}>
+
+                    <lightning-input type="date"
+                                     key={field.Id}
+                                     class={fieldStyle}
+                                     label={field.Label}
+                                     value={field.value}
+                                     field-level-help={iv_InlineHelpText}
+                                     required={field.Erforderlich}
+                                     disabled={fieldLocked}
+                                     onchange={handleDataChange}
+                    ></lightning-input>
+
+                </template>
+
+                <template if:true={field.isDateTime}>
+
+                    <lightning-input type="datetime"
+                                     key={field.Id}
+                                     class={fieldStyle}
+                                     label={field.Label}
+                                     value={field.value}
+                                     field-level-help={iv_InlineHelpText}
+                                     required={field.Erforderlich}
+                                     disabled={field.Schreibschutz}
+                                     onchange={handleDataChange}
+                    ></lightning-input>
+
+                </template>
+
+                <template if:true={field.isEmail}>
+
+                    <lightning-input type="email"
+                                     key={field.Id}
+                                     pattern={field.Validierung_Regex}
+                                     class={fieldStyle}
+                                     label={field.Label}
+                                     value={field.value}
+                                     maxlength={field.Maximale_Laenge}
+                                     field-level-help={iv_InlineHelpText}
+                                     required={field.Erforderlich}
+                                     disabled={fieldLocked}
+                                     onchange={handleDataChange}
+                    ></lightning-input>
+
+                </template>
+
+                <template if:true={field.isPicklist}>
+
+                    <lightning-combobox
+                            key={field.Id}
+                            class={fieldStyle}
+                            label={field.Label}
+                            value={field.value}
+                            options={field.picklistValues}
+                            field-level-help={field.Hilfetext}
+                            required={field.Erforderlich}
+                            disabled={fieldLocked}
+                            onchange={handleDataChange}
+                    >
+                    </lightning-combobox>
+
+                </template>
+            </lightning-layout-item>
+        </lightning-layout>
+
+    </template>
+
+</template>

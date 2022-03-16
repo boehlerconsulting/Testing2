@@ -1,0 +1,2586 @@
+<!--
+/**
+ *@author       Karsten Maaß
+ *@created      09.08.2019
+ *@version      1.0
+ *@since        45.0
+ *
+ *
+ *@description  Mitteilung über Änderungen im Filialnetz für bestehende Filialen
+ *
+ *
+ *@changelog    09.04.2019 Karsten Maaß - Created
+ *
+ *
+ */
+ -->
+<apex:page id="HW_MAEF" controller="HW_Document_C" contentType="{!contentType}" renderAs="{!renderAs}"
+           action="{!controllerActions}"
+           applyHtmlTag="false" applyBodyTag="false" showHeader="false" standardStylesheets="false" cache="true">
+
+    <html xmlns:v="urn:schemas-microsoft-com:vml"
+          xmlns:o="urn:schemas-microsoft-com:office:office"
+          xmlns:x="urn:schemas-microsoft-com:office:excel">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+
+        <style type="text/css" media="print,all">
+            @page {
+                size: landscape;
+            }
+
+            br {
+                mso-data-placement: same-cell;
+            }
+
+            body {
+                font-family: sans-serif;
+                text-align: left;
+            <!-- background-color: RGB(192, 192, 192);
+            --> margin: 0px;
+            }
+
+            div {
+                margin: 0px;
+            }
+
+            table {
+                border-collapse: collapse;
+                table-layout: fixed;
+            }
+
+            tr {
+                height: 12.75pt;
+                vertical-align: bottom;
+                font-size: 10pt;
+                white-space: nowrap;
+            }
+
+            td {
+                background-color: RGB(255, 255, 255);
+            }
+
+            .header {
+                font-size: 14pt;
+            }
+
+            .header-2 {
+                font-size: 12pt;
+            }
+
+            .info,
+            .info-important {
+                font-size: 6pt;
+            }
+
+            .info-important {
+                color: RGB(255, 0, 0);
+            }
+
+            .label,
+            .label-top,
+            .label-bottom {
+                font-size: 4pt;
+            }
+
+            .mini-label {
+                font-size: 3pt;
+            }
+
+            .hint {
+                font-size: 9pt;
+            }
+
+            .addition {
+                font-size: 8pt;
+            }
+
+            .comment {
+                font-family: Tahoma;
+                font-size: 8pt;
+            }
+
+            .bg-green,
+            .text-green,
+            .check-green {
+                background-color: RGB(204, 255, 204);
+            }
+
+            .bg-yellow,
+            .text-yellow,
+            .check-yellow,
+            .underlined-yellow {
+                background-color: RGB(255, 255, 153);
+            }
+
+            .bg-orange,
+            .text-orange {
+                background-color: RGB(255, 204, 153);
+            }
+
+            .text-blue{
+                background-color: RGB(218, 238, 243);
+            }
+
+            .bold,
+            .address,
+            .header-2 {
+                font-weight: bold;
+            }
+
+            .italic {
+                font-style: italic;
+            }
+
+            .border-top,
+            .border-top-left {
+                border-top-style: solid;
+                border-top-width: thin;
+                border-top-color: black;
+            }
+
+            .border-left,
+            .border-top-left {
+                border-left-style: solid;
+                border-left-width: thin;
+                border-left-color: black;
+            }
+
+            .border,
+            .text-green,
+            .text-yellow,
+            .text-blue,
+            .text-orange {
+                border-style: solid;
+                border-width: thin;
+                border-color: black;
+            }
+
+            .changed-orange {
+                border-style: solid;
+                border-width: thin;
+                border-color: black;
+                color: red;
+                background-color: RGB(255, 204, 153);
+            }
+
+            .changed-green {
+                border-style: solid;
+                border-width: thin;
+                border-color: black;
+                color: red;
+                background-color: RGB(204, 255, 204);
+            }
+
+            .check,
+            .check-green,
+            .check-yellow {
+                border-style: solid;
+                border-width: medium;
+                border-color: black;
+            }
+
+            .align-top,
+            .label-top {
+                vertical-align: top;
+            }
+
+            .align-center,
+            .label {
+                vertical-align: middle;
+            }
+
+            .align-bottom,
+            .label-bottom {
+                vertical-align: bottom;
+            }
+
+            .align-right {
+                text-align: right;
+            }
+
+            .underlined,
+            .underlined-yellow {
+                border-bottom-style: solid;
+                border-bottom-width: thin;
+                border-bottom-color: black;
+            }
+
+            .dotted-top {
+                border-top-style: dotted;
+                border-top-width: thin;
+                border-top-color: black;
+            }
+
+            .dotted-left {
+                border-left-style: dotted;
+                border-left-width: thin;
+                border-left-color: black;
+            }
+        </style>
+    </head>
+
+    <body>
+    <table>
+        <col style="width:0.37cm"/>
+        <col style="width:0.56cm"/>
+        <col style="width:0.56cm"/>
+        <col style="width:0.56cm"/>
+        <col style="width:3.74cm"/>
+        <col style="width:3.69cm"/>
+        <col style="width:1.20cm"/>
+        <col style="width:0.37cm"/>
+        <col style="width:2.54cm"/>
+        <col style="width:0.35cm"/>
+        <col style="width:1.11cm"/>
+        <col style="width:2.22cm"/>
+        <col style="width:0.25cm"/>
+        <col style="width:1.89cm"/>
+        <col style="width:0.56cm"/>
+        <col style="width:0.25cm"/>
+        <col style="width:1.20cm"/>
+        <col style="width:0.56cm"/>
+        <col style="width:3.55cm"/>
+        <col style="width:0.35cm"/>
+        <col style="width:1.64cm"/>
+        <col style="width:2.20cm"/>
+        <col style="width:0.19cm"/>
+        <col style="width:2.15cm"/>
+        <col style="width:0.35cm"/>
+        <col style="width:0.56cm"/>
+
+        <tr style="height:15.75pt">
+            <td class="header">Mitteilung über Änderungen im Filialnetz</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="header-2">Bereich</td>
+            <td/>
+            <td colspan="4" class="text-green">{!Bereich}</td>
+            <td/>
+        </tr>
+        <tr style="height:8.25pt">
+            <td/>
+            <td class="info">Bitte nur ein Auswahlfeld ankreuzen</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td class="check-green">
+                {!IF(LEN(TEXT(tempMAEFContract.ErsatzloseSchliessungMitAblaufDes__c)) != 0,'x','')}
+            </td>
+            <td/>
+            <td>Ersatzlose Schließung mit Ablauf des</td>
+            <td/>
+            <td/>
+            <td colspan="3" class="text-green">
+                <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+                    <apex:param value="{!tempMAEFContract.ErsatzloseSchliessungMitAblaufDes__c}"/>
+                </apex:outputText>
+            </td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="check-yellow"></td>
+            <td/>
+            <td>Eröffnung zum <span class="info-important">(Zweites Arbeitsblatt beachten!)</span></td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="4" class="text-yellow"></td>
+            <td/>
+        </tr>
+        <tr style="height:5.25pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label">Datum</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label">Datum</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td class="check-yellow">
+                {!IF(LEN(TEXT(tempMAEFContract.MAEF_Voruebergehende_Schliessung_ab__c)) != 0,'x','')}
+            </td>
+            <td/>
+            <td>Vorübergehende <span class="bold">ganztägige</span> Schließung</td>
+            <td/>
+            <td/>
+            <td colspan="3" class="text-yellow">
+                <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+                    <apex:param value="{!tempMAEFContract.MAEF_Voruebergehende_Schliessung_ab__c}"/>
+                </apex:outputText>
+            </td>
+            <td></td>
+            <td colspan="3" class="text-yellow">
+                <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+                    <apex:param value="{!tempMAEFContract.MAEF_Voruebergehende_Schliessung_bis__c}"/>
+                </apex:outputText>
+            </td>
+            <td/>
+            <td class="check-green">
+                {!IF(LEN(TEXT(tempMAEFContract.AenderungDerOeffnungszeitenAb__c)) != 0,'x','')}
+            </td>
+            <td/>
+            <td>Änderung der Öffnungszeiten ab</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="4" class="text-green">
+                <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+                    <apex:param value="{!tempMAEFContract.AenderungDerOeffnungszeitenAb__c}"/>
+                </apex:outputText>
+            </td>
+            <td/>
+        </tr>
+        <tr style="height:6.75pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label">vorübergehende Schließung ab</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label">vorübergehende Schließung bis</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label">Datum</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+            <td class="align-right">Grund&nbsp;</td>
+            <td class="underlined-yellow">
+                {!tempMAEFContract.Grund__c}
+            </td>
+            <td class="align-right">Ad-hoc-Vertretung&nbsp;</td>
+            <td colspan="2" class="underlined-yellow">
+                {!tempMAEFContract.AdHocVertretung__c}
+            </td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="align-right">Zustellung der Pf-Sdg&nbsp;</td>
+            <td class="underlined-yellow">
+                {!tempMAEFContract.ZustellungDerPfSdg__c}
+            </td>
+            <td/>
+            <td/>
+            <td>Änderung der Öffnungszeiten bis</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="4" class="text-green">
+                <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+                    <apex:param value="{!tempMAEFContract.AenderungDerOeffnungszeitenBis__c}"/>
+                </apex:outputText>
+            </td>
+            <td/>
+        </tr>
+        <tr style="height:3.75pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td class="check-green">
+                {!IF(LEN(TEXT(tempMAEFContract.DatumDerSchliessung__c)) != 0,'x','')}
+            </td>
+            <td/>
+            <td rowspan="2" colspan="3" class="align-center">Schließung mit Ablauf des</td>
+            <td class="align-center">und Eröffnung zum <span
+                        class="info-important">(Zweites Arbeitsblatt beachten!)</span></td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="check-yellow">
+                {!IF(LEN(TEXT(tempMAEFContract.sonstigeAenderungAb__c)) != 0,'x','')}
+            </td>
+            <td/>
+            <td>sonstige Änderung ab</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="4" class="text-yellow">
+                <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+                    <apex:param value="{!tempMAEFContract.sonstigeAenderungAb__c}"/>
+                </apex:outputText>
+            </td>
+            <td/>
+        </tr>
+        <tr style="height:5.25pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="dotted-top"/>
+            <td class="dotted-top"/>
+            <td class="dotted-top"/>
+            <td class="dotted-top"/>
+            <td class="dotted-left"/>
+            <td class="label">Datum</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="2" class="text-green">
+                <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+                    <apex:param value="{!tempMAEFContract.DatumDerSchliessung__c}"/>
+                </apex:outputText>
+            </td>
+            <td/>
+            <td colspan="3" class="text-green">
+                <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+                    <apex:param value="{!tempMAEFContract.DatumderEroeffnung__c}"/>
+                </apex:outputText>
+            </td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="check-green" style="mso-number-format:'@'"></td>
+            <td/>
+            <td>Erstausstattung Produkte</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="dotted-left"/>
+            <td colspan="4" class="underlined-yellow"></td>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-top">Datum der Schließung</td>
+            <td/>
+            <td/>
+            <td class="label-top">Datum der Eröffnung</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="align-top">bei Betreiberwechsel</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="dotted-left"/>
+            <td class="label">Art der Änderung</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"><span class="bold">Angaben alt </span><span class="hint">(z.B. zu schließender Standort)</span>
+            </td>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top-left"/>
+            <td class="border-top"><span class="bold">Angaben neu </span><span class="hint">(z.B. zu eröffnender Standort)</span>
+            </td>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>ASt-Name <span class="addition">(Pflichtfeld)</span></td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="8" class="text-orange">{!oldMAEFAccount.ASt_Name__c}</td>
+            <td/>
+            <td class="border-left"/>
+            <apex:outputPanel rendered="{!oldMAEFAccount.ASt_Name__c != tempMAEFAccount.ASt_Name__c}">
+                <td colspan="8" class="changed-orange">{!tempMAEFAccount.ASt_Name__c}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldMAEFAccount.ASt_Name__c != tempMAEFAccount.ASt_Name__c)}">
+                <td colspan="8" class="text-orange">{!tempMAEFAccount.ASt_Name__c}</td>
+            </apex:outputPanel>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:3.75pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Straße, Hsnr. <span class="addition">(Pflichtfeld)</span></td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="6" class="text-orange">{!oldMAEFAccount.Strasse__c}</td>
+            <td/>
+            <td class="text-orange">{!oldMAEFAccount.Filiale_Hausnummer__c}</td>
+            <td/>
+            <td class="border-left"/>
+            <apex:outputPanel rendered="{!oldMAEFAccount.Strasse__c != tempMAEFAccount.Strasse__c}">
+                <td colspan="6" class="changed-orange">{!tempMAEFAccount.Strasse__c}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldMAEFAccount.Strasse__c != tempMAEFAccount.Strasse__c)}">
+                <td colspan="6" class="text-orange">{!tempMAEFAccount.Strasse__c}</td>
+            </apex:outputPanel>
+            <td/>
+            <apex:outputPanel rendered="{!oldMAEFAccount.Filiale_Hausnummer__c != tempMAEFAccount.Filiale_Hausnummer__c}">
+                <td class="changed-orange">{!tempMAEFAccount.Filiale_Hausnummer__c}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldMAEFAccount.Filiale_Hausnummer__c != tempMAEFAccount.Filiale_Hausnummer__c)}">
+                <td class="text-orange">{!tempMAEFAccount.Filiale_Hausnummer__c}</td>
+            </apex:outputPanel>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:6pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Straße</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Hsnr.</td>
+            <td/>
+            <td class="border-left"/>
+            <td class="label-bottom">Straße</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Hsnr.</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Ort-Ortsteil, PLZ <span class="addition">(Pflichtfeld)</span></td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="3" class="text-orange">{!oldMAEFAccount.ShippingCity}</td>
+            <td/>
+            <td colspan="2" class="text-orange">{!oldMAEFAccount.Ortsteil_Postanschrift__c}</td>
+            <td/>
+            <td class="text-orange">{!oldMAEFAccount.ShippingPostalCode}</td>
+            <td/>
+            <td class="border-left"/>
+            <apex:outputPanel rendered="{!oldMAEFAccount.ShippingCity != tempMAEFAccount.ShippingCity}">
+                <td colspan="3" class="changed-orange">{!tempMAEFAccount.ShippingCity}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldMAEFAccount.ShippingCity != tempMAEFAccount.ShippingCity)}">
+                <td colspan="3" class="text-orange">{!tempMAEFAccount.ShippingCity}</td>
+            </apex:outputPanel>
+            <td/>
+            <apex:outputPanel rendered="{!oldMAEFAccount.Ortsteil_Postanschrift__c != tempMAEFAccount.Ortsteil_Postanschrift__c}">
+                <td colspan="2" class="changed-orange">{!tempMAEFAccount.Ortsteil_Postanschrift__c}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldMAEFAccount.Ortsteil_Postanschrift__c != tempMAEFAccount.Ortsteil_Postanschrift__c)}">
+                <td colspan="2" class="text-orange">{!tempMAEFAccount.Ortsteil_Postanschrift__c}</td>
+            </apex:outputPanel>
+            <td/>
+            <apex:outputPanel rendered="{!oldMAEFAccount.ShippingPostalCode != tempMAEFAccount.ShippingPostalCode}">
+                <td class="changed-orange">{!tempMAEFAccount.ShippingPostalCode}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldMAEFAccount.ShippingPostalCode != tempMAEFAccount.ShippingPostalCode)}">
+                <td class="text-orange">{!tempMAEFAccount.ShippingPostalCode}</td>
+            </apex:outputPanel>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:6pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Ort</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Ortsteil</td>
+            <td/>
+            <td/>
+            <td class="label-bottom">PLZ</td>
+            <td/>
+            <td class="border-left"/>
+            <td class="label-bottom">Ort</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Ortsteil</td>
+            <td/>
+            <td/>
+            <td class="label-bottom">PLZ</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Tel.Nr. / Fax Nr.</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="3" class="text-green" style="mso-number-format:'@'">{!oldMAEFAccount.Phone}</td>
+            <td/>
+            <td colspan="4" class="text-green" style="mso-number-format:'@'">{!oldMAEFAccount.Fax}</td>
+            <td/>
+            <td class="border-left"/>
+            <apex:outputPanel rendered="{!oldMAEFAccount.Phone != tempMAEFAccount.Phone}">
+                <td colspan="3" class="changed-green" style="mso-number-format:'@'">{!tempMAEFAccount.Phone}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldMAEFAccount.Phone != tempMAEFAccount.Phone)}">
+                <td colspan="3" class="text-green" style="mso-number-format:'@'">{!tempMAEFAccount.Phone}</td>
+            </apex:outputPanel>
+            <td/>
+            <apex:outputPanel rendered="{!oldMAEFAccount.Fax != tempMAEFAccount.Fax}">
+                <td colspan="4" class="changed-green" style="mso-number-format:'@'">{!tempMAEFAccount.Fax}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldMAEFAccount.Fax != tempMAEFAccount.Fax)}">
+                <td colspan="4" class="text-green" style="mso-number-format:'@'">{!tempMAEFAccount.Fax}</td>
+            </apex:outputPanel>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:6pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Tel.Nr. (mit Vorwahl)</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Fax Nr. (mit Vorwahl)</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td class="label-bottom">Tel.Nr. (mit Vorwahl)</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Fax Nr. (mit Vorwahl)</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>ASt-Nr. <span class="addition">(Pflichtfeld) </span>/ Kostenstelle <span
+                        class="addition">(Pflichtfeld)</span></td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="3" class="text-orange" style="mso-number-format: '@'">{!oldMAEFAccount.ASt_Nummer__c}</td>
+            <td/>
+            <td colspan="4" class="text-orange"
+                style="mso-number-format: '@'">{!oldMAEFAccount.DPAG_Kostenstelle__c}</td>
+            <td/>
+            <td class="border-left"/>
+            <apex:outputPanel rendered="{!oldMAEFAccount.ASt_Nummer__c != tempMAEFAccount.ASt_Nummer__c}">
+                <td colspan="3" class="changed-orange"
+                    style="mso-number-format: '@'">{!tempMAEFAccount.ASt_Nummer__c}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldMAEFAccount.ASt_Nummer__c != tempMAEFAccount.ASt_Nummer__c)}">
+                <td colspan="3" class="text-orange" style="mso-number-format: '@'">{!tempMAEFAccount.ASt_Nummer__c}</td>
+            </apex:outputPanel>
+            <td/>
+            <apex:outputPanel rendered="{!oldMAEFAccount.DPAG_Kostenstelle__c != tempMAEFAccount.DPAG_Kostenstelle__c}">
+                <td colspan="4" class="changed-orange"
+                    style="mso-number-format: '@'">{!tempMAEFAccount.DPAG_Kostenstelle__c}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldMAEFAccount.DPAG_Kostenstelle__c != tempMAEFAccount.DPAG_Kostenstelle__c)}">
+                <td colspan="4" class="text-orange"
+                    style="mso-number-format: '@'">{!tempMAEFAccount.DPAG_Kostenstelle__c}</td>
+            </apex:outputPanel>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:4.5pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td rowspan="3" colspan="4" class="label-top" style="white-space: normal;">
+                Kostenstelle:<br/>
+                <span class="italic">* </span>DPAG-Filialen, Partner, <span class="italic">POSTPOINT</span> und
+                Post-Service -> DPAG<br/>
+                * Postbank-Center -> PB Filialvertrieb
+            </td>
+            <td/>
+            <td class="border-left"/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td rowspan="3" colspan="4" class="label-top" style="white-space: normal;">
+                Kostenstelle:<br/>
+                * DPAG-Filialen, Partner, Postpoint und Post-Service -> DPAG <br/>
+                * Postbank-Center -> PB Filialvertrieb
+            </td>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:12.75pt">
+            <td/>
+            <td colspan="4">Debitorennr.</td>
+            <td/>
+            <td colspan="3" class="text-green" style="mso-number-format: '@'">{!oldMAEFAccount.Debitor__c}</td>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <apex:outputPanel rendered="{!oldMAEFAccount.Debitor__c != tempMAEFAccount.Debitor__c}">
+                <td colspan="3" class="changed-green" style="mso-number-format: '@'">{!tempMAEFAccount.Debitor__c}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldMAEFAccount.Debitor__c != tempMAEFAccount.Debitor__c)}">
+                <td colspan="3" class="text-green" style="mso-number-format: '@'">{!tempMAEFAccount.Debitor__c}</td>
+            </apex:outputPanel>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:3.75pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td rowspan="2" colspan="5" class="align-top" style="white-space: normal;">WaWi-Nummer<span
+                        class="addition"> (Pflichtfeld) &nbsp;</span>/ ASt-Nr. Referenz-Filiale für Verkaufsprodukte
+            </td>
+            <td colspan="3" class="text-orange" style="mso-number-format: '@'">{!oldMAEFAccount.WaWi_Nummer__c}</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <apex:outputPanel rendered="{!oldMAEFAccount.WaWi_Nummer__c != tempMAEFAccount.WaWi_Nummer__c}">
+                <td colspan="3" class="changed-orange"
+                    style="mso-number-format: '@'">{!tempMAEFAccount.WaWi_Nummer__c}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldMAEFAccount.WaWi_Nummer__c != tempMAEFAccount.WaWi_Nummer__c)}">
+                <td colspan="3" class="text-orange"
+                    style="mso-number-format: '@'">{!tempMAEFAccount.WaWi_Nummer__c}</td>
+            </apex:outputPanel>
+            <td/>
+            <td colspan="4" class="changed-green">{!tempMAEFContract.AStNrReferenzFilialeVerkaufsproduktespro__c}</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:14.25pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-top">ASt-Nr. Referenz-Filiale für Verkaufsprodukte</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Filialtyp <span class="addition">(Pflichtfeld) </span>/ Regel/Interim<span class="addition"> (Pflichtfeld)</span>
+            </td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="6" class="text-orange">{!oldMAEFAccount.Filialtyp_OZ__c}</td>
+            <td/>
+            <td class="text-orange"></td>
+            <td/>
+            <td class="border-left"/>
+            <apex:outputPanel rendered="{!oldMAEFAccount.Filialtyp_OZ__c != tempMAEFAccount.Filialtyp_OZ__c}">
+                <td colspan="6" class="changed-orange">{!tempMAEFAccount.Filialtyp_OZ__c}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldMAEFAccount.Filialtyp_OZ__c != tempMAEFAccount.Filialtyp_OZ__c)}">
+                <td colspan="6" class="text-orange">{!tempMAEFAccount.Filialtyp_OZ__c}</td>
+            </apex:outputPanel>
+            <td/>
+            <td class="changed-orange">{!tempMAEFContract.RegelInterim__c}</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:5.25pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label">Filialtyp</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Regel/Interim</td>
+            <td/>
+            <td class="border-left"/>
+            <td class="label">Filialtyp</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Regel/Interim</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Anzahl Schalter / Branche im Hauptgeschäft</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="3" class="text-green"
+                style="mso-number-format: '@'">{!text(oldMAEFAccount.Anzahl_Schalter__c)}</td>
+            <td/>
+            <td colspan="4" class="text-green">{!oldMAEFAccount.Branche_FACTS__c}</td>
+            <td/>
+            <td class="border-left"/>
+            <apex:outputPanel rendered="{!oldMAEFAccount.Anzahl_Schalter__c != tempMAEFAccount.Anzahl_Schalter__c}">
+                <td colspan="3" class="changed-green"
+                    style="mso-number-format: '@'">{!text(tempMAEFAccount.Anzahl_Schalter__c)}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldMAEFAccount.Anzahl_Schalter__c != tempMAEFAccount.Anzahl_Schalter__c)}">
+                <td colspan="3" class="text-green"
+                    style="mso-number-format: '@'">{!text(tempMAEFAccount.Anzahl_Schalter__c)}</td>
+            </apex:outputPanel>
+            <td/>
+            <apex:outputPanel rendered="{!oldMAEFAccount.Branche_FACTS__c != tempMAEFAccount.Branche_FACTS__c}">
+                <td colspan="4" class="changed-green">{!tempMAEFAccount.Branche_FACTS__c}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldMAEFAccount.Branche_FACTS__c != tempMAEFAccount.Branche_FACTS__c)}">
+                <td colspan="4" class="text-green">{!tempMAEFAccount.Branche_FACTS__c}</td>
+            </apex:outputPanel>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:5.25pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Anzahl Schalter</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Branche im Hauptgeschäft</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td class="label-bottom">Anzahl Schalter (Pflichtfeld bei Eröffnung)</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Branche im Hauptgeschäft</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Anzahl Mitarbeiter</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="3" class="text-green"></td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td colspan="3" class="changed-green"
+                style="mso-number-format: '@'">{!text(tempMAEFContract.AnzahlMitarbeiter__c)}</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:5.25pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Anzahl Mitarbeiter</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td class="label-bottom">Anzahl Mitarbeiter</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Juristischer Name des Partners / Anrede</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="6" class="text-green">{!oldMAEFAccount.Name}</td>
+            <td/>
+            <td class="text-green"></td>
+            <td/>
+            <td class="border-left"/>
+            <apex:outputPanel rendered="{!oldMAEFAccount.Name != tempMAEFAccount.Name}">
+                <td colspan="6" class="changed-green">{!tempMAEFAccount.Name}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldMAEFAccount.Name != tempMAEFAccount.Name)}">
+                <td colspan="6" class="text-green">{!tempMAEFAccount.Name}</td>
+            </apex:outputPanel>
+            <td/>
+            <td class="changed-green">{!tempMAEFContract.AnredeMAEF__c}</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:3.75pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>KKZ Masterkasse / Steuernummer des Partners</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="3" class="text-green" style="mso-number-format: '@'">{!oldMAEFAccount.Masterkasse_KKZ__c}</td>
+            <td/>
+            <td colspan="4" class="text-green" style="mso-number-format: '@'"></td>
+            <td/>
+            <td class="border-left"/>
+            <apex:outputPanel rendered="{!oldMAEFAccount.Masterkasse_KKZ__c != tempMAEFAccount.Masterkasse_KKZ__c}">
+                <td colspan="3" class="changed-green"
+                    style="mso-number-format: '@'">{!tempMAEFAccount.Masterkasse_KKZ__c}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldMAEFAccount.Masterkasse_KKZ__c != tempMAEFAccount.Masterkasse_KKZ__c)}">
+                <td colspan="3" class="text-green"
+                    style="mso-number-format: '@'">{!tempMAEFAccount.Masterkasse_KKZ__c}</td>
+            </apex:outputPanel>
+            <td/>
+            <td colspan="4" class="changed-green"
+                style="mso-number-format: '@'">{!tempMAEFContract.SteuernummerPartner__c}</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:6pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">KKZ Masterkasse</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Steuernummer des Partners</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td class="label-bottom">KKZ Masterkasse</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Steuernummer des Partners</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Tagesstempelinschrift <span class="addition">(inkl. Unterscheidungsbuchstabe)</span></td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="8" class="text-green"></td>
+            <td/>
+            <td class="border-left"/>
+            <td colspan="8" class="changed-green">{!tempMAEFContract.TagesstempelMAEF__c}</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:6pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">PLZ/Ort/Unterscheidungsbuchstabe</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td class="label-bottom">PLZ/Ort/Unterscheidungsbuchstabe</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Postfach/Betreiber <span class="addition">(Pflichtfeld)</span> / Verteilschluss Pf-Sdg</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="text-orange">{!IF(oldMAEFAccount.PostfachanlageCheckbox__c==true, 'Ja', 'Nein')}</td>
+            <td/>
+            <td class="text-orange">{!oldMAEFAccount.Postfach_Betreiber__c}</td>
+            <td/>
+            <td colspan="4" class="text-green"></td>
+            <td/>
+            <td class="border-left"/>
+            <apex:outputPanel rendered="{!oldMAEFAccount.PostfachanlageCheckbox__c != tempMAEFAccount.PostfachanlageCheckbox__c}">
+                <td class="changed-orange">{!IF(tempMAEFAccount.PostfachanlageCheckbox__c==true, 'Ja', 'Nein')}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldMAEFAccount.PostfachanlageCheckbox__c != tempMAEFAccount.PostfachanlageCheckbox__c)}">
+                <td class="text-orange">{!IF(tempMAEFAccount.PostfachanlageCheckbox__c==true, 'Ja', 'Nein')}</td>
+            </apex:outputPanel>
+            <td/>
+            <apex:outputPanel rendered="{!oldMAEFAccount.Postfach_Betreiber__c != tempMAEFAccount.Postfach_Betreiber__c}">
+                <td class="changed-orange">{!tempMAEFAccount.Postfach_Betreiber__c}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldMAEFAccount.Postfach_Betreiber__c != tempMAEFAccount.Postfach_Betreiber__c)}">
+                <td class="text-orange">{!tempMAEFAccount.Postfach_Betreiber__c}</td>
+            </apex:outputPanel>
+            <td/>
+            <td colspan="4"
+                class="changed-green">{!tempMAEFContract.VerteilschlussPfSdg__c}</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:6pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Betreiber</td>
+            <td/>
+            <td class="label-bottom">Verteilschluss Pf-Sdg</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td/>
+            <td/>
+            <td class="label-bottom">Betreiber</td>
+            <td/>
+            <td class="label-bottom">Verteilschluss Pf-Sdg</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td>Anlagen-Typ Pf-Schrank / Anzahl Pf-Schränke</td>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="3" class="text-green"></td>
+            <td/>
+            <td colspan="2" class="text-green"></td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td colspan="3" class="changed-green">{!tempMAEFContract.AnlagenTypPfSchrank__c}</td>
+            <td/>
+            <td colspan="2" class="changed-green"
+                style="mso-number-format: '@'">{!text(tempMAEFContract.AnzahlPfSchraenke__c)}</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:3.75pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Ausgabe PAKET / BRIEF <span class="addition">(Pflichtfelder)</span></td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="3" class="text-orange">{!IF(oldMAEFAccount.Paketausgabe__c==true, 'Ja', 'Nein')}</td>
+            <td/>
+            <td colspan="2" class="text-orange">{!IF(oldMAEFAccount.Briefausgabe__c==true, 'Ja', 'Nein')}</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <apex:outputPanel rendered="{!NOT(ISBLANK(tempMAEFContract.ErsatzloseSchliessungMitAblaufDes__c))}">
+                <td colspan="3" class="text-orange"></td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!ISBLANK(tempMAEFContract.ErsatzloseSchliessungMitAblaufDes__c)}">
+                <apex:outputPanel rendered="{!oldMAEFAccount.Paketausgabe__c != tempMAEFAccount.Paketausgabe__c}">
+                    <td colspan="3"
+                        class="changed-orange">{!IF(tempMAEFAccount.Paketausgabe__c==true, 'Ja', 'Nein')}</td>
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!not(oldMAEFAccount.Paketausgabe__c != tempMAEFAccount.Paketausgabe__c)}">
+                    <td colspan="3" class="text-orange">{!IF(tempMAEFAccount.Paketausgabe__c==true, 'Ja', 'Nein')}</td>
+                </apex:outputPanel>
+            </apex:outputPanel>
+            <td/>
+            <apex:outputPanel rendered="{!NOT(ISBLANK(tempMAEFContract.ErsatzloseSchliessungMitAblaufDes__c))}">
+                <td colspan="3" class="text-orange"></td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!ISBLANK(tempMAEFContract.ErsatzloseSchliessungMitAblaufDes__c)}">
+                <apex:outputPanel rendered="{!oldMAEFAccount.Briefausgabe__c != tempMAEFAccount.Briefausgabe__c}">
+                    <td colspan="2"
+                        class="changed-orange">{!IF(tempMAEFAccount.Briefausgabe__c==true, 'Ja', 'Nein')}</td>
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!not(oldMAEFAccount.Briefausgabe__c != tempMAEFAccount.Briefausgabe__c)}">
+                    <td colspan="2" class="text-orange">{!IF(tempMAEFAccount.Briefausgabe__c==true, 'Ja', 'Nein')}</td>
+                </apex:outputPanel>
+            </apex:outputPanel>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:6pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-top">PAKET</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-top">BRIEF</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td class="label">PAKET</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label">BRIEF</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Postfiliale Direkt</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="3" class="text-orange" style="mso-number-format: '@'">{!PostfilialeDirekt}</td>
+            <td/>
+            <td colspan="2" class="changed-green" style="mso-number-format: '@'">{!tempMAEFContract.ZS_Id__c}</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td colspan="3" class="changed-orange">{!tempMAEFContract.PostfilialeDirektMAEF__c}</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:9pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-top">Postfiliale Direkt</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-top">ZS Id</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td class="label-bottom">Postfiliale Direkt</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-bottom">ZS Id</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:3.75pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td><span style="font-size: 8.5pt;">DHL Express Int. / Bfk am Standort vorhanden? (Pflichtfeld)</span></td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="3" class="text-orange" style="mso-number-format: '@'">{!oldMAEFAccount.DHL_Express_Int__c}</td>
+            <td/>
+            <td class="text-orange">{!oldMAEFAccount.Briefkasten__c}</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <apex:outputPanel rendered="{!oldMAEFAccount.DHL_Express_Int__c != tempMAEFAccount.DHL_Express_Int__c}">
+                <td colspan="3" class="changed-orange"
+                    style="mso-number-format: '@'">{!tempMAEFAccount.DHL_Express_Int__c}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldMAEFAccount.DHL_Express_Int__c != tempMAEFAccount.DHL_Express_Int__c)}">
+                <td colspan="3" class="text-orange"
+                    style="mso-number-format: '@'">{!tempMAEFAccount.DHL_Express_Int__c}</td>
+            </apex:outputPanel>
+            <td/>
+            <apex:outputPanel rendered="{!oldMAEFAccount.Briefkasten__c != tempMAEFAccount.Briefkasten__c}">
+                <td class="changed-orange">{!tempMAEFAccount.Briefkasten__c}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldMAEFAccount.Briefkasten__c != tempMAEFAccount.Briefkasten__c)}">
+                <td class="text-orange">{!tempMAEFAccount.Briefkasten__c}</td>
+            </apex:outputPanel>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:6pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label">EKP-Nummer</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label">BRIEF</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td class="label">EKP-Nummer</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label">BRIEF</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Ast-ID</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="3" class="text-orange" style="mso-number-format: '@'">{!oldMAEFAccount.ASt_ID__c}</td>
+            <td/>
+            <td colspan="4" class="text-green" style="mso-number-format: '@'">{!oldMAEFAccount.Filial_ILN__c}</td>
+            <td/>
+            <td class="border-left"/>
+            <apex:outputPanel rendered="{!oldMAEFAccount.ASt_ID__c != tempMAEFAccount.ASt_ID__c}">
+                <td colspan="3" class="changed-orange" style="mso-number-format: '@'">{!tempMAEFAccount.ASt_ID__c}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldMAEFAccount.ASt_ID__c != tempMAEFAccount.ASt_ID__c)}">
+                <td colspan="3" class="text-orange" style="mso-number-format: '@'">{!tempMAEFAccount.ASt_ID__c}</td>
+            </apex:outputPanel>
+            <td/>
+            <apex:outputPanel rendered="{!oldMAEFAccount.Filial_ILN__c != tempMAEFAccount.Filial_ILN__c}">
+                <td colspan="4" class="changed-green"
+                    style="mso-number-format: '@'">{!tempMAEFAccount.Filial_ILN__c}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldMAEFAccount.Filial_ILN__c != tempMAEFAccount.Filial_ILN__c)}">
+                <td colspan="4" class="text-green" style="mso-number-format: '@'">{!tempMAEFAccount.Filial_ILN__c}</td>
+            </apex:outputPanel>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:6pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label">Ast-ID</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label">Filial-ILN</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Externe Filial-Bezeichnung (ggf. vom Partner)</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="8" class="text-green">{!tempMAEFContract.Externe_Filial_Bezeichnung__c}</td>
+            <td/>
+            <td class="border-left"/>
+            <td colspan="8"
+                class="text-green">{!IF(NOT(ISBLANK(tempMAEFContract.ErsatzloseSchliessungMitAblaufDes__c)), '',  tempMAEFContract.Externe_Filial_Bezeichnung__c)}</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:3.75pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Ergänzender Hinweis zum Standort (falls zutreffend)</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-top-left"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td/>
+            <td colspan="8" class="text-green">{!tempMAEFContract.ErgaenzenderHinweisStandort__c}</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:3.75pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+
+        <tr>
+            <td/>
+            <td>Schlussinventur am:</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="3" class="text-green">
+                <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+                    <apex:param value="{!tempMAEFContract.Schlussinventur__c}"/>
+                </apex:outputText>
+            </td>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:7.5pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="label-top">Pflichtfeld bei Schließung</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>E-Mail für Versand Inventurzählisten</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="3" class="text-green" style="mso-number-format:'@'">{!tempMAEFContract.ZusendeanschriftFuerInventurzaehllisten__c}</td>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td/>
+            <td class="align-right"><span class="bold">Öffnungszeiten:</span></td>
+            <td class="hint">Post (Benachrichtigungskarte)</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="hint">Hauptgeschäft</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td/>
+            <td class="align-right">Montag</td>
+            <apex:outputPanel rendered="{!oldMAEFAccount.Mo_vm_von__c != tempMAEFAccount.Mo_vm_von__c
+            || oldMAEFAccount.Mo_vm_bis__c != tempMAEFAccount.Mo_vm_bis__c
+            || oldMAEFAccount.Mo_nm_von__c != tempMAEFAccount.Mo_nm_von__c
+            || oldMAEFAccount.Mo_nm_von__c != tempMAEFAccount.Mo_nm_von__c }">
+                <td colspan="5" class="changed-orange">
+                    {!tempMAEFAccount.Mo_vm_von__c} - {!tempMAEFAccount.Mo_vm_bis__c}
+                    &nbsp; {!tempMAEFAccount.Mo_nm_von__c} - {!tempMAEFAccount.Mo_nm_bis__c}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldMAEFAccount.Mo_vm_von__c != tempMAEFAccount.Mo_vm_von__c)
+            && not(oldMAEFAccount.Mo_vm_bis__c != tempMAEFAccount.Mo_vm_bis__c)
+            && not(oldMAEFAccount.Mo_nm_von__c != tempMAEFAccount.Mo_nm_von__c)
+            && not(oldMAEFAccount.Mo_nm_von__c != tempMAEFAccount.Mo_nm_von__c) }">
+                <td colspan="5" class="text-orange">
+                    {!tempMAEFAccount.Mo_vm_von__c} - {!tempMAEFAccount.Mo_vm_bis__c}
+                    &nbsp; {!tempMAEFAccount.Mo_nm_von__c} - {!tempMAEFAccount.Mo_nm_bis__c}</td>
+            </apex:outputPanel>
+            <td/>
+            <apex:outputPanel rendered="{!oldMAEFAccount.Gz_Mo_vm_von__c != tempMAEFAccount.Gz_Mo_vm_von__c
+            || oldMAEFAccount.Gz_Mo_vm_bis__c != tempMAEFAccount.Gz_Mo_vm_bis__c
+            || oldMAEFAccount.Gz_Mo_nm_von__c != tempMAEFAccount.Gz_Mo_nm_von__c
+            || oldMAEFAccount.Gz_Mo_nm_von__c != tempMAEFAccount.Gz_Mo_nm_von__c }">
+                <td colspan="4" class="changed-green">{!tempMAEFAccount.Gz_Mo_vm_von__c}
+                    - {!tempMAEFAccount.Gz_Mo_vm_bis__c}
+                    &nbsp; {!tempMAEFAccount.Gz_Mo_nm_von__c} - {!tempMAEFAccount.Gz_Mo_nm_bis__c}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldMAEFAccount.Gz_Mo_vm_von__c != tempMAEFAccount.Gz_Mo_vm_von__c)
+            && not(oldMAEFAccount.Gz_Mo_vm_bis__c != tempMAEFAccount.Gz_Mo_vm_bis__c)
+            && not(oldMAEFAccount.Gz_Mo_nm_von__c != tempMAEFAccount.Gz_Mo_nm_von__c)
+            && not(oldMAEFAccount.Gz_Mo_nm_von__c != tempMAEFAccount.Gz_Mo_nm_von__c) }">
+                <td colspan="4" class="text-green">{!tempMAEFAccount.Gz_Mo_vm_von__c}
+                    - {!tempMAEFAccount.Gz_Mo_vm_bis__c}
+                    &nbsp; {!tempMAEFAccount.Gz_Mo_nm_von__c} - {!tempMAEFAccount.Gz_Mo_nm_bis__c}</td>
+            </apex:outputPanel>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:3.75pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td class="border-top"/>
+            <td class="border-top"><span class="info">Pflichtfelder bei ersatzloser Schließung, nicht nahtloser Eröffnung der Nachfolge-Filiale UND / ODER Umleitungsfiliale für Packstation</span>
+            </td>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td class="border-top"/>
+            <td/>
+            <td/>
+            <td class="align-right">Dienstag</td>
+            <apex:outputPanel rendered="{!oldMAEFAccount.Di_vm_von__c != tempMAEFAccount.Di_vm_von__c
+            || oldMAEFAccount.Di_vm_bis__c != tempMAEFAccount.Di_vm_bis__c
+            || oldMAEFAccount.Di_nm_von__c != tempMAEFAccount.Di_nm_von__c
+            || oldMAEFAccount.Di_nm_von__c != tempMAEFAccount.Di_nm_von__c }">
+                <td colspan="5" class="changed-orange">
+                    {!tempMAEFAccount.Di_vm_von__c} - {!tempMAEFAccount.Di_vm_bis__c}
+                    &nbsp; {!tempMAEFAccount.Di_nm_von__c} - {!tempMAEFAccount.Di_nm_bis__c}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldMAEFAccount.Di_vm_von__c != tempMAEFAccount.Di_vm_von__c)
+            && not(oldMAEFAccount.Di_vm_bis__c != tempMAEFAccount.Di_vm_bis__c)
+            && not(oldMAEFAccount.Di_nm_von__c != tempMAEFAccount.Di_nm_von__c)
+            && not(oldMAEFAccount.Di_nm_von__c != tempMAEFAccount.Di_nm_von__c) }">
+                <td colspan="5" class="text-orange">
+                    {!tempMAEFAccount.Di_vm_von__c} - {!tempMAEFAccount.Di_vm_bis__c}
+                    &nbsp; {!tempMAEFAccount.Di_nm_von__c} - {!tempMAEFAccount.Di_nm_bis__c}</td>
+            </apex:outputPanel>
+            <td/>
+            <apex:outputPanel rendered="{!oldMAEFAccount.Gz_Di_vm_von__c != tempMAEFAccount.Gz_Di_vm_von__c
+            || oldMAEFAccount.Gz_Di_vm_bis__c != tempMAEFAccount.Gz_Di_vm_bis__c
+            || oldMAEFAccount.Gz_Di_nm_von__c != tempMAEFAccount.Gz_Di_nm_von__c
+            || oldMAEFAccount.Gz_Di_nm_von__c != tempMAEFAccount.Gz_Di_nm_von__c }">
+                <td colspan="4" class="changed-green">{!tempMAEFAccount.Gz_Di_vm_von__c}
+                    - {!tempMAEFAccount.Gz_Di_vm_bis__c}
+                    &nbsp; {!tempMAEFAccount.Gz_Di_nm_von__c} - {!tempMAEFAccount.Gz_Di_nm_bis__c}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldMAEFAccount.Gz_Di_vm_von__c != tempMAEFAccount.Gz_Di_vm_von__c)
+            && not(oldMAEFAccount.Gz_Di_vm_bis__c != tempMAEFAccount.Gz_Di_vm_bis__c)
+            && not(oldMAEFAccount.Gz_Di_nm_von__c != tempMAEFAccount.Gz_Di_nm_von__c)
+            && not(oldMAEFAccount.Gz_Di_nm_von__c != tempMAEFAccount.Gz_Di_nm_von__c) }">
+                <td colspan="4" class="text-green">{!tempMAEFAccount.Gz_Di_vm_von__c}
+                    - {!tempMAEFAccount.Gz_Di_vm_bis__c}
+                    &nbsp; {!tempMAEFAccount.Gz_Di_nm_von__c} - {!tempMAEFAccount.Gz_Di_nm_bis__c}</td>
+            </apex:outputPanel>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:3.75pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Neue Umleitungsfiliale</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="6" class="text-blue" style="mso-number-format:'@'">{!tempMAEFContract.Umleitungsfiliale_PackstationenMAEF__c}</td>
+            <td/>
+            <td class="align-right">Mittwoch</td>
+            <apex:outputPanel rendered="{!oldMAEFAccount.Mi_vm_von__c != tempMAEFAccount.Mi_vm_von__c
+            || oldMAEFAccount.Mi_vm_bis__c != tempMAEFAccount.Mi_vm_bis__c
+            || oldMAEFAccount.Mi_nm_von__c != tempMAEFAccount.Mi_nm_von__c
+            || oldMAEFAccount.Mi_nm_von__c != tempMAEFAccount.Mi_nm_von__c }">
+                <td colspan="5" class="changed-orange">
+                    {!tempMAEFAccount.Mi_vm_von__c} - {!tempMAEFAccount.Mi_vm_bis__c}
+                    &nbsp; {!tempMAEFAccount.Mi_nm_von__c} - {!tempMAEFAccount.Mi_nm_bis__c}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldMAEFAccount.Mi_vm_von__c != tempMAEFAccount.Mi_vm_von__c)
+            && not(oldMAEFAccount.Mi_vm_bis__c != tempMAEFAccount.Mi_vm_bis__c)
+            && not(oldMAEFAccount.Mi_nm_von__c != tempMAEFAccount.Mi_nm_von__c)
+            && not(oldMAEFAccount.Mi_nm_von__c != tempMAEFAccount.Mi_nm_von__c) }">
+                <td colspan="5" class="text-orange">
+                    {!tempMAEFAccount.Mi_vm_von__c} - {!tempMAEFAccount.Mi_vm_bis__c}
+                    &nbsp; {!tempMAEFAccount.Mi_nm_von__c} - {!tempMAEFAccount.Mi_nm_bis__c}</td>
+            </apex:outputPanel>
+            <td/>
+            <apex:outputPanel rendered="{!oldMAEFAccount.Gz_Mi_vm_von__c != tempMAEFAccount.Gz_Mi_vm_von__c
+            || oldMAEFAccount.Gz_Mi_vm_bis__c != tempMAEFAccount.Gz_Mi_vm_bis__c
+            || oldMAEFAccount.Gz_Mi_nm_von__c != tempMAEFAccount.Gz_Mi_nm_von__c
+            || oldMAEFAccount.Gz_Mi_nm_von__c != tempMAEFAccount.Gz_Mi_nm_von__c }">
+                <td colspan="4" class="changed-green">{!tempMAEFAccount.Gz_Mi_vm_von__c}
+                    - {!tempMAEFAccount.Gz_Mi_vm_bis__c}
+                    &nbsp; {!tempMAEFAccount.Gz_Mi_nm_von__c} - {!tempMAEFAccount.Gz_Mi_nm_bis__c}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldMAEFAccount.Gz_Mi_vm_von__c != tempMAEFAccount.Gz_Mi_vm_von__c)
+            && not(oldMAEFAccount.Gz_Mi_vm_bis__c != tempMAEFAccount.Gz_Mi_vm_bis__c)
+            && not(oldMAEFAccount.Gz_Mi_nm_von__c != tempMAEFAccount.Gz_Mi_nm_von__c)
+            && not(oldMAEFAccount.Gz_Mi_nm_von__c != tempMAEFAccount.Gz_Mi_nm_von__c) }">
+                <td colspan="4" class="text-green">{!tempMAEFAccount.Gz_Mi_vm_von__c}
+                    - {!tempMAEFAccount.Gz_Mi_vm_bis__c}
+                    &nbsp; {!tempMAEFAccount.Gz_Mi_nm_von__c} - {!tempMAEFAccount.Gz_Mi_nm_bis__c}</td>
+            </apex:outputPanel>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:3.75pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td>für folgende Packstationen:</td>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="6" class="text-blue" style="mso-number-format:'@'">{!tempMAEFContract.Fuer_PackstationenMAEF__c}</td>
+            <td/>
+            <td class="align-right">Donnerstag</td>
+            <apex:outputPanel rendered="{!oldMAEFAccount.Do_vm_von__c != tempMAEFAccount.Do_vm_von__c
+            || oldMAEFAccount.Do_vm_bis__c != tempMAEFAccount.Do_vm_bis__c
+            || oldMAEFAccount.Do_nm_von__c != tempMAEFAccount.Do_nm_von__c
+            || oldMAEFAccount.Do_nm_von__c != tempMAEFAccount.Do_nm_von__c }">
+                <td colspan="5" class="changed-orange">
+                    {!tempMAEFAccount.Do_vm_von__c} - {!tempMAEFAccount.Do_vm_bis__c}
+                    &nbsp; {!tempMAEFAccount.Do_nm_von__c} - {!tempMAEFAccount.Do_nm_bis__c}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldMAEFAccount.Do_vm_von__c != tempMAEFAccount.Do_vm_von__c)
+            && not(oldMAEFAccount.Do_vm_bis__c != tempMAEFAccount.Do_vm_bis__c)
+            && not(oldMAEFAccount.Do_nm_von__c != tempMAEFAccount.Do_nm_von__c)
+            && not(oldMAEFAccount.Do_nm_von__c != tempMAEFAccount.Do_nm_von__c) }">
+                <td colspan="5" class="text-orange">
+                    {!tempMAEFAccount.Do_vm_von__c} - {!tempMAEFAccount.Do_vm_bis__c}
+                    &nbsp; {!tempMAEFAccount.Do_nm_von__c} - {!tempMAEFAccount.Do_nm_bis__c}</td>
+            </apex:outputPanel>
+            <td/>
+            <apex:outputPanel rendered="{!oldMAEFAccount.Gz_Do_vm_von__c != tempMAEFAccount.Gz_Do_vm_von__c
+            || oldMAEFAccount.Gz_Do_vm_bis__c != tempMAEFAccount.Gz_Do_vm_bis__c
+            || oldMAEFAccount.Gz_Do_nm_von__c != tempMAEFAccount.Gz_Do_nm_von__c
+            || oldMAEFAccount.Gz_Do_nm_von__c != tempMAEFAccount.Gz_Do_nm_von__c }">
+                <td colspan="4" class="changed-green">{!tempMAEFAccount.Gz_Do_vm_von__c}
+                    - {!tempMAEFAccount.Gz_Do_vm_bis__c}
+                    &nbsp; {!tempMAEFAccount.Gz_Do_nm_von__c} - {!tempMAEFAccount.Gz_Do_nm_bis__c}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldMAEFAccount.Gz_Do_vm_von__c != tempMAEFAccount.Gz_Do_vm_von__c)
+            && not(oldMAEFAccount.Gz_Do_vm_bis__c != tempMAEFAccount.Gz_Do_vm_bis__c)
+            && not(oldMAEFAccount.Gz_Do_nm_von__c != tempMAEFAccount.Gz_Do_nm_von__c)
+            && not(oldMAEFAccount.Gz_Do_nm_von__c != tempMAEFAccount.Gz_Do_nm_von__c) }">
+                <td colspan="4" class="text-green">{!tempMAEFAccount.Gz_Do_vm_von__c}
+                    - {!tempMAEFAccount.Gz_Do_vm_bis__c}
+                    &nbsp; {!tempMAEFAccount.Gz_Do_nm_von__c} - {!tempMAEFAccount.Gz_Do_nm_bis__c}</td>
+            </apex:outputPanel>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:3.75pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Ausgabe benachr. Sdg. Brief:</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="6" class="text-green" style="mso-number-format:'@'">{!tempMAEFContract.AusgabeBenachrichtigterSendungenMAEF__c}</td>
+            <td/>
+            <td class="align-right">Freitag</td>
+            <apex:outputPanel rendered="{!oldMAEFAccount.Fr_vm_von__c != tempMAEFAccount.Fr_vm_von__c
+            || oldMAEFAccount.Fr_vm_bis__c != tempMAEFAccount.Fr_vm_bis__c
+            || oldMAEFAccount.Fr_nm_von__c != tempMAEFAccount.Fr_nm_von__c
+            || oldMAEFAccount.Fr_nm_von__c != tempMAEFAccount.Fr_nm_von__c }">
+                <td colspan="5" class="changed-orange">
+                    {!tempMAEFAccount.Fr_vm_von__c} - {!tempMAEFAccount.Fr_vm_bis__c}
+                    &nbsp; {!tempMAEFAccount.Fr_nm_von__c} - {!tempMAEFAccount.Fr_nm_bis__c}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldMAEFAccount.Fr_vm_von__c != tempMAEFAccount.Fr_vm_von__c)
+            && not(oldMAEFAccount.Fr_vm_bis__c != tempMAEFAccount.Fr_vm_bis__c)
+            && not(oldMAEFAccount.Fr_nm_von__c != tempMAEFAccount.Fr_nm_von__c)
+            && not(oldMAEFAccount.Fr_nm_von__c != tempMAEFAccount.Fr_nm_von__c) }">
+                <td colspan="5" class="text-orange">
+                    {!tempMAEFAccount.Fr_vm_von__c} - {!tempMAEFAccount.Fr_vm_bis__c}
+                    &nbsp; {!tempMAEFAccount.Fr_nm_von__c} - {!tempMAEFAccount.Fr_nm_bis__c}</td>
+            </apex:outputPanel>
+            <td/>
+            <apex:outputPanel rendered="{!oldMAEFAccount.Gz_Fr_vm_von__c != tempMAEFAccount.Gz_Fr_vm_von__c
+            || oldMAEFAccount.Gz_Fr_vm_bis__c != tempMAEFAccount.Gz_Fr_vm_bis__c
+            || oldMAEFAccount.Gz_Fr_nm_von__c != tempMAEFAccount.Gz_Fr_nm_von__c
+            || oldMAEFAccount.Gz_Fr_nm_von__c != tempMAEFAccount.Gz_Fr_nm_von__c }">
+                <td colspan="4" class="changed-green">{!tempMAEFAccount.Gz_Fr_vm_von__c}
+                    - {!tempMAEFAccount.Gz_Fr_vm_bis__c}
+                    &nbsp; {!tempMAEFAccount.Gz_Fr_nm_von__c} - {!tempMAEFAccount.Gz_Fr_nm_bis__c}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldMAEFAccount.Gz_Fr_vm_von__c != tempMAEFAccount.Gz_Fr_vm_von__c)
+            && not(oldMAEFAccount.Gz_Fr_vm_bis__c != tempMAEFAccount.Gz_Fr_vm_bis__c)
+            && not(oldMAEFAccount.Gz_Fr_nm_von__c != tempMAEFAccount.Gz_Fr_nm_von__c)
+            && not(oldMAEFAccount.Gz_Fr_nm_von__c != tempMAEFAccount.Gz_Fr_nm_von__c) }">
+                <td colspan="4" class="text-green">{!tempMAEFAccount.Gz_Fr_vm_von__c}
+                    - {!tempMAEFAccount.Gz_Fr_vm_bis__c}
+                    &nbsp; {!tempMAEFAccount.Gz_Fr_nm_von__c} - {!tempMAEFAccount.Gz_Fr_nm_bis__c}</td>
+            </apex:outputPanel>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:3.75pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Ausgabe benachr. Sdg. Fracht:</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td colspan="6" class="text-green" style="mso-number-format:'@'">{!tempMAEFContract.AusgabebenSendungenFrachtinMAEF__c}</td>
+            <td/>
+            <td class="align-right">Samstag</td>
+            <apex:outputPanel rendered="{!oldMAEFAccount.Sa_vm_von__c != tempMAEFAccount.Sa_vm_von__c
+            || oldMAEFAccount.Sa_vm_bis__c != tempMAEFAccount.Sa_vm_bis__c
+            || oldMAEFAccount.Sa_nm_von__c != tempMAEFAccount.Sa_nm_von__c
+            || oldMAEFAccount.Sa_nm_von__c != tempMAEFAccount.Sa_nm_von__c }">
+                <td colspan="5" class="changed-orange">
+                    {!tempMAEFAccount.Sa_vm_von__c} - {!tempMAEFAccount.Sa_vm_bis__c}
+                    &nbsp; {!tempMAEFAccount.Sa_nm_von__c} - {!tempMAEFAccount.Sa_nm_bis__c}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldMAEFAccount.Sa_vm_von__c != tempMAEFAccount.Sa_vm_von__c)
+            && not(oldMAEFAccount.Sa_vm_bis__c != tempMAEFAccount.Sa_vm_bis__c)
+            && not(oldMAEFAccount.Sa_nm_von__c != tempMAEFAccount.Sa_nm_von__c)
+            && not(oldMAEFAccount.Sa_nm_von__c != tempMAEFAccount.Sa_nm_von__c) }">
+                <td colspan="5" class="text-orange">
+                    {!tempMAEFAccount.Sa_vm_von__c} - {!tempMAEFAccount.Sa_vm_bis__c}
+                    &nbsp; {!tempMAEFAccount.Sa_nm_von__c} - {!tempMAEFAccount.Sa_nm_bis__c}</td>
+            </apex:outputPanel>
+            <td/>
+            <apex:outputPanel rendered="{!oldMAEFAccount.Gz_Sa_vm_von__c != tempMAEFAccount.Gz_Sa_vm_von__c
+            || oldMAEFAccount.Gz_Sa_vm_bis__c != tempMAEFAccount.Gz_Sa_vm_bis__c
+            || oldMAEFAccount.Gz_Sa_nm_von__c != tempMAEFAccount.Gz_Sa_nm_von__c
+            || oldMAEFAccount.Gz_Sa_nm_von__c != tempMAEFAccount.Gz_Sa_nm_von__c }">
+                <td colspan="4" class="changed-green">{!tempMAEFAccount.Gz_Sa_vm_von__c}
+                    - {!tempMAEFAccount.Gz_Sa_vm_bis__c}
+                    &nbsp; {!tempMAEFAccount.Gz_Sa_nm_von__c} - {!tempMAEFAccount.Gz_Sa_nm_bis__c}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldMAEFAccount.Gz_Sa_vm_von__c != tempMAEFAccount.Gz_Sa_vm_von__c)
+            && not(oldMAEFAccount.Gz_Sa_vm_bis__c != tempMAEFAccount.Gz_Sa_vm_bis__c)
+            && not(oldMAEFAccount.Gz_Sa_nm_von__c != tempMAEFAccount.Gz_Sa_nm_von__c)
+            && not(oldMAEFAccount.Gz_Sa_nm_von__c != tempMAEFAccount.Gz_Sa_nm_von__c) }">
+                <td colspan="4" class="text-green">{!tempMAEFAccount.Gz_Sa_vm_von__c}
+                    - {!tempMAEFAccount.Gz_Sa_vm_bis__c}
+                    &nbsp; {!tempMAEFAccount.Gz_Sa_nm_von__c} - {!tempMAEFAccount.Gz_Sa_nm_bis__c}</td>
+            </apex:outputPanel>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:3.75pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Einrichtung MoPS?</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="text-green">{!tempMAEFContract.EinrichtungMOPSMAEF__c}</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="align-right">Sonntag</td>
+            <apex:outputPanel rendered="{!oldMAEFAccount.So_vm_von__c != tempMAEFAccount.So_vm_von__c
+            || oldMAEFAccount.So_vm_bis__c != tempMAEFAccount.So_vm_bis__c
+            || oldMAEFAccount.So_nm_von__c != tempMAEFAccount.So_nm_von__c
+            || oldMAEFAccount.So_nm_von__c != tempMAEFAccount.So_nm_von__c }">
+                <td colspan="5" class="changed-orange">
+                    {!tempMAEFAccount.So_vm_von__c} - {!tempMAEFAccount.So_vm_bis__c}
+                    &nbsp; {!tempMAEFAccount.So_nm_von__c} - {!tempMAEFAccount.So_nm_bis__c}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldMAEFAccount.So_vm_von__c != tempMAEFAccount.So_vm_von__c)
+            && not(oldMAEFAccount.So_vm_bis__c != tempMAEFAccount.So_vm_bis__c)
+            && not(oldMAEFAccount.So_nm_von__c != tempMAEFAccount.So_nm_von__c)
+            && not(oldMAEFAccount.So_nm_von__c != tempMAEFAccount.So_nm_von__c) }">
+                <td colspan="5" class="text-orange">
+                    {!tempMAEFAccount.So_vm_von__c} - {!tempMAEFAccount.So_vm_bis__c}
+                    &nbsp; {!tempMAEFAccount.So_nm_von__c} - {!tempMAEFAccount.So_nm_bis__c}</td>
+            </apex:outputPanel>
+            <td/>
+            <apex:outputPanel rendered="{!oldMAEFAccount.Gz_So_vm_von__c != tempMAEFAccount.Gz_So_vm_von__c
+            || oldMAEFAccount.Gz_So_vm_bis__c != tempMAEFAccount.Gz_So_vm_bis__c
+            || oldMAEFAccount.Gz_So_nm_von__c != tempMAEFAccount.Gz_So_nm_von__c
+            || oldMAEFAccount.Gz_So_nm_von__c != tempMAEFAccount.Gz_So_nm_von__c }">
+                <td colspan="4" class="changed-green">{!tempMAEFAccount.Gz_So_vm_von__c}
+                    - {!tempMAEFAccount.Gz_So_vm_bis__c}
+                    &nbsp; {!tempMAEFAccount.Gz_So_nm_von__c} - {!tempMAEFAccount.Gz_So_nm_bis__c}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldMAEFAccount.Gz_So_vm_von__c != tempMAEFAccount.Gz_So_vm_von__c)
+            && not(oldMAEFAccount.Gz_So_vm_bis__c != tempMAEFAccount.Gz_So_vm_bis__c)
+            && not(oldMAEFAccount.Gz_So_nm_von__c != tempMAEFAccount.Gz_So_nm_von__c)
+            && not(oldMAEFAccount.Gz_So_nm_von__c != tempMAEFAccount.Gz_So_nm_von__c) }">
+                <td colspan="4" class="text-green">{!tempMAEFAccount.Gz_So_vm_von__c}
+                    - {!tempMAEFAccount.Gz_So_vm_bis__c}
+                    &nbsp; {!tempMAEFAccount.Gz_So_nm_von__c} - {!tempMAEFAccount.Gz_So_nm_bis__c}</td>
+            </apex:outputPanel>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:3.75pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:3.75pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td colspan="4" class="align-top" style="font-size:9pt;">Sonstiges/Grund Änderung Öffnz:</td>
+            <td colspan="19" class="text-orange"
+                style="border-right:none; mso-number-format:'@'" >{!tempMAEFContract.SonstigesGrundMAEF__c}</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:4.5pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td>Erstellt:</td>
+            <td/>
+            <td/>
+            <td colspan="3" class="underlined-yellow" style="mso-number-format:'@'">{!$User.FirstName} {!$User.LastName}</td>
+            <td/>
+            <td class="align-right">Datum:</td>
+            <td colspan="3" class="underlined-yellow">
+                <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+                    <apex:param value="{!TODAY()}"/>
+                </apex:outputText>
+            </td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="align-right">Telefon:</td>
+            <td colspan="3" class="underlined-yellow" style="mso-number-format:'@'">{!$User.Phone} / {!$User.MobilePhone}</td>
+            <td/>
+            <td class="align-right">Stelle:</td>
+            <td colspan="3" class="underlined-yellow" style="mso-number-format:'@'">{!Stelle}</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:7.5pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="align-top"><span class="info">OrgE, Name</span></td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:15pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="align-right"><span class="bold">Weiterleiten per Mail an</span></td>
+            <td colspan="9" class="border" style="text-align:center"><a href="mailto:NetzMAEF@deutschepost.de">NetzMAEF@deutschepost.de</a>
+            </td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+    </table>
+    </body>
+    </html>
+</apex:page>

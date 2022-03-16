@@ -1,0 +1,61 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      10.11.2020
+ *
+ *
+ *@description  EmailFooterWeiden
+ *
+ *
+ *@changelog    10.11.2020 Mats Böhler - Created
+ *@changelog    18.01.2021 Marcel Schulz - Anpassungen Layout
+ *              
+ * 
+ */
+ -->
+
+<apex:component id="EmailFooterWeiden" access="global">
+    <html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+
+        <style type="text/css" media="print,all">
+
+            .greyStyle {
+                font-size: 10px;
+                color: #000000;
+            }
+            .greenStyle {
+                font-size: 10px;
+                color: forestgreen;
+            }
+            .bodyWeiden{
+                background-color: FFCC00;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div>Ihr Team &quot;Eigene Packstation&quot;</div>
+        <div>&nbsp;</div>
+        <div><b>Deutsche Post AG</b></div>
+        <div>Service- und Versandzentrum Weiden</div>
+        <div>Franz-Zebisch-Str. 15</div>
+        <div>92637 Weiden</div>
+        <div>&nbsp;</div>
+        <div>Telefon +49 961 3818 2840</div>
+        <div>&nbsp;</div>
+        <div><a href="mailto:eigene-packstation@deutschepost.de">eigene-packstation@deutschepost.de</a></div>
+        <hr style="color:#000000;" />
+        <div class="bodyWeiden">
+            <div class="greyStyle">Deutsche Post DHL Group</div>
+            <div class="greyStyle">Deutsche Post AG; Sitz Bonn; Registergericht Bonn; HRB 6792</div>
+            <div class="greyStyle">Vorstand: Dr. Frank Appel, Vorsitzender; Ken Allen, Oscar de Bok, Melanie Kreis, Dr. Tobias Meyer, Dr. Thomas Ogilvie, John Pearson, Tim Scharwath</div>
+            <div class="greyStyle">Vorsitzender des Aufsichtsrates:  Dr. Nikolaus von Bomhard</div>
+            <div class="greyStyle">Dies ist eine Nachricht der Deutsche Post AG und kann vertrauliche firmeninterne Informationen enthalten. Sie ist ausschließlich für die oben adressierte Einzelperson bestimmt. Sind Sie nicht der beabsichtigte Empfänger, bitten wir Sie, den Sender zu informieren und die Nachricht sowie deren Anhänge zu löschen. Unzulässige Veröffentlichungen, Verwendungen, Verbreitung, Weiterleitung, sowie das Drucken oder Kopieren dieser Mail und ihrer verknüpften Anhänge sind strikt untersagt.</div>
+            <div>&nbsp;</div>
+            <div class="greyStyle">Bitte denken Sie über Ihre Verantwortung gegenüber der Umwelt nach, bevor Sie diese E-Mail ausdrucken!</div>
+        </div>
+    </body>
+    </html>
+</apex:component>

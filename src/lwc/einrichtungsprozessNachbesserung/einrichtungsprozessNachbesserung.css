@@ -1,0 +1,18 @@
+/**
+ *@author       Mats Böhler
+ *@created      11.05.2021
+ *
+ *
+ *@description  einrichtungsprozessNachbesserung.css
+ *
+ *
+ *@changelog    11.05.2021 Mats Böhler - Created
+ *              
+ * 
+ */
+.slds-modal__content{
+    background: white;
+}
+.modal-body{
+    background: white;
+}

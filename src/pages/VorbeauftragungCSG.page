@@ -1,0 +1,251 @@
+<apex:page id="VorbeauftragungCSG"
+           renderAs="pdf"
+           controller="VorbeauftragungCSGCtrl"
+           action="{!controllerAction}"
+           applyHtmlTag="false"
+           applyBodyTag="false"
+           showHeader="false"
+           standardStylesheets="false"
+           cache="true">
+
+    <head>
+        <style>
+            @page rotated {
+                size: A4 landscape;
+            }
+
+            .rotated {
+                page: rotated;
+
+            }
+        </style>
+
+    <body>
+    <div class="firstpage">
+        <table style="border: 1px solid black; width : 700px; border-collapse: collapse; height : 50px">
+            <tbody>
+            <tr>
+                <td style="border: 1px solid black;padding:5px;width:40px;text-align: center;">
+                    <div class="boxs">
+                        <img src="{!PostLogo}"
+                             width="150"/>
+                    </div>
+                </td>
+                <td style="border: 1px solid black;padding:5px; width : 300px; text-align: center; font-weight:bold">
+                    <div>
+                        Beauftragung Verkehrssicherungspflicht /
+                        <br/> Winterdienst (VSP)
+                    </div>
+                </td>
+                <td style="border: 1px solid black;padding:5px; width:60px; text-align: left;">
+                    <div style="text-align: left; border-bottom: 1px solid #000000;">
+                        15.03.2013
+                    </div>
+                    <div style="text-align: left;">
+                        Version 2.0
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div style="font-size:16px; padding:20px,0px,0px,0px; width : 680px;text-align: left; font-weight:bold">
+            Beauftragung zur Verkehrssicherungspflicht / Winterdienst
+            <br/> für PACKSTATION-Standorte
+        </div>
+        <div style="font-size:12px; padding:10px,0px,0px,0px; width : 680px;text-align: left;font-style:italic">
+            die STO-Daten können aus der STO-Dispo direkt kopiert werden
+        </div>
+
+        <table style="border: 1px solid #000000;border-collapse: collapse; width : 700px; height : 50px">
+            <tr>
+                <th style="padding:5px,5px,5px,5px;font-weight:bold;text-align: center;border: 1px solid #000000; font-size:12px;">POD ID</th>
+                <th style="font-weight:bold;text-align: center;border: 1px solid #000000;font-size:12px;">Short-ID</th>
+                <th style="font-weight:bold;text-align: center;border: 1px solid #000000;font-size:12px;">PLZ</th>
+                <th style="font-weight:bold;text-align: center;border: 1px solid #000000;font-size:12px;">Stadt</th>
+                <th style="font-weight:bold;text-align: center;border: 1px solid #000000;font-size:12px;">Straße und
+                    Hausnummer
+                </th>
+            </tr>
+            <tr>
+                <td style="text-align: center;border: 1px solid #000000;font-size:12px;">{!Lead.PODID_Lookup__r.Wert__c}</td>
+                <td style="text-align: center;border: 1px solid #000000;font-size:12px;">{!RIGHT(Lead.PODID_Lookup__r.Wert__c, 3)}</td>
+                <td style="text-align: center;border: 1px solid #000000;font-size:12px;">{!Lead.PostalCode}</td>
+                <td style="text-align: center;border: 1px solid #000000;font-size:12px;">{!Lead.City}</td>
+                <td style="text-align: center;border: 1px solid #000000;font-size:12px;">{!Lead.Street}</td>
+            </tr>
+        </table>
+        <div style="padding:10px,0px,0px,0px;">
+            <table style="border: 1px solid black; border-collapse: collapse; width : 700px; height : 120px">
+                <tr>
+                    <th style="padding:5px,5px,5px,5px;font-weight:bold;text-align: left;border: 1px solid #000000;font-size:12px;">
+                        Standortgeber, Anschrift
+                    </th>
+                    <th style="padding:5px,5px,5px,5px;font-weight:bold;text-align: left;border: 1px solid #000000;font-size:12px;">
+                        Ansprechpartner Standortgeber mit Kontaktdaten
+                    </th>
+                </tr>
+                <tr>
+                    <td style="padding:5px,5px,5px,5px;text-align: left;border: 1px solid #000000;font-size:12px;">
+                        {!IF(ISBLANK(Lead.Strategischer_Partner__c), Lead.Company, Lead.Strategischer_Partner__r.Name + ' ' + Lead.Strategischer_Partner__r.BillingCity)}
+                        <br/>{!Lead.Strategischer_Partner__r.BillingStreet}
+                        <br/>{!Lead.Strategischer_Partner__r.BillingPostalCode}&nbsp;{!Lead.Strategischer_Partner__r.BillingCity}
+                        <br/>&nbsp;
+                        <br/>&nbsp;
+                    </td>
+                    <td style="padding:5px,5px,5px,5px;text-align: left;border: 1px solid #000000;font-size:12px;">
+                        {!Lead.FirstName}&nbsp;{!Lead.LastName}
+                        <br/>Tel: {!Lead.Phone}
+                        <br/>Mobil: {!Lead.MobilePhone}
+                        <br/> Fax: {!Lead.Fax}
+                        <br/>{!Lead.Email}</td>
+                </tr>
+            </table>
+        </div>
+        <div style="font-size:14px; width : 700px;text-align: left;">
+            Bei o.a. Mietvertrag konnte nicht die Standard-Regelung zur Verkehrssicherungspflicht ausgehandelt werden.
+            Daher beauftragen
+            wir die
+        </div>
+        <div style="font-size:14px; padding:10px,0px,0px,15px; width : 700px;text-align: left;font-weight:bold">
+            CSG GmbH
+            <br/>{!Bezeichnung}
+            <br/>{!Strasse}
+            <br/>{!Postleitzahl}&nbsp;{!Ort}
+            <br/>
+        </div>
+        <div style="font-size:14px; padding:10px,0px,px,0px; width : 700px;text-align: left;">
+            für den o. g. Standort den:
+        </div>
+        <div style="font-size:14px; padding:10px,0px,5px,0px; width : 700px;text-align: left;">
+            <img src="/img/checkbox_checked.gif" width="15" alt="checkbox_checked"/> Winterdienst
+        </div>
+        <div style="font-size:14px; padding:10px,0px,px,0px; width : 700px;text-align: left;">
+            Die Dienstleistung ist im Rahmen der Ortsatzung wie folgt zu erbringen:
+        </div>
+        <div style="font-size:14px; padding:10px,0px,5px,0px; width : 700px;text-align: left;">
+            <img src="{!if(vollstaendig, '/img/checkbox_checked.gif', '/img/checkbox_unchecked.gif')}" width="15" alt="checkbox"/> vollständig
+            <br/><img src="{!if(werktags, '/img/checkbox_checked.gif', '/img/checkbox_unchecked.gif')}" width="15" alt="checkbox"/> werktags außerhalb der
+            Öffnungszeiten
+            <br/><img src="{!if(sonntags, '/img/checkbox_checked.gif', '/img/checkbox_unchecked.gif')}" width="15" alt="checkbox"/> an Sonn- und Feiertagen
+            <br/><img src="{!if(sonstiges, '/img/checkbox_checked.gif', '/img/checkbox_unchecked.gif')}" width="15" alt="checkbox"/> zu sonstigen Zeiten:
+        </div>
+        <div style="border: 1px solid black;padding:10px,2px,5px,2px; width : 700px;min-height: 50px">
+        {!angaben}
+        </div>
+        <div style="font-size:10px; border: 1px solid #000000; padding:2px,2px,2px,2px; width : 700px;text-align: left;height : 10px">
+            Angaben
+        </div>
+        <div style="padding:2px,0px,10px,0px;">
+
+        </div>
+        <div style="font-size:14px; padding:10px,0px,px,0px; width : 700px;text-align: left;">
+            Die Verkehrssicherungspflicht bezieht sich auf die in der Anlage 1 dieses Auftrages rot schraffierte Fläche.
+        </div>
+        <div style="font-size:16px; padding:0px,0px,0px,0px; width : 680px;text-align: left; font-weight:bold">
+            Sonstige Bemerkungen oder Aufträge:
+        </div>
+        <div style="padding:2px,0px,5px,0px;">
+
+        </div>
+        <div style="border: 1px solid black;padding:10px,2px,0px,2px; width : 700px;min-height : 50px">
+            {!bemerkungen}
+        </div>
+        <div style="font-weight:bold;padding:10px,0px,0px,0px;">
+            Unterschrift:
+        </div>
+        <div style="padding:10px,0px,5px,0px;">
+
+        </div>
+        <div style="padding:10px,0px,5px,0px;">
+            {!VL}, <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+
+                <apex:param value="{!Today()}"/>
+
+            </apex:outputText> i.A.
+        </div>
+        <div style="font-size:10px; border: 1px solid #000000; padding:2px,2px,2px,2px; width : 300px;text-align: left;height : 10px">
+            Ort, Datum, Unterschrift Vertriebsleitung {!VL}
+        </div>
+        <div style="padding:2px,0px,30px,0px;">
+
+        </div>
+
+        <table style="border: 1px solid black; padding:10px,0px,0px,0px; border-collapse: collapse; width : 700px; height : 31px">
+            <tbody>
+            <tr>
+                <td style="border: 1px solid black;padding:5px;width:40px;text-align: center">
+                    <div class="boxs">
+                        <img src="{!PackstationLogo}"
+                             width="100"/>
+                    </div>
+                </td>
+                <td style="border: 1px solid black;padding:5px; width : 300px; text-align: center;">
+                    <div>
+                        Deutsche Post AG, Niederlassung Multikanalvertrieb
+                    </div>
+                </td>
+                <td style="border: 1px solid black;padding:5px; width:60px; text-align: left;">
+                    <div style="text-align: right;">
+                        Seite 1 von 1
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <div style="page-break-after:always;"/>
+    <div class="rotated">
+        <table width="1000" cellspacing="0" class="centered" >
+            <tr >
+                <td style="padding:5px,5px,5px,5px;width: 500px; height: 40px; font-weight: bold; font-size: xx-large">
+                    DHL Packstation
+                </td>
+                <td style="padding:5px,5px,5px,5px;width: 500px; height: 20px;font-size: x-large; text-align: right">
+                    Anlage Beauftragung Winterdienst:
+                </td>
+            </tr>
+            <tr >
+                <td style="font-size: x-large;padding:5px,5px,5px,5px;width: 500px; height: 20px">
+                    {!Lead.PostalCode} {!Lead.City}, {!Lead.Street}
+                </td>
+                <td style="width: 500px; height: 20px">
+
+                </td>
+            </tr>
+        </table>
+        <table width="1000" cellspacing="0" class="centered" >
+            <tr>
+                <td class="image-border" style="width: 1000px; height: 400px">
+
+                    <apex:outputPanel rendered="{!PictureExists['pic1']}">
+                        <img
+                                src="{!Picture['pic1']}"
+                                width="1000"
+                                height="550"
+                        />
+                    </apex:outputPanel>
+                </td>
+            </tr>
+        </table>
+        <table width="1000" cellspacing="0" class="centered" style="border: 1px solid black">
+            <tr >
+                <td style="padding:5px,5px,5px,5px;width: 500px; height: 40px">
+                    <img src="{!PostLogo}"
+                         width="150"/>
+                </td>
+                <td style="padding:5px,5px,5px,5px;width: 500px; height: 20px;text-align: right">
+                    ADM-Typ: {!Lead.ADM_Typ__c} {!Lead.ADM_Hersteller__c}
+                    <br/>
+                    Stand <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+
+                        <apex:param value="{!Today()}"/>
+
+                    </apex:outputText>
+                </td>
+            </tr>
+        </table>
+    </div>
+    </body>
+    </head>
+</apex:page>

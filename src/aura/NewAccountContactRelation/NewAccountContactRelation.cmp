@@ -1,0 +1,28 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      08.09.2021
+ *
+ *
+ *@description  NewAccountContactRelation
+ *
+ *
+ *@changelog    08.09.2021 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<aura:component description="NewAccountContactRelation">
+
+    <aura:attribute name="parentFieldName" access="global" type="String" />
+    <aura:attribute name="parentFieldId" access="global" type="String" />
+
+
+    <c:newAccountContactRelationRecord
+            recordId="{!v.parentFieldId}"
+            onrefreshView="{!c.refreshView}"
+    >
+    </c:newAccountContactRelationRecord>
+
+</aura:component>

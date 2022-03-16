@@ -1,0 +1,18 @@
+/**
+ *@author       Mats Böhler
+ *@created      10.05.2021
+ *
+ *
+ *@description  einrichtungsBundle.css
+ *
+ *
+ *@changelog    10.05.2021 Mats Böhler - Created
+ *              
+ * 
+ */
+.slds-modal__content{
+    background: white;
+}
+.modal-body{
+    background: white;
+}

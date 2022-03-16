@@ -1,0 +1,572 @@
+<!--
+/**
+ *@author       Karsten Maaß
+ *@created      09.08.2019
+ *@version      1.0
+ *@since        45.0
+ *
+ *
+ *@description  Zusatzinformation Materialerstausstattung für Filialen und Verkaufsstellen (existierende Filale)
+ *
+ *
+ *@changelog    12.04.2019 Karsten Maaß - Created
+ *
+ *
+ */
+ -->
+
+<apex:page id="HW_Zusatzinfo_Material" controller="HW_Document_C" contentType="{!contentType}" renderAs="{!renderAs}"
+           applyHtmlTag="false" applyBodyTag="false" showHeader="false" standardStylesheets="false" cache="true">
+
+    <html xmlns:v="urn:schemas-microsoft-com:vml"
+          xmlns:o="urn:schemas-microsoft-com:office:office"
+          xmlns:x="urn:schemas-microsoft-com:office:excel">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+
+        <style type="text/css" media="print,all">
+
+            @page {
+                size: 21.0cm 29.7cm !important;
+                margin: .63in .47in .16in .51in;
+            }
+
+            br {
+                mso-data-placement: same-cell;
+            }
+
+            body {
+                font-family: sans-serif;
+                text-align: left;
+                margin: 0px;
+            <!-- [ if mso ] > background-color: RGB(192, 192, 192);
+            < ! [ endif ] -->
+            }
+
+            table {
+                border-collapse: collapse;
+                table-layout: fixed;
+            }
+
+            tr {
+                height: 0.51cm;
+                vertical-align: bottom;
+                font-size: 10pt;
+                white-space: nowrap;
+            }
+
+            td {
+                background-color: RGB(255, 255, 255);
+            }
+
+            .header {
+                font-size: 14pt;
+            }
+
+            .label,
+            .label-large {
+                font-size: 12pt;
+            }
+
+            .label-medium,
+            .label-bold {
+                font-size: 11pt;
+            }
+
+            .bold,
+            .header,
+            .label-large,
+            .label-bold {
+                font-weight: bold;
+            }
+
+            .underline {
+                text-decoration: underline;
+            }
+
+            .align-middle,
+            .info-box {
+                vertical-align: middle;
+            }
+
+            .align-center,
+            .border,
+            .text-green {
+                text-align: center;
+            }
+
+            .border,
+            .info-box,
+            .text-green {
+                border-style: solid;
+            }
+
+            .border-bottom,
+            .underlined-green {
+                border-bottom-style: solid;
+            }
+
+            .border-top,
+            .border-top-bold {
+                border-top-style: solid;
+            }
+
+            .border-left,
+            .label-bold,
+            .underlined-green {
+                border-left-style: solid;
+            }
+
+            .border-left-top {
+                border-left-style: solid;
+                border-top-style: solid;
+            }
+
+            .border-left-bottom {
+                border-left-style: solid;
+                border-bottom-style: solid;
+            }
+
+            .border,
+            .border-top,
+            .text-green,
+            .underlined-green {
+                border-width: thin;
+            }
+
+            .border-medium,
+            .border-left,
+            .border-left-top,
+            .border-top-bold,
+            .info-box,
+            .label-bold {
+                border-width: medium;
+            }
+
+            .text-green,
+            .underlined-green {
+                background-color: RGB(204, 255, 204);
+            }
+
+        </style>
+    </head>
+
+    <!--[if mso]>
+    <body style="background-color: RGB(192,192,192);">
+    <![endif]-->
+
+    <table>
+        <col style="width:1.33cm"/>
+        <col style="width:2.54cm"/>
+        <col style="width:2.46cm"/>
+        <col style="width:2.12cm"/>
+        <col style="width:1.44cm"/>
+        <col style="width:2.81cm"/>
+        <col style="width:0.95cm"/>
+        <col style="width:0.13cm"/>
+        <col style="width:4.22cm"/>
+        <col style="width:0.34cm"/>
+        <col style="width:0.34cm"/>
+
+        <tr style="height:0.59cm">
+
+            <td class="header">Zusatzinformation Materialerstausstattung</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td rowspan="2" colspan="4">
+                <apex:outputtext escape="false" value="{!LogoZusatzinfoMaterial}"/>
+            </td>
+            <td/>
+        </tr>
+        <tr style="height:0.59cm">
+            <td class="header">für Filialen und Verkaufsstellen</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:0.26cm">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td rowspan="5" colspan="10" class="info-box" style="white-space: normal;">
+                <span class="bold">Hinweis:</span><br/>
+                Der Vordruck ist <span class="bold">bei <span class="underline">jeder</span> Neueröffnung</span> einer
+                Partner-, DP Shop- oder kleinen Partner-Filiale OZ 84, die eine Erstausstattung mit
+                Verbrauchsmaterialien erforderlich macht, vom Vertriebsmanager bzw. von der Vertriebsleitung
+                auszufüllen. Die Erstausstattung erfolgt grundsätzlich anhand von mit dem Partnermanagement abgestimmten
+                Erstausstattungslisten je Filialtyp und den u. g. Zusatzinformationen.
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:15.75pt">
+            <td class="label-large">ASt-Name</td>
+            <td/>
+            <td colspan="5" class="border">{!Feld['Zusatzinfo_Material_Filialname']}</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:15.75pt">
+            <td class="label-large">ASt-OZ <span style="font-weight: normal;">(12-stellig)</span></td>
+            <td/>
+            <td colspan="2" class="border">{!Feld['Zusatzinfo_Material_Aussenstellen_Nummer']}</td>
+            <td/>
+            <td class="border">Regel</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:15.75pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:12pt">
+            <td class="border-left-top" colspan="10"/>
+            <td class="border-left"/>
+        </tr>
+        <tr style="height:15.75pt">
+            <td class="label-bold">Grundausstattung aller Formblätter erforderlich?</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="text-green">{!Feld['Zusatzinfo_Material_Grundausstattung']}</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+        </tr>
+        <tr style="height:4.5pt">
+            <td class="border-left" colspan="10"/>
+            <td class="border-left"/>
+        </tr>
+        <tr style="height:15.75pt">
+            <td class="label-bold">Nur Lieferung der zusätzlichen Formblätter (upgrade OZ 79 -> 95)?</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="text-green">{!Feld['Zusatzinfo_Lieferung_der_zusatzlichen']}</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+        </tr>
+        <tr style="height:9pt">
+            <td class="border-left" colspan="10"/>
+            <td class="border-left"/>
+        </tr>
+        <tr style="height:15.75pt">
+            <td class="border-left"/>
+            <td/>
+            <td class="label-large" style="text-align: right;">Anzahl der Schalter:</td>
+            <td class="text-green">{!Feld['Zusatzinfo_Material_Anzahl_der_Schalter']}</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+        </tr>
+        <tr style="height:12pt">
+            <td class="border-left" colspan="10"/>
+            <td class="border-left"/>
+        </tr>
+        <tr style="height:12pt">
+            <td class="border-left-top" colspan="10"/>
+            <td class="border-left"/>
+        </tr>
+        <tr style="height:15.75pt">
+            <td class="border-left"><span class="label-large">Zusatzausstattung erforderlich?</span></td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+        </tr>
+        <tr style="height:4.5pt">
+            <td class="border-left" colspan="10"/>
+            <td class="border-left"/>
+        </tr>
+        <tr>
+            <td class="border-left"/>
+            <td class="label">Kontoauszugsdrucker</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="text-green">{!Feld['Zusatzinfo_Material_Kontoauszugsdrucker']}</td>
+            <td/>
+            <td class="border-top"/>
+            <td/>
+            <td class="border-left"/>
+        </tr>
+        <tr>
+            <td class="border-left"/>
+            <td class="label">Briefmarkenautomat</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="text-green">{!Feld['Zusatzinfo_Material_Briefmarkenautomat']}</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+        </tr>
+        <tr style="height:12pt">
+            <td class="border-left" colspan="10"/>
+            <td class="border-left"/>
+        </tr>
+        <tr style="height:12pt">
+            <td class="border-left-top" colspan="10"/>
+            <td class="border-left"/>
+        </tr>
+        <tr style="height:15.75pt">
+            <td class="border-left"><span class="label-large">Stempel mit speziellem Eindruck erforderlich?</span></td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+        </tr>
+        <tr style="height:4.5pt">
+            <td class="border-left" colspan="10"/>
+            <td class="border-left"/>
+        </tr>
+        <tr>
+            <td class="border-left"/>
+            <td class="label">Tagesstempel</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="text-green">{!Feld['Zusatzinfo_Material_Tagesstempel']}</td>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+        </tr>
+        <tr style="height:12pt">
+            <td class="border-left-bottom" colspan="10"/>
+            <td class="border-left"/>
+        </tr>
+        <tr style="height:7.5pt">
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr style="height:12.75pt">
+            <td class="border-left-top" colspan="10"/>
+            <td class="border-left"/>
+        </tr>
+        <tr style="height:12.75pt">
+            <td class="border-left"><span class="label-large">Interimsfiliale:</span></td>
+            <td/>
+            <td/>
+            <td class="label-medium">Einrichtungstermin:</td>
+            <td/>
+            <td/>
+            <td colspan="3" class="text-green"></td>
+            <td/>
+            <td class="border-left"/>
+        </tr>
+        <tr style="height:12.75pt">
+            <td class="border-left" colspan="10"/>
+            <td class="border-left"/>
+        </tr>
+        <tr style="height:12.75pt">
+            <td class="border-left">bei Versand MÄF &lt; x-20 AT ggfs. abweichende Lieferanschrift (Versand per
+                Fracht):
+            </td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+        </tr>
+        <tr style="height:12.75pt">
+            <td colspan="6" class="underlined-green"></td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+        </tr>
+        <tr style="height:12.75pt">
+            <td colspan="6" class="underlined-green"></td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+        </tr>
+        <tr style="height:12.75pt">
+            <td colspan="6" class="underlined-green"></td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+        </tr>
+        <tr style="height:9pt">
+            <td class="border-top-bold" colspan="10"/>
+            <td/>
+        </tr>
+        <tr>
+            <td class="border-left-top" colspan="10"><span class="bold">Name, Telefonnummer und E-Mail-Adresse des zuständigen Bearbeiters der VL:</span>
+            </td>
+            <td class="border-left"/>
+        </tr>
+        <tr>
+            <td class="border-left">VL:</td>
+            <td>{!Feld['Zusatzinfo_Material_VL']}</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+        </tr>
+        <tr>
+            <td class="border-left"><span class="label-medium">Name:</span></td>
+            <td>{!Feld['Zusatzinfo_Material_Name_VM']}</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+        </tr>
+        <tr>
+            <td class="border-left"><span class="label-medium">Tel:</span></td>
+            <td>{!Feld['Zusatzinfo_Material_Tel_VM']}</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+        </tr>
+        <tr>
+            <td class="border-left"><span class="label-medium">E-Mail:</span></td>
+            <td colspan="3" class="text-green">{!Feld['Zusatzinfo_Material_Email_VM']}</td>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td class="border-left"/>
+        </tr>
+        <tr style="height:15.75pt">
+            <td class="border-left-bottom" colspan="10"/>
+            <td class="border-left"/>
+        </tr>
+    </table>
+    <!--[if mso]>
+    </body>
+    <![endif]-->
+    </html>
+</apex:page>

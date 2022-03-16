@@ -1,0 +1,19 @@
+/**
+ *@author       Mats Böhler
+ *@created      20.10.2020
+ *
+ *
+ *@description  VerkehrssicherungspflichtAnschreiben.css
+ *
+ *
+ *@changelog    20.10.2020 Mats Böhler - Created
+ *              
+ * 
+ */
+
+.THIS .attach-to-bottom{
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+    width: 100%;
+}

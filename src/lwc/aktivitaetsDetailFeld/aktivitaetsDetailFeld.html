@@ -1,0 +1,74 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      01.07.2021
+ *
+ *
+ *@description  aktivitaetsDetailFeld
+ *
+ *
+ *@changelog    01.07.2021 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<!-- Aktivitaets Detail Feld -->
+<template>
+
+    <template if:true={isText}>
+
+        <lightning-input
+                type="text"
+                label={field.Name}
+                value={field.Antwort_Text_Auswahlliste__c}
+                read-only
+        ></lightning-input>
+
+    </template>
+
+    <template if:true={isCheckbox}>
+        <div class="slds-form-element__label slds-m-bottom_x-small">{field.Name}</div>
+        <lightning-input
+                variant="label-hidden"
+                type="checkbox"
+                label={field.Name}
+                checked={field.Antwort_Kontrollkaestchen__c}
+                disabled="true"
+        ></lightning-input>
+
+    </template>
+
+    <template if:true={isNumber}>
+        <lightning-input
+                type="number"
+                label={field.Name}
+                value={field.Antwort_Zahl__c}
+                read-only
+        ></lightning-input>
+    </template>
+
+    <template if:true={isCurrency}>
+
+        <lightning-input
+                type="number"
+                formatter="currency"
+                label={field.Name}
+                value={field.Antwort_Euro_Cent__c}
+                read-only
+        ></lightning-input>
+
+    </template>
+
+    <template if:true={isDate}>
+
+        <lightning-input
+                type="date"
+                label={field.Name}
+                value={field.Antwort_Datum__c}
+                read-only
+        ></lightning-input>
+
+    </template>
+
+</template>

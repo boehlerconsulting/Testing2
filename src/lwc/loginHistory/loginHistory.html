@@ -1,0 +1,47 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      10.02.2022
+ *
+ *
+ *@description  loginHistory
+ *
+ *
+ *@changelog    10.02.2022 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<!-- Login History -->
+<template>
+    <template if:true={showSpinner}>
+        <lightning-spinner
+                variant="brand"
+                alternative-text="Loading"
+        ></lightning-spinner>
+    </template>
+    <template if:false={showSpinner}>
+        <lightning-card  title="Login-Historie">
+            <lightning-layout >
+                <lightning-layout-item size="6" padding="around-small">
+                    <lightning-input
+                            type="text"
+                            label={instance.labelLastSuccessfulLoginDateTime}
+                            value={instance.lastSuccessfulLoginDateTimeString}
+                            read-only
+                    ></lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item size="6" padding="around-small">
+                    <lightning-input
+                            type="number"
+                            label={instance.labelNumberOfFailedLogins}
+                            value={instance.numberOfFailedLogins}
+                            read-only
+                    ></lightning-input>
+                </lightning-layout-item>
+            </lightning-layout>
+
+        </lightning-card>
+    </template>
+</template>

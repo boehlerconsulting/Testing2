@@ -1,0 +1,353 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      24.05.2021
+ *
+ *
+ *@description  BestellvorschauVM
+ *
+ *
+ *@changelog    24.05.2021 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<apex:page id="BestellvorschauVM" controller="BestellvorschauVMCtrl" contentType="{!contentType}"
+           applyHtmlTag="false" applyBodyTag="false" showHeader="false" standardStylesheets="false" cache="true" renderAs="pdf">
+
+    <html xmlns:v="urn:schemas-microsoft-com:vml"
+          xmlns:o="urn:schemas-microsoft-com:office:office"
+          xmlns:x="urn:schemas-microsoft-com:office:excel">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+        <apex:outputText value="{!sheetName}" escape="false"/>
+
+        <style type="text/css" media="print,all">
+
+            @page{
+                size: A4 landscape;
+            }
+
+            body {
+                font-family: sans-serif;
+                text-align: left;
+                margin: 0px;
+            }
+
+            table {
+                border-collapse: collapse;
+                table-layout: fixed;
+                width: 100%;
+            }
+
+            tr {
+                height: 15pt;
+                vertical-align: bottom;
+                font-size: 11pt;
+                white-space: nowrap;
+            }
+
+            table td {
+                word-wrap: break-word;         /* All browsers since IE 5.5+ */
+                overflow-wrap: break-word;     /* Renamed property in CSS3 draft spec */
+                max-width: 100px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            br {
+                mso-data-placement: same-cell;
+            }
+
+            .section-header {
+                font-weight: bold;
+                vertical-align: top;
+                font-size: 11pt;
+                background-color: RGB(255, 255, 0);
+            }
+
+            .product-header {
+                font-weight: bold;
+                vertical-align: top;
+                font-size: 11pt;
+                background-color: RGB(255, 255, 0);
+                border-style: solid;
+                border-width: thin;
+                border-color: black;
+            }
+
+            .product-section-header {
+                font-weight: bold;
+                vertical-align: top;
+                font-size: 11pt;
+                border-style: solid;
+                border-width: thin;
+                border-color: black;
+            }
+
+            .header {
+                font-size: 20pt;
+                font-weight: bold;
+                background-color: RGB(255, 255, 0);
+            }
+
+            .border {
+                border-style: solid;
+                border-width: thin;
+                border-color: black;
+            }
+        </style>
+    </head>
+
+    <body>
+
+    <table>
+
+        <tr style="height:35px;">
+            <td class="header" colspan="4">{!title}</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2">Filiale</td>
+            <td>{!record.Filiale__r.ASt_Name__c}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2">Filialname</td>
+            <td>{!record.Filiale__r.Name}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2">ASTID</td>
+            <td style="mso-number-format:'@'">{!record.Filiale__r.ASt_ID__c}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2">OZ</td>
+            <td>{!record.Filiale__r.Filialtyp_OZ__c}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2">Segment</td>
+            <td>{!record.Filiale__r.Vertriebssegment__c}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2">Anzahl Schalter</td>
+            <td>{!record.Filiale__r.AnzahlSchalter__c}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="2">Geschäftsvorfall/Grund der Bestellung</td>
+            <td>{!Bestellgrund}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <apex:outputPanel rendered="{!!IsAbbau}">
+            <tr>
+                <td colspan="2">Eröffnungsdatum</td>
+                <td>
+                    <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+                        <apex:param value="{!record.Filiale__r.Eroeffnungsdatum__c}"/>
+                    </apex:outputText>
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </apex:outputPanel>
+        <tr>
+            <td colspan="2">Wunschtermin</td>
+            <td>
+                <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+                    <apex:param value="{!record.Wunschliefertermin__c}"/>
+                </apex:outputText>
+            </td>
+            <td>
+                <apex:outputText value="{!Wunschlieferuhrzeit}"/>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <apex:outputPanel rendered="{!!IsAbbau}">
+            <tr>
+                <td colspan="8" style="font-weight: bold">
+                    Hinweis: Die Aufstellung enthält neben der bestellten Filialausstattung auch mitzulieferndes Zubehör.
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </apex:outputPanel>
+
+        <!--NEUBESTELLUNG-->
+        <apex:outputPanel rendered="{!IsNeubestellung}">
+            <tr>
+                <td class="product-section-header" style="width:60%">Filialausstattung</td>
+                <td class="product-section-header" style="width:20%">Lieferant</td>
+                <td class="product-section-header" style="width:10%">Anzahl</td>
+                <td class="product-section-header" style="width:10%">Vorgänger</td>
+            </tr>
+            <apex:repeat value="{!categories}" var="category">
+                <tr>
+                    <td class="product-header">{!category.title}</td>
+                    <td class="product-header"></td>
+                    <td class="product-header"></td>
+                    <td class="product-header"></td>
+                </tr>
+                <apex:repeat value="{!category.products}" var="product">
+                    <tr>
+                        <td class="border">{!product.product.Name}</td>
+                        <td class="border">{!product.product.Produkt__r.Lieferant__c}</td>
+                        <td class="border" style="text-align: center;">{!product.product.Menge__c}</td>
+                        <td class="border"
+                            style="text-align: center;">{!if(product.product.BestandVorgaengerfiliale__c, 'x', '')}
+                        </td>
+                    </tr>
+                </apex:repeat>
+            </apex:repeat>
+        </apex:outputPanel>
+        <!--ERSATZ-->
+        <apex:outputPanel rendered="{!IsErsatz}">
+            <table>
+                <tr>
+                    <td class="product-section-header" width="600" >Filialausstattung</td>
+                    <td class="product-section-header" width="300">Lieferant</td>
+                    <td class="product-section-header" width="100">Anzahl</td>
+                </tr>
+                <apex:repeat value="{!categories}" var="category">
+                    <tr>
+                        <td class="product-header">{!category.title}</td>
+                        <td class="product-header"></td>
+                        <td class="product-header"></td>
+                    </tr>
+                    <apex:repeat value="{!category.products}" var="product">
+                        <apex:outputPanel rendered="{!product.product.ErsatzFuer__r.Name != null}">
+                            <table>
+                                <tr>
+                                    <td class="border" style="font-weight: bold;background-color: rgb(232,232,232);width: 1000px">
+                                        {!product.product.ErsatzFuer__r.Name}, wird ersetzt (ggf. inkl. Zubehör) durch:
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </apex:outputPanel>
+                        <tr>
+                            <td class="border" width="600">{!product.product.Name}</td>
+                            <td class="border" width="300">{!product.product.Produkt__r.Lieferant__c}</td>
+                            <td class="border" width="100" style="text-align: center;">{!product.product.Menge__c}</td>
+                        </tr>
+                    </apex:repeat>
+                </apex:repeat>
+            </table>
+
+        </apex:outputPanel>
+        <!--ZUSATZ-->
+        <apex:outputPanel rendered="{!IsZusatz}">
+            <tr>
+                <td class="product-section-header" style="width:60%">Filialausstattung</td>
+                <td class="product-section-header" style="width:25%">Lieferant</td>
+                <td class="product-section-header" style="width:15%">Anzahl</td>
+            </tr>
+            <apex:repeat value="{!categories}" var="category">
+                <tr>
+                    <td class="product-header">{!category.title}</td>
+                    <td class="product-header"></td>
+                    <td class="product-header"></td>
+                </tr>
+                <apex:repeat value="{!category.products}" var="product">
+                    <tr>
+                        <td class="border">{!product.product.Name}</td>
+                        <td class="border">{!product.product.Produkt__r.Lieferant__c}</td>
+                        <td class="border" style="text-align: center;">{!product.product.Menge__c}</td>
+                    </tr>
+                </apex:repeat>
+            </apex:repeat>
+        </apex:outputPanel>
+        <!--ABBAU-->
+        <apex:outputPanel rendered="{!IsAbbau}">
+            <tr>
+                <td class="product-section-header" style="width:67%">Filialausstattung</td>
+                <td class="product-section-header" style="width:12%">Menge Abbau</td>
+                <td class="product-section-header" style="width:21%">Menge Wiedereinsatzfähig</td>
+            </tr>
+            <apex:repeat value="{!categories}" var="category">
+                <tr>
+                    <td class="product-header">{!category.title}</td>
+                    <td class="product-header"></td>
+                    <td class="product-header"></td>
+                </tr>
+                <apex:repeat value="{!category.products}" var="product">
+                    <tr>
+                        <td class="border">{!product.product.Name}</td>
+                        <td class="border" style="text-align: center;">{!product.product.Menge_Abbau__c}</td>
+                        <td class="border"
+                            style="text-align: center;">{!product.product.Menge_Wiedereinsatzfaehig__c}</td>
+                    </tr>
+                </apex:repeat>
+            </apex:repeat>
+        </apex:outputPanel>
+    </table>
+    </body>
+    </html>
+
+</apex:page>

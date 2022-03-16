@@ -1,0 +1,16 @@
+/**
+ *@author       Mats Böhler
+ *@created      05.02.2021
+ *
+ *
+ *@description  einrichtungsprozess
+ *
+ *
+ *@changelog    05.02.2021 Mats Böhler - Created
+ *              
+ * 
+ */
+.slds-modal__content{
+    height : 95vh;
+    background: white;
+}

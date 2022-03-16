@@ -1,0 +1,133 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      30.08.2021
+ *
+ *
+ *@description  bestandsmassnahme
+ *
+ *
+ *@changelog    30.08.2021 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<!-- Bestandsmassnahme -->
+<template>
+    <template if:true={recordId}>
+        <div class="slds-is-relative">
+            <lightning-record-edit-form
+                    object-api-name={objectApiName}
+                    record-id={recordId}
+                    onload= {handleOnLoad}
+                    onsubmit={handleSubmit}
+            >
+                <lightning-quick-action-panel header="Bestandsmaßnahme">
+
+                    <template if:true={showSpinner}>
+                        <lightning-spinner
+                                variant="brand"
+                                alternative-text="Loading"
+                        ></lightning-spinner>
+                    </template>
+                    <lightning-layout>
+                        <lightning-layout-item size="6" padding="around-small">
+                            <lightning-input-field
+                                    field-name="Bestandsmassnahme__c"
+                                    onchange={handleChangeBestandsmassnahme}
+                                    required
+                            ></lightning-input-field>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="6" padding="around-small">
+                            <lightning-input-field
+                                    field-name="Bestandsmassnahme_Datum__c"
+                                    onchange={handleChangeBestandsmassnahmeDatum}
+                                    required
+                            ></lightning-input-field>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                    <template if:true={isNoKuendigung}>
+                        <lightning-layout>
+                            <lightning-layout-item size="6" padding="around-small">
+                                <lightning-input-field
+                                        field-name="Ziel_Fachanzahl__c"
+                                        required={isNoKuendigung}
+                                ></lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="around-small">
+                                <lightning-input-field
+                                        field-name="Ziel_Format__c"
+                                        required={isNoKuendigung}
+                                ></lightning-input-field>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </template>
+                    <lightning-layout>
+                        <lightning-layout-item size="6" padding="around-small">
+                            <lightning-input-field
+                                    field-name="Hinweis_Bestandsmassnahme__c"
+                            ></lightning-input-field>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="6" padding="around-small">
+
+                        </lightning-layout-item>
+                    </lightning-layout>
+                    <template if:true={showKuendigung}>
+                        <lightning-layout>
+                            <lightning-layout-item size="6" padding="around-small">
+                                <lightning-input-field
+                                        field-name="Kuendigung_durch__c"
+                                        onchange={handleChangeKuendigungDurch}
+                                ></lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="around-small">
+                                <lightning-input-field
+                                        field-name="Kuendigungseingang_Datum__c"
+                                ></lightning-input-field>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        <lightning-layout>
+                            <lightning-layout-item size="6" padding="around-small">
+                                <lightning-input-field
+                                        field-name="Kuendigung_zum_Datum__c"
+                                ></lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="around-small">
+                                <lightning-input-field
+                                        field-name="Kuendigungsgrund__c"
+                                ></lightning-input-field>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        <lightning-layout>
+                            <lightning-layout-item size="6" padding="around-small">
+                                <lightning-input-field
+                                        field-name="Rueckgewinnung_erforderlich__c"
+                                ></lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="around-small">
+
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </template>
+
+                    <div slot="footer">
+                        <lightning-button
+                                variant="neutral"
+                                label="Abbrechen"
+                                onclick={closeAction}
+                        ></lightning-button>
+                        <lightning-button
+                                variant="brand"
+                                disabled={isSaveDisabled}
+                                label="Speichern"
+                                class="slds-m-left_x-small"
+                                type="submit"
+                        ></lightning-button>
+                    </div>
+
+                </lightning-quick-action-panel>
+            </lightning-record-edit-form>
+        </div>
+    </template>
+</template>

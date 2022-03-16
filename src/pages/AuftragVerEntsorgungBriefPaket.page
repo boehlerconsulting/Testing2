@@ -1,0 +1,614 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      18.02.2021
+ *
+ *
+ *@description  [MYPM-1113] Generierung Excel-Vorschau Auftrag Ver-/Entsorgung Brief & Paket
+ *
+ *
+ *@changelog    18.02.2021 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<apex:page id="AuftragVerEntsorgungBriefPaket" controller="AuftragVerEntsorgungBriefPaketCtrl" contentType="{!contentType}"
+           applyHtmlTag="false" applyBodyTag="false" showHeader="false" standardStylesheets="false" cache="true">
+
+    <html xmlns:v="urn:schemas-microsoft-com:vml"
+          xmlns:o="urn:schemas-microsoft-com:office:office"
+          xmlns:x="urn:schemas-microsoft-com:office:excel">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+        <apex:outputText value="{!sheetName}" escape="false"/>
+
+        <style type="text/css" media="print,all">
+
+            body {
+                font-family: sans-serif;
+                text-align: left;
+                margin: 0px;
+            }
+
+            table {
+                border-collapse: collapse;
+                table-layout: fixed;
+            }
+
+            tr {
+                height: 26px;
+                vertical-align: bottom;
+                font-size: 11pt;
+                white-space: nowrap;
+            }
+
+            br {
+                mso-data-placement: same-cell;
+            }
+
+            .section-header {
+                font-weight: bold;
+                vertical-align: top;
+                font-size: 11pt;
+                background-color: RGB(255, 255, 0);
+            }
+
+            .header {
+                font-size: 20pt;
+                font-weight: bold;
+                background-color: RGB(255, 255, 0);
+            }
+
+            .line-height {
+                height: 40px;
+            }
+        </style>
+    </head>
+
+    <body>
+
+    <table>
+        <col style="width:355px;height: 26px;"/>
+        <col style="width:121px;height: 26px;"/>
+        <col style="width:606px;height: 26px;"/>
+
+        <tr style="height:35px">
+            <td class="header" colspan="3">Auftrag Ver- und Entsorgung Brief/Paket</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td >Filiale</td>
+            <td>{!record.Filiale__r.ASt_Name__c}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Filialanschrift</td>
+            <td>{!record.Filiale__r.ShippingStreet}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>{!record.Filiale__r.ShippingPostalCode} {!record.Filiale__r.ShippingCity}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Außenkennzeichnung/Branche</td>
+            <td>{!record.Filiale__r.Aussenkennzeichnung__c} / {!record.Filiale__r.Branche_FACTS__c}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Eröffnungsdatum</td>
+            <td>
+                <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+                    <apex:param value="{!record.Filiale__r.Eroeffnungsdatum__c}"/>
+                </apex:outputText>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>ASTID</td>
+            <td style="mso-number-format:'@'">{!record.Filiale__r.ASt_ID__c}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>ASt-Nummer</td>
+            <td style="mso-number-format:'@'">{!record.Filiale__r.ASt_Nummer__c}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Debitor</td>
+            <td style="mso-number-format:'@'">{!record.Filiale__r.Debitor__c}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="section-header">Auftraggeber</td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Vertriebsleitung</td>
+            <td>{!record.Filiale__r.GL_Name__c}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Vertriebsmanager</td>
+            <td>
+                <apex:outputPanel rendered="{!record.Filiale__r.Owner.Name != null}">
+                    {!record.Filiale__r.Owner.Name}
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!record.Filiale__r.Owner.Phone != null}">,
+                    Telefon: {!record.Filiale__r.Owner.Phone}
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!record.Filiale__r.Owner.MobilePhone != null}">,
+                    Mobiltelefon: {!record.Filiale__r.Owner.MobilePhone}
+                </apex:outputPanel>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Vertriebsmanager E-Mail:</td>
+            <td>
+                <apex:outputPanel rendered="{!record.Filiale__r.Owner.Email != null}">
+                    {!record.Filiale__r.Owner.Email}
+                </apex:outputPanel>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Regionaler Vertriebssteuerer</td>
+            <td>
+                <apex:outputPanel rendered="{!record.Filiale__r.NL_Brief_Lookup__c != null}">
+                    <apex:outputPanel rendered="{!record.Filiale__r.NL_Brief_Lookup__r.Koordinator__r.Name != null}">
+                        {!record.Filiale__r.NL_Brief_Lookup__r.Koordinator__r.Name}
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!record.Filiale__r.NL_Brief_Lookup__r.Koordinator__r.Phone != null}">,
+                        Telefon: {!record.Filiale__r.NL_Brief_Lookup__r.Koordinator__r.Phone}
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!record.Filiale__r.NL_Brief_Lookup__r.Koordinator__r.MobilePhone != null}">,
+                        Mobiltelefon: {!record.Filiale__r.NL_Brief_Lookup__r.Koordinator__r.MobilePhone}
+                    </apex:outputPanel>
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!record.Filiale__r.NL_Brief_Lookup__c = null}">
+                    <apex:outputPanel rendered="{!record.Filiale__r.GL__r.Koordinator__r.Name != null}">
+                        {!record.Filiale__r.GL__r.Koordinator__r.Name}
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!record.Filiale__r.GL__r.Koordinator__r.Phone != null}">,
+                        Telefon: {!record.Filiale__r.GL__r.Koordinator__r.Phone}
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!record.Filiale__r.GL__r.Koordinator__r.MobilePhone != null}">,
+                        Mobiltelefon: {!record.Filiale__r.GL__r.Koordinator__r.MobilePhone}
+                    </apex:outputPanel>
+                </apex:outputPanel>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Regionaler Vertriebssteuerer E-Mail:</td>
+            <td>
+                <apex:outputPanel rendered="{!record.Filiale__r.NL_Brief_Lookup__c != null}">
+                    <apex:outputPanel rendered="{!record.Filiale__r.NL_Brief_Lookup__r.Koordinator__r.Email != null}">
+                        {!record.Filiale__r.NL_Brief_Lookup__r.Koordinator__r.Email}
+                    </apex:outputPanel>
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!record.Filiale__r.NL_Brief_Lookup__c = null}">
+                    <apex:outputPanel rendered="{!record.Filiale__r.GL__r.Koordinator__r.Email != null}">
+                        {!record.Filiale__r.GL__r.Koordinator__r.Email}
+                    </apex:outputPanel>
+                </apex:outputPanel>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="section-header">Filialöffnungszeiten</td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Montag</td>
+            <td>
+                <apex:outputPanel rendered="{!Montag.vm_von__c != null}">
+                    {!Montag.vm_von__c} Uhr
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!Montag.vm_bis__c != null}">
+                    bis {!Montag.vm_bis__c} Uhr
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!Montag.nm_von__c != null}">
+                    und {!Montag.nm_von__c} Uhr
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!Montag.nm_bis__c != null}">
+                    bis {!Montag.nm_bis__c} Uhr
+                </apex:outputPanel>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Dienstag</td>
+            <td>
+                <apex:outputPanel rendered="{!Dienstag.vm_von__c != null}">
+                    {!Dienstag.vm_von__c} Uhr
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!Dienstag.vm_bis__c != null}">
+                    bis {!Dienstag.vm_bis__c} Uhr
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!Dienstag.nm_von__c != null}">
+                    und {!Dienstag.nm_von__c} Uhr
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!Dienstag.nm_bis__c != null}">
+                    bis {!Dienstag.nm_bis__c} Uhr
+                </apex:outputPanel>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Mittwoch</td>
+            <td>
+                <apex:outputPanel rendered="{!Mittwoch.vm_von__c != null}">
+                    {!Mittwoch.vm_von__c} Uhr
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!Mittwoch.vm_bis__c != null}">
+                    bis {!Mittwoch.vm_bis__c} Uhr
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!Mittwoch.nm_von__c != null}">
+                    und {!Mittwoch.nm_von__c} Uhr
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!Mittwoch.nm_bis__c != null}">
+                    bis {!Mittwoch.nm_bis__c} Uhr
+                </apex:outputPanel>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Donnerstag</td>
+            <td>
+                <apex:outputPanel rendered="{!Donnerstag.vm_von__c != null}">
+                    {!Donnerstag.vm_von__c} Uhr
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!Donnerstag.vm_bis__c != null}">
+                    bis {!Donnerstag.vm_bis__c} Uhr
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!Donnerstag.nm_von__c != null}">
+                    und {!Donnerstag.nm_von__c} Uhr
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!Donnerstag.nm_bis__c != null}">
+                    bis {!Donnerstag.nm_bis__c} Uhr
+                </apex:outputPanel>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Freitag</td>
+            <td>
+                <apex:outputPanel rendered="{!Freitag.vm_von__c != null}">
+                    {!Freitag.vm_von__c} Uhr
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!Freitag.vm_bis__c != null}">
+                    bis {!Freitag.vm_bis__c} Uhr
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!Freitag.nm_von__c != null}">
+                    und {!Freitag.nm_von__c} Uhr
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!Freitag.nm_bis__c != null}">
+                    bis {!Freitag.nm_bis__c} Uhr
+                </apex:outputPanel>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Samstag</td>
+            <td>
+                <apex:outputPanel rendered="{!Samstag.vm_von__c != null}">
+                    {!Samstag.vm_von__c} Uhr
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!Samstag.vm_bis__c != null}">
+                    bis {!Samstag.vm_bis__c} Uhr
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!Samstag.nm_von__c != null}">
+                    und {!Samstag.nm_von__c} Uhr
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!Samstag.nm_bis__c != null}">
+                    bis {!Samstag.nm_bis__c} Uhr
+                </apex:outputPanel>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Sonntag</td>
+            <td>
+                <apex:outputPanel rendered="{!Sonntag.vm_von__c != null}">
+                    {!Sonntag.vm_von__c} Uhr
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!Sonntag.vm_bis__c != null}">
+                    bis {!Sonntag.vm_bis__c} Uhr
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!Sonntag.nm_von__c != null}">
+                    und {!Sonntag.nm_von__c} Uhr
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!Sonntag.nm_bis__c != null}">
+                    bis {!Sonntag.nm_bis__c} Uhr
+                </apex:outputPanel>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="section-header">Leistungsangebot</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td>Briefausgabe</td>
+            <td>{!IF(record.Filiale__r.Briefausgabe__c, "Ja", "Nein")}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Paketausgabe</td>
+            <td>{!IF(record.Filiale__r.Paketausgabe__c, "Ja", "Nein")}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Annahmekapazität Paket</td>
+            <td>{!record.Filiale__r.Kapazitaet_Paketannahme__c}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Ausgabekapazität Paket</td>
+            <td>{!record.Filiale__r.Kapazitaet_Paketausgabe__c}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="section-header">Kontaktdaten Filiale/Vertragspartner</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td>Filiale</td>
+            <td>Telefon {!record.Filiale__r.Phone}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Vertragspartner</td>
+            <td>
+                <apex:outputPanel rendered="{!record.Filiale__r.Kontaktperson_Vertragspartner__c != null}">
+                    {!record.Filiale__r.Kontaktperson_Vertragspartner__c}
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!record.Filiale__r.Telefon_Vertragspartner__c != null}">,
+                    Telefon: {!record.Filiale__r.Telefon_Vertragspartner__c}
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!record.Filiale__r.Mobil__c != null}">,
+                    Mobiltelefon: {!record.Filiale__r.Mobil__c}
+                </apex:outputPanel>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Vertragspartner E-Mail:</td>
+            <td>
+                <apex:outputPanel rendered="{!record.Filiale__r.E_Mail_Vertragspartner__c != null}">
+                    {!record.Filiale__r.E_Mail_Vertragspartner__c}
+                </apex:outputPanel>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="section-header">Grunddaten zur Abholung Brief/Paket</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr class="line-height">
+            <td>Anfahrt mit LKW möglich</td>
+            <td>{!record.Anfahrt_mit_LKW_moeglich__c}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="section-header">Örtliche Besonderheiten</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr class="line-height">
+            <td>Filiale im Einkaufszentrum, bei ja welche Etage</td>
+            <td>{!record.Filiale_im_Einkaufszentrum__c}</td>
+            <td>{!IF(record.Filiale_im_Einkaufszentrum__c = "Ja", record.Etage_der_Postfiliale_ggf_Lage__c, "")}</td>
+        </tr>
+        <tr class="line-height">
+            <td>Fußgängerzone, bei ja welche Einschränkungen</td>
+            <td>{!record.Fussgaengerzone__c}</td>
+            <td>{!IF(record.Fussgaengerzone__c = "Ja", record.EinschraenkungenFussgaengerzone__c, "")}</td>
+        </tr>
+        <tr class="line-height">
+            <td>Halteverbote, bei ja welche Einschränkungen</td>
+            <td>{!record.Halteverbote__c}</td>
+            <td>{!IF(record.Halteverbote__c = "Ja", record.EinschraenkungenHalteverbote__c, "")}</td>
+        </tr>
+        <tr class="line-height">
+            <td>Markttage, bei ja welche Einschränkungen</td>
+            <td>{!record.Markttage__c}</td>
+            <td>{!IF(record.Markttage__c = "Ja", record.EinschraenkungenMarkttage__c, "")}</td>
+        </tr>
+        <tr class="line-height">
+            <td>Rampe vorhanden</td>
+            <td>{!record.RampeVorhanden__c}</td>
+            <td></td>
+        </tr>
+        <tr class="line-height">
+            <td>Hubladebühne erforderlich</td>
+            <td>{!record.HubladebuehneErforderlich__c}</td>
+            <td></td>
+        </tr>
+        <tr class="line-height">
+            <td>Weitere Besonderheiten</td>
+            <td>{!record.WeitereBesonderheiten__c}</td>
+            <td></td>
+        </tr>
+        <tr class="line-height">
+            <td>Schleuse vorhanden</td>
+            <td>{!record.SchleuseVorhanden__c}</td>
+            <td></td>
+        </tr>
+        <tr class="line-height">
+            <td>Genehmigungen erforderlich, bei ja welche</td>
+            <td>{!record.GenehmigungenErforderlich__c}</td>
+            <td>{!IF(record.GenehmigungenErforderlich__c = "Ja", record.ErforderlicheGenehmigungen__c, "")}</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="section-header">Transportwege zum und im Ladengeschäft</td>
+            <td/>
+            <td/>
+        </tr>
+        <tr class="line-height">
+            <td>Stufen vorhanden, bei ja wie viele</td>
+            <td>{!record.StufenVorhanden__c}</td>
+            <td>{!IF(record.StufenVorhanden__c = "Ja", record.AnzahlStufen__c, "")}</td>
+        </tr>
+        <tr class="line-height">
+            <td>Anlieferung/Abholung Filialausstattung über Aufzug, bei ja Angabe <br/>Maße ,Tragkraft und Zugänglichkeit</td>
+            <td>{!record.AnlieferungUeberAufzug__c}</td>
+            <td>{!IF(record.AnlieferungUeberAufzug__c = "Ja", record.AngabeMasseTragkraftUndZugaenglichkeit__c, "")}</td>
+        </tr>
+        <tr>
+            <td>Transport durch Kundenbereich</td>
+            <td>{!record.TransportDurchKundenbereich__c}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="section-header">Einsatz von Transportmitteln</td>
+            <td class="section-header"></td>
+            <td class="section-header">Anzahl Stellplätze in der Filiale</td>
+        </tr>
+        <tr>
+            <td>Paketrollbehälter-Einsatz möglich</td>
+            <td>{!record.PaketrollbehaelterEinsatzMoeglich__c}</td>
+            <td>{!IF(record.PaketrollbehaelterEinsatzMoeglich__c = "Ja", record.AnzahlStellmoeglichkeiten__c, "")}</td>
+        </tr>
+        <tr>
+            <td>Briefbehälterwagen-Einsatz möglich</td>
+            <td>{!record.BriefbehaelterwagenEinsatzMoeglich__c}</td>
+            <td>{!IF(record.BriefbehaelterwagenEinsatzMoeglich__c = "Ja", record.AnzahlBriefbehaelterwagen__c, "")}</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="section-header">Erstausstattung Transportbetriebsmittel (TBM) (Anzahl)</td>
+            <td class="section-header"></td>
+            <td ></td>
+        </tr>
+        <tr>
+            <td>Briefbehälterwagen</td>
+            <td>{!record.Briefbehaelterwagen__c}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Seitenwände Briefbehälterwagen</td>
+            <td>{!record.TrennwaendeBriefbehaelterwagen__c}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Briefbehälter Größe 1</td>
+            <td>{!record.BriefbehaelterGroesse1__c}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Briefbehälter Größe 2</td>
+            <td>{!record.BriefbehaelterGroesse2__c}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Briefbehälter Größe 3</td>
+            <td>{!record.BriefbehaelterGroesse3__c}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Deckel</td>
+            <td>{!record.Deckel__c}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Eingriffschützer</td>
+            <td>{!record.Eingriffschuetzer__c}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Rote Trennstege</td>
+            <td>{!record.Trennwaende__c}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Paketrollbehälter</td>
+            <td>{!record.Paketrollbehaelter__c}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="section-header">Anschrift für Zusendung Fahrplan und Anfahrtsstellenbarcode</td>
+            <td class="section-header"></td>
+            <td></td>
+        </tr>
+        <tr style="height: 36px;">
+            <td>Termin
+                <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+                    <apex:param value="{!termin}"/>
+                </apex:outputText>
+            </td>
+            <td>Partner-Filiale {!record.Filiale__r.ASt_Name__c}, {!record.PostanschriftStrasse__c}, {!record.Postanschrift_PLZ__c}, {!record.Postanschrift_Ort__c}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;">cc.</td>
+            <td>{!record.E_Mail_Adresse__c}</td>
+            <td></td>
+        </tr>
+    </table>
+    </body>
+    </html>
+
+</apex:page>

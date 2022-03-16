@@ -1,0 +1,121 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      08.09.2021
+ *
+ *
+ *@description  newAccountContactRelationRecord
+ *
+ *
+ *@changelog    08.09.2021 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<!-- New Account Contact Relation Record -->
+<template>
+    <template if:true={recordId}>
+        <template if:true={showModal}>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_medium">
+                <div class="slds-modal__container">
+                    <div class="slds-is-relative">
+                        <lightning-record-edit-form object-api-name="Contact" onsubmit={handleSubmit}>
+                        <lightning-quick-action-panel header="Kontakte">
+
+                            <template if:true={showSpinner}>
+                                <lightning-spinner
+                                        variant="brand"
+                                        alternative-text="Loading"
+                                ></lightning-spinner>
+                            </template>
+                            <lightning-tabset>
+                                <lightning-tab label="Bestehender Kontakt" title="Bestehender Kontakt">
+                                    <lightning-layout>
+                                        <lightning-layout-item size="6" padding="around-small">
+                                            <c-lookup
+                                                    label="Kontakt"
+                                                    scroll-after-n-items="5"
+                                                    is-input-readonly=true
+                                                    errors={errors}
+                                                    onsearch={handleSearch}
+                                                    onselectionchange={handleSelectionChange}
+                                                    placeholder=""
+                                            >
+                                            </c-lookup>
+                                        </lightning-layout-item>
+                                        <lightning-layout-item size="6" padding="around-small">
+                                            <template if:true={roleOptions}>
+                                                <lightning-dual-listbox name="roles"
+                                                                        label="Rolle(n)"
+                                                                        options={roleOptions}
+                                                                        onchange={handleChange}></lightning-dual-listbox>
+                                            </template>
+
+                                        </lightning-layout-item>
+                                    </lightning-layout>
+                                </lightning-tab>
+                                <lightning-tab label="Neuer Kontakt" title="Neuer Kontakt">
+                                    <lightning-layout multiple-rows="true">
+                                        <lightning-layout-item size="6" padding="around-small">
+                                            <lightning-input-field field-name="Title">
+                                            </lightning-input-field>
+                                            <lightning-input-field field-name="FirstName">
+                                            </lightning-input-field>
+                                            <lightning-input-field field-name="LastName">
+                                            </lightning-input-field>
+                                            <lightning-input-field field-name="Firmenbezeichnung__c" required={isRequired}>
+                                            </lightning-input-field>
+                                            <lightning-input-field field-name="MailingStreet" required={isRequired}>
+                                            </lightning-input-field>
+                                            <lightning-input-field field-name="MailingPostalCode" required={isRequired}>
+                                            </lightning-input-field>
+                                            <lightning-input-field field-name="MailingCity" required={isRequired}>
+                                            </lightning-input-field>
+                                            <lightning-input-field field-name="MailingCountry">
+                                            </lightning-input-field>
+                                        </lightning-layout-item>
+                                        <lightning-layout-item size="6" padding="around-small">
+                                            <lightning-input-field field-name="Phone">
+                                            </lightning-input-field>
+                                            <lightning-input-field field-name="MobilePhone">
+                                            </lightning-input-field>
+                                            <lightning-input-field field-name="Email">
+                                            </lightning-input-field>
+                                            <template if:true={roleOptions}>
+                                                <lightning-dual-listbox name="roles"
+                                                                        label="Rolle(n)"
+                                                                        options={roleOptions}
+                                                                        onchange={handleChange}></lightning-dual-listbox>
+                                            </template>
+
+                                        </lightning-layout-item>
+                                    </lightning-layout>
+                                    <lightning-messages>
+                                    </lightning-messages>
+                                </lightning-tab>
+                            </lightning-tabset>
+
+                            <div slot="footer">
+                                <lightning-button
+                                        variant="neutral"
+                                        label="Abbrechen"
+                                        onclick={closeAction}
+                                ></lightning-button>
+                                <lightning-button
+                                        variant="brand"
+                                        label="Speichern"
+                                        class="slds-m-left_x-small"
+                                        type="submit"
+                                        onclick={handleSave}
+                                ></lightning-button>
+                            </div>
+                        </lightning-quick-action-panel>
+                        </lightning-record-edit-form>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+    </template>
+</template>

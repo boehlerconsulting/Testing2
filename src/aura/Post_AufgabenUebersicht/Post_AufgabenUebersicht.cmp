@@ -1,0 +1,70 @@
+<!--
+/**
+ *@author       Mats Böhler <mats.boehler@boehlerconsulting.com>
+ *@created      03.12.2018
+ *@version      1.0
+ *@since        44.0
+ *
+ *
+ *@description  Post_AufgabenUebersicht
+ *
+ *
+ *@changelog    03.12.2018 Mats Böhler <mats.boehler@boehlerconsulting.com> - Created
+ *              
+ * 
+ */
+ -->
+
+<aura:component description="Post_AufgabenUebersicht"
+                controller="Post_UebersichtController"
+                implements="flexipage:availableForAllPageTypes,force:hasRecordId"
+                access="global">
+
+    <aura:attribute access="public" default="" type="String" name="userType"/>
+    <aura:attribute access="public" default="" type="String" name="filterValue"/>
+    <aura:attribute access="public" type="Object" name="ctrl"/>
+    <aura:attribute access="public" type="String" name="recordId" description="Beinhaltet AccountId, wenn dieses Component nicht auf der Startseite, sondern der Filialenübersicht verwendet wird."/>
+    <aura:attribute name="tableData" type="Object"/>
+    <aura:attribute name="tableColumns" type="List"/>
+    <aura:attribute name="showSpinner" type="Boolean" default="false"/>
+
+    <aura:handler name="init" value="{! this }" action="{! c.doInit }"/>
+
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    <lightning:notificationsLibrary aura:id="notifLib"/>
+
+    <lightning:card class="slds-card_boundary" variant="base" iconName="standard:task" title="{! $Label.c.Post_OffeneAufgaben + ' ' +  if ( !empty( v.userType ), '(' + v.userType + ')', '' )}">
+        <aura:set attribute="actions">
+            <aura:if isTrue="{!empty(v.recordId)}">
+                <lightning:button label="{!$Label.c.Post_Listenansicht}" onclick="{!c.handleListviewRedirect}"/>
+            </aura:if>
+            <lightning:button label="{!$Label.c.Post_NeueAufgabe}" onclick="{!c.onNewTask}"/>
+            <aura:if isTrue="{!!empty(v.recordId)}">
+                <lightning:button label="{!$Label.c.Post_Aktivitaetshistorie}" onclick="{!c.handleHistoryRedirect}"/>
+            </aura:if>
+        </aura:set>
+        <p class="slds-p-horizontal_small slds-m-left--small">
+
+            <aura:if isTrue="{!v.showSpinner}">
+                <lightning:spinner variant="brand" size="large"/>
+            </aura:if>
+            
+            <lightning:layout class="slds-p-bottom--medium">
+                <lightning:layoutItem size="3">
+                    <lightning:combobox class="slds-text-heading--label"
+                                        value="{!v.filterValue}"
+                                        options="{!v.ctrl.taskFilter }"
+                                        required="false"
+                                        onchange="{!c.handleTaskFilterChange}"/>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="9">
+
+                </lightning:layoutItem>
+        </lightning:layout>
+
+        {!v.body}
+
+        </p>
+    </lightning:card>
+
+</aura:component>

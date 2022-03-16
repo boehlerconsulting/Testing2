@@ -1,0 +1,190 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      11.03.2021
+ *
+ *
+ *@description  einrichtungsBestandskonfigurator
+ *
+ *
+ *@changelog    11.03.2021 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<!-- Einrichtungs Bestandskonfigurator -->
+<template>
+
+    <lightning-spinner if:true={showSpinner} alternative-text="Loading" size="medium"
+                       variant="base"></lightning-spinner>
+
+    <lightning-layout>
+        <template if:true={previousAccountHasValue}>
+            <lightning-layout-item size="2" padding="around-small">
+                <div>
+                    <lightning-formatted-text
+                            value="Vorgängerfiliale am gleichen Standort"
+                            title="Vorgängerfiliale am gleichen Standort"
+                    ></lightning-formatted-text>
+                </div>
+                <a onclick={openPreviousAccount}>
+                    <lightning-formatted-text
+                            value={account.Vorgaengerfiliale__r.ASt_Name__c}
+                            title={account.Vorgaengerfiliale__r.ASt_Name__c}
+                    ></lightning-formatted-text>
+                </a>
+            </lightning-layout-item>
+            <lightning-layout-item size="6">
+                <lightning-combobox
+                        label="Soll(en) Möbel / Filialausstattung übernommen werden?"
+                        value={zeigeBundles}
+                        name="zeigeBundles"
+                        options={processOptions}
+                        onchange={handleProcessChange}
+                >
+                </lightning-combobox>
+            </lightning-layout-item>
+
+            <lightning-layout-item size="4" padding="around-small">
+                <template if:true={showBundles}>
+
+                    <lightning-button-icon
+                            class="slds-float_right slds-p-around_x-small"
+                            size="medium"
+                            icon-name="utility:jump_to_top"
+                            alternative-text="Alle Sektionen schließen"
+                            title="Alle Sektionen schließen"
+                            onclick={handleCloseAllSections}
+                    ></lightning-button-icon>
+                    <lightning-button-icon
+                            class="slds-float_right slds-p-around_x-small"
+                            size="medium"
+                            icon-name="utility:jump_to_bottom"
+                            alternative-text="Alle Sektionen öffnen"
+                            title="Alle Sektionen öffnen"
+                            onclick={handleOpenAllSections}
+                    ></lightning-button-icon>
+
+                </template>
+
+            </lightning-layout-item>
+        </template>
+        <template if:false={previousAccountHasValue}>
+
+            <lightning-layout-item size="6">
+
+                <lightning-combobox
+                        label="Soll(en) Möbel / Filialausstattung übernommen werden?"
+                        value={zeigeBundles}
+                        name="zeigeBundles"
+                        options={processOptions}
+                        onchange={handleProcessChange}
+                >
+                </lightning-combobox>
+            </lightning-layout-item>
+
+            <lightning-layout-item size="6" padding="around-small">
+                <template if:true={showBundles}>
+
+                    <lightning-button-icon
+                            class="slds-float_right slds-p-around_x-small"
+                            size="medium"
+                            icon-name="utility:jump_to_top"
+                            alternative-text="Alle Sektionen schließen"
+                            title="Alle Sektionen schließen"
+                            onclick={handleCloseAllSections}
+                    ></lightning-button-icon>
+                    <lightning-button-icon
+                            class="slds-float_right slds-p-around_x-small"
+                            size="medium"
+                            icon-name="utility:jump_to_bottom"
+                            alternative-text="Alle Sektionen öffnen"
+                            title="Alle Sektionen öffnen"
+                            onclick={handleOpenAllSections}
+                    ></lightning-button-icon>
+
+                </template>
+
+            </lightning-layout-item>
+        </template>
+
+    </lightning-layout>
+    <template if:true={showHinweis}>
+        <lightning-layout>
+            <lightning-layout-item size="12">
+
+                <lightning-textarea
+                        label="Begründung Neubestellung"
+                        max-length="500"
+                        value={einrichtungsprozess.BegruendungNeubestellung__c}
+                        onchange={handleBegruendungChange}
+                ></lightning-textarea>
+
+            </lightning-layout-item>
+        </lightning-layout>
+        <lightning-layout>
+
+            <lightning-layout-item size="12" padding="around-medium">
+
+                <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning"
+                     role="alert">
+                    <span class="slds-assistive-text">warning</span>
+                    <span class="slds-icon_container slds-icon-utility-warning slds-m-right_x-small"
+                          title="Description of icon when needed">
+                        <lightning-icon icon-name="utility:warning" alternative-text="Warning!"
+                                        variant="warning"></lightning-icon>
+                    </span>
+                    <h2 class="slds-text-align_left">Es gilt der Grundsatz, dass bei Betreiberwechsel und up-/downgrade
+                        OZ79/OZ95 die Filialausstattung weitestgehend übernommen wird und nur die OZ-abhängige
+                        Ausstattung neu bestellt wird. Erforderliche Reparaturen an der vorhandenen Filialausstattung
+                        sind vorab über den Workflow 510 zu initiieren. Sollte sich daraus ergeben, dass eine Reparatur
+                        nicht möglich oder nicht wirtschaftlich ist, ist das im Begründungsfeld anzugeben.
+
+                    </h2>
+                </div>
+
+            </lightning-layout-item>
+
+        </lightning-layout>
+    </template>
+
+    <template if:true={isInitialized}>
+
+        <template if:true={showBundles}>
+
+            <lightning-layout>
+
+
+                <lightning-layout-item size="12">
+
+                    <lightning-accordion allow-multiple-sections-open active-section-name={activeSections}>
+
+                        <template for:each={categories} for:item="category" for:index="categoryIndex">
+
+                            <lightning-accordion-section name={category.title}
+                                                         label={category.title} key={category.Id}>
+
+                                <c-einrichtungs-bundle
+                                        key={category.Id}
+                                        category-index={categoryIndex}
+                                        options={category.products}
+                                        option-by-ids={optionByIds}
+                                        onselected={handleOptionChange}
+                                        onchanged={handleChange}
+                                ></c-einrichtungs-bundle>
+                            </lightning-accordion-section>
+
+                        </template>
+
+                    </lightning-accordion>
+
+                </lightning-layout-item>
+
+            </lightning-layout>
+
+        </template>
+
+    </template>
+
+</template>

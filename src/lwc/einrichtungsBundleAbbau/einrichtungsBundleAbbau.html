@@ -1,0 +1,193 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      14.04.2021
+ *
+ *
+ *@description  einrichtungsBundleAbbau
+ *
+ *
+ *@changelog    14.04.2021 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<!-- Einrichtungs Bundle Abbau -->
+<template>
+
+    <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_fixed-layout" aria-hidden="true">
+        <thead>
+        <tr class="slds-line-height_reset">
+
+            <template if:false={isAbbauZusatz}>
+                <th scope="col" style="width:5%">
+
+                </th>
+                <th scope="col" style="width:5%">
+                </th>
+                <th scope="col" class="slds-truncate" style="width:40%">Bezeichnung</th>
+                <th scope="col" class="slds-truncate" style="width:15%">Menge Bestand</th>
+                <th scope="col" class="slds-truncate" style="width:15%">Menge Abbau</th>
+                <th scope="col" class="slds-truncate" style="width:20%">Menge Wiedereinsatzfähig</th>
+            </template>
+            <template if:true={isAbbauZusatz}>
+                <th scope="col" style="width:5%">
+
+                </th>
+                <th scope="col" style="width:5%">
+                </th>
+                <th scope="col" class="slds-truncate" style="width:55%">Bezeichnung</th>
+                <th scope="col" class="slds-truncate" style="width:15%">Menge Abbau</th>
+                <th scope="col" class="slds-truncate" style="width:20%">Menge Wiedereinsatzfähig</th>
+            </template>
+        </tr>
+        </thead>
+        <tbody>
+        <template for:each={options} for:item="option" for:index="optionIndex">
+
+            <tr class="slds-hint-parent" key={option.Id}>
+
+                <td>
+                    <c-einrichtungs-bundle-selection
+                            key={option.Id}
+                            option={option}
+                            option-by-ids={optionByIds}
+                            is-abbau=true
+                            onselected={handleOptionChange}
+                    ></c-einrichtungs-bundle-selection>
+                </td>
+                <td>
+                    <template if:true={option.showConfiguration}>
+                        <lightning-button-menu
+                                alternative-text="Zeige"
+                                variant="border-filled"
+                                icon-name="utility:settings"
+                                menu-alignment="auto"
+                        >
+                            <template if:true={option.hasPicture}>
+                                <lightning-menu-item
+                                        label="Vorschau anzeigen"
+                                        title="Vorschau anzeigen"
+                                        name={option}
+                                        prefix-icon-name="utility:image"
+                                        onclick={openFilePreview}
+                                ></lightning-menu-item>
+                            </template>
+                            <template if:true={option.hasAdditionalInformation}>
+                                <lightning-menu-item
+                                        label="Zusatzinformationen anzeigen"
+                                        title="Zusatzinformationen anzeigen"
+                                        name={option}
+                                        prefix-icon-name="utility:info"
+                                        onclick={handleShowAdditionalInformation}
+                                ></lightning-menu-item>
+                            </template>
+                        </lightning-button-menu>
+                    </template>
+                </td>
+                <td class="slds-truncate">
+                    <template if:true={isEinrichtungskoordinator}>
+                        <a onclick={handleOpenOption}>
+                            <lightning-formatted-text
+                                    name={option}
+                                    value={option.name}
+                                    title={option.name}
+                            ></lightning-formatted-text>
+                        </a>
+                    </template>
+                    <template if:false={isEinrichtungskoordinator}>
+                        <lightning-formatted-text
+                                name={option}
+                                value={option.name}
+                                title={option.name}
+                        ></lightning-formatted-text>
+                    </template>
+
+                </td>
+                <template if:false={isAbbauZusatz}>
+                    <td class="slds-truncate">
+
+                        <lightning-formatted-number
+                                value={option.quantity}
+                        ></lightning-formatted-number>
+
+                    </td>
+                    <td class="slds-truncate">
+
+                        <c-einrichtungs-bundle-quantity
+                                key={option.Id}
+                                option={option}
+                                option-by-ids={optionByIds}
+                                is-abbau={trueBoolean}
+                                max-value={option.quantity}
+                                is-disabled={isSchliessung}
+                                onchanged={handleChange}
+                        ></c-einrichtungs-bundle-quantity>
+                    </td>
+                </template>
+                <template if:true={isAbbauZusatz}>
+
+                    <td class="slds-truncate">
+
+                        <c-einrichtungs-bundle-quantity
+                                key={option.Id}
+                                option={option}
+                                option-by-ids={optionByIds}
+                                is-abbau={trueBoolean}
+                                onchanged={handleChange}
+                        ></c-einrichtungs-bundle-quantity>
+
+                    </td>
+                </template>
+                <td class="slds-truncate">
+
+                    <c-einrichtungs-bundle-quantity
+                            key={option.Id}
+                            option={option}
+                            option-by-ids={optionByIds}
+                            is-abbau-wiedereinsatzfaehig={trueBoolean}
+                            min-value=0
+                            onchanged={handleChange}
+                    ></c-einrichtungs-bundle-quantity>
+
+                </td>
+            </tr>
+
+        </template>
+        </tbody>
+    </table>
+
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+
+
+    <div class=slds-m-around_large></div>
+
+    <template if:true={showAdditionalInformation}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-02" aria-modal="true"
+                 aria-describedby="modal-content-id-2" class="slds-modal slds-fade-in-open slds-modal_large">
+            <div class="slds-modal__container">
+
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close"
+                            title="Close" onclick={closeAdditionalInformation}>
+                        <lightning-icon icon-name="utility:close" size="medium" variant="inverse">
+                        </lightning-icon>
+                        <span class="slds-assistive-text">Schließen</span>
+                    </button>
+                    <h2 id="modal-heading-02" class="slds-text-heading_medium slds-hyphenate">
+                        {selectedOption.name}</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+
+                    <lightning-formatted-rich-text
+                            value={selectedOption.zusatzinformationen}
+                    ></lightning-formatted-rich-text>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+</template>

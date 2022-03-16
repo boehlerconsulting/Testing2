@@ -1,0 +1,57 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      26.07.2021
+ *
+ *
+ *@description  packstationRueckgabe
+ *
+ *
+ *@changelog    26.07.2021 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<!-- Packstation Rueckgabe -->
+<template>
+
+    <template if:true={recordId}>
+        <div class="slds-is-relative">
+            <lightning-quick-action-panel header="Rückgabe von Team Bauen">
+
+                <template if:true={showSpinner}>
+                    <lightning-spinner
+                            variant="brand"
+                            alternative-text="Loading"
+                    ></lightning-spinner>
+                </template>
+
+                <lightning-textarea
+                        class="slds-p-around_medium"
+                        label="Begründung:"
+                        value={stornierungsgrund}
+                        max-length="255"
+                        required="true"
+                        onchange={handleStorierungsgrundChange}
+                ></lightning-textarea>
+
+                <div slot="footer">
+                    <lightning-button
+                            variant="neutral"
+                            label="Abbrechen"
+                            onclick={closeAction}
+                    ></lightning-button>
+                    <lightning-button
+                            disabled={stornoDisabled}
+                            variant="brand"
+                            label="Rückgabe"
+                            class="slds-m-left_x-small"
+                            onclick={sendEmail}
+                    ></lightning-button>
+                </div>
+            </lightning-quick-action-panel>
+        </div>
+    </template>
+
+</template>

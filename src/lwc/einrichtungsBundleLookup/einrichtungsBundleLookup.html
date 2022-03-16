@@ -1,0 +1,45 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      06.04.2021
+ *
+ *
+ *@description  einrichtungsBundleLookup
+ *
+ *
+ *@changelog    06.04.2021 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<!-- Einrichtungs Bundle Lookup -->
+<template>
+
+    <template if:true={show}>
+        <template if:true={hasInitialSelection}>
+            <c-lookup
+                    scroll-after-n-items="5"
+                    is-input-readonly=true
+                    selection={initialSelection}
+                    errors={errors}
+                    onsearch={handleSearch}
+                    onselectionchange={handleSelectionChange}
+                    placeholder=""
+            >
+            </c-lookup>
+        </template>
+        <template if:false={hasInitialSelection}>
+            <c-lookup
+                    scroll-after-n-items="5"
+                    is-input-readonly=true
+                    errors={errors}
+                    onsearch={handleSearch}
+                    onselectionchange={handleSelectionChange}
+                    placeholder=""
+            >
+            </c-lookup>
+        </template>
+    </template>
+
+</template>

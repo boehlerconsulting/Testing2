@@ -1,0 +1,196 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      25.09.2019
+ *@version      1.0
+ *@since        45.0
+ *
+ *
+ *@description  hwPriorisierungshilfe
+ *
+ *
+ *@changelog    25.09.2019 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<!-- hwPriorisierungshilfe -->
+<template>
+
+    <div class=slds-p-around_small></div>
+
+    <lightning-card title={titel} icon-name={iconName}><br/>
+
+        <lightning-spinner if:true={showSpinner} alternative-text="Loading" size="medium"
+                           variant="brand"></lightning-spinner>
+
+        <div style="width: auto;">
+            <lightning-layout>
+                <template if:true={isStandard}>
+                    <lightning-layout-item padding="around-small" size=2>
+                        <div class="slds-text-align_left slds-m-bottom_medium">
+
+                            <lightning-input
+                                    name="NL Brief"
+                                    label="Niederlassung Brief"
+                                    type="search"
+                                    value={nlBrief}
+                                    onchange={handleOnChangeNlBrief}
+                            ></lightning-input>
+                        </div>
+                    </lightning-layout-item>
+                </template>
+                <lightning-layout-item padding="around-small" size=2>
+                    <template if:true={isStandard}>
+                        <div class="slds-text-align_left slds-m-bottom_medium">
+
+                            <lightning-combobox
+                                    label="Zeige:"
+                                    value={zeige}
+                                    options={zeigeValues}
+                                    onchange={handleChangeZeige}></lightning-combobox>
+                        </div>
+                    </template>
+                </lightning-layout-item>
+                <lightning-layout-item padding="around-small" size=2>
+                    <template if:true={isStandard}>
+                        <div class="slds-text-align_left slds-m-bottom_medium">
+
+                            <lightning-combobox
+                                    label="Aufgabenstatus:"
+                                    value={aufgabenstatusValue}
+                                    options={aufgabenstatusValues}
+                                    onchange={handleChangeAufgabenstatus}></lightning-combobox>
+                        </div>
+                    </template>
+                </lightning-layout-item>
+                <lightning-layout-item padding="around-small" size=2>
+                    <template if:true={isClosed}>
+                        <div class="slds-text-align_left slds-m-bottom_medium">
+
+                            <lightning-combobox
+                                    label="Zeitraum:"
+                                    value={zeitraumValue}
+                                    options={zeitraumValues}
+                                    onchange={handleChangeZeitraum}></lightning-combobox>
+                        </div>
+                    </template>
+                </lightning-layout-item>
+                <template if:true={showMassClose}>
+                    <template if:false={isStandard}>
+                        <lightning-layout-item padding="around-small" size=2>
+
+                        </lightning-layout-item>
+                    </template>
+                    <lightning-layout-item padding="around-small" size=4>
+
+                        <div class="slds-text-align_right slds-m-bottom_medium slds-m-top_medium">
+
+                            <lightning-button-group>
+                                <lightning-button title="Aufgaben speichern"
+                                                  label="Aufgaben speichern"
+                                                  onclick={handleSaveTasks}
+                                >
+                                </lightning-button>
+                                <lightning-button title="Ausgewählte Aufgaben erledigen"
+                                                  label="Ausgewählte Aufgaben erledigen"
+                                                  disabled={disableMassClose}
+                                                  onclick={handleShowModal}
+                                >
+                                </lightning-button>
+                            </lightning-button-group>
+                        </div>
+                    </lightning-layout-item>
+                </template>
+                <template if:false={showMassClose}>
+                    <template if:true={isStandard}>
+                        <lightning-layout-item padding="around-small" size=2>
+
+                        </lightning-layout-item>
+                    </template>
+                    <template if:false={isStandard}>
+                        <lightning-layout-item padding="around-small" size=4>
+
+                        </lightning-layout-item>
+                    </template>
+                    <lightning-layout-item padding="around-small" size=2>
+
+                        <div class="slds-text-align_right slds-m-bottom_medium slds-m-top_medium">
+                            <template if:false={isAkquise}>
+                                <lightning-button title="Aufgaben speichern"
+                                                  label="Aufgaben speichern"
+                                                  onclick={handleSaveTasks}
+                                >
+                                </lightning-button>
+                            </template>
+                        </div>
+                    </lightning-layout-item>
+                </template>
+
+            </lightning-layout>
+            <template if:true={initialized}>
+                <c-hw-lightning-datatable
+                        table-data={data}
+                        table-columns={columns}
+                        picklist-value={defaultFilter}
+                        sort-by={sortBy}
+                        sort-direction={sortDirection}
+                        show-checkbox-column={showMassClose}
+                        selected-task-ids={selectedTaskIds}
+                        erledigungstyp-picklist-values={erledigungstypPicklistValues}
+                        onselected={handleOnSelected}
+                        ontypchanged={handleOnTypChanged}
+                        onterminiertchanged={handleOnTerminiertChanged}
+                >
+                </c-hw-lightning-datatable>
+            </template>
+
+        </div>
+    </lightning-card>
+
+    <template if:true={showModal}>
+        <div class="modal-max-width">
+            <section role="dialog"
+                     tabindex="-1"
+                     aria-label="Ausgewählte Aufgaben erledigen"
+                     aria-modal="true"
+                     aria-describedby="modal-content-id-1"
+                     class="slds-modal slds-fade-in-open slds-modal_small modal-max-width slds-align_absolute-center">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                                title="Close" onclick={handleHideModal}>
+                            <template if:false={isTermin}>
+                                <lightning-icon icon-name="utility:close" size="medium" variant="inverse">
+                                </lightning-icon>
+                            </template>
+                            <template if:true={isTermin}>
+                                <lightning-icon icon-name="utility:close" size="medium">
+                                </lightning-icon>
+                            </template>
+                            <span class="slds-assistive-text">Schließen</span>
+                        </button>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium slds-border_top slds-border_left slds-border_right"
+                         id="modal-content-id-1">
+                        <div class="slds-m-top_large">
+                            Sind die Erledigungstypen der Aufgaben korrekt?
+                        </div>
+                    </div>
+                    <footer class="slds-modal__footer slds-border_bottom slds-border_left slds-border_right">
+                        <button class="slds-button slds-button_neutral" onclick={handleHideModal}>Nein, Aktion
+                            abbrechen
+                        </button>
+                        <button class="slds-button slds-button_brand" onclick={handleCloseTasks}>Ja, ausgewählte
+                            Aufgaben erledigen
+                        </button>
+                    </footer>
+                </div>
+            </section>
+            <template if:false={isTermin}>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </template>
+        </div>
+    </template>
+</template>

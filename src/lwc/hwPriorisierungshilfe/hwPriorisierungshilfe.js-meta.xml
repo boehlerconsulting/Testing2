@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>45.0</apiVersion>
+    <description>hwPriorisierungshilfe</description>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__AppPage</target>
+        <target>lightning__RecordPage</target>
+        <target>lightning__HomePage</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__HomePage,lightning__RecordPage,lightning__AppPage">
+            <property name="iconName" type="String" default="standard:task"  label="Icon Name" datasource="standard:task" />
+            <property name="title" type="String" default="Übersicht priorisierter Aufgaben"  label="Titel" />
+            <property name="sObjectType" type="String" default="Task" label="Objekt" datasource="Task"/>
+            <property name="sortBy" type="String" default="KennzifferPrioritaet__c" label="Sortiert nach" datasource="KennzifferPrioritaet__c"/>
+            <property name="sortDirection" type="String" default="desc" label="Sortierrichtung" datasource="desc,asc"/>
+            <property name="aufgabenstatusValue" type="String" default="offen" label="Aufgabenstatus" datasource="offen,terminiert,geschlossen"/>
+            <property name="version" type="String" default="ohne Akquise" label="Berechnungslogik" datasource="ohne Akquise,mit Akquise"/>
+        </targetConfig>
+    </targetConfigs>
+    <masterLabel>hwPriorisierungshilfe</masterLabel>
+</LightningComponentBundle>

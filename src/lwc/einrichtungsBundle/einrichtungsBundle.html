@@ -1,0 +1,417 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      08.03.2021
+ *
+ *
+ *@description  einrichtungsBundle
+ *
+ *
+ *@changelog    08.03.2021 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<!-- Einrichtungs Bundle -->
+<template>
+    <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_fixed-layout" aria-hidden=true>
+        <thead>
+        <tr class="slds-line-height_reset">
+
+            <template if:false={isErsatz}>
+                <th scope="col" style="width:5%">
+
+                </th>
+                <th scope="col" style="width:5%">
+                </th>
+                <th scope="col" class="slds-truncate" style="width:75%">Bezeichnung</th>
+                <th scope="col" class="slds-truncate" style="width:15%">Menge</th>
+            </template>
+            <template if:true={isErsatz}>
+                <th scope="col" style="width:5%">
+
+                </th>
+                <th scope="col" style="width:5%">
+                </th>
+                <th scope="col" class="slds-truncate" style="width:40%">Bezeichnung</th>
+                <th scope="col" class="slds-truncate" style="width:15%">Menge</th>
+                <th scope="col" class="slds-truncate" style="width:35%">Ersatz für</th>
+            </template>
+        </tr>
+        </thead>
+        <tbody>
+        <template for:each={options} for:item="option" for:index="optionIndex">
+
+            <template if:true={isLager}>
+
+                <template if:true={option.product.Option__r.Lagerprodukt__c}>
+
+                    <tr class="slds-hint-parent" key={option.Id}>
+
+                        <td>
+                            <c-einrichtungs-bundle-selection
+                                    key={option.Id}
+                                    option={option}
+                                    option-by-ids={optionByIds}
+                                    is-lager={isLager}
+                                    onselected={handleOptionChange}
+                            ></c-einrichtungs-bundle-selection>
+                        </td>
+                        <td>
+                            <template if:true={option.showConfiguration}>
+                                <lightning-button-menu alternative-text="Zeige" variant="border-filled"
+                                                       icon-name="utility:settings">
+                                    <template if:true={option.hasPicture}>
+                                        <lightning-menu-item
+                                                label="Vorschau anzeigen"
+                                                title="Vorschau anzeigen"
+                                                name={option}
+                                                prefix-icon-name="utility:image"
+                                                onclick={openFilePreview}
+                                        ></lightning-menu-item>
+                                    </template>
+                                    <template if:true={option.hasAdditionalInformation}>
+                                        <lightning-menu-item
+                                                label="Zusatzinformationen anzeigen"
+                                                title="Zusatzinformationen anzeigen"
+                                                name={option}
+                                                prefix-icon-name="utility:info"
+                                                onclick={handleShowAdditionalInformation}
+                                        ></lightning-menu-item>
+                                    </template>
+                                    <template if:true={option.hasOptions}>
+                                        <lightning-menu-item
+                                                label="Konfiguration anzeigen"
+                                                title="Konfiguration anzeigen"
+                                                name={option}
+                                                prefix-icon-name="utility:strategy"
+                                                onclick={handleShowConfiguration}
+                                        ></lightning-menu-item>
+                                    </template>
+                                </lightning-button-menu>
+                            </template>
+                        </td>
+                        <td class="slds-truncate">
+                            <template if:true={isEinrichtungskoordinator}>
+                                <a onclick={handleOpenOption}>
+                                    <lightning-formatted-text
+                                            name={option}
+                                            value={option.name}
+                                            title={option.name}
+                                    ></lightning-formatted-text>
+                                </a>
+                            </template>
+                            <template if:false={isEinrichtungskoordinator}>
+                                <lightning-formatted-text
+                                        name={option}
+                                        value={option.name}
+                                        title={option.name}
+                                ></lightning-formatted-text>
+                            </template>
+                        </td>
+                        <td class="slds-truncate">
+
+                            <c-einrichtungs-bundle-quantity
+                                    key={option.Id}
+                                    option={option}
+                                    option-by-ids={optionByIds}
+                                    is-lager={isLager}
+                                    onchanged={handleChange}
+                            ></c-einrichtungs-bundle-quantity>
+
+                        </td>
+                        <template if:true={isErsatz}>
+                            <td class="slds-truncate">
+
+                                <c-einrichtungs-bundle-lookup
+                                        key={option.Id}
+                                        option={option}
+                                        option-by-ids={optionByIds}
+                                        is-lager={isLager}
+                                        account={account}
+                                        initial-selection-by-id={initialSelectionById}
+                                        category-title={categoryTitle}
+                                >
+                                </c-einrichtungs-bundle-lookup>
+
+                            </td>
+                        </template>
+                    </tr>
+
+                </template>
+
+            </template>
+
+            <template if:false={isLager}>
+
+                <template if:false={option.product.Option__r.Lagerprodukt__c}>
+
+                    <tr class="slds-hint-parent" key={option.Id}>
+
+                        <td>
+                            <c-einrichtungs-bundle-selection
+                                    key={option.Id}
+                                    option={option}
+                                    option-by-ids={optionByIds}
+                                    is-lager={isLager}
+                                    onselected={handleOptionChange}
+                            ></c-einrichtungs-bundle-selection>
+                        </td>
+                        <td>
+                            <template if:true={option.showConfiguration}>
+                                <lightning-button-menu
+                                        alternative-text="Zeige"
+                                        variant="border-filled"
+                                        icon-name="utility:settings"
+                                >
+                                    <template if:true={option.hasPicture}>
+                                        <lightning-menu-item
+                                                label="Vorschau anzeigen"
+                                                title="Vorschau anzeigen"
+                                                name={option}
+                                                prefix-icon-name="utility:image"
+                                                onclick={openFilePreview}
+                                        ></lightning-menu-item>
+                                    </template>
+                                    <template if:true={option.hasAdditionalInformation}>
+                                        <lightning-menu-item
+                                                label="Zusatzinformationen anzeigen"
+                                                title="Zusatzinformationen anzeigen"
+                                                name={option}
+                                                prefix-icon-name="utility:info"
+                                                onclick={handleShowAdditionalInformation}
+                                        ></lightning-menu-item>
+                                    </template>
+                                    <template if:true={option.hasOptions}>
+                                        <lightning-menu-item
+                                                label="Konfiguration anzeigen"
+                                                title="Konfiguration anzeigen"
+                                                name={option}
+                                                prefix-icon-name="utility:strategy"
+                                                onclick={handleShowConfiguration}
+                                        ></lightning-menu-item>
+                                    </template>
+                                </lightning-button-menu>
+                            </template>
+                        </td>
+                        <td class="slds-truncate">
+                            <template if:true={isEinrichtungskoordinator}>
+                                <a onclick={handleOpenOption}>
+                                    <lightning-formatted-text
+                                            name={option}
+                                            value={option.name}
+                                            title={option.name}
+                                    ></lightning-formatted-text>
+                                </a>
+                            </template>
+                            <template if:false={isEinrichtungskoordinator}>
+                                <lightning-formatted-text
+                                        name={option}
+                                        value={option.name}
+                                        title={option.name}
+                                ></lightning-formatted-text>
+                            </template>
+
+                        </td>
+                        <td class="slds-truncate">
+
+                            <c-einrichtungs-bundle-quantity
+                                    key={option.Id}
+                                    option={option}
+                                    option-by-ids={optionByIds}
+                                    is-lager={isLager}
+                                    onchanged={handleChange}
+                            ></c-einrichtungs-bundle-quantity>
+
+                        </td>
+                        <template if:true={isErsatz}>
+                            <td class="slds-truncate">
+
+                                <c-einrichtungs-bundle-lookup
+                                        key={option.Id}
+                                        option={option}
+                                        option-by-ids={optionByIds}
+                                        is-lager={isLager}
+                                        account={account}
+                                        initial-selection-by-id={initialSelectionById}
+                                        category-title={categoryTitle}
+                                >
+                                </c-einrichtungs-bundle-lookup>
+
+                            </td>
+                        </template>
+                    </tr>
+
+                </template>
+                <!--LAGER SELECTED-->
+                <template if:true={option.product.Option__r.Lagerprodukt__c}>
+
+                    <template if:true={option.isSelected}>
+
+                        <tr class="slds-hint-parent" key={option.Id}>
+
+                            <td>
+
+                                <c-einrichtungs-bundle-selection
+                                        key={option.Id}
+                                        option={option}
+                                        option-by-ids={optionByIds}
+                                        is-lager={isLager}
+                                        onselected={handleOptionChange}
+                                ></c-einrichtungs-bundle-selection>
+                            </td>
+                            <td>
+                                <template if:true={option.showConfiguration}>
+                                    <lightning-button-menu alternative-text="Zeige" variant="border-filled"
+                                                           icon-name="utility:settings">
+                                        <template if:true={option.hasPicture}>
+                                            <lightning-menu-item
+                                                    label="Vorschau anzeigen"
+                                                    title="Vorschau anzeigen"
+                                                    name={option}
+                                                    prefix-icon-name="utility:image"
+                                                    onclick={openFilePreview}
+                                            ></lightning-menu-item>
+                                        </template>
+                                        <template if:true={option.hasAdditionalInformation}>
+                                            <lightning-menu-item
+                                                    label="Zusatzinformationen anzeigen"
+                                                    title="Zusatzinformationen anzeigen"
+                                                    name={option}
+                                                    prefix-icon-name="utility:info"
+                                                    onclick={handleShowAdditionalInformation}
+                                            ></lightning-menu-item>
+                                        </template>
+                                        <template if:true={option.hasOptions}>
+                                            <lightning-menu-item
+                                                    label="Konfiguration anzeigen"
+                                                    title="Konfiguration anzeigen"
+                                                    name={option}
+                                                    prefix-icon-name="utility:strategy"
+                                                    onclick={handleShowConfiguration}
+                                            ></lightning-menu-item>
+                                        </template>
+                                    </lightning-button-menu>
+                                </template>
+                            </td>
+                            <td class="slds-truncate">
+                                <template if:true={isEinrichtungskoordinator}>
+                                    <a onclick={handleOpenOption}>
+                                        <lightning-formatted-text
+                                                name={option}
+                                                value={option.name}
+                                                title={option.name}
+                                        ></lightning-formatted-text>
+                                    </a>
+                                </template>
+                                <template if:false={isEinrichtungskoordinator}>
+                                    <lightning-formatted-text
+                                            name={option}
+                                            value={option.name}
+                                            title={option.name}
+                                    ></lightning-formatted-text>
+                                </template>
+
+                            </td>
+                            <td class="slds-truncate">
+
+                                <c-einrichtungs-bundle-quantity
+                                        key={option.Id}
+                                        option={option}
+                                        option-by-ids={optionByIds}
+                                        is-lager={isLager}
+                                        onchanged={handleChange}
+                                ></c-einrichtungs-bundle-quantity>
+
+                            </td>
+                            <template if:true={isErsatz}>
+                                <td class="slds-truncate">
+
+
+
+                                </td>
+                            </template>
+                        </tr>
+
+                    </template>
+
+                </template>
+
+            </template>
+
+        </template>
+        </tbody>
+    </table>
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    <template if:true={isErsatz}>
+        <div>&nbsp;</div>
+        <div>&nbsp;</div>
+        <div>&nbsp;</div>
+        <div>&nbsp;</div>
+        <div>&nbsp;</div>
+    </template>
+
+
+    <div class=slds-m-around_large></div>
+
+    <template if:true={showBundleConfiguration}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                 aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_large">
+            <div class="slds-modal__container">
+
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close"
+                            title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close" size="medium" variant="inverse">
+                        </lightning-icon>
+                        <span class="slds-assistive-text">Schließen</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">
+                        {selectedOption.product.Option__r.Name}</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+
+                    <c-einrichtungs-bundle
+                            options={selectedOption.options}
+                            option-by-ids={optionByIds}
+                            is-lager={isLager}
+                            onselected={handleOptionChange}
+                            onchanged={handleChange}
+                    ></c-einrichtungs-bundle>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <template if:true={showAdditionalInformation}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-02" aria-modal="true"
+                 aria-describedby="modal-content-id-2" class="slds-modal slds-fade-in-open slds-modal_large">
+            <div class="slds-modal__container">
+
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close"
+                            title="Close" onclick={closeAdditionalInformation}>
+                        <lightning-icon icon-name="utility:close" size="medium" variant="inverse">
+                        </lightning-icon>
+                        <span class="slds-assistive-text">Schließen</span>
+                    </button>
+                    <h2 id="modal-heading-02" class="slds-text-heading_medium slds-hyphenate">
+                        {selectedOption.product.Option__r.Name}</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+
+                    <lightning-formatted-rich-text
+                            value={selectedOption.product.Zusatzinformationen__c}
+                    ></lightning-formatted-rich-text>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

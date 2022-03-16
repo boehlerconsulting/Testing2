@@ -1,0 +1,48 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      09.08.2019
+ *@version      1.0
+ *@since        45.0
+ *
+ *
+ *@description  HW_C_MAEF
+ *
+ *
+ *@changelog    09.08.2019 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<aura:component description="HW_C_MAEF" implements="force:lightningQuickActionWithoutHeader,force:hasRecordId">
+
+
+    <aura:html tag="style">
+        .slds-spinner_container{
+        background: transparent !important;
+        }
+        .modal-body {
+        background: transparent !important;
+        box-shadow: none !important;
+        }
+        .slds-modal__header--empty {
+        display: none !important;
+        }
+        .modal-container{
+        width: 100% !important;
+        max-width: initial !important;
+        }
+        .slds-modal__content{
+        background: transparent;
+        }
+    </aura:html>
+
+    <c:hwStammdatensammler
+            recordId="{!v.recordId}"
+            isExistingMAEF="true"
+            oncloseModal="{!c.closeModal}"
+            onrefreshView="{!c.refreshView}"
+    ></c:hwStammdatensammler>
+
+</aura:component>

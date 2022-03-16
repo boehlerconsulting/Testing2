@@ -1,0 +1,95 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      15.05.2020
+ *
+ *
+ *@description  emailDispatcher
+ *
+ *
+ *@changelog    15.05.2020 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<!-- Email Dispatcher -->
+<template>
+
+    <lightning-card  title="Anhänge auswählen" icon-name="standard:file">
+
+        <lightning-spinner if:true={showSpinner} alternative-text="Loading" size="medium"
+                           variant="brand"></lightning-spinner>
+
+        <p class="slds-p-horizontal_small slds-m-bottom_medium slds-m-top_large">
+            <template if:true={initialized}>
+                <template if:true={displayWarning}>
+                    <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning" role="alert">
+                        <span class="slds-assistive-text">warning</span>
+                        <span class="slds-icon_container slds-icon-utility-warning slds-m-right_x-small" title="Description of icon when needed">
+                        <lightning-icon icon-name="utility:warning" alternative-text="Warning!" variant="warning"></lightning-icon>
+                    </span>
+                        <h2>
+                            {displayText}
+                        </h2>
+                    </div>
+                </template>
+                <template if:false={noData}>
+                    <div class="slds-scrollable_y" style="height:30rem">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_fixed-layout" aria-hidden="true">
+                            <thead>
+                            <tr class="slds-line-height_reset">
+                                <th scope="col" style="width:3.25rem">
+
+                                </th>
+                                <th class="" scope="col" style="width:80%">
+                                    <div class="slds-truncate" title="Name">Name</div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Typ">Typ</div>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <template for:each={response.data} for:item="record" for:index="rowIndex">
+
+                                <tr class="slds-hint-parent" key={record.Id}>
+                                    <td>
+                                        <lightning-input data-item={rowIndex}
+                                                         type="checkbox"
+                                                         label="Checkbox"
+                                                         variant="label-hidden"
+                                                         checked={record.isSelected}
+                                                         onchange={handleOnChange}
+                                        ></lightning-input>
+                                    </td>
+                                    <td data-label="Name">
+
+                                        <lightning-formatted-text key={rowIndex} class=slds-truncate title={record.ContentDocument.Title}
+                                                                  value={record.ContentDocument.Title}></lightning-formatted-text>
+
+                                    </td>
+                                    <td data-label="Name">
+
+                                        <lightning-formatted-text key={rowIndex} class=slds-truncate title={record.ContentDocument.FileExtension}
+                                                                  value={record.ContentDocument.FileExtension}></lightning-formatted-text>
+
+                                    </td>
+
+                                </tr>
+                            </template>
+
+                            </tbody>
+                        </table>
+                        <template if:true={noData}>
+                            <div class="slds-align--absolute-center slds-m-around--large"> Es sind keine Datensätze zur Anzeige
+                                vorhanden.
+                            </div>
+                        </template>
+                    </div>
+                </template>
+            </template>
+
+        </p>
+    </lightning-card>
+</template>

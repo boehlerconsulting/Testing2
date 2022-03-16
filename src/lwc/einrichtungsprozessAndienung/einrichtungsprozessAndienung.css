@@ -1,0 +1,16 @@
+/**
+ *@author       Mats Böhler
+ *@created      10.05.2021
+ *
+ *
+ *@description  einrichtungsprozessAndienung.css
+ *
+ *
+ *@changelog    10.05.2021 Mats Böhler - Created
+ *              
+ * 
+ */
+.slds-modal__content{
+    height : 95vh;
+    background: white;
+}

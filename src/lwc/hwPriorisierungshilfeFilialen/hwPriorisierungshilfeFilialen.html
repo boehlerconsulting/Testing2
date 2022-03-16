@@ -1,0 +1,97 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      15.10.2019
+ *@version      1.0
+ *@since        45.0
+ *
+ *
+ *@description  hwPriorisierungshilfeFilialen
+ *
+ *
+ *@changelog    15.10.2019 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<!-- hwPriorisierungshilfeFilialen -->
+<template>
+    <div class=slds-p-around_small></div>
+    <lightning-card title={titel} icon-name={iconName} > <br/>
+
+        <lightning-spinner if:true={showSpinner} alternative-text="Loading" size="medium"
+                           variant="brand"></lightning-spinner>
+
+        <div style="width: auto;">
+            <lightning-layout >
+                <lightning-layout-item padding="around-small" size=2>
+                    <div class="slds-text-align_left slds-m-bottom_medium">
+
+                        <lightning-input
+                                name="NL Brief"
+                                label="Niederlassung Brief"
+                                type="search"
+                                value={nlBrief}
+                                onchange={handleOnChangeNlBrief}
+                        ></lightning-input>
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+            <template if:true={initialized}>
+                <c-hw-lightning-datatable
+                        table-data={data}
+                        table-columns={columns}
+                        picklist-value={defaultFilter}
+                        show-action-column=true
+                        sort-by={sortBy}
+                        sort-direction={sortDirection}
+                        onshowtasks={handleShowTasks}
+                >
+                </c-hw-lightning-datatable>
+            </template>
+
+        </div>
+    </lightning-card>
+
+    <template if:true={showModal}>
+
+        <section role="dialog"
+                 tabindex="-1"
+                 aria-label="Ausgewählte Aufgaben erledigen"
+                 aria-modal="true"
+                 aria-describedby="modal-content-id-1"
+                 class="slds-modal slds-fade-in-open slds-modal_large slds-border_top">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header slds-modal__header_empty">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                            title="Close" onclick={handleHideModal}>
+                        <lightning-icon icon-name="utility:close" size="medium" variant="inverse">
+                        </lightning-icon>
+                        <span class="slds-assistive-text">Schließen</span>
+                    </button>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium slds-border_top slds-border_bottom slds-border_left slds-border_right" id="modal-content-id-1">
+                    <div class="slds-m-top_large">
+                        <c-hw-priorisierungshilfe
+                                s-object-type="Task"
+                                title="Priorisierte Aufgaben"
+                                record-id={filialId}
+                                sort-by="KennzifferPrioritaet__c"
+                                sort-direction="desc"
+                                aufgabenstatus-value="offen"
+                                version="ohne Akquise"
+                                is-filiale={returnBooleanTrue}
+                                icon-name="standard:task"
+                                nl-brief={nlBrief}
+                        >
+
+                        </c-hw-priorisierungshilfe>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+
+    </template>
+</template>

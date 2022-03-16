@@ -1,0 +1,219 @@
+<!--
+ - @author      Stefan Richter (stefan.richter@hundw.de)
+ -              H+W CONSULT GmbH
+ -              Bahnhofstr. 3
+ -              21244 Buchholz i. d. Nordheide
+ -              Germany
+ -              https://www.hundw.de
+ -
+ - @description class for <insert-description-here>
+ -
+ - TIMELINE
+ - 06.01.21      Stefan Richter  Initial release.
+ -->
+<apex:page id="AnschreibenCSG" renderAs="pdf"
+           controller="AnschreibenCSGCtrl"
+           showHeader="false"
+           applyHtmlTag="false"
+           applyBodyTag="false"
+           action="{!dmlExecHook}">
+    <html>
+    <head>
+        <style> 
+            @page {
+                size: A4;
+                margin-right: 1.1cm;
+                margin-top: 0.8cm;
+                margin-left: 0.0cm;
+                margin-bottom: 0cm;
+                position: running(logo) !important;
+            }
+
+            body {
+                font-size: 10pt;
+                line-height: 120%;
+                margin-left: 2.5cm;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+
+            .logos {
+                position: absolute;
+                right: 0px;
+                text-align: right;
+            }
+
+            .recipient {
+                margin-top: 0.5cm;
+                margin-bottom: 1cm;
+            }
+
+            .tags {
+                color: #696969;
+                font-size: 7pt;
+            }
+
+            .subtags {
+                position: absolute;
+                top: 275px;
+                left: 35px;
+                width: 48px;
+                text-align: right;
+            }
+
+            .subject {
+                font-weight: bold;
+            }
+
+            .footer {
+                position: absolute;
+                vertical-align: top;
+                top: 950px;
+                margin-left: 2.5cm;
+            }
+
+            .footer table tr td {
+                vertical-align: top;
+                text-align: left;
+                padding-right: 40px;
+                margin-right: 10px;
+                line-height: 110%;
+            }
+
+            .foldmarks {
+                position: absolute;
+                top: 275px;
+                width: 48px;
+                left: -20px;
+                text-align: right;
+            }
+
+            .debug {
+                background: #555;
+                border: #AA5555 4px solid;
+                font-weight: bold;
+                margin: 6px;
+                padding: 6px;
+                color: #97DD98;
+            }
+        </style>
+    </head>
+
+    <body>
+    <div class="main">
+        <div id="header">
+            <div id="logos" class="logos">
+                <div style="margin-bottom: 0.4cm">
+                    <img src="{!postLogo}"
+                         width="200"/>
+                </div>
+                <div>
+                    <img src="{!dHLLogo}"
+                         width="200"/>
+                </div>
+            </div>
+            <div id="sender">
+                Deutsche Post AG, NL MKV<br/>
+                Vertriebsleitung {!currentLead.VL_Name__c}<br/>
+                {!vkUser.FirstName}, {!vkUser.LastName}, VK<br/>
+            </div>
+            <div id="recipient" class="recipient">
+                <div class="tags">DP AG · NL MKV · VL {!currentLead.VL_Name__c} · {!senderAddress.ShippingStreet} · {!senderAddress.ShippingPostalCode} {!senderAddress.ShippingCity}</div>
+                <br/><br/><br/>
+                CSG GmbH<br/>
+                {!ansprechpartnerCSG}<br/>
+                {!bezeichnungCSG}<br/>
+                {!strasseCSG}<br/>
+                {!postleitzahlCSG} {!ortCSG}<br/>
+                <br/>
+            </div>
+        </div>
+        <div id="subhead">
+            <br/><br/>
+            <br/><br/>
+            {!vkUser.Phone}<br/>
+            {!vkUser.Email}<br/><br/>
+            <apex:outputText value="{0, date, dd.MM.yyyy}">
+                <apex:param value="{!NOW()}" />
+            </apex:outputText><br/>
+            1 von 1<br/><br/>
+            <div id="subject" class="subject">Übersendung Mietverträge DHL Packstation zur Verwaltung und Ablage
+            </div>
+            <div id="subtags" class="tags subtags">
+                Ihr Zeichen<br/>
+                Unser<br/>
+                Zeichen<br/><br/>
+                Telefon<br/>
+                E-Mail<br/><br/>
+                Datum<br/>
+                Seite<br/><br/>
+                Betreff<br/>
+            </div>
+        </div>
+        <div id="maintext">
+            <br/><br/><br/><br/>
+            Guten Tag,<br />
+            anbei erhalten Sie___Mietverträge zur Verwaltung und Ablage.<br />
+            Mit freundlichen Grüßen<br /><br /><br />
+            VL {!currentLead.VL_Name__c}
+        </div>
+
+    </div>
+    <div id="footer" class="footer">
+        <table class="tags">
+            <tr>
+                <td style="font-weight: bold;">
+                Deutsche Post DHL<br />
+                Group
+                </td>
+                <td>
+                Hausadresse<br />
+                Charles-de-Gaulle-Str. 20<br />
+                53113 Bonn<br />
+                <br />
+                www.deutschepost.de
+                </td>
+                <td>
+                Kontoverbindung<br />
+                Deutsche Post AG<br />
+                Postbank Köln<br />
+                IBAN:<br />
+                DE49 3701 0050<br />
+                000 0165 03<br />
+                SWIFT BIC<br />
+                PBNKDEFF
+                </td>
+                <td>
+                Vorstand<br />
+                Dr. Frank Appel<br />
+                Vorsitzender<br />
+                Ken Allen<br />
+                Oscar de Bok<br />
+                Melanie Kreis<br />
+                Dr. Tobias Meyer<br />
+                Dr. Thomas Ogilvie<br />
+                John Pearson<br />
+                Tim Scharwath
+                </td>
+                <td>
+                Vorsitzender des<br />
+                Aufsichtsrats<br />
+                Dr. Nikolaus von<br />
+                Bomhard<br />
+                Sitz Bonn<br />
+                Registergericht Bonn<br />
+                HRB 6792<br />
+                <br />
+                USt-ldNr.: DE 1698<br />
+                38187
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="foldmarks" class="foldmarks">
+        <div style="margin-bottom: 5.8cm;">____</div>
+        <div style="margin-bottom: 3.9cm;">__</div>
+        <div>____</div>
+    </div>
+    </body>
+    </html>
+</apex:page>
