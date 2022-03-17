@@ -334,54 +334,59 @@ public without sharing class HW_Document_C {
 	private List<String> getAenderungsgrund ( Boolean isExistingMAEF ) {
 		List<String> aenderungsgrunds = new List<String>();
 		if ( isExistingMAEF ) {
-			if ( getTempMAEFContract().ErsatzloseSchliessungMitAblaufDes__c != null ) {
-				aenderungsgrunds.add( 'Ersatzlose Schliessung' );
-				aenderungsgrunds.add( getTempMAEFContract().ErsatzloseSchliessungMitAblaufDes__c.format() );
-			}
-			else if ( getTempMAEFContract().MAEF_Voruebergehende_Schliessung_ab__c != null ) {
-				aenderungsgrunds.add( 'Voruebergehende ganztaegige Schliessung' );
-				aenderungsgrunds.add( getTempMAEFContract().MAEF_Voruebergehende_Schliessung_ab__c.format() );
-			}
-			else if ( getTempMAEFContract().AenderungDerOeffnungszeitenAb__c != null
-					&& getTempMAEFContract().sonstigeAenderungAb__c != null ) {
-				aenderungsgrunds.add( 'Aenderung der Oeffnungszeiten und Sonstiges' );
-				aenderungsgrunds.add( getTempMAEFContract().AenderungDerOeffnungszeitenAb__c.format()
-						+ ' und ' + getTempMAEFContract().sonstigeAenderungAb__c.format() );
-			}
-			else if ( getTempMAEFContract().AenderungDerOeffnungszeitenAb__c != null
-					&& getTempMAEFContract().sonstigeAenderungAb__c == null ) {
-				aenderungsgrunds.add( 'Aenderung der Oeffnungszeiten' );
-				aenderungsgrunds.add( getTempMAEFContract().AenderungDerOeffnungszeitenAb__c.format() );
-			}
-			else if ( getTempMAEFContract().AenderungDerOeffnungszeitenAb__c == null
-					&& getTempMAEFContract().sonstigeAenderungAb__c != null ) {
-				aenderungsgrunds.add( 'Sonstiges' );
-				aenderungsgrunds.add( getTempMAEFContract().sonstigeAenderungAb__c.format() );
-			}
-			else if ( getTempMAEFContract().DatumDerSchliessung__c != null
-					&& getTempMAEFContract().DatumderEroeffnung__c != null ) {
-				aenderungsgrunds.add( 'Schliessung und Eroeffnung' );
-				aenderungsgrunds.add( getTempMAEFContract().DatumDerSchliessung__c.format()
-						+ ' und ' + getTempMAEFContract().DatumderEroeffnung__c.format() );
-			}
-			else if ( getTempMAEFContract().DatumDerSchliessung__c == null
-					&& getTempMAEFContract().DatumderEroeffnung__c != null ) {
-				aenderungsgrunds.add( 'Eroeffnung' );
-				aenderungsgrunds.add( getTempMAEFContract().DatumderEroeffnung__c.format() );
-			}
-			else if ( getTempMAEFContract().DatumDerSchliessung__c != null
-					&& getTempMAEFContract().DatumderEroeffnung__c == null ) {
-				aenderungsgrunds.add( 'Schliessung' );
-				aenderungsgrunds.add( getTempMAEFContract().DatumDerSchliessung__c.format() );
-			}
-			else{
-				aenderungsgrunds.add( 'Keine Aenderung' );
-				aenderungsgrunds.add( Date.today().format() );
-			}
+			getAenderungsgrundExistingMaef( aenderungsgrunds );
 		}
 		else {
 			aenderungsgrunds.add( 'Eroeffnung' );
 			aenderungsgrunds.add( getAccount().Eroeffnungsdatum__c.format() );
+		}
+		return aenderungsgrunds;
+	}
+	
+	private List<String> getAenderungsgrundExistingMaef ( List<String> aenderungsgrunds ) {
+		if ( getTempMAEFContract().ErsatzloseSchliessungMitAblaufDes__c != null ) {
+			aenderungsgrunds.add( 'Ersatzlose Schliessung' );
+			aenderungsgrunds.add( getTempMAEFContract().ErsatzloseSchliessungMitAblaufDes__c.format() );
+		}
+		else if ( getTempMAEFContract().MAEF_Voruebergehende_Schliessung_ab__c != null ) {
+			aenderungsgrunds.add( 'Voruebergehende ganztaegige Schliessung' );
+			aenderungsgrunds.add( getTempMAEFContract().MAEF_Voruebergehende_Schliessung_ab__c.format() );
+		}
+		else if ( getTempMAEFContract().AenderungDerOeffnungszeitenAb__c != null
+				&& getTempMAEFContract().sonstigeAenderungAb__c != null ) {
+			aenderungsgrunds.add( 'Aenderung der Oeffnungszeiten und Sonstiges' );
+			aenderungsgrunds.add( getTempMAEFContract().AenderungDerOeffnungszeitenAb__c.format()
+					+ ' und ' + getTempMAEFContract().sonstigeAenderungAb__c.format() );
+		}
+		else if ( getTempMAEFContract().AenderungDerOeffnungszeitenAb__c != null
+				&& getTempMAEFContract().sonstigeAenderungAb__c == null ) {
+			aenderungsgrunds.add( 'Aenderung der Oeffnungszeiten' );
+			aenderungsgrunds.add( getTempMAEFContract().AenderungDerOeffnungszeitenAb__c.format() );
+		}
+		else if ( getTempMAEFContract().AenderungDerOeffnungszeitenAb__c == null
+				&& getTempMAEFContract().sonstigeAenderungAb__c != null ) {
+			aenderungsgrunds.add( 'Sonstiges' );
+			aenderungsgrunds.add( getTempMAEFContract().sonstigeAenderungAb__c.format() );
+		}
+		else if ( getTempMAEFContract().DatumDerSchliessung__c != null
+				&& getTempMAEFContract().DatumderEroeffnung__c != null ) {
+			aenderungsgrunds.add( 'Schliessung und Eroeffnung' );
+			aenderungsgrunds.add( getTempMAEFContract().DatumDerSchliessung__c.format()
+					+ ' und ' + getTempMAEFContract().DatumderEroeffnung__c.format() );
+		}
+		else if ( getTempMAEFContract().DatumDerSchliessung__c == null
+				&& getTempMAEFContract().DatumderEroeffnung__c != null ) {
+			aenderungsgrunds.add( 'Eroeffnung' );
+			aenderungsgrunds.add( getTempMAEFContract().DatumderEroeffnung__c.format() );
+		}
+		else if ( getTempMAEFContract().DatumDerSchliessung__c != null
+				&& getTempMAEFContract().DatumderEroeffnung__c == null ) {
+			aenderungsgrunds.add( 'Schliessung' );
+			aenderungsgrunds.add( getTempMAEFContract().DatumDerSchliessung__c.format() );
+		}
+		else {
+			aenderungsgrunds.add( 'Keine Aenderung' );
+			aenderungsgrunds.add( Date.today().format() );
 		}
 		return aenderungsgrunds;
 	}
@@ -475,7 +480,7 @@ public without sharing class HW_Document_C {
 	private void setTemporaryData () {
 		if ( getAccount().MAEF_Zwischenspeicher__c != null ) {
 			HW_Stammdatensammler_LC.HW_MaefWrapper hwMaefWrapper =
-					( HW_Stammdatensammler_LC.HW_MaefWrapper ) JSON.deserialize( getAccount().MAEF_Zwischenspeicher__c,
+					(HW_Stammdatensammler_LC.HW_MaefWrapper) JSON.deserialize( getAccount().MAEF_Zwischenspeicher__c,
 							HW_Stammdatensammler_LC.HW_MaefWrapper.class );
 			
 			this.iv_tempMAEFaccount = hwMaefWrapper.account;
@@ -569,16 +574,16 @@ public without sharing class HW_Document_C {
 			request.contractId = account.Contracts.size() > 0
 					? account.Contracts[ 0 ].Id
 					: null;
-			EmailSettingService.getInstance().requests.add(request);
+			EmailSettingService.getInstance().requests.add( request );
 			List<EmailVersand__c> emailDeliveries
 					= EmailSettingService.getInstance().createMessages().getEmailDispatcherServiceDeliveries();
 			for ( EmailVersand__c emailVersand : emailDeliveries ) {
 				if ( getDocumentDeveloperName() == 'MAEF_Beleg_Filiale_existiert' ) {
-					emailVersand.Email_Betreff__c = getMaefTitle(true);
+					emailVersand.Email_Betreff__c = getMaefTitle( true );
 				}
 			}
 			insert emailDeliveries;
-			return emailDeliveries[0].Id;
+			return emailDeliveries[ 0 ].Id;
 		}
 		return null;
 	}
@@ -941,21 +946,21 @@ public without sharing class HW_Document_C {
 		return contract;
 	}
 	
-	public String getBereich(){
+	public String getBereich () {
 		User currentUser = CurrentUser.getInstance().getUser();
-		return currentUser.Profile.Name.contains('myPM Vertrieb (V')
+		return currentUser.Profile.Name.contains( 'myPM Vertrieb (V' )
 				? currentUser.OrgE_DP__c
 				: getAccount().GL__r.Name;
 	}
 	
-	public String getStelle(){
+	public String getStelle () {
 		User currentUser = CurrentUser.getInstance().getUser();
-		return currentUser.Profile.Name.contains('myPM Vertrieb (V')
+		return currentUser.Profile.Name.contains( 'myPM Vertrieb (V' )
 				? currentUser.OrgE_DP__c
 				: 'ZG 3510';
 	}
 	
-	public String getPostfilialeDirekt(){
+	public String getPostfilialeDirekt () {
 		return getAccount().Postfilialnummer__c != null ? 'Ja' : '';
 	}
 	
