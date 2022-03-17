@@ -16,6 +16,7 @@ public without sharing class LoginHistoryCtrl {
 	private String lastSuccessfulLoginDateTimeString = '';
 	private String labelNumberOfFailedLogins = Label.LoginHistory_NumberOfFailedLogins;
 	private Integer numberOfFailedLogins = 0;
+	private List<LoginHistoryWrapper> loginHistories = new List<LoginHistoryWrapper>();
 	
 	@AuraEnabled
 	public static String loadData () {
@@ -25,32 +26,8 @@ public without sharing class LoginHistoryCtrl {
 	}
 	
 	private void load () {
-		List<LoginHistoryWrapper> loginHistories = new List<LoginHistoryWrapper>();
-		if ( Test.isRunningTest() ) {
-			loginHistories.add(
-					new LoginHistoryWrapper(
-							'Browser',
-							'Application',
-							'Success',
-							Datetime.now().addYears( -1 )
-					)
-			);
-		}
-		else {
-			for ( LoginHistory loginHistory : [
-					SELECT
-							Id,
-							LoginTime,
-							Application,
-							LoginType,
-							Status
-					FROM LoginHistory
-					WHERE UserId = :UserInfo.getUserId()
-					ORDER BY LoginTime
-			] ) {
-				loginHistories.add( new LoginHistoryWrapper( loginHistory.Application, loginHistory.LoginType, loginHistory.Status, loginHistory.LoginTime ) );
-			}
-		}
+		
+		loadLoginHistories();
 		Datetime currentLoginDateTime;
 		Datetime lastLoginDateTime;
 		for ( LoginHistoryWrapper loginHistory : loginHistories ) {
@@ -79,6 +56,34 @@ public without sharing class LoginHistoryCtrl {
 			}
 		}
 		lastSuccessfulLoginDateTimeString = lastLoginDateTime == null ? null : lastLoginDateTime.format( 'dd.MM.YYYY HH:mm:ss' );
+	}
+	
+	private void loadLoginHistories(){
+		if ( Test.isRunningTest() ) {
+			loginHistories.add(
+					new LoginHistoryWrapper(
+							'Browser',
+							'Application',
+							'Success',
+							Datetime.now().addYears( -1 )
+					)
+			);
+		}
+		else {
+			for ( LoginHistory loginHistory : [
+					SELECT
+							Id,
+							LoginTime,
+							Application,
+							LoginType,
+							Status
+					FROM LoginHistory
+					WHERE UserId = :UserInfo.getUserId()
+					ORDER BY LoginTime
+			] ) {
+				loginHistories.add( new LoginHistoryWrapper( loginHistory.Application, loginHistory.LoginType, loginHistory.Status, loginHistory.LoginTime ) );
+			}
+		}
 	}
 	
 	private class LoginHistoryWrapper {
