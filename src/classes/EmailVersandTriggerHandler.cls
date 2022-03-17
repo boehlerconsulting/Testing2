@@ -49,22 +49,26 @@ public without sharing class EmailVersandTriggerHandler extends TriggerHandler {
 		fnaeEmailVersands = new List<EmailVersand__c>();
 
 		for ( EmailVersand__c emailVersand : newEmails ) {
-			if ( emailVersand.Status__c == 'versendet'
-					&& emailVersand.Status__c != oldEmailsMap.get( emailVersand.Id ).Status__c ) {
-				
-				if ( emailVersand.Dokument__c == 'Packstation - Mietvertrag'
-						|| emailVersand.Dokument__c == 'Packstation - Einzelvertrag' ) {
-					vertragEmailVersands.add( emailVersand );
-				}
-				if ( emailVersand.Lead__c != null ) {
-					leadEmailVersands.add( emailVersand );
-				}
-				if ( emailVersand.Account__c != null ) {
-					accountEmailVersands.add( emailVersand );
-				}
-				if (emailVersand.Netzaenderung_FNAE__c != null ) {
-					fnaeEmailVersands.add(emailVersand);
-				}
+			sortEmail(emailVersand);
+		}
+	}
+	
+	private void sortEmail(EmailVersand__c emailVersand){
+		if ( emailVersand.Status__c == 'versendet'
+				&& emailVersand.Status__c != oldEmailsMap.get( emailVersand.Id ).Status__c ) {
+			
+			if ( emailVersand.Dokument__c == 'Packstation - Mietvertrag'
+					|| emailVersand.Dokument__c == 'Packstation - Einzelvertrag' ) {
+				vertragEmailVersands.add( emailVersand );
+			}
+			if ( emailVersand.Lead__c != null ) {
+				leadEmailVersands.add( emailVersand );
+			}
+			if ( emailVersand.Account__c != null ) {
+				accountEmailVersands.add( emailVersand );
+			}
+			if (emailVersand.Netzaenderung_FNAE__c != null ) {
+				fnaeEmailVersands.add(emailVersand);
 			}
 		}
 	}
