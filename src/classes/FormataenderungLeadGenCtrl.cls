@@ -138,7 +138,6 @@ public with sharing class FormataenderungLeadGenCtrl {
 		setFromAccount( contr, filialpartnerComplete, fnaeComplete );
 		setFromContract( contr, partnerContractComplete );
 		
-		contr.BemessungsartzBZORAZORAmitFDL__c = 'ZORA';
 		if ( fnaeComplete.Wunschformat__c == 'Partner-Filiale (OZ 79)' ) {
 			contr.Filialtyp__c = '79';
 			contr.Annahme_Express_Inter__c = 'Ja';
@@ -152,7 +151,6 @@ public with sharing class FormataenderungLeadGenCtrl {
 		if ( fnaeComplete.Wunschformat__c == 'Partner-Filiale (OZ 95)' ) {
 			contr.Filialtyp__c = '95';
 			contr.Annahme_Express_Inter__c = 'Ja';
-			contr.BemessungsartzBZORAZORAmitFDL__c = 'ZORA mit FDL';
 		}
 		
 		
@@ -194,7 +192,6 @@ public with sharing class FormataenderungLeadGenCtrl {
 		contr.PostfilialeDirekt__c = 'Ja';
 		contr.Zustellabrechnungsart__c = 'keine Zuordnung';
 		contr.Anlieferungssteuerung__c = 'Nein';
-		contr.AnzKassen__c = 1;
 		contr.AnzderneuenKassen__c = 1;
 		contr.KassenartderneuenKasse__c = 'ZORA-Kasse';
 		contr.ErstelldatumMAEF__c = Date.today();
@@ -222,7 +219,6 @@ public with sharing class FormataenderungLeadGenCtrl {
 			return;
 		}
 		contr.Kette1__c = filialpartnerComplete.Kette__c != null ? filialpartnerComplete.Kette__c : null;
-		contr.AStNrderFiliale__c = filialpartnerComplete.ASt_Nummer__c;
 		contr.Anz_Datenendgeraet_ZORA__c = filialpartnerComplete.Anzahl_Schalter__c;
 		contr.Name = filialpartnerComplete.ASt_Name__c;
 		contr.ShippingStreet = filialpartnerComplete.ShippingStreet;
@@ -391,7 +387,6 @@ public with sharing class FormataenderungLeadGenCtrl {
 		contr.AnzentgeltpflichtigerParkplaetze__c = partnerContractComplete.AnzentgeltpflichtigerParkplaetze__c;
 		contr.EntgeltfreieParkplaetze__c = partnerContractComplete.EntgeltfreieParkplaetze__c;
 		contr.Schrankevorhanden__c = partnerContractComplete.Schrankevorhanden__c;
-		contr.ZusaetzlicheAngabenParkmoeglichkeiten__c = partnerContractComplete.ZusaetzlicheAngabenParkmoeglichkeiten__c;
 		contr.Tagesstempel1__c = partnerContractComplete.Tagesstempel1__c;
 		contr.Postfachschrank__c = partnerContractComplete.Postfachschrank__c;
 		contr.PartnerILN__c = partnerContractComplete.PartnerILN__c;
@@ -415,7 +410,6 @@ public with sharing class FormataenderungLeadGenCtrl {
 					Name_Ansprechpartner__c = filialpartnerComplete.Betreiber__c,
 					Weitere_Telefonnummer__c = filialpartnerComplete.Telefon_Vertragspartner__c,
 					Company = filialpartnerComplete.Name,
-					//LastName = filialpartnerComplete.Name,
 					FirstName = filialpartnerComplete.X1_Ansprechpartner_Vorname__c,
 					VL__c = HW_SharedVertragsUtils.getUserOrgeDpDummyAccountId( fnae.VGL__c ),
 					City = filialpartnerComplete.ShippingCity,

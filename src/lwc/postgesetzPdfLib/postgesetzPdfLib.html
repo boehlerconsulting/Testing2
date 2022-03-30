@@ -1,0 +1,27 @@
+<!--
+/**
+ *@author       Mats Böhler
+ *@created      22.03.2022
+ *
+ *
+ *@description  postgesetzPdfLib
+ *
+ *
+ *@changelog    22.03.2022 Mats Böhler - Created
+ *              
+ * 
+ */
+ -->
+
+<!-- Postgesetz Pdf Lib -->
+<template>
+    <template if:true={isInitialized}>
+        <c-pdf-lib-document-creator
+                record-id={pdfLibRecordId}
+                relate-to-record-field-name={relateToRecordFieldName}
+                source-document-index-name="Postgesetz"
+                success-message="Dokument erfolgreich erzeugt!"
+                file-name="Postgesetz"
+        ></c-pdf-lib-document-creator>
+    </template>
+</template>

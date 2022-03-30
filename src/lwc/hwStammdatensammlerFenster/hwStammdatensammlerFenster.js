@@ -81,7 +81,7 @@ export default class HW_StammdatensammlerFenster extends LightningElement {
     }
 
     get isLocked(){
-        return this.screen.isLocked || this.isFactsLocked;
+        return !this.isMAEFOnly && (this.screen.isLocked || this.isFactsLocked);
     }
 
     get isFactsLocked(){

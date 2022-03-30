@@ -82,6 +82,7 @@ public with sharing class BeauftragungTvMCtrl {
 				emailVersand.Email_Betreff__c += ', PODID ' + lead.PODID_Lookup__r.Wert__c;
 			}
 			emailVersand.Email_Nachricht__c = getNachricht(emailVersand.Email_Nachricht__c);
+			emailVersand.Anhang__c = true;
 		}
 		insert emailDeliveries;
 		createContentDocumentLinks( emailDeliveries[0].Id );

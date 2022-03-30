@@ -1082,7 +1082,6 @@ public without sharing class LeadTriggerHandler extends TriggerHandler {
 						Id,
 						Profile.Name
 				FROM User
-				WHERE Id IN :userIds
 		] ) {
 			
 			profileNameByUserIds.put( user.Id, user.Profile.Name );

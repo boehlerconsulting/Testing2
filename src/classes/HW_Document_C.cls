@@ -581,6 +581,7 @@ public without sharing class HW_Document_C {
 				if ( getDocumentDeveloperName() == 'MAEF_Beleg_Filiale_existiert' ) {
 					emailVersand.Email_Betreff__c = getMaefTitle( true );
 				}
+				emailVersand.Anhang__c = true;
 			}
 			insert emailDeliveries;
 			return emailDeliveries[ 0 ].Id;

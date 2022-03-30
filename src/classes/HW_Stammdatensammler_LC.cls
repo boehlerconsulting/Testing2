@@ -853,7 +853,7 @@ public without sharing class HW_Stammdatensammler_LC {
 		lo_Account.ASt_Name__c = filialpartnerComplete.ASt_Name__c;
 		lo_Account.Ortsteil_Postanschrift__c = filialpartnerComplete.Ortsteil_Postanschrift__c;
 		lo_Account.Filiale_Hausnummer__c = filialpartnerComplete.Filiale_Hausnummer__c;
-		lo_Account.Phone = filialpartnerComplete.Telefon__c;
+		lo_Account.Phone = filialpartnerComplete.Phone;
 		lo_Account.Fax = filialpartnerComplete.Fax;
 		lo_Account.Vertriebssegment_SDS__c = filialpartnerComplete.Vertriebssegment__c;
 		lo_Account.Juristischer_Name_Gewerbeanmeldung_1__c = filialpartnerComplete.Juristischer_Name_Gewerbeanmeldung_1__c;

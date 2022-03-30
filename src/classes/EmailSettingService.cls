@@ -41,6 +41,7 @@ public without sharing class EmailSettingService {
 				EmailSettingService.getInstance().createMessages().callEmailDispatcherService();
 			}
 		}
+		requests = new List<EmailSettingService.Request>();
 	}
 	
 	@TestVisible

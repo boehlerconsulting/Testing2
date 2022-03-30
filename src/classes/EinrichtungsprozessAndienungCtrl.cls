@@ -112,6 +112,9 @@ public with sharing class EinrichtungsprozessAndienungCtrl extends Einrichtungsp
 				emailVersand.Email_Betreff__c = 'Änderung ' + emailVersand.Email_Betreff__c;
 			}
 		}
+		for ( EmailVersand__c emailVersand : emailDeliveries ) {
+			emailVersand.Anhang__c = true;
+		}
 		insert emailDeliveries;
 		return emailDeliveries[0].Id;
 	}
