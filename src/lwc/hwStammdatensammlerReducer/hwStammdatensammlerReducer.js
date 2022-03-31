@@ -568,9 +568,6 @@ function handleSaveSteps(state, caller) {
             successMessage: "Success"
         })
         .execute()
-        .then((data) => {
-
-        })
         .catch((errorMessage) => {
             Logger.logError("Error", {data: errorMessage})();
         });
