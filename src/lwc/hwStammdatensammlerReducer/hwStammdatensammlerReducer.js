@@ -640,20 +640,7 @@ function checkFieldVisibility(state) {
                 field.hide = true;
             }
         }
-
-        let isValid = false;
-        if (field.hide) {
-            isValid = true;
-        } else if (!field.hide && field.value) {
-            isValid = true;
-        } else if (!field.Erforderlich) {
-            isValid = true;
-        } else if (field.isCheckbox) {
-            isValid = true;
-        } else if (field.isFormula) {
-            isValid = true;
-        }
-        setButtonVisibility(state, field, isValid);
+        setButtonVisibility(state, field, getFieldValidity(field));
         if (originalFieldHideValue !== field.hide) {
             setSectionVisibility(state, field);
         }
@@ -716,21 +703,24 @@ function checkOeffnungszeitVisibility(state) {
         if (!state.isVorgaengerfilialePresent && field.VorgaengerfilialeVorhanden) {
             field.hide = true;
         }
-
-        let isValid = false;
-        if (field.hide) {
-            isValid = true;
-        } else if (!field.hide && field.value) {
-            isValid = true;
-        } else if (!field.Erforderlich) {
-            isValid = true;
-        } else if (field.isCheckbox) {
-            isValid = true;
-        } else if (field.isFormula) {
-            isValid = true;
-        }
-        setButtonVisibility(state, field, isValid);
+        setButtonVisibility(state, field, getFieldValidity(field));
     }
+}
+
+function getFieldValidity(field){
+    let isValid = false;
+    if (field.hide) {
+        isValid = true;
+    } else if (!field.hide && field.value) {
+        isValid = true;
+    } else if (!field.Erforderlich) {
+        isValid = true;
+    } else if (field.isCheckbox) {
+        isValid = true;
+    } else if (field.isFormula) {
+        isValid = true;
+    }
+    return isValid;
 }
 
 function checkButtonVisibility(state) {
