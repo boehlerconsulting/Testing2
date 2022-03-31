@@ -186,21 +186,21 @@ function reduceSetStepDone(state, action, caller) {
 }
 
 function reduceSetButtonDisable(action, state, caller) {
-    let button = action.button;
-    state.sentDocuments.add(button.iv_VisualforceName);
-    state.screens[button.screenPosition].buttons[button.position] = {
-        ...state.screens[button.screenPosition].buttons[button.position],
+    let actionButton = action.button;
+    state.sentDocuments.add(actionButton.iv_VisualforceName);
+    state.screens[actionButton.screenPosition].buttons[actionButton.position] = {
+        ...state.screens[actionButton.screenPosition].buttons[actionButton.position],
         isDisabled: true,
         allRequiredDocumentsSent: true,
         lv_AllFieldsValid: true,
         isDocumentSent: true
     };
-    state.screens[button.screenPosition] = {
-        ...state.screens[button.screenPosition]
+    state.screens[actionButton.screenPosition] = {
+        ...state.screens[actionButton.screenPosition]
     };
     let allDocumentsSent = true;
-    for (let i = 0; i < state.screens[button.screenPosition].buttons.length; i++) {
-        let screenButton = state.screens[button.screenPosition].buttons[i];
+    for (let i = 0; i < state.screens[actionButton.screenPosition].buttons.length; i++) {
+        let screenButton = state.screens[actionButton.screenPosition].buttons[i];
         if (!screenButton.iv_isPreview) {
             if (screenButton.isHidden) {
                 continue;
@@ -214,25 +214,25 @@ function reduceSetButtonDisable(action, state, caller) {
         for (let j = 0; j < state.screens[i].buttons.length; j++) {
             let button = state.screens[i].buttons[j];
             if (!button.iv_isPreview
-                && button.iv_VisualforceName !== button.iv_VisualforceName) {
+                && actionButton.iv_VisualforceName !== button.iv_VisualforceName){
                 button.allRequiredDocumentsSent = true;
                 for (let k = 0; k < button.pflichtdokumente.length; k++) {
                     let pflichtdokument = button.pflichtdokumente[k];
-                    if (!state.sentDocuments.has(pflichtdokument.Pflichtdokument__r.Visualforce_Page__c)) {
+                    if (!state.sentDocuments.has(pflichtdokument.Pflichtdokument__r.Visualforce_Page__c)){
                         button.allRequiredDocumentsSent = false;
                     }
                 }
-                button.isDisabled = !button.lv_AllFieldsValid || !button.allRequiredDocumentsSent;
+                button.isDisabled = ! button.lv_AllFieldsValid || ! button.allRequiredDocumentsSent;
             }
         }
     }
     if (allDocumentsSent) {
-        state.screens[button.screenPosition] = {
-            ...state.screens[button.screenPosition],
+        state.screens[actionButton.screenPosition] = {
+            ...state.screens[actionButton.screenPosition],
             isLocked: true
         };
-        state.steps[button.screenPosition] = {
-            ...state.steps[button.screenPosition],
+        state.steps[actionButton.screenPosition] = {
+            ...state.steps[actionButton.screenPosition],
             isDone: false,
             isActive: false,
             isOpen: false,
@@ -241,14 +241,14 @@ function reduceSetButtonDisable(action, state, caller) {
             iv_Status: 'doneAndActive',
             iv_IsLocked: true
         };
-        state.screens[button.screenPosition] = {
-            ...state.screens[button.screenPosition],
+        state.screens[actionButton.screenPosition] = {
+            ...state.screens[actionButton.screenPosition],
             isDone: true
         };
 
         for (let i = 0; i < state.steps.length; i++) {
             let step = state.steps[i];
-            if (step.isDoneAndActive && i !== button.screenPosition) {
+            if (step.isDoneAndActive && i !== actionButton.screenPosition) {
                 step.isDoneAndActive = false;
                 step.isActive = true;
                 step.iv_Status = 'doneAndActive';
@@ -257,7 +257,7 @@ function reduceSetButtonDisable(action, state, caller) {
 
         handleSaveSteps(state, caller);
     }
-    saveObject(setDocumentSentState(button, state), caller, state, action);
+    saveObject(setDocumentSentState(actionButton, state), caller, state, action);
 }
 
 function setDocumentSentState(button, state) {
