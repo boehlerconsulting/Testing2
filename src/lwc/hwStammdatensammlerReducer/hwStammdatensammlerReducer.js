@@ -59,11 +59,11 @@ const reduce = (state, action, caller) => {
     }
 };
 
-function reduceSetActiveSectionsEmpty( screenIndex, state ) {
+function reduceSetActiveSectionsEmpty(screenIndex, state) {
     state.screens.find(x => x.key === screenIndex).activeSections = [];
 }
 
-function reduceSetActiveSectionsAll( screenIndex, state ) {
+function reduceSetActiveSectionsAll(screenIndex, state) {
 
     let allSections = state.screens.find(x => x.key === screenIndex).sections;
     let activeSections = [];
@@ -149,7 +149,7 @@ function reduceSetFieldValue(action, state, caller) {
         state.isVorgaengerfilialePresent = state.contract[action.field.Feldname];
         checkFieldVisibility(state);
     }
-    if (action.field.Feldname === 'Anzahl_Schalter_ZORA_Geraete__c'){
+    if (action.field.Feldname === 'Anzahl_Schalter_ZORA_Geraete__c') {
         sObject.AnzahlSchalter__c = action.value;
     }
     setFieldValues(state, action);
@@ -219,15 +219,15 @@ function reduceSetButtonDisable(action, state, caller) {
         for (let j = 0; j < state.screens[i].buttons.length; j++) {
             let button = state.screens[i].buttons[j];
             if (!button.iv_isPreview
-                && button.iv_VisualforceName !== button.iv_VisualforceName){
+                && button.iv_VisualforceName !== button.iv_VisualforceName) {
                 button.allRequiredDocumentsSent = true;
                 for (let k = 0; k < button.pflichtdokumente.length; k++) {
                     let pflichtdokument = button.pflichtdokumente[k];
-                    if (!state.sentDocuments.has(pflichtdokument.Pflichtdokument__r.Visualforce_Page__c)){
+                    if (!state.sentDocuments.has(pflichtdokument.Pflichtdokument__r.Visualforce_Page__c)) {
                         button.allRequiredDocumentsSent = false;
                     }
                 }
-                button.isDisabled = ! button.lv_AllFieldsValid || ! button.allRequiredDocumentsSent;
+                button.isDisabled = !button.lv_AllFieldsValid || !button.allRequiredDocumentsSent;
             }
         }
     }
@@ -262,9 +262,11 @@ function reduceSetButtonDisable(action, state, caller) {
 
         handleSaveSteps(state, caller);
     }
+    saveObject(setDocumentSentState(button, state), caller, state, action);
+}
 
+function setDocumentSentState(button, state) {
     let sObject;
-
     switch (button.iv_VisualforceName) {
         case "HW_Postbankanfrage":
             state.object["Postbankanfrage_versendet__c"] = true;
@@ -298,7 +300,7 @@ function reduceSetButtonDisable(action, state, caller) {
         default:
             break;
     }
-    saveObject(sObject, caller, state, action);
+    return sObject;
 }
 
 function reduceSetOeffnungszeiten(state, action, caller) {
@@ -437,10 +439,9 @@ function reduceSetMaefUrl(state, caller, action) {
                 ...state.screens[0],
 
             };
-            if (action.button.iv_Label !== 'MAEF Beleg versenden'){
+            if (action.button.iv_Label !== 'MAEF Beleg versenden') {
                 window.open(url, '_blank');
-            }
-            else{
+            } else {
                 caller.closeModal();
                 caller.showToast('Der MAEF Beleg wurde erfolgreich versendet.');
             }
@@ -607,7 +608,7 @@ function checkFieldVisibility(state) {
 
         field.hide = false;
 
-        if(!state.contract.Formataenderung__c) {
+        if (!state.contract.Formataenderung__c) {
             if (state.isFiliale84 && !field.OZ_84) {
                 field.hide = true;
             }
@@ -751,7 +752,7 @@ function checkButtonVisibility(state) {
             };
         }
     }
-    if(state.screens.length>=4) {
+    if (state.screens.length >= 4) {
         for (let i = 0; i < state.screens[4].buttons.length; i++) {
 
             let button = state.screens[4].buttons[i];
@@ -773,7 +774,7 @@ function checkButtonVisibility(state) {
 }
 
 function setButtonVisibility(state, field, isValid) {
-    for( let x = 0; x < state.screens.length; x++){
+    for (let x = 0; x < state.screens.length; x++) {
         for (let i = 0; i < state.screens[x].buttons.length; i++) {
 
             let button = state.screens[x].buttons[i];
@@ -789,14 +790,14 @@ function setButtonVisibility(state, field, isValid) {
                         button.lv_AllFieldsValid = false;
                     }
                 }
-                button.isDisabled = ! button.lv_AllFieldsValid || ! button.allRequiredDocumentsSent;
+                button.isDisabled = !button.lv_AllFieldsValid || !button.allRequiredDocumentsSent;
                 forceButtonRerender(state);
             }
         }
     }
 }
 
-function forceButtonRerender(state){
+function forceButtonRerender(state) {
     for (let i = 0; i < state.screens.length; i++) {
         for (let j = 0; j < state.screens[i].buttons.length; j++) {
             state.screens[i].buttons[j] = {
@@ -848,7 +849,7 @@ function saveObject(sObject, caller, state, action) {
 
         state.apexRequests.unshift(apexRequest);
 
-        if (new hwRequestEvaluator().isExecuting){
+        if (new hwRequestEvaluator().isExecuting) {
             return;
         }
         new hwRequestEvaluator().isExecuting = true;
@@ -858,8 +859,8 @@ function saveObject(sObject, caller, state, action) {
     }
 }
 
-function spinnerOnButtons(enabled, state){
-    for( let x = 0; x < state.screens.length; x++){
+function spinnerOnButtons(enabled, state) {
+    for (let x = 0; x < state.screens.length; x++) {
         for (let i = 0; i < state.screens[x].buttons.length; i++) {
 
             state.screens[x].buttons[i] = {
@@ -875,7 +876,7 @@ function processRequestQueue(sObject, caller, state, action, request) {
         .execute()
         .then((data) => {
             state.apexRequests.pop();
-            if (request.getMethod() === saveSObject){
+            if (request.getMethod() === saveSObject) {
                 let controllerInstance = JSON.parse(data);
                 let controllerObject = controllerInstance.io_SObject;
                 let controllerContract = controllerInstance.io_Contract;
@@ -916,10 +917,9 @@ function processRequestQueue(sObject, caller, state, action, request) {
                     }
                 }
             }
-            if (state.apexRequests.length > 0){
+            if (state.apexRequests.length > 0) {
                 processRequestQueue(sObject, caller, state, action, state.apexRequests[state.apexRequests.length - 1]);
-            }
-            else{
+            } else {
                 new hwRequestEvaluator().isExecuting = false;
                 spinnerOnButtons(false, state);
             }
@@ -948,7 +948,7 @@ function handleSaveOeffnungszeiten(oeffnungszeiten, caller, state, action) {
 
     state.apexRequests.unshift(apexRequest);
 
-    if (new hwRequestEvaluator().isExecuting){
+    if (new hwRequestEvaluator().isExecuting) {
         return;
     }
     new hwRequestEvaluator().isExecuting = true;
