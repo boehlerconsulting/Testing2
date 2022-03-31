@@ -50,7 +50,7 @@ const reduce = (state, action, caller) => {
             reduceSetMaefUrl(state, caller, action);
             break;
         case "setActiveSectionsEmpty":
-            reduceSetActiveSectionsEmpty(action.screenIndex, caller, state);
+            reduceSetActiveSectionsEmpty(action.screenIndex, state);
             break;
         case "setActiveSectionsAll":
             reduceSetActiveSectionsAll(action.screenIndex, caller, state);
@@ -59,8 +59,8 @@ const reduce = (state, action, caller) => {
     }
 };
 
-function reduceSetActiveSectionsEmpty( pv_ScreenIndex, po_Caller, po_State ) {
-    po_State.screens.find(x => x.key === pv_ScreenIndex).activeSections = [];
+function reduceSetActiveSectionsEmpty( screenIndex, state ) {
+    state.screens.find(x => x.key === screenIndex).activeSections = [];
 }
 
 function reduceSetActiveSectionsAll( screenIndex, caller, state ) {
@@ -174,11 +174,11 @@ function reduceSetStepDone(state, action, caller) {
     };
 
     for (let i = 0; i < state.steps.length; i++) {
-        let lo_Step = state.steps[i];
-        if (lo_Step.isDoneAndActive && i !== action.index) {
-            lo_Step.isDoneAndActive = false;
-            lo_Step.isActive = true;
-            lo_Step.iv_Status = 'doneAndActive';
+        let step = state.steps[i];
+        if (step.isDoneAndActive && i !== action.index) {
+            step.isDoneAndActive = false;
+            step.isActive = true;
+            step.iv_Status = 'doneAndActive';
         }
     }
 
@@ -302,7 +302,9 @@ function reduceSetButtonDisable(action, state, caller) {
 }
 
 function reduceSetOeffnungszeiten(state, action, caller) {
-    let oeffnungszeit = state.screens[action.screenIndex].sections[action.sectionIndex].il_Oeffnungszeits[action.categoryIndex].pl_Oeffnungszeitens[action.weekdayIndex];
+    let oeffnungszeit
+        = state.screens[action.screenIndex].sections[action.sectionIndex]
+        .il_Oeffnungszeits[action.categoryIndex].pl_Oeffnungszeitens[action.weekdayIndex];
     oeffnungszeit[action.fieldName] = action.value;
     oeffnungszeit.manuallyEdited = true;
 
@@ -443,8 +445,8 @@ function reduceSetMaefUrl(state, caller, action) {
                 caller.showToast('Der MAEF Beleg wurde erfolgreich versendet.');
             }
         })
-        .catch((pv_ErrorMessage) => {
-            Logger.logError("Error", {data: pv_ErrorMessage})();
+        .catch((errorMessage) => {
+            Logger.logError("Error", {data: errorMessage})();
         });
 }
 
@@ -883,11 +885,14 @@ function processRequestQueue(sObject, caller, state, action, request) {
 
                         let formulaFieldDefinition = state.formulaFieldsSObject[i];
 
-                        state.screens[formulaFieldDefinition.screenPosition].sections[formulaFieldDefinition.sectionPosition].il_Fields[formulaFieldDefinition.position] = {
-                            ...state.screens[formulaFieldDefinition.screenPosition].sections[formulaFieldDefinition.sectionPosition].il_Fields[formulaFieldDefinition.position],
+                        state.screens[formulaFieldDefinition.screenPosition]
+                            .sections[formulaFieldDefinition.sectionPosition].il_Fields[formulaFieldDefinition.position] = {
+                            ...state.screens[formulaFieldDefinition.screenPosition]
+                                .sections[formulaFieldDefinition.sectionPosition].il_Fields[formulaFieldDefinition.position],
                         };
 
-                        let field = state.screens[formulaFieldDefinition.screenPosition].sections[formulaFieldDefinition.sectionPosition].il_Fields[formulaFieldDefinition.position];
+                        let field = state.screens[formulaFieldDefinition.screenPosition]
+                            .sections[formulaFieldDefinition.sectionPosition].il_Fields[formulaFieldDefinition.position];
 
                         field.value = controllerObject[formulaFieldDefinition.Feldname];
                     }
@@ -898,11 +903,14 @@ function processRequestQueue(sObject, caller, state, action, request) {
 
                         let formulaFieldDefinition = state.formulaFieldsContract[i];
 
-                        state.screens[formulaFieldDefinition.screenPosition].sections[formulaFieldDefinition.sectionPosition].il_Fields[formulaFieldDefinition.position] = {
-                            ...state.screens[formulaFieldDefinition.screenPosition].sections[formulaFieldDefinition.sectionPosition].il_Fields[formulaFieldDefinition.position],
+                        state.screens[formulaFieldDefinition.screenPosition]
+                            .sections[formulaFieldDefinition.sectionPosition].il_Fields[formulaFieldDefinition.position] = {
+                            ...state.screens[formulaFieldDefinition.screenPosition]
+                                .sections[formulaFieldDefinition.sectionPosition].il_Fields[formulaFieldDefinition.position],
                         };
 
-                        let field = state.screens[formulaFieldDefinition.screenPosition].sections[formulaFieldDefinition.sectionPosition].il_Fields[formulaFieldDefinition.position];
+                        let field = state.screens[formulaFieldDefinition.screenPosition]
+                            .sections[formulaFieldDefinition.sectionPosition].il_Fields[formulaFieldDefinition.position];
 
                         field.value = controllerContract[formulaFieldDefinition.Feldname];
                     }
