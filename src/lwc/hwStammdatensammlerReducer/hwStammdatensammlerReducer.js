@@ -198,17 +198,12 @@ function reduceSetButtonDisable(action, state, caller) {
     state.screens[button.screenPosition] = {
         ...state.screens[button.screenPosition]
     };
-
-    let allButtonsDisabled = true;
     let allDocumentsSent = true;
     for (let i = 0; i < state.screens[button.screenPosition].buttons.length; i++) {
         let screenButton = state.screens[button.screenPosition].buttons[i];
         if (!screenButton.iv_isPreview) {
             if (screenButton.isHidden) {
                 continue;
-            }
-            if (!screenButton.isDisabled) {
-                allButtonsDisabled = false;
             }
             if (!screenButton.isDocumentSent) {
                 allDocumentsSent = false;
