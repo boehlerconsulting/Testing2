@@ -53,7 +53,7 @@ const reduce = (state, action, caller) => {
             reduceSetActiveSectionsEmpty(action.screenIndex, state);
             break;
         case "setActiveSectionsAll":
-            reduceSetActiveSectionsAll(action.screenIndex, caller, state);
+            reduceSetActiveSectionsAll(action.screenIndex, state);
             break;
         default:
     }
@@ -63,7 +63,7 @@ function reduceSetActiveSectionsEmpty( screenIndex, state ) {
     state.screens.find(x => x.key === screenIndex).activeSections = [];
 }
 
-function reduceSetActiveSectionsAll( screenIndex, caller, state ) {
+function reduceSetActiveSectionsAll( screenIndex, state ) {
 
     let allSections = state.screens.find(x => x.key === screenIndex).sections;
     let activeSections = [];
