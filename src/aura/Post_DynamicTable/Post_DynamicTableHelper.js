@@ -102,7 +102,7 @@
         $A.enqueueAction(action);
     },
 
-    retrieveRecords : function(component, criteria_have_changed){
+    retrieveRecords : function(component, criteriaHaveChanged){
         var sObjectName = component.get('v.SObjectName');
         let action = component.get( sObjectName === 'Task' ? 'c.getTaskRecords' : 'c.getEventRecords');
         action.setParams({
@@ -122,7 +122,7 @@
                     let preserveSelectedRecords = component.get('v.PreserveSelectedRecords');
                     component.set('v.AllRecords', sobjectWrapper.sobjects);
                     component.set('v.TotalRecordsLoaded', sobjectWrapper.sobjects.length);
-                    if(!preserveSelectedRecords && criteria_have_changed){
+                    if(!preserveSelectedRecords && criteriaHaveChanged){
                         component.set('v.SelectedRecordsMap', new Map());
                         component.set('v.AllRecordsSelected', false);
                         this.updateSelectedRecords(component);
@@ -160,10 +160,8 @@
                         let fields = tableColumns[j].field_api_name.split('.');
                         let value;
                         let reference;
-                        let accountName;
                         if(fields.length > 1){
                             let record = allRecords[i];
-                            accountName = record.Account.Name;
                             for(let k = 0; k < fields.length-1; k++){
                                 record = record[fields[k]];
                             }
@@ -294,14 +292,14 @@
         component.find('lastButton').set('v.disabled', (!hasNext));
     },
 
-    switchRow : function(component, index, is_checked){
+    switchRow : function(component, index, isChecked){
         let allRecords = component.get('v.AllRecords');
         let firstRecordOnPage = component.get('v.FirstRecordOnPage');
         let selectedRecordsMap = component.get('v.SelectedRecordsMap');
         let indexOnPage = (firstRecordOnPage + index - 1);
         if(indexOnPage <= allRecords.length){
-            allRecords[indexOnPage].is_checked = is_checked;
-            if(is_checked){
+            allRecords[indexOnPage].is_checked = isChecked;
+            if(isChecked){
                 selectedRecordsMap.set(allRecords[indexOnPage].Id, allRecords[indexOnPage]);
             } else {
                 selectedRecordsMap.delete(allRecords[indexOnPage].Id);
@@ -311,10 +309,10 @@
         this.updateSelectedRecords(component);
     },
 
-    switchAllRows : function(component, is_checked){
+    switchAllRows : function(component, isChecked){
         let allRecords = component.get('v.AllRecords');
         let selectedRecordsMap = component.get('v.SelectedRecordsMap');
-        if(is_checked){
+        if(isChecked){
             for(let i = 0; i < allRecords.length; i++){
                 allRecords[i].is_checked = true;
                 selectedRecordsMap.set(allRecords[i].Id, allRecords[i]);
@@ -325,7 +323,7 @@
                 selectedRecordsMap.delete(allRecords[i].Id);
             }
         }
-        component.set('v.AllRecordsSelected', is_checked);
+        component.set('v.AllRecordsSelected', isChecked);
         this.updateTableRows(component);
         this.updateSelectedRecords(component);
     },
