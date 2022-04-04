@@ -40,7 +40,7 @@ export default class HwApplicationState {
 
     //Instance Methods-------------------------------------------------------------------------
     getCurrentStateClone() {
-        return { ...this.io_Caller.io_State };
+        return { ...this.io_Caller.state };
     }
 
     addCurrentSourceActionStateToHistory() {
@@ -51,7 +51,7 @@ export default class HwApplicationState {
         this.il_SourceActionStateHistory.push( {
             source: this.iv_CurrentActionSource,
             action: this.io_CurrentAction,
-            state:  this.io_Caller.io_State
+            state:  this.io_Caller.state
         } );
         this.cleanupSavedStates();
     }
@@ -116,7 +116,7 @@ export default class HwApplicationState {
     loadStateFromHistory(  ) {
         this.iv_CurrentActionSource = this.il_SourceActionStateHistory[ this.iv_CurrentStateIndex ].source;
         this.io_CurrentAction       = this.il_SourceActionStateHistory[ this.iv_CurrentStateIndex ].action;
-        this.io_Caller.io_State     = this.il_SourceActionStateHistory[ this.iv_CurrentStateIndex ].state;
+        this.io_Caller.state     = this.il_SourceActionStateHistory[ this.iv_CurrentStateIndex ].state;
     }
 
 
@@ -139,7 +139,7 @@ export default class HwApplicationState {
         }
 
         if ( !lv_ActionSkipped ) {
-            this.io_Caller.io_State     = lo_CurrentState;
+            this.io_Caller.state     = lo_CurrentState;
             this.io_CurrentAction       = lo_ActionConfiguration.action;
             this.iv_CurrentActionSource = lv_SrcElement;
             if ( this.iv_HistoricizeState ) {

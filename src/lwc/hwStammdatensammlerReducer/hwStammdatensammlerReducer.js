@@ -76,6 +76,7 @@ function reduceSetCurrentStep(state, action) {
 
 function reduceSetFieldValue(action, state, caller) {
     let sObject;
+
     if (action.field.Objektname === 'Contract') {
         state.contract[action.field.Feldname] = action.value;
         if (action.field.isCheckbox) {
