@@ -99,16 +99,16 @@ export default class HW_Stammdatensammler extends LightningElement {
             });
     }
 
-    initializeContainerComponent(po_Result) {
-        let lo_ControllerInstance = po_Result;
-        if (!lo_ControllerInstance) {
+    initializeContainerComponent(result) {
+        let controllerInstance = result;
+        if (!controllerInstance) {
             window.open('/' + this.recordId, '_Self');
         } else {
-            lo_ControllerInstance = JSON.parse(po_Result);
-            this.state.object = lo_ControllerInstance.io_SObject;
-            this.state.contract = lo_ControllerInstance.io_Contract;
-            this.state.screens = lo_ControllerInstance.il_Screens;
-            this.state.steps = lo_ControllerInstance.il_Steps;
+            controllerInstance = JSON.parse(result);
+            this.state.object = controllerInstance.io_SObject;
+            this.state.contract = controllerInstance.io_Contract;
+            this.state.screens = controllerInstance.il_Screens;
+            this.state.steps = controllerInstance.il_Steps;
             this.state.recordId = this.state.object.Id;
             this.state.isExistingMAEF = this.isExistingMAEF;
 
@@ -182,7 +182,8 @@ export default class HW_Stammdatensammler extends LightningElement {
                         for (let k = 0; k < this.state.screens[i].sections[j].il_Oeffnungszeits.length; k++) {
                             let oeffnungszeit = this.state.screens[i].sections[j].il_Oeffnungszeits[k];
 
-                            oeffnungszeit.hide = !this.state.isPostfachanlagePresent && section.iv_Title === 'Veränderungsmeldung zu Postfachanlagen (PfA)';
+                            oeffnungszeit.hide = !this.state.isPostfachanlagePresent
+                                && section.iv_Title === 'Veränderungsmeldung zu Postfachanlagen (PfA)';
                         }
                     }
                 }
@@ -455,11 +456,11 @@ export default class HW_Stammdatensammler extends LightningElement {
                 }
             }
             for (let i = 0; i < this.state.screens[fieldMarker.screenPosition].buttons.length; i++) {
-                let lo_Button = this.state.screens[fieldMarker.screenPosition].buttons[i];
-                if (lo_Button.fieldMappingMap.has(field.Objektname + field.Feldname) && !lo_Button.iv_isPreview) {
-                    let lo_FieldMapping = lo_Button.fieldMappingMap.get(field.Objektname + field.Feldname);
+                let screenButton = this.state.screens[fieldMarker.screenPosition].buttons[i];
+                if (screenButton.fieldMappingMap.has(field.Objektname + field.Feldname) && !screenButton.iv_isPreview) {
+                    let fieldMapping = screenButton.fieldMappingMap.get(field.Objektname + field.Feldname);
                     if (field.hide || !field.Erforderlich || field.isCheckbox || field.isFormula) {
-                        lo_FieldMapping.isValid = true;
+                        fieldMapping.isValid = true;
                     }
                 }
             }
