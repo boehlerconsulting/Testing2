@@ -11,7 +11,7 @@
  *
  */
 
-import {api, LightningElement, track, wire} from 'lwc';
+import {api, LightningElement} from 'lwc';
 
 export default class Zeiten extends LightningElement {
 
@@ -26,38 +26,38 @@ export default class Zeiten extends LightningElement {
     @api titleColumnThree;
     @api titleColumnFour;
 
-    @api fieldName_1_1;
-    @api fieldName_1_2;
-    @api fieldName_1_3;
-    @api fieldName_1_4;
+    @api fieldNameOneOne;
+    @api fieldNameOneTwo;
+    @api fieldNameOneThree;
+    @api fieldNameOneFour;
 
-    @api fieldName_2_1;
-    @api fieldName_2_2;
-    @api fieldName_2_3;
-    @api fieldName_2_4;
+    @api fieldNameTwoOne;
+    @api fieldNameTwoTwo;
+    @api fieldNameTwoThree;
+    @api fieldNameTwoFour;
 
-    @api fieldName_3_1;
-    @api fieldName_3_2;
-    @api fieldName_3_3;
-    @api fieldName_3_4;
+    @api fieldNameThreeOne;
+    @api fieldNameThreeTwo;
+    @api fieldNameThreeThree;
+    @api fieldNameThreeFour;
 
-    @api fieldName_4_1;
-    @api fieldName_4_2;
-    @api fieldName_4_3;
-    @api fieldName_4_4;
+    @api fieldNameFourOne;
+    @api fieldNameFourTwo;
+    @api fieldNameFourThree;
+    @api fieldNameFourFour;
 
-    @api fieldName_5_1;
-    @api fieldName_5_2;
-    @api fieldName_5_3;
-    @api fieldName_5_4;
+    @api fieldNameFiveOne;
+    @api fieldNameFiveTwo;
+    @api fieldNameFiveThree;
+    @api fieldNameFiveFour;
 
-    @api fieldName_6_1;
-    @api fieldName_6_2;
-    @api fieldName_6_3;
-    @api fieldName_6_4;
+    @api fieldNameSixOne;
+    @api fieldNameSixTwo;
+    @api fieldNameSixThree;
+    @api fieldNameSixFour;
 
-    @api fieldName_7_1;
-    @api fieldName_7_2;
-    @api fieldName_7_3;
-    @api fieldName_7_4;
+    @api fieldNameSevenOne;
+    @api fieldNameSevenTwo;
+    @api fieldNameSevenThree;
+    @api fieldNameSevenFour;
 }
