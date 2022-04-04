@@ -14,14 +14,14 @@
  */
 ({
     initializePageSizeSelectList : function(component) {
-        let page_size = component.get('v.PageSize');
-        let available_page_sizes = component.get('v.AvailablePageSizes');
+        let pageSize = component.get('v.PageSize');
+        let availablePageSizes = component.get('v.AvailablePageSizes');
         let options = [];
-        for(let option in available_page_sizes){
+        for(let option in availablePageSizes){
             options.push({
-                value: available_page_sizes[option],
-                label: available_page_sizes[option],
-                selected: (available_page_sizes[option] === page_size)
+                value: availablePageSizes[option],
+                label: availablePageSizes[option],
+                selected: (availablePageSizes[option] === pageSize)
             });
         }
         component.find('pageSizeInput').set('v.options', options);
@@ -40,32 +40,32 @@
         action.setCallback(this, function(response){
             let state = response.getState();
             if(state === 'SUCCESS'){
-                let column_metadata_wrapper = JSON.parse(response.getReturnValue());
-                if(column_metadata_wrapper.error_message){
-                    this.handleErrorMessage(component, column_metadata_wrapper.error_message);
+                let columnMetadataWrapper = JSON.parse(response.getReturnValue());
+                if(columnMetadataWrapper.error_message){
+                    this.handleErrorMessage(component, columnMetadataWrapper.error_message);
                 } else {
-                    let field_names = component.get('v.FieldNames');
-                    let selection_column = component.get('v.SelectionColumn');
-                    let table_columns = [];
-                    if(selection_column){
-                        table_columns.push({
+                    let fieldNames = component.get('v.FieldNames');
+                    let selectionColumn = component.get('v.SelectionColumn');
+                    let tableColumns = [];
+                    if(selectionColumn){
+                        tableColumns.push({
                             is_selection_column: true
                         });
                     }
-                    for(let i = 0; i < field_names.length; i++){
-                        table_columns.push({
+                    for(let i = 0; i < fieldNames.length; i++){
+                        tableColumns.push({
                             is_selection_column: false,
-                            field_name: field_names[i],
-                            field_api_name: column_metadata_wrapper.column_metadata[field_names[i]].field_api_name,
-                            field_label: column_metadata_wrapper.column_metadata[field_names[i]].field_label,
-                            field_type: column_metadata_wrapper.column_metadata[field_names[i]].field_type,
-                            field_override_type: column_metadata_wrapper.column_metadata[field_names[i]].field_override_type,
-                            field_is_reference: column_metadata_wrapper.column_metadata[field_names[i]].field_is_reference,
-                            field_is_sortable: column_metadata_wrapper.column_metadata[field_names[i]].field_is_sortable
+                            field_name: fieldNames[i],
+                            field_api_name: columnMetadataWrapper.column_metadata[fieldNames[i]].field_api_name,
+                            field_label: columnMetadataWrapper.column_metadata[fieldNames[i]].field_label,
+                            field_type: columnMetadataWrapper.column_metadata[fieldNames[i]].field_type,
+                            field_override_type: columnMetadataWrapper.column_metadata[fieldNames[i]].field_override_type,
+                            field_is_reference: columnMetadataWrapper.column_metadata[fieldNames[i]].field_is_reference,
+                            field_is_sortable: columnMetadataWrapper.column_metadata[fieldNames[i]].field_is_sortable
                         });
                     }
-                    component.set('v.ColumnMetadata', column_metadata_wrapper.column_metadata);
-                    component.set('v.TableColumns', table_columns);
+                    component.set('v.ColumnMetadata', columnMetadataWrapper.column_metadata);
+                    component.set('v.TableColumns', tableColumns);
                     this.retrieveTotalRecords(component);
                     this.retrieveRecords(component, true);
                 }
@@ -90,8 +90,8 @@
         action.setCallback(this, function(response){
             let state = response.getState();
             if(state === 'SUCCESS'){
-                let total_records = parseInt(response.getReturnValue());
-                component.set('v.TotalRecords', total_records);
+                let totalRecords = parseInt(response.getReturnValue());
+                component.set('v.TotalRecords', totalRecords);
             } else if(state === 'ERROR'){
                 this.handleErrorMessage(component, response.getError());
             }
@@ -103,7 +103,6 @@
     },
 
     retrieveRecords : function(component, criteria_have_changed){
-
         var sObjectName = component.get('v.SObjectName');
         let action = component.get( sObjectName === 'Task' ? 'c.getTaskRecords' : 'c.getEventRecords');
         action.setParams({
@@ -116,14 +115,14 @@
         action.setCallback(this, function(response){
             let state = response.getState();
             if(state === 'SUCCESS'){
-                let sobject_wrapper = JSON.parse(response.getReturnValue());
-                if(sobject_wrapper.error_message){
-                    this.handleErrorMessage(component, sobject_wrapper.error_message);
+                let sobjectWrapper = JSON.parse(response.getReturnValue());
+                if(sobjectWrapper.error_message){
+                    this.handleErrorMessage(component, sobjectWrapper.error_message);
                 } else {
-                    let preserve_selected_records = component.get('v.PreserveSelectedRecords');
-                    component.set('v.AllRecords', sobject_wrapper.sobjects);
-                    component.set('v.TotalRecordsLoaded', sobject_wrapper.sobjects.length);
-                    if(!preserve_selected_records && criteria_have_changed){
+                    let preserveSelectedRecords = component.get('v.PreserveSelectedRecords');
+                    component.set('v.AllRecords', sobjectWrapper.sobjects);
+                    component.set('v.TotalRecordsLoaded', sobjectWrapper.sobjects.length);
+                    if(!preserveSelectedRecords && criteria_have_changed){
                         component.set('v.SelectedRecordsMap', new Map());
                         component.set('v.AllRecordsSelected', false);
                         this.updateSelectedRecords(component);
@@ -142,28 +141,28 @@
 
     updateTableRows : function(component) {
         this.updatePagination(component);
-        let all_records = component.get('v.AllRecords');
-        let table_rows = [];
-        if(all_records.length){
-            let first_record_on_page = component.get('v.FirstRecordOnPage');
-            let last_record_on_page = component.get('v.LastRecordOnPage');
-            let table_columns = component.get('v.TableColumns');
-            let selected_records_map = component.get('v.SelectedRecordsMap');
-            for(let i = first_record_on_page-1; i < last_record_on_page; i++){
+        let allRecords = component.get('v.AllRecords');
+        let tableRows = [];
+        if(allRecords.length){
+            let firstRecordOnPage = component.get('v.FirstRecordOnPage');
+            let lastRecordOnPage = component.get('v.LastRecordOnPage');
+            let tableColumns = component.get('v.TableColumns');
+            let selectedRecordsMap = component.get('v.SelectedRecordsMap');
+            for(let i = firstRecordOnPage-1; i < lastRecordOnPage; i++){
                 let row = [];
-                for(let j = 0; j < table_columns.length; j++){
-                    if(table_columns[j].is_selection_column){
+                for(let j = 0; j < tableColumns.length; j++){
+                    if(tableColumns[j].is_selection_column){
                         row.push({
                             is_selection_column: true,
-                            is_checked: selected_records_map.has(all_records[i].Id)
+                            is_checked: selectedRecordsMap.has(allRecords[i].Id)
                         });
                     } else {
-                        let fields = table_columns[j].field_api_name.split('.');
+                        let fields = tableColumns[j].field_api_name.split('.');
                         let value;
                         let reference;
                         let accountName;
                         if(fields.length > 1){
-                            let record = all_records[i];
+                            let record = allRecords[i];
                             accountName = record.Account.Name;
                             for(let k = 0; k < fields.length-1; k++){
                                 record = record[fields[k]];
@@ -173,19 +172,19 @@
                                 reference = record.Id;
                             }
                         } else {
-                            value = all_records[i][table_columns[j].field_api_name];
-                            reference = all_records[i].Id;
+                            value = allRecords[i][tableColumns[j].field_api_name];
+                            reference = allRecords[i].Id;
                         }
-                        if(table_columns[j].field_type === 'PERCENT'){
+                        if(tableColumns[j].field_type === 'PERCENT'){
                             value = (value != null) ? (value * 100) : 0
                         }
-                        if(table_columns[j].field_override_type !== undefined && table_columns[j].field_override_type !== table_columns[j].field_type){
-                            switch(table_columns[j].field_override_type){
+                        if(tableColumns[j].field_override_type !== undefined && tableColumns[j].field_override_type !== tableColumns[j].field_type){
+                            switch(tableColumns[j].field_override_type){
                                 case 'BOOLEAN':{
-                                    if(table_columns[j].field_type === 'CURRENCY'
-                                        || table_columns[j].field_type === 'DOUBLE'
-                                        || table_columns[j].field_type === 'INTEGER'
-                                        || table_columns[j].field_type === 'PERCENT'){
+                                    if(tableColumns[j].field_type === 'CURRENCY'
+                                        || tableColumns[j].field_type === 'DOUBLE'
+                                        || tableColumns[j].field_type === 'INTEGER'
+                                        || tableColumns[j].field_type === 'PERCENT'){
                                         value = (value !== undefined && value !== 0);
                                     } else {
                                         value = (value !== undefined);
@@ -193,35 +192,38 @@
                                     break;
                                 }
                                 case 'CURRENCY':{
-                                    if(table_columns[j].field_type !== 'DOUBLE' && table_columns[j].field_type !== 'INTEGER'){
+                                    if(tableColumns[j].field_type !== 'DOUBLE' && tableColumns[j].field_type !== 'INTEGER'){
                                         value = undefined;
                                     }
                                     break;
                                 }
                                 case 'DATE':{
-                                    if(table_columns[j].field_type !== 'DATETIME'){
+                                    if(tableColumns[j].field_type !== 'DATETIME'){
                                         value = undefined;
                                     }
                                     break;
                                 }
                                 case 'DATETIME':{
-                                    if(table_columns[j].field_type !== 'DATE'){
+                                    if(tableColumns[j].field_type !== 'DATE'){
                                         value = undefined;
                                     }
                                     break;
                                 }
                                 case 'DOUBLE':{
-                                    if(table_columns[j].field_type === 'BOOLEAN'){
+                                    if(tableColumns[j].field_type === 'BOOLEAN'){
                                         value = value ? 1.0 : 0.0;
-                                    } else if(table_columns[j].field_type !== 'CURRENCY' && table_columns[j].field_type !== 'INTEGER' && table_columns[j].field_type !== 'PERCENT'){
+                                    } else if(tableColumns[j].field_type !== 'CURRENCY'
+                                        && tableColumns[j].field_type !== 'INTEGER' && tableColumns[j].field_type !== 'PERCENT'){
                                         value = undefined;
                                     }
                                     break;
                                 }
                                 case 'INTEGER':{
-                                    if(table_columns[j].field_type === 'BOOLEAN'){
+                                    if(tableColumns[j].field_type === 'BOOLEAN'){
                                         value = value ? 1 : 0;
-                                    } else if((table_columns[j].field_type === 'CURRENCY' || table_columns[j].field_type === 'DOUBLE' || table_columns[j].field_type === 'PERCENT') && value !== undefined){
+                                    } else if((tableColumns[j].field_type === 'CURRENCY'
+                                        || tableColumns[j].field_type === 'DOUBLE'
+                                        || tableColumns[j].field_type === 'PERCENT') && value !== undefined){
                                         value = parseInt(value);
                                     } else {
                                         value = undefined;
@@ -229,7 +231,7 @@
                                     break;
                                 }
                                 case 'PERCENT':{
-                                    if(table_columns[j].field_type === 'DOUBLE' || table_columns[j].field_type === 'INTEGER'){
+                                    if(tableColumns[j].field_type === 'DOUBLE' || tableColumns[j].field_type === 'INTEGER'){
                                         if(value === undefined){
                                             value = 0;
                                         }
@@ -251,63 +253,58 @@
 
                         row.push({
                             is_selection_column: false,
-                            field_type: table_columns[j].field_override_type ? table_columns[j].field_override_type : table_columns[j].field_type,
-                            reference: table_columns[j].field_is_reference ? reference : null,
+                            field_type: tableColumns[j].field_override_type ? tableColumns[j].field_override_type : tableColumns[j].field_type,
+                            reference: tableColumns[j].field_is_reference ? reference : null,
                             value: value,
-                            field_name: table_columns[j].field_name,
-                            accountName: all_records[i].Account ? all_records[i].Account.Name : null,
-                            mitarbeiterName: all_records[i].Who ? all_records[i].Who.Name : null,
-                            ownerName: all_records[i].Owner ? all_records[i].Owner.Name : null,
+                            field_name: tableColumns[j].field_name,
+                            accountName: allRecords[i].Account ? allRecords[i].Account.Name : null,
+                            mitarbeiterName: allRecords[i].Who ? allRecords[i].Who.Name : null,
+                            ownerName: allRecords[i].Owner ? allRecords[i].Owner.Name : null,
                         });
                     }
                 }
-                table_rows.push(row);
+                tableRows.push(row);
             }
         }
-        component.set('v.TableRows', table_rows);
+        component.set('v.TableRows', tableRows);
     },
 
     updatePagination : function(component) {
-        let page_number = component.get('v.PageNumber');
-        let page_size = component.get('v.PageSize');
-        let total_records = component.get('v.TotalRecordsLoaded');
-
-        let pages_total = Math.ceil(total_records / page_size);
-
-        let first_record_on_page = (total_records > 0) ? (((page_number - 1) * page_size) + 1) : 0;
-        let last_record_on_page;
-        if((page_number * page_size) > total_records){
-            last_record_on_page = total_records;
+        let pageNumber = component.get('v.PageNumber');
+        let pageSize = component.get('v.PageSize');
+        let totalRecords = component.get('v.TotalRecordsLoaded');
+        let pagesTotal = Math.ceil(totalRecords / pageSize);
+        let firstRecordOnPage = (totalRecords > 0) ? (((pageNumber - 1) * pageSize) + 1) : 0;
+        let lastRecordOnPage;
+        if((pageNumber * pageSize) > totalRecords){
+            lastRecordOnPage = totalRecords;
         } else {
-            last_record_on_page = (page_number * page_size);
+            lastRecordOnPage = (pageNumber * pageSize);
         }
-
-        let has_previous = page_number > 1;
-        let has_next = page_number < pages_total;
-
-        component.set('v.PageTotal', pages_total);
-        component.set('v.FirstRecordOnPage', first_record_on_page);
-        component.set('v.LastRecordOnPage', last_record_on_page);
-        component.set('v.HasPrevious', has_previous);
-        component.set('v.HasNext', has_next);
-
-        component.find('firstButton').set('v.disabled', (!has_previous));
-        component.find('previousButton').set('v.disabled', (!has_previous));
-        component.find('nextButton').set('v.disabled', (!has_next));
-        component.find('lastButton').set('v.disabled', (!has_next));
+        let hasPrevious = pageNumber > 1;
+        let hasNext = pageNumber < pagesTotal;
+        component.set('v.PageTotal', pagesTotal);
+        component.set('v.FirstRecordOnPage', firstRecordOnPage);
+        component.set('v.LastRecordOnPage', lastRecordOnPage);
+        component.set('v.HasPrevious', hasPrevious);
+        component.set('v.HasNext', hasNext);
+        component.find('firstButton').set('v.disabled', (!hasPrevious));
+        component.find('previousButton').set('v.disabled', (!hasPrevious));
+        component.find('nextButton').set('v.disabled', (!hasNext));
+        component.find('lastButton').set('v.disabled', (!hasNext));
     },
 
     switchRow : function(component, index, is_checked){
-        let all_records = component.get('v.AllRecords');
-        let first_record_on_page = component.get('v.FirstRecordOnPage');
-        let selected_records_map = component.get('v.SelectedRecordsMap');
-        let index_on_page = (first_record_on_page + index - 1);
-        if(index_on_page <= all_records.length){
-            all_records[index_on_page].is_checked = is_checked;
+        let allRecords = component.get('v.AllRecords');
+        let firstRecordOnPage = component.get('v.FirstRecordOnPage');
+        let selectedRecordsMap = component.get('v.SelectedRecordsMap');
+        let indexOnPage = (firstRecordOnPage + index - 1);
+        if(indexOnPage <= allRecords.length){
+            allRecords[indexOnPage].is_checked = is_checked;
             if(is_checked){
-                selected_records_map.set(all_records[index_on_page].Id, all_records[index_on_page]);
+                selectedRecordsMap.set(allRecords[indexOnPage].Id, allRecords[indexOnPage]);
             } else {
-                selected_records_map.delete(all_records[index_on_page].Id);
+                selectedRecordsMap.delete(allRecords[indexOnPage].Id);
                 component.set('v.AllRecordsSelected', false);
             }
         }
@@ -315,17 +312,17 @@
     },
 
     switchAllRows : function(component, is_checked){
-        let all_records = component.get('v.AllRecords');
-        let selected_records_map = component.get('v.SelectedRecordsMap');
+        let allRecords = component.get('v.AllRecords');
+        let selectedRecordsMap = component.get('v.SelectedRecordsMap');
         if(is_checked){
-            for(let i = 0; i < all_records.length; i++){
-                all_records[i].is_checked = true;
-                selected_records_map.set(all_records[i].Id, all_records[i]);
+            for(let i = 0; i < allRecords.length; i++){
+                allRecords[i].is_checked = true;
+                selectedRecordsMap.set(allRecords[i].Id, allRecords[i]);
             }
         } else {
-            for(let i = 0; i < all_records.length; i++){
-                all_records[i].is_checked = false;
-                selected_records_map.delete(all_records[i].Id);
+            for(let i = 0; i < allRecords.length; i++){
+                allRecords[i].is_checked = false;
+                selectedRecordsMap.delete(allRecords[i].Id);
             }
         }
         component.set('v.AllRecordsSelected', is_checked);
@@ -334,8 +331,8 @@
     },
 
     updateSelectedRecords : function(component){
-        let selected_records_map = component.get('v.SelectedRecordsMap');
-        component.set('v.SelectedRecords', Array.from(selected_records_map.values()));
+        let selectedRecordsMap = component.get('v.SelectedRecordsMap');
+        component.set('v.SelectedRecords', Array.from(selectedRecordsMap.values()));
     },
 
     handleErrorMessage : function(component, message){
