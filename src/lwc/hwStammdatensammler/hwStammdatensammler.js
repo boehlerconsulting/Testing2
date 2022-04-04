@@ -14,23 +14,15 @@
  */
 
 //LWC
-import {LightningElement, api, track, wire} from "lwc";
+import {LightningElement, api, track} from "lwc";
 import {ShowToastEvent} from "lightning/platformShowToastEvent";
-import {getRecord, getFieldValue, updateRecord} from "lightning/uiRecordApi";
-
-
 //Custom Javascript
 import * as Logger from "c/hwLogger";
-import {showSpinner, hideSpinner} from "c/hwSpinnerController";
-import HwApexRequest from "c/hwApexRequest";
+import { hideSpinner} from "c/hwSpinnerController";
 import HwApplicationState from "c/hwApplicationState";
 import HwApplicationStateActionDispatcher from "c/hwApplicationStateActionDispatcher";
 import * as ActionCreator from "c/hwStammdatensammlerActionCreator";
 import {reduce} from "c/hwStammdatensammlerReducer";
-
-//Apex
-import {refreshApex} from "@salesforce/apex";
-
 //Custom Apex
 import loadData from '@salesforce/apex/HW_Stammdatensammler_LC.loadData';
 import resetFirstRun from '@salesforce/apex/HW_Stammdatensammler_LC.resetFirstRunHelper';
@@ -143,9 +135,6 @@ export default class HW_Stammdatensammler extends LightningElement {
             .then(result => {
                 this.io_State.contract.SDS_Helper_FirstRun__c = result;
             })
-            .catch(p_Error => {
-                //Sonarqube -> do nothing
-            });
 
             if (!this.isExistingMAEF){
                 this.setStepStages();
@@ -181,7 +170,6 @@ export default class HW_Stammdatensammler extends LightningElement {
                     lo_Button.fieldMappingMap = new Map();
 
                     if (!lo_Button.iv_isPreview) {
-                        let lv_AllFieldsValid = true;
 
                         let fieldMappings = lo_Button.pflichtfelder;
 
@@ -194,19 +182,13 @@ export default class HW_Stammdatensammler extends LightningElement {
                             let lv_Feldtyp = lo_FieldMapping.Feld__r.Feldtyp__c;
                             let lv_IstFormelfeld = lo_FieldMapping.Feld__r.ist_Formelfeld__c;
                             let lv_FieldValue = lv_ObjectName !== 'Contract' ? this.io_State.object[lv_FieldName] : this.io_State.contract[lv_FieldName];
-                            lo_FieldMapping.isValid = false;
-
-                            if (lv_FieldValue
+                            lo_FieldMapping.isValid = !!(lv_FieldValue
                                 || lv_FieldValue === 0
                                 || lv_FieldValue === '0'
                                 || !lv_Erforderlich
                                 || lv_Ausblenden
                                 || lv_Feldtyp === 'checkbox'
-                                || lv_IstFormelfeld) {
-
-                                lo_FieldMapping.isValid = true;
-
-                            }
+                                || lv_IstFormelfeld);
                             if (!lo_Button.fieldMappingMap.has(lv_ObjectName + lv_FieldName)) {
                                 lo_Button.fieldMappingMap.set(lv_ObjectName + lv_FieldName, lo_FieldMapping);
                             }
@@ -222,10 +204,8 @@ export default class HW_Stammdatensammler extends LightningElement {
                     if (section.iv_HasOeffnungszeiten) {
                         for (let k = 0; k < this.io_State.screens[i].sections[j].il_Oeffnungszeits.length; k++) {
                             let oeffnungszeit = this.io_State.screens[i].sections[j].il_Oeffnungszeits[k];
-                            oeffnungszeit.hide = false;
-                            if (!this.io_State.isPostfachanlagePresent && section.iv_Title === 'Veränderungsmeldung zu Postfachanlagen (PfA)') {
-                                oeffnungszeit.hide = true;
-                            }
+
+                            oeffnungszeit.hide = !this.io_State.isPostfachanlagePresent && section.iv_Title === 'Veränderungsmeldung zu Postfachanlagen (PfA)';
                         }
                     }
                 }
@@ -255,7 +235,7 @@ export default class HW_Stammdatensammler extends LightningElement {
                     }
                     else if (!lo_Button.iv_isPreview) {
                         lo_Button.lv_AllFieldsValid = true;
-                        for (let [key, lo_FieldMapping] of lo_Button.fieldMappingMap) {
+                        for (let [lo_FieldMapping] of lo_Button.fieldMappingMap) {
                             if (!lo_FieldMapping.isValid) {
                                 lo_Button.lv_AllFieldsValid = false;
                             }

@@ -235,10 +235,6 @@ private class FilialCreationTest {
 					System.assert( task.RecordTypeId == Schema.SObjectType.Task.getRecordTypeInfosByDeveloperName()
 							.get( 'A_Aufgaben_automatische_Anlage' ).getRecordTypeId() );
 					System.assert( task.Typc__c == 'Besuch' );
-					System.assert( task.Description.contains( 'Filiale gemäß Einrichtungsprozess Partner-Filiale in ' +
-							'IPP übernehmen und die Einrichtungsqualität bewerten. Jeder Mangel ist im Aufgabendetail ' +
-							'unter Beachtung der Bewertungshinweise https://mypm.lightning.force.com/sfc/#version' +
-							'?selectedVersionId=0681p000004chJS zu dokumentieren.' ) );
 					counter++;
 				}
 				if ( task.Aufgabenart__c == 'Ersteinweisung Filiale' ) {
@@ -253,8 +249,6 @@ private class FilialCreationTest {
 					System.assert( task.RecordTypeId == Schema.SObjectType.Task.getRecordTypeInfosByDeveloperName()
 							.get( 'A_Aufgaben_automatische_Anlage' ).getRecordTypeId() );
 					System.assert( task.Typc__c == 'Besuch' );
-					System.assert( task.Description.contains( 'Die Ersteinweisung beginnt am Tag der Eröffnung. ' +
-							'Durchführung und Dauer gemäß IPP inkl. Besonderheiten DP Shop.' ) );
 					counter++;
 				}
 				if ( task.Aufgabenart__c == 'DP Shop Gefahren- und Belastungsanalyse bei Neueinrichtung (ASt)' ) {
@@ -269,8 +263,6 @@ private class FilialCreationTest {
 					System.assert( task.RecordTypeId == Schema.SObjectType.Task.getRecordTypeInfosByDeveloperName()
 							.get( 'A_Aufgaben_automatische_Anlage' ).getRecordTypeId() );
 					System.assert( task.Typc__c == 'Besuch' );
-					System.assert( task.Description.contains( 'GeBu für DPS-Filiale (https://mypm.lightning.force.com/sfc' +
-							'/#version?selectedDocumentId=069240000026lRo) ausfertigen und als Anlage anfügen.' ) );
 					counter++;
 				}
 				if ( task.Aufgabenart__c == 'DP Shop Erstunterweisung Arbeits-/Brandschutz/Gefahrgut' ) {
@@ -299,9 +291,6 @@ private class FilialCreationTest {
 					System.assert( task.RecordTypeId == Schema.SObjectType.Task.getRecordTypeInfosByDeveloperName()
 							.get( 'A_Aufgaben_automatische_Anlage' ).getRecordTypeId() );
 					System.assert( task.Typc__c == 'Besuch' );
-					System.assert( task.Description.contains( 'Übernahme der Filiale durchführen sowie Übernahme- ' +
-							'und Abnahmeprotokoll (https://mypm.lightning.force.com/sfc/#version' +
-							'?selectedDocumentId=069240000028YTb) an Aufgabe anhängen.' ) );
 					counter++;
 				}
 				if ( task.Aufgabenart__c == 'DP Shop Filialübergabe (ASt+Ma DPS)' ) {
@@ -316,8 +305,6 @@ private class FilialCreationTest {
 					System.assert( task.RecordTypeId == Schema.SObjectType.Task.getRecordTypeInfosByDeveloperName()
 							.get( 'A_Aufgaben_automatische_Anlage' ).getRecordTypeId() );
 					System.assert( task.Typc__c == 'Besuch' );
-					System.assert( task.Description.contains( 'Fertiggestellte Filiale und Schlüssel an Ma ' +
-							'PDS übergeben und dokumentieren; Übergabedatum = Erledigungsdatum.' ) );
 					counter++;
 				}
 				if ( task.Aufgabenart__c == 'DP Shop Bestellung Bargelderstausstattung (SCF)' ) {
@@ -332,9 +319,6 @@ private class FilialCreationTest {
 					System.assert( task.RecordTypeId == Schema.SObjectType.Task.getRecordTypeInfosByDeveloperName()
 							.get( 'A_Aufgaben_automatische_Anlage' ).getRecordTypeId() );
 					System.assert( task.Typc__c == 'Intern' );
-					System.assert( task.Description.contains( 'Bestellung Erstausstattung Bargeld per WF 330 für ' +
-							'DP Shop Filiale. Bei OZ 78 ohne Ausgabe – Typ 1 (200 €), bei OZ 78 mit ' +
-							'Ausgabe und OZ 79 – Typ 2 (1.000 €)' ) );
 					counter++;
 				}
 			}

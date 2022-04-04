@@ -8,7 +8,7 @@ public class AutoTaskServicezertifikatScheduleTest {
 	
     @isTest
     static void testScheduleRun() {
-        String cron = '0 0 0 1 4 ? 2022';
+        String cron = '0 0 0 1 4 ? 2099';
         
         Test.startTest();
         AutoTaskServicezertifikatSchedule.heute = Date.newInstance(2020, 4, 19);
@@ -32,7 +32,7 @@ public class AutoTaskServicezertifikatScheduleTest {
     
     @isTest
     static void testScheduleNoRun() {
-        String cron = '0 0 0 2 4 ? 2022';
+        String cron = '0 0 0 2 4 ? 2099';
         
         Test.startTest();
         AutoTaskServicezertifikatSchedule.heute = Date.newInstance(2020, 4, 2);
@@ -55,7 +55,7 @@ public class AutoTaskServicezertifikatScheduleTest {
     
     @isTest
     static void testScheduleFail() {
-        String cron = '0 0 0 1 4 ? 2022';
+        String cron = '0 0 0 1 4 ? 2099';
         
         Test.startTest();
         AutoTaskServicezertifikatSchedule.heute = Date.newInstance(2020, 4, 1);
