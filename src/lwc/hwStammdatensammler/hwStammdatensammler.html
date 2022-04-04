@@ -20,36 +20,19 @@
 
     <template if:false={isExistingMAEF}>
 
-        <lightning-spinner if:true={io_State.showSpinner} alternative-text="Loading" size="medium"
+        <lightning-spinner if:true={state.showSpinner} alternative-text="Loading" size="medium"
                            variant="brand"></lightning-spinner>
 
         <lightning-card icon-name="standard:process" title="Prozess Stammdatensammler">
 
-            <template if:true={iv_ShowComponent}>
-
-                <lightning-button label={iv_ButtonName} onclick={openModal} slot="actions"
+            <template if:true={showComponent}>
+                <lightning-button label={buttonName} onclick={openModal} slot="actions"
                                   variant="brand"></lightning-button>
-
-                <p class="slds-p-horizontal_small">
-
-                    <!--<lightning-progress-indicator current-step={io_State.currentStep.iv_Value} type="path"
-                                                  variant="base">
-                        <template for:each={io_State.steps} for:item="step">
-                            <lightning-progress-step label={step.iv_Label}
-                                                     value={step.iv_Value}
-                                                     key={step.iv_Label}
-                                                     onstepfocus={setCurrentStep}
-                            ></lightning-progress-step>
-                        </template>
-                    </lightning-progress-indicator>-->
-
-                </p>
-
             </template>
 
         </lightning-card>
 
-        <template if:true={io_State.showModal}>
+        <template if:true={state.showModal}>
 
             <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
                      aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_medium">
@@ -63,24 +46,24 @@
                             <span class="slds-assistive-text">Schließen</span>
                         </button>
                         <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">
-                            {io_State.currentStep.iv_Label}</h2>
+                            {state.currentStep.iv_Label}</h2>
                     </header>
 
                     <!-- Content -->
                     <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
 
-                        <template for:each={io_State.screens} for:item="screen" for:index="screenIndex">
+                        <template for:each={state.screens} for:item="screen" for:index="screenIndex">
 
                             <template if:true={screen.isActive}>
 
                                 <c-hw-stammdatensammler-fenster
                                         screen={screen}
-                                        record-id={io_State.recordId}
+                                        record-id={state.recordId}
                                         key={screen.key}
-                                        is-filiale-95={io_State.isFiliale95}
+                                        is-filiale-95={state.isFiliale95}
                                         index={screenIndex}
-                                        is-facts-sent={io_State.isFactsSent}
-                                        is-vorgaengerfiliale-present={io_State.isVorgaengerfilialePresent}
+                                        is-facts-sent={state.isFactsSent}
+                                        is-vorgaengerfiliale-present={state.isVorgaengerfilialePresent}
                                         is-formataenderung={isFormataenderung}
                                 ></c-hw-stammdatensammler-fenster>
 
@@ -94,7 +77,7 @@
                     <footer class="slds-modal__footer ">
 
 
-                        <c-hw-progress-indicator steps={io_State.steps}></c-hw-progress-indicator>
+                        <c-hw-progress-indicator steps={state.steps}></c-hw-progress-indicator>
 
                     </footer>
                 </div>
@@ -107,7 +90,7 @@
 
     <template if:true={isExistingMAEF}>
 
-        <lightning-spinner if:true={io_State.showSpinner} alternative-text="Loading" size="medium"
+        <lightning-spinner if:true={state.showSpinner} alternative-text="Loading" size="medium"
                            variant="brand"></lightning-spinner>
 
         <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
@@ -152,18 +135,18 @@
 
                     <template if:false={isWrongRecordType}>
 
-                        <template for:each={io_State.screens} for:item="screen" for:index="screenIndex">
+                        <template for:each={state.screens} for:item="screen" for:index="screenIndex">
 
                             <c-hw-stammdatensammler-fenster
                                     screen={screen}
-                                    record-id={io_State.recordId}
+                                    record-id={state.recordId}
                                     key={screen.key}
-                                    is-filiale-95={io_State.isFiliale95}
+                                    is-filiale-95={state.isFiliale95}
                                     index={screenIndex}
-                                    is-facts-sent={io_State.isFactsSent}
-                                    is-vorgaengerfiliale-present={io_State.isVorgaengerfilialePresent}
+                                    is-facts-sent={state.isFactsSent}
+                                    is-vorgaengerfiliale-present={state.isVorgaengerfilialePresent}
                                     is-existing-maef={isExistingMAEF}
-                                    maef-url={io_State.maefUrl}
+                                    maef-url={state.maefUrl}
                                     is-formataenderung={isFormataenderung}
                             ></c-hw-stammdatensammler-fenster>
 
