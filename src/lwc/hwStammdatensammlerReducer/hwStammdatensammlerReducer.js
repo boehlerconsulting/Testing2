@@ -12,12 +12,8 @@
  *
  *
  */
-//Custom Javascript
-import * as Logger from "c/hwLogger";
 import HwApexRequest from "c/hwApexRequest";
 import hwRequestEvaluator from "c/hwRequestEvaluator";
-
-//Custom Apex
 import saveSteps from '@salesforce/apex/HW_Stammdatensammler_LC.saveSteps';
 import saveSObject from '@salesforce/apex/HW_Stammdatensammler_LC.saveSObject';
 import saveOeffnungszeiten from '@salesforce/apex/HW_Stammdatensammler_LC.saveOeffnungszeiten';
@@ -441,9 +437,6 @@ function reduceSetMaefUrl(state, caller, action) {
                 caller.showToast('Der MAEF Beleg wurde erfolgreich versendet.');
             }
         })
-        .catch((errorMessage) => {
-            Logger.logError("Error", {data: errorMessage})();
-        });
 }
 
 function reduceSetSteps(state, action, caller) {
@@ -551,9 +544,6 @@ function reduceSetWarningFalse(state, action, caller) {
 }
 
 function handleSaveSteps(state, caller) {
-
-    Logger.startBlock("hwStammdatensammlerReducer.handleSaveSteps")();
-
     const apexRequest = new HwApexRequest(caller);
     apexRequest
         .setMethod(saveSteps)
@@ -568,11 +558,6 @@ function handleSaveSteps(state, caller) {
             successMessage: "Success"
         })
         .execute()
-        .catch((errorMessage) => {
-            Logger.logError("Error", {data: errorMessage})();
-        });
-
-    Logger.endBlock()();
 }
 
 function setFieldValues(state, action) {
@@ -907,9 +892,6 @@ function processRequestQueue(sObject, caller, state, action, request) {
             }
             forceButtonRerender(state);
         })
-        .catch((errorMessage) => {
-            Logger.logError("Error", {data: errorMessage})();
-        });
 }
 
 function handleSaveOeffnungszeiten(oeffnungszeiten, caller, state, action) {

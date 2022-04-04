@@ -13,16 +13,7 @@
  *
  */
 
-import {LightningElement, track, api, wire} from 'lwc';
-
-//Custom Javascript
-import * as Logger from "c/hwLogger";
-import * as FieldInputValidator from "c/hwFieldInputValidator";
-import {showSpinner, hideSpinner} from "c/hwSpinnerController";
-
-import HwApplicationStateActionDispatcher from "c/hwApplicationStateActionDispatcher";
-import * as ActionCreator from "c/hwStammdatensammlerActionCreator";
-import {reduce} from "c/hwStammdatensammlerReducer";
+import {LightningElement, api} from 'lwc';
 
 export default class HW_Oeffnungszeiten extends LightningElement {
 

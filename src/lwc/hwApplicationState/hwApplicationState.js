@@ -1,10 +1,6 @@
 /**
  * Created by oliverpreuschl on 2019-03-28.
  */
-
-import * as Logger from "c/hwLogger";
-
-
 export default class HwApplicationState {
 
     //Instance Properties------------------------------------------------------------------------
@@ -25,7 +21,6 @@ export default class HwApplicationState {
             historicizeState: false,
             maxStates:        10000
         } ) {
-        Logger.startBlock( "HwApplicationState.constructor" )();
 
         this.io_Caller           = po_Caller;
         this.if_Reduce           = pf_reduce;
@@ -40,8 +35,6 @@ export default class HwApplicationState {
 
         this.addCurrentSourceActionStateToHistory();
         po_Caller.addEventListener( "hwdispatch", this.handleEvent_HwDispatch.bind( this ) );
-
-        Logger.endBlock()();
     }
 
 
@@ -129,28 +122,19 @@ export default class HwApplicationState {
 
     //Event Handlers---------------------------------------------------------------------------
     handleEvent_HwDispatch( pe_Dispatch ) {
-        Logger.startBlock( "HwApplicationState.handleEvent_HwDispatch" )();
-
         const lv_SrcElement          = pe_Dispatch.path ? pe_Dispatch.path[ 0 ].localName : null;
         const lo_CurrentState        = this.getCurrentStateClone();
         const lo_ActionConfiguration = pe_Dispatch.detail;
 
         let lv_ActionSkipped = false;
         if ( lo_ActionConfiguration.type === "action" ) {
-            Logger.log( "Call Reducer", { data: lo_ActionConfiguration.action } )();
             this.if_Reduce( lo_CurrentState, lo_ActionConfiguration.action, this.io_Caller );
         } else if ( lo_ActionConfiguration.type === "function" ) {
-            try {
-                const lo_Action = lo_ActionConfiguration.actionFunction( lo_CurrentState );
-                if ( lo_Action ) {
-                    Logger.log( "Call Reducer", { data: lo_Action } )();
-                    this.if_Reduce( lo_CurrentState, lo_Action, this.io_Caller );
-                } else {
-                    Logger.log( "ActionFunction did not return any Action" )();
-                    lv_ActionSkipped = true;
-                }
-            } catch ( e ) {
-                Logger.log( "Dispatch Error:", { data: e.message } )();
+            const lo_Action = lo_ActionConfiguration.actionFunction( lo_CurrentState );
+            if ( lo_Action ) {
+                this.if_Reduce( lo_CurrentState, lo_Action, this.io_Caller );
+            } else {
+                lv_ActionSkipped = true;
             }
         }
 
@@ -162,8 +146,5 @@ export default class HwApplicationState {
                 this.addCurrentSourceActionStateToHistory();
             }
         }
-
-
-        Logger.endBlock()();
     }
 }

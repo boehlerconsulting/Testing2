@@ -12,16 +12,7 @@
  *
  *
  */
-
-//LWC
-import {LightningElement, api, track, wire} from "lwc";
-import {ShowToastEvent} from "lightning/platformShowToastEvent";
-import {getRecord, getFieldValue, updateRecord} from "lightning/uiRecordApi";
-
-//Custom Javascript
-import * as Logger from "c/hwLogger";
-import {showSpinner, hideSpinner} from "c/hwSpinnerController";
-
+import {LightningElement, api} from "lwc";
 import HwApplicationStateActionDispatcher from "c/hwApplicationStateActionDispatcher";
 import * as ActionCreator from "c/hwStammdatensammlerActionCreator";
 
@@ -40,27 +31,19 @@ export default class HW_StammdatensammlerFenster extends LightningElement {
     io_Dispatcher = new HwApplicationStateActionDispatcher(this);
 
     handleFirstWarningClose(){
-        Logger.startBlock("hwStammdatensammlerFenster.handleFirstWarningClose")();
-
         this.io_Dispatcher.dispatch(
             ActionCreator.setWarningFalse(
                 'First'
             )
         );
-
-        Logger.endBlock()();
     }
 
     handleSecondWarningClose(){
-        Logger.startBlock("hwStammdatensammlerFenster.handleSecondWarningClose")();
-
         this.io_Dispatcher.dispatch(
             ActionCreator.setWarningFalse(
                 'Second'
             )
         );
-
-        Logger.endBlock()();
     }
 
     //Expand or Collapse All actions

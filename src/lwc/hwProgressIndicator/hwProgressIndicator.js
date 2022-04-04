@@ -12,23 +12,10 @@
  *
  *
  */
-
-//LWC
-import {LightningElement, api, track, wire} from "lwc";
-import {ShowToastEvent} from "lightning/platformShowToastEvent";
+import {LightningElement, api, track} from "lwc";
 import { NavigationMixin } from 'lightning/navigation';
-
-//Custom Javascript
-import * as Logger from "c/hwLogger";
-import {showSpinner, hideSpinner} from "c/hwSpinnerController";
-
-import HwApplicationState from "c/hwApplicationState";
 import HwApplicationStateActionDispatcher from "c/hwApplicationStateActionDispatcher";
 import * as ActionCreator from "c/hwStammdatensammlerActionCreator";
-import {reduce} from "c/hwStammdatensammlerReducer";
-
-//Apex
-import {refreshApex} from "@salesforce/apex";
 
 export default class HW_ProgressIndicator extends NavigationMixin(LightningElement) {
 
@@ -38,16 +25,10 @@ export default class HW_ProgressIndicator extends NavigationMixin(LightningEleme
     io_Dispatcher = new HwApplicationStateActionDispatcher(this);
 
     renderedCallback() {
-        Logger.startBlock("hwProgressIndicator.renderedCallback")();
-
         this.calculateProgressValueWidth();
-
-        Logger.endBlock()();
     }
 
     calculateProgressValueWidth() {
-        Logger.startBlock("hwProgressIndicator.calculateProgressValueWidth")();
-
         let lv_ActiveStepIndex;
         for (let i = 0; i < this.steps.length; i++) {
             let lo_Step = this.steps[i];
@@ -61,30 +42,20 @@ export default class HW_ProgressIndicator extends NavigationMixin(LightningEleme
         this.activeStepIndex = lv_ActiveStepIndex;
         this.template.querySelector(".slds-progress-bar__value").style.width =
             `${100 / (this.steps.length - 1) * (lv_ActiveStepIndex)}%`;
-
-        Logger.endBlock()();
     }
 
     handleChange(event) {
-        Logger.startBlock("hwProgressIndicator.handleChange")();
-
         let lv_ActiveIndex = event.target.name ? event.target.name : event.target.alternativeText;
-
         if (lv_ActiveIndex !== undefined){
-
             this.io_Dispatcher.dispatch(
                 ActionCreator.setSteps(
                     lv_ActiveIndex
                 )
             );
-
-
         }
-
-        Logger.endBlock()();
     }
 
-    handlePrevious(event){
+    handlePrevious(){
         this.io_Dispatcher.dispatch(
             ActionCreator.setSteps(
                 this.activeStepIndex - 1
@@ -92,7 +63,7 @@ export default class HW_ProgressIndicator extends NavigationMixin(LightningEleme
         );
     }
 
-    handleNext(event){
+    handleNext(){
         this.io_Dispatcher.dispatch(
             ActionCreator.setSteps(
                 this.activeStepIndex + 1

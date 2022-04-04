@@ -13,15 +13,9 @@
  *
  */
 
-import {LightningElement, track, api, wire} from 'lwc';
-
-//Custom Javascript
-import * as Logger from "c/hwLogger";
-import {showSpinner, hideSpinner} from "c/hwSpinnerController";
-
+import {LightningElement, api} from 'lwc';
 import HwApplicationStateActionDispatcher from "c/hwApplicationStateActionDispatcher";
 import * as ActionCreator from "c/hwStammdatensammlerActionCreator";
-import {reduce} from "c/hwStammdatensammlerReducer";
 
 export default class HW_OeffnungszeitenWochentag extends LightningElement {
 
@@ -36,9 +30,6 @@ export default class HW_OeffnungszeitenWochentag extends LightningElement {
     io_Dispatcher = new HwApplicationStateActionDispatcher(this);
 
     handleDataChange(event) {
-
-        Logger.startBlock("hwOeffnungszeitenWochentag.handleDataChange")();
-
         let lv_FieldValue = event.target.value;
         let lv_CategoryIndex = event.target.name;
         let lv_Weekday = this.oeffnungszeitWochentag.Wochentag__c;
@@ -55,8 +46,6 @@ export default class HW_OeffnungszeitenWochentag extends LightningElement {
                 lv_Weekday
             )
         );
-
-        Logger.endBlock()();
     }
 
     get value(){

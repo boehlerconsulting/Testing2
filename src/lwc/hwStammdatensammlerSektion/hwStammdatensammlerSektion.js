@@ -13,8 +13,7 @@
  *
  */
 
-import {LightningElement, track, api, wire} from 'lwc';
-import * as Logger from "c/hwLogger";
+import {LightningElement, api} from 'lwc';
 
 export default class HW_StammdatensammlerSektion extends LightningElement {
 

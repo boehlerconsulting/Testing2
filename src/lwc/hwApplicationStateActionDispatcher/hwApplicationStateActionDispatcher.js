@@ -2,8 +2,6 @@
  * Created by oliverpreuschl on 2019-03-28.
  */
 
-import * as Logger from "c/hwLogger";
-
 export default class HwApplicationStateActionDispatcher {
 
     io_Caller;
@@ -13,7 +11,6 @@ export default class HwApplicationStateActionDispatcher {
     }
 
     dispatch( po_ActionOrActionFunction ) {
-        Logger.startBlock( "hwApplicationStoreDispatcher.dispatch()" )();
 
         let lo_Action;
         let lo_ActionConfiguration;
@@ -23,13 +20,11 @@ export default class HwApplicationStateActionDispatcher {
                 type:   "action",
                 action: lo_Action
             };
-            Logger.log( "Dispatch Action" )();
         } else {
             lo_ActionConfiguration = {
                 type:           "function",
                 actionFunction: po_ActionOrActionFunction
             };
-            Logger.log( "Dispatch ActionFunction" )();
         }
         const le_Dispatch = new CustomEvent( "hwdispatch",
             {
@@ -38,8 +33,6 @@ export default class HwApplicationStateActionDispatcher {
                 composed: true
             } );
         this.io_Caller.dispatchEvent( le_Dispatch, lo_Action );
-
-        Logger.endBlock()();
     };
 
 }

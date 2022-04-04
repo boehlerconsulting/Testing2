@@ -14,21 +14,14 @@
  */
 
 //LWC
-import {LightningElement, api, track, wire} from "lwc";
+import {LightningElement, api, track} from "lwc";
 import {ShowToastEvent} from "lightning/platformShowToastEvent";
 import { NavigationMixin } from 'lightning/navigation';
-import {getRecord, getFieldValue, updateRecord} from "lightning/uiRecordApi";
 import validateAstId from '@salesforce/apex/HW_Stammdatensammler_LC.validateAstId';
 import getDocumentUrl from '@salesforce/apex/HW_Stammdatensammler_LC.getDocumentUrl';
 import saveDocument from '@salesforce/apex/HW_Stammdatensammler_LC.saveDocument';
-
-//Custom Javascript
-import * as Logger from "c/hwLogger";
-import {showSpinner, hideSpinner} from "c/hwSpinnerController";
 import HwApplicationStateActionDispatcher from "c/hwApplicationStateActionDispatcher";
 import * as ActionCreator from "c/hwStammdatensammlerActionCreator";
-import HwApexRequest from "c/hwApexRequest";
-
 
 export default class HW_StammdatensammlerButton extends NavigationMixin(LightningElement) {
 
@@ -48,20 +41,14 @@ export default class HW_StammdatensammlerButton extends NavigationMixin(Lightnin
     io_Dispatcher = new HwApplicationStateActionDispatcher(this);
 
     setStepDone() {
-        Logger.startBlock("hwStammdatensammlerButton.setSteps")();
-
         this.io_Dispatcher.dispatch(
             ActionCreator.setStepDone(
                 this.screen.position
             )
         );
-
-        Logger.endBlock()();
     }
 
     handleDocumentCreation() {
-        Logger.startBlock("hwStammdatensammlerButton.handleDocumentCreation")();
-
         let lo_Button = this.button;
         if (!this.showSpinner && !this.isLoading) {
 
@@ -98,7 +85,6 @@ export default class HW_StammdatensammlerButton extends NavigationMixin(Lightnin
                 this.generateDocuments();
             }
         }
-        Logger.endBlock()();
     }
 
     generateDocuments() {

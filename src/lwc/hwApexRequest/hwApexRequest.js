@@ -2,11 +2,8 @@
  * Created by oliverpreuschl on 2019-01-21.
  */
 
-import * as Logger from "c/hwLogger";
 import { showSpinner, hideSpinner } from "c/hwSpinnerController";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
-
-let sv_RequestCounter = 0;
 
 export default class HwApexRequest {
 
@@ -62,26 +59,19 @@ export default class HwApexRequest {
     }
 
     execute() {
-        Logger.startFrameworkBlock( "HwApexRequest.execute" )();
-
         var lo_Promise = new Promise(
             function ( pf_Resolve, pf_Reject ) {
                 try {
                     if ( this.io_Config.iv_ShowSpinner ) {
                         showSpinner( this.io_Caller );
                     }
-                    this.iv_RequestNumber = sv_RequestCounter++;
                     this.callApexMethod( pf_Resolve, pf_Reject );
-                    this.logApexRequest();
                 } catch ( e ) {
                     this.showError( e.message );
                     pf_Reject( e.message );
                 }
             }.bind( this )
         );
-
-        Logger.endFrameworkBlock()();
-
         return lo_Promise;
     };
 
@@ -99,16 +89,7 @@ export default class HwApexRequest {
             } );
     }
 
-    logApexRequest() {
-        Logger.logApexRequest( this.iv_MethodName,
-            {
-                data:          this.io_Parameters,
-                statusMessage: this.iv_RequestNumber
-            } )();
-    }
-
     showError( pv_ErrorMessage ) {
-        Logger.logError( pv_ErrorMessage )();
         if ( this.io_Config.iv_ShowErrorMessage ) {
             const le_Toast = new ShowToastEvent( {
                 title:   "Error",
@@ -120,11 +101,6 @@ export default class HwApexRequest {
     }
 
     showApexError( po_Error ) {
-        Logger.logApexError( this.iv_MethodName,
-            {
-                data:          po_Error,
-                statusMessage: this.iv_RequestNumber
-            } )();
         if ( this.io_Config.iv_ShowErrorMessage ) {
             const le_Toast = new ShowToastEvent( {
                 title:   "Error",
@@ -136,11 +112,6 @@ export default class HwApexRequest {
     }
 
     showApexSuccess( pv_SuccessMessage, p_Data ) {
-        Logger.logApexSuccess( this.iv_MethodName,
-            {
-                data:          p_Data,
-                statusMessage: this.iv_RequestNumber
-            } )();
         if ( this.io_Config.iv_SuccessMessage && this.io_Config.iv_ShowSuccessMessage ) {
             const le_Toast = new ShowToastEvent( {
                 title:   "Success",

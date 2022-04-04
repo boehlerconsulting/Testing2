@@ -13,25 +13,10 @@
  *
  */
 
-//LWC
 import {LightningElement, api, track, wire} from "lwc";
-import {ShowToastEvent} from "lightning/platformShowToastEvent";
-import {getRecord, getFieldValue, updateRecord} from "lightning/uiRecordApi";
-
-
-//Custom Javascript
-import * as Logger from "c/hwLogger";
 import * as FieldInputValidator from "c/hwFieldInputValidator";
-import {showSpinner, hideSpinner} from "c/hwSpinnerController";
-
 import HwApplicationStateActionDispatcher from "c/hwApplicationStateActionDispatcher";
 import * as ActionCreator from "c/hwStammdatensammlerActionCreator";
-import {reduce} from "c/hwStammdatensammlerReducer";
-
-//Apex
-import {refreshApex} from "@salesforce/apex";
-
-//Lightning UI Adapters
 import {getObjectInfo} from "lightning/uiObjectInfoApi";
 
 export default class HW_StammdatensammlerFeld extends LightningElement {
@@ -61,9 +46,6 @@ export default class HW_StammdatensammlerFeld extends LightningElement {
     }
 
     handleDataChange(event) {
-
-        Logger.startBlock("hwStammdatensammlerFeld.handleDataChange")();
-
         let isValid = this.field.Feldtyp === 'picklist' || this.field.Feldtyp === 'date' || this.field.Feldtyp === 'datetime'
             ? true
             : this.validateInput(event);
@@ -81,13 +63,9 @@ export default class HW_StammdatensammlerFeld extends LightningElement {
                 )
             );
         }
-
-
-        Logger.endBlock()();
     }
 
     validateInput(event) {
-        Logger.startBlock("hwStammdatensammlerFeld.validateInput")();
         let lo_InputComponent = event.target;
         lo_InputComponent.setCustomValidity("");
         let lv_IsValid = lo_InputComponent.checkValidity();
@@ -98,7 +76,6 @@ export default class HW_StammdatensammlerFeld extends LightningElement {
             lo_InputComponent.setCustomValidity(this.field.Validierung_Fehlermeldung);
         }
         lo_InputComponent.reportValidity();
-        Logger.endBlock()();
         return lv_IsValid;
     }
 
