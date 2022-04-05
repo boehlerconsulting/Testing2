@@ -4,145 +4,106 @@
 export default class HwApplicationState {
 
     //Instance Properties------------------------------------------------------------------------
-    io_Caller;
-    io_CurrentAction;
-    iv_CurrentActionSource;
-    iv_HistoricizeState;
-    iv_MaxStates;
-    il_SourceActionStateHistory = [];
-    iv_CurrentStateIndex        = -1;
-    if_Reduce;
-
+    caller;
+    currentAction;
+    currentActionSource;
+    historicizeState;
+    maxStates;
+    sourceActionStateHistory = [];
+    currentStateIndex        = -1;
+    reduce;
 
     //Lifecycle Hooks---------------------------------------------------------------------------
-    constructor( po_Caller,
-        pf_reduce,
+    constructor( caller,
+        reduce,
         { historicizeState, maxStates } = {
             historicizeState: false,
             maxStates:        10000
         } ) {
 
-        this.io_Caller           = po_Caller;
-        this.if_Reduce           = pf_reduce;
-        this.iv_HistoricizeState = historicizeState;
-        this.iv_MaxStates        = maxStates;
-        if ( this.iv_HistoricizeState === undefined || this.iv_HistoricizeState === null ) {
-            this.iv_HistoricizeState = false;
+        this.caller           = caller;
+        this.reduce           = reduce;
+        this.historicizeState = historicizeState;
+        this.maxStates        = maxStates;
+        if ( this.historicizeState === undefined || this.historicizeState === null ) {
+            this.historicizeState = false;
         }
-        if ( !this.iv_MaxStates ) {
-            this.iv_MaxStates = 10000;
+        if ( !this.maxStates ) {
+            this.maxStates = 10000;
         }
 
         this.addCurrentSourceActionStateToHistory();
-        po_Caller.addEventListener( "hwdispatch", this.handleEvent_HwDispatch.bind( this ) );
+        caller.addEventListener( "hwdispatch", this.handleEvent_HwDispatch.bind( this ) );
     }
-
 
     //Instance Methods-------------------------------------------------------------------------
     getCurrentStateClone() {
-        return { ...this.io_Caller.state };
+        return { ...this.caller.state };
     }
 
     addCurrentSourceActionStateToHistory() {
-        if ( this.iv_CurrentStateIndex < this.iv_MaxStates ) {
-            this.setCurrentStateIndex( this.iv_CurrentStateIndex + 1 );
+        if ( this.currentStateIndex < this.maxStates ) {
+            this.setCurrentStateIndex( this.currentStateIndex + 1 );
         }
         this.cleanupFutureStates();
-        this.il_SourceActionStateHistory.push( {
-            source: this.iv_CurrentActionSource,
-            action: this.io_CurrentAction,
-            state:  this.io_Caller.state
+        this.sourceActionStateHistory.push( {
+            source: this.currentActionSource,
+            action: this.currentAction,
+            state:  this.caller.state
         } );
         this.cleanupSavedStates();
     }
 
-    setCurrentStateIndex( pv_StateIndex ) {
-        this.iv_CurrentStateIndex = pv_StateIndex;
+    setCurrentStateIndex( stateIndex ) {
+        this.currentStateIndex = stateIndex;
     }
 
     cleanupSavedStates() {
-        if ( ( this.iv_MaxStates !== -1 ) && ( this.il_SourceActionStateHistory.length > this.iv_MaxStates ) ) {
+        if ( ( this.maxStates !== -1 ) && ( this.sourceActionStateHistory.length > this.maxStates ) ) {
             this.deleteEarliestSavedState();
         }
     }
 
     cleanupFutureStates() {
-        if ( this.il_SourceActionStateHistory.length > ( this.iv_CurrentStateIndex + 1 ) ) {
-            const lv_NumberOfDeprectedFutureStates = this.il_SourceActionStateHistory.length - ( this.iv_CurrentStateIndex );
-            for ( let i = 1; i <= lv_NumberOfDeprectedFutureStates; i++ ) {
+        if ( this.sourceActionStateHistory.length > ( this.currentStateIndex + 1 ) ) {
+            const numberOfDeprectedFutureStates = this.sourceActionStateHistory.length - ( this.currentStateIndex );
+            for ( let i = 1; i <= numberOfDeprectedFutureStates; i++ ) {
                 this.deleteLatestSavedState();
             }
         }
     }
 
     deleteEarliestSavedState() {
-        this.il_SourceActionStateHistory.shift();
+        this.sourceActionStateHistory.shift();
     }
 
     deleteLatestSavedState() {
-        this.il_SourceActionStateHistory.pop();
+        this.sourceActionStateHistory.pop();
     }
-
-    getNumberOfSavedStates() {
-        return this.il_SourceActionStateHistory.length;
-    }
-
-    getCurrentStateIndex() {
-        return this.iv_CurrentStateIndex;
-    }
-
-    isPreviousStateAvailable() {
-        return ( this.iv_CurrentStateIndex > 0 );
-    }
-
-    isNextStateAvailable() {
-        return ( this.iv_CurrentStateIndex < ( this.getNumberOfSavedStates() - 1 ) );
-    }
-
-    switchToPreviousState() {
-        if ( this.iv_CurrentStateIndex > 0 ) {
-            this.setCurrentStateIndex( this.iv_CurrentStateIndex - 1 );
-        }
-        this.loadStateFromHistory( this.iv_CurrentStateIndex );
-    }
-
-    switchToNextState() {
-        if ( this.iv_CurrentStateIndex < ( this.getNumberOfSavedStates() - 1 ) ) {
-            this.setCurrentStateIndex( this.iv_CurrentStateIndex + 1 );
-        }
-        this.loadStateFromHistory( this.iv_CurrentStateIndex );
-    }
-
-    loadStateFromHistory(  ) {
-        this.iv_CurrentActionSource = this.il_SourceActionStateHistory[ this.iv_CurrentStateIndex ].source;
-        this.io_CurrentAction       = this.il_SourceActionStateHistory[ this.iv_CurrentStateIndex ].action;
-        this.io_Caller.state     = this.il_SourceActionStateHistory[ this.iv_CurrentStateIndex ].state;
-    }
-
 
     //Event Handlers---------------------------------------------------------------------------
-    handleEvent_HwDispatch( pe_Dispatch ) {
-        const lv_SrcElement          = pe_Dispatch.path ? pe_Dispatch.path[ 0 ].localName : null;
-        const lo_CurrentState        = this.getCurrentStateClone();
-        const lo_ActionConfiguration = pe_Dispatch.detail;
+    handleEvent_HwDispatch( dispatch ) {
+        const srcElement          = dispatch.path ? dispatch.path[ 0 ].localName : null;
+        const currentState        = this.getCurrentStateClone();
+        const actionConfiguration = dispatch.detail;
 
-        let lv_ActionSkipped = false;
-        if ( lo_ActionConfiguration.type === "action" ) {
-            this.if_Reduce( lo_CurrentState, lo_ActionConfiguration.action, this.io_Caller );
-        } else if ( lo_ActionConfiguration.type === "function" ) {
-            const lo_Action = lo_ActionConfiguration.actionFunction( lo_CurrentState );
-            if ( lo_Action ) {
-                this.if_Reduce( lo_CurrentState, lo_Action, this.io_Caller );
+        let actionSkipped = false;
+        if ( actionConfiguration.type === "action" ) {
+            this.reduce( currentState, actionConfiguration.action, this.caller );
+        } else if ( actionConfiguration.type === "function" ) {
+            const action = actionConfiguration.actionFunction( currentState );
+            if ( action ) {
+                this.reduce( currentState, action, this.caller );
             } else {
-                lv_ActionSkipped = true;
+                actionSkipped = true;
             }
         }
 
-        if ( !lv_ActionSkipped ) {
-            this.io_Caller.state     = lo_CurrentState;
-            this.io_CurrentAction       = lo_ActionConfiguration.action;
-            this.iv_CurrentActionSource = lv_SrcElement;
-            if ( this.iv_HistoricizeState ) {
+        if ( !actionSkipped ) {
+            this.caller.state     = currentState;
+            this.currentAction       = actionConfiguration.action;
+            this.currentActionSource = srcElement;
+            if ( this.historicizeState ) {
                 this.addCurrentSourceActionStateToHistory();
             }
         }
