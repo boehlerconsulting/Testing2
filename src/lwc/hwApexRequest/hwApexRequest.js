@@ -2,123 +2,118 @@
  * Created by oliverpreuschl on 2019-01-21.
  */
 
-import { showSpinner, hideSpinner } from "c/hwSpinnerController";
-import { ShowToastEvent } from "lightning/platformShowToastEvent";
+import {hideSpinner, showSpinner} from "c/hwSpinnerController";
+import {ShowToastEvent} from "lightning/platformShowToastEvent";
 
 export default class HwApexRequest {
 
-    io_Caller;
-    if_Method;
-    iv_MethodName;
-    io_Parameters;
-    io_Config = {
-        iv_ShowSpinner:      true,
-        iv_ShowErrorMessage: true,
-        iv_ShowSuccessMessage: true,
-        iv_SuccessMessage:   "Success"
+    caller;
+    method;
+    methodName;
+    parameters;
+    config = {
+        showSpinner: true,
+        showErrorMessage: true,
+        showSuccessMessage: true,
+        successMessage: "Success"
     };
-    iv_RequestNumber;
 
-    constructor( po_Caller ) {
-        this.io_Caller = po_Caller;
+    constructor(caller) {
+        this.caller = caller;
     }
 
-    setMethod( pf_Method ) {
-        this.if_Method = pf_Method;
+    setMethod(method) {
+        this.method = method;
         return this;
     }
 
-    getMethod( ) {
-        return this.if_Method;
+    getMethod() {
+        return this.method;
     }
 
-    setMethodName( pv_MethodName ) {
-        this.iv_MethodName = pv_MethodName;
+    setMethodName(methodName) {
+        this.methodName = methodName;
         return this;
     }
 
-    setParameters( po_Parameters ) {
-        this.io_Parameters = po_Parameters;
+    setParameters(parameters) {
+        this.parameters = parameters;
         return this;
     }
 
-    setConfig( { showSpinner, showErrorMessage, showSuccessMessage, successMessage } ) {
-        if ( showSpinner !== undefined && showSpinner !== null ) {
-            this.io_Config.iv_ShowSpinner = showSpinner;
+    setConfig({showSpinner, showErrorMessage, showSuccessMessage, successMessage}) {
+        if (showSpinner !== undefined && showSpinner !== null) {
+            this.config.showSpinner = showSpinner;
         }
-        if ( showErrorMessage !== undefined && showErrorMessage !== null ) {
-            this.io_Config.iv_ShowErrorMessage = showErrorMessage;
+        if (showErrorMessage !== undefined && showErrorMessage !== null) {
+            this.config.showErrorMessage = showErrorMessage;
         }
-        if ( showSuccessMessage !== undefined && showSuccessMessage !== null ) {
-            this.io_Config.iv_ShowSuccessMessage = showSuccessMessage;
+        if (showSuccessMessage !== undefined && showSuccessMessage !== null) {
+            this.config.showSuccessMessage = showSuccessMessage;
         }
-        if ( successMessage !== undefined && successMessage !== null ) {
-            this.io_Config.iv_SuccessMessage = successMessage;
+        if (successMessage !== undefined && successMessage !== null) {
+            this.config.successMessage = successMessage;
         }
         return this;
     }
 
     execute() {
-        var lo_Promise = new Promise(
-            function ( pf_Resolve, pf_Reject ) {
+        return new Promise(
+            function (resolve, reject) {
                 try {
-                    if ( this.io_Config.iv_ShowSpinner ) {
-                        showSpinner( this.io_Caller );
+                    if (this.config.showSpinner) {
+                        showSpinner(this.caller);
                     }
-                    this.callApexMethod( pf_Resolve, pf_Reject );
-                } catch ( e ) {
-                    this.showError( e.message );
-                    pf_Reject( e.message );
+                    this.callApexMethod(resolve, reject);
+                } catch (e) {
+                    this.showError(e.message);
+                    reject(e.message);
                 }
-            }.bind( this )
+            }.bind(this)
         );
-        return lo_Promise;
     };
 
-    callApexMethod( pf_Resolve, pf_Reject ) {
-        this.if_Method( this.io_Parameters )
-            .then( p_Result => {
-                hideSpinner( this.io_Caller );
-                this.showApexSuccess( this.io_Config.iv_SuccessMessage, p_Result );
-                pf_Resolve( p_Result );
-            } )
-            .catch( po_Error => {
-                hideSpinner( this.io_Caller );
-                this.showApexError( po_Error );
-                pf_Reject( po_Error );
-            } );
+    callApexMethod(resolve, reject) {
+        this.method(this.parameters)
+            .then(result => {
+                hideSpinner(this.caller);
+                this.showApexSuccess(this.config.successMessage, result);
+                resolve(result);
+            })
+            .catch(error => {
+                hideSpinner(this.caller);
+                this.showApexError(error);
+                reject(error);
+            });
     }
 
-    showError( pv_ErrorMessage ) {
-        if ( this.io_Config.iv_ShowErrorMessage ) {
-            const le_Toast = new ShowToastEvent( {
-                title:   "Error",
-                message: pv_ErrorMessage,
+    showError(errorMessage) {
+        if (this.config.showErrorMessage) {
+            this.caller.dispatchEvent(new ShowToastEvent({
+                title: "Error",
+                message: errorMessage,
                 variant: "error"
-            } );
-            this.io_Caller.dispatchEvent( le_Toast );
+            }));
         }
     }
 
-    showApexError( po_Error ) {
-        if ( this.io_Config.iv_ShowErrorMessage ) {
-            const le_Toast = new ShowToastEvent( {
-                title:   "Error",
-                message: po_Error,
+    showApexError(error) {
+        if (this.config.showErrorMessage) {
+            this.caller.dispatchEvent(new ShowToastEvent({
+                title: "Error",
+                message: error,
                 variant: "error"
-            } );
-            this.io_Caller.dispatchEvent( le_Toast );
+            }));
         }
     }
 
-    showApexSuccess( pv_SuccessMessage, p_Data ) {
-        if ( this.io_Config.iv_SuccessMessage && this.io_Config.iv_ShowSuccessMessage ) {
-            const le_Toast = new ShowToastEvent( {
-                title:   "Success",
-                message: pv_SuccessMessage,
+    showApexSuccess(successMessage) {
+        if (this.config.successMessage && this.config.showSuccessMessage) {
+            this.caller.dispatchEvent(new ShowToastEvent({
+                title: "Success",
+                message: successMessage,
                 variant: "success"
-            } );
-            this.io_Caller.dispatchEvent( le_Toast );
+            }));
         }
     }
 
