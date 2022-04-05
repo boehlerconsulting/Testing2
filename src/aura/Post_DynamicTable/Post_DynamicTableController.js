@@ -13,7 +13,7 @@
  *
  */
 ({
-    initializeComponent: function (component, event, helper) {
+    initializeComponent: function (component, _event, helper) {
         component.set('v.showSpinner', true);
         component.set('v.PrivateMatchCriteria', component.get('v.MatchCriteria'));
         component.set('v.SelectedRecordsMap', new Map());
@@ -22,7 +22,7 @@
         component.set('v.showSpinner', false);
     },
 
-    updateMatchCriteria: function (component, event, helper) {
+    updateMatchCriteria: function (component, _event, helper) {
         component.set('v.showSpinner', true);
         component.set('v.PrivateMatchCriteria', component.get("v.MatchCriteria"));
         helper.retrieveTotalRecords(component);
@@ -61,7 +61,7 @@
         component.set('v.showSpinner', false);
     },
 
-    firstPage: function (component, event, helper) {
+    firstPage: function (component, _event, helper) {
         component.set('v.showSpinner', true);
         let hasPrevious = component.get('v.HasPrevious');
         if (hasPrevious) {
@@ -71,7 +71,7 @@
         component.set('v.showSpinner', false);
     },
 
-    previousPage: function (component, event, helper) {
+    previousPage: function (component, _event, helper) {
         component.set('v.showSpinner', true);
         let hasPrevious = component.get('v.HasPrevious');
         if (hasPrevious) {
@@ -83,7 +83,7 @@
         component.set('v.showSpinner', false);
     },
 
-    nextPage: function (component, event, helper) {
+    nextPage: function (component, _event, helper) {
         component.set('v.showSpinner', true);
         let hasNext = component.get('v.HasNext');
         if (hasNext) {
@@ -95,7 +95,7 @@
         component.set('v.showSpinner', false);
     },
 
-    lastPage: function (component, event, helper) {
+    lastPage: function (component, _event, helper) {
         component.set('v.showSpinner', true);
         let hasNext = component.get('v.HasNext');
         if (hasNext) {
@@ -106,7 +106,7 @@
         component.set('v.showSpinner', false);
     },
 
-    changePageSize: function (component, event, helper) {
+    changePageSize: function (component, _event, helper) {
         component.set('v.showSpinner', true);
         component.set('v.PageNumber', 1);
         component.set('v.PageSize', component.find('pageSizeInput').get('v.value'));
@@ -114,7 +114,7 @@
         component.set('v.showSpinner', false);
     },
 
-    navigateToSObject: function (component, event) {
+    navigateToSObject: function (_component, event) {
         let recordId = event.currentTarget.id;
         let navigate = $A.get('e.force:navigateToSObject');
         navigate.setParams({
