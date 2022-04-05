@@ -40,31 +40,31 @@
 
     changeSort: function (component, event, helper) {
         component.set('v.showSpinner', true);
-        let clicked_element = event.target;
-        let sort_field = clicked_element.dataset.id;
-        let current_sort_field = component.get('v.SortByField');
-        let sort_order = component.get('v.SortOrder');
-        if (sort_field === current_sort_field) {
-            if (sort_order === 'ASC') {
-                sort_order = 'DESC';
+        let clickedElement = event.target;
+        let sortField = clickedElement.dataset.id;
+        let currentSortField = component.get('v.SortByField');
+        let sortOrder = component.get('v.SortOrder');
+        if (sortField === currentSortField) {
+            if (sortOrder === 'ASC') {
+                sortOrder = 'DESC';
             } else {
-                sort_order = 'ASC';
+                sortOrder = 'ASC';
             }
         } else {
-            current_sort_field = sort_field;
-            sort_order = 'DESC';
+            currentSortField = sortField;
+            sortOrder = 'DESC';
         }
         component.set('v.PageNumber', 1);
-        component.set('v.SortByField', current_sort_field);
-        component.set('v.SortOrder', sort_order);
+        component.set('v.SortByField', currentSortField);
+        component.set('v.SortOrder', sortOrder);
         helper.retrieveRecords(component, false);
         component.set('v.showSpinner', false);
     },
 
     firstPage: function (component, event, helper) {
         component.set('v.showSpinner', true);
-        let has_previous = component.get('v.HasPrevious');
-        if (has_previous) {
+        let hasPrevious = component.get('v.HasPrevious');
+        if (hasPrevious) {
             component.set('v.PageNumber', 1);
             helper.updateTableRows(component);
         }
@@ -73,11 +73,11 @@
 
     previousPage: function (component, event, helper) {
         component.set('v.showSpinner', true);
-        let has_previous = component.get('v.HasPrevious');
-        if (has_previous) {
-            let page_number = component.get('v.PageNumber');
-            page_number = page_number - 1;
-            component.set('v.PageNumber', page_number);
+        let hasPrevious = component.get('v.HasPrevious');
+        if (hasPrevious) {
+            let pageNumber = component.get('v.PageNumber');
+            pageNumber = pageNumber - 1;
+            component.set('v.PageNumber', pageNumber);
             helper.updateTableRows(component);
         }
         component.set('v.showSpinner', false);
@@ -85,11 +85,11 @@
 
     nextPage: function (component, event, helper) {
         component.set('v.showSpinner', true);
-        let has_next = component.get('v.HasNext');
-        if (has_next) {
-            let page_number = component.get('v.PageNumber');
-            page_number = page_number + 1;
-            component.set('v.PageNumber', page_number);
+        let hasNext = component.get('v.HasNext');
+        if (hasNext) {
+            let pageNumber = component.get('v.PageNumber');
+            pageNumber = pageNumber + 1;
+            component.set('v.PageNumber', pageNumber);
             helper.updateTableRows(component);
         }
         component.set('v.showSpinner', false);
@@ -97,10 +97,10 @@
 
     lastPage: function (component, event, helper) {
         component.set('v.showSpinner', true);
-        let has_next = component.get('v.HasNext');
-        if (has_next) {
-            let page_number = component.get('v.PageTotal');
-            component.set('v.PageNumber', page_number);
+        let hasNext = component.get('v.HasNext');
+        if (hasNext) {
+            let pageNumber = component.get('v.PageTotal');
+            component.set('v.PageNumber', pageNumber);
             helper.updateTableRows(component);
         }
         component.set('v.showSpinner', false);
@@ -115,21 +115,20 @@
     },
 
     navigateToSObject: function (component, event) {
-        let record_id = event.currentTarget.id;
+        let recordId = event.currentTarget.id;
         let navigate = $A.get('e.force:navigateToSObject');
         navigate.setParams({
-            'recordId': record_id,
+            'recordId': recordId,
             'slideDevName': 'detail'
         });
         navigate.fire();
     },
 
     editRecord: function (component, event, helper) {
-
-        var selectedAction = event.getParam("value");
-        var indexVar = event.getSource().get("v.name");
-        var all_records = component.get('v.AllRecords');
-        var recordId = all_records[indexVar].Id;
+        let selectedAction = event.getParam("value");
+        let indexVar = event.getSource().get("v.name");
+        let all_records = component.get('v.AllRecords');
+        let recordId = all_records[indexVar].Id;
 
         switch (selectedAction) {
             case "1":
