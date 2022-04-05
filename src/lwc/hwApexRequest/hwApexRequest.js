@@ -71,7 +71,7 @@ export default class HwApexRequest {
                 }
             }.bind(this)
         );
-    };
+    }
 
     callApexMethod(resolve, reject) {
         this.method(this.parameters)
@@ -116,5 +116,4 @@ export default class HwApexRequest {
             }));
         }
     }
-
 }
