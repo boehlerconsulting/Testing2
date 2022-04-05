@@ -127,8 +127,8 @@
     editRecord: function (component, event, helper) {
         let selectedAction = event.getParam("value");
         let indexVar = event.getSource().get("v.name");
-        let all_records = component.get('v.AllRecords');
-        let recordId = all_records[indexVar].Id;
+        let allRecords = component.get('v.AllRecords');
+        let recordId = allRecords[indexVar].Id;
 
         switch (selectedAction) {
             case "1":
