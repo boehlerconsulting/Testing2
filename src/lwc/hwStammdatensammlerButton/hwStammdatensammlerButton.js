@@ -16,7 +16,7 @@
 //LWC
 import {LightningElement, api, track} from "lwc";
 import {ShowToastEvent} from "lightning/platformShowToastEvent";
-import { NavigationMixin } from 'lightning/navigation';
+import {NavigationMixin} from 'lightning/navigation';
 import validateAstId from '@salesforce/apex/HW_Stammdatensammler_LC.validateAstId';
 import getDocumentUrl from '@salesforce/apex/HW_Stammdatensammler_LC.getDocumentUrl';
 import saveDocument from '@salesforce/apex/HW_Stammdatensammler_LC.saveDocument';
@@ -27,15 +27,9 @@ export default class HW_StammdatensammlerButton extends NavigationMixin(Lightnin
 
     @api button;
     @api recordId;
-    @api isFiliale95;
     @api screenLocked;
-    @api isVorgaengerfilialePresent;
     @api screen;
     @api isExistingMaef;
-    @api maefUrl;
-
-    @track disabled = false;
-
     @track isLoading = false;
 
     io_Dispatcher = new HwApplicationStateActionDispatcher(this);
@@ -90,78 +84,64 @@ export default class HW_StammdatensammlerButton extends NavigationMixin(Lightnin
     generateDocuments() {
         this.isLoading = true;
         let lo_Button = this.button;
-        if (this.isExistingMaef) {
-            this.openExistingMaef();
+        if (lo_Button.iv_isPreview) {
+
+            getDocumentUrl({
+                recordId: this.recordId,
+                visualforceName: lo_Button.iv_VisualforceName,
+                dataType: lo_Button.iv_DataType,
+                isLaufenderBetrieb: this.isExistingMaef
+            })
+                .then(url => {
+                    window.open(url, '_blank');
+                    this.isLoading = false;
+                })
+                .catch(error => {
+
+                    const evt = new ShowToastEvent({
+                        title: error.statusText,
+                        message: error.body.message,
+                        variant: 'error',
+                        mode: 'sticky'
+                    });
+                    this.dispatchEvent(evt);
+                });
+            this.isLoading = false;
         } else {
-            if (lo_Button.iv_isPreview) {
 
-                getDocumentUrl({
-                    recordId: this.recordId,
-                    visualforceName: lo_Button.iv_VisualforceName,
-                    dataType: lo_Button.iv_DataType
-                })
-                    .then(url => {
-                        window.open(url, '_blank');
-                        this.isLoading = false;
-                    })
-                    .catch(error => {
-
-                        const evt = new ShowToastEvent({
-                            title: error.statusText,
-                            message: error.body.message,
-                            variant: 'error',
-                            mode: 'sticky'
-                        });
-                        this.dispatchEvent(evt);
+            saveDocument({
+                recordId: this.recordId,
+                visualforceName: lo_Button.iv_VisualforceName,
+                dataType: lo_Button.iv_DataType,
+                isLaufenderBetrieb: this.isExistingMaef
+            })
+                .then(url => {
+                    this.io_Dispatcher.dispatch(
+                        ActionCreator.setButtonDisable(
+                            lo_Button
+                        )
+                    );
+                    const evt = new ShowToastEvent({
+                        title: 'Erfolg!',
+                        message: 'Das Dokument wurde erfolgreich generiert.',
+                        variant: 'success'
                     });
-                this.isLoading = false;
-            } else {
-
-                saveDocument({
-                    recordId: this.recordId,
-                    visualforceName: lo_Button.iv_VisualforceName,
-                    dataType: lo_Button.iv_DataType
+                    this.dispatchEvent(evt);
+                    this.isLoading = false;
                 })
-                    .then(url => {
-                        this.io_Dispatcher.dispatch(
-                            ActionCreator.setButtonDisable(
-                                lo_Button
-                            )
-                        );
-                        const evt = new ShowToastEvent({
-                            title: 'Erfolg!',
-                            message: 'Das Dokument wurde erfolgreich generiert.',
-                            variant: 'success'
-                        });
-                        this.dispatchEvent(evt);
-                        this.isLoading = false;
-                    })
-                    .catch(error => {
+                .catch(error => {
 
-                        const evt = new ShowToastEvent({
-                            title: error.statusText,
-                            message: error.body.message,
-                            variant: 'error',
-                            mode: 'sticky'
-                        });
-                        this.dispatchEvent(evt);
-                        this.isLoading = false;
+                    const evt = new ShowToastEvent({
+                        title: error.statusText,
+                        message: error.body.message,
+                        variant: 'error',
+                        mode: 'sticky'
                     });
-            }
+                    this.dispatchEvent(evt);
+                    this.isLoading = false;
+                });
         }
-    }
 
-    openExistingMaef() {
-
-        this.io_Dispatcher.dispatch(
-            ActionCreator.setMaefUrl(
-                this.button
-            )
-        );
-        if (this.button.iv_Label === 'MAEF Beleg versenden'){
-            this.disabled = true;
-        }
-        this.isLoading = false;
     }
 
     get hideButton() {
@@ -169,8 +149,12 @@ export default class HW_StammdatensammlerButton extends NavigationMixin(Lightnin
     }
 
     get disableButton() {
-
-        return ((this.button.isDisabled || this.screenLocked) && !this.isExistingMaef) || (this.isExistingMaef && this.disabled);
+        if (this.isExistingMaef){
+            return this.button.isDisabled || this.disabled;
+        }
+        else{
+            return this.button.isDisabled || this.screenLocked;
+        }
     }
 
     get showSpinner() {

@@ -74,6 +74,7 @@ public with sharing class AuftragVerEntsorgungBriefPaketCtrl extends Einrichtung
 				FROM Oeffnungszeiten__c
 				WHERE Account__c = :einrichtungsprozess.Filiale__c
 				AND Kategorie__c = 'Filialöffnungszeiten'
+				AND Prozess__c = :HW_Stammdatensammler_LC.mainProcess
 				ORDER BY Name ASC NULLS LAST
 		];
 		if ( filialOeffnungszeiten.size() == 0 ) {

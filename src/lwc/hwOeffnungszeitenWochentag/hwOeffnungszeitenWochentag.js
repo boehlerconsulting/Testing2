@@ -26,6 +26,7 @@ export default class HW_OeffnungszeitenWochentag extends LightningElement {
     @api index;
     @api categoryIndex;
     @api screenLocked;
+    @api isExistingMaef;
 
     io_Dispatcher = new HwApplicationStateActionDispatcher(this);
 
@@ -53,6 +54,9 @@ export default class HW_OeffnungszeitenWochentag extends LightningElement {
     }
 
     get required(){
+        if ( this.isExistingMaef){
+            return false;
+        }
         return (
             this.oeffnungszeitWochentag.Wochentag__c === 'Montag'
             && this.oeffnungszeitWochentag.Kategorie__c === 'Filialöffnungszeiten'

@@ -105,26 +105,28 @@ export default class HW_Stammdatensammler extends LightningElement {
             window.open('/' + this.recordId, '_Self');
         } else {
             controllerInstance = JSON.parse(result);
-            this.state.object = controllerInstance.io_SObject;
-            this.state.contract = controllerInstance.io_Contract;
-            this.state.screens = controllerInstance.il_Screens;
-            this.state.steps = controllerInstance.il_Steps;
+            this.state.object = controllerInstance.account;
+            this.state.contract = controllerInstance.contract;
+            this.state.screens = controllerInstance.screens;
+            this.state.steps = controllerInstance.steps;
             this.state.recordId = this.state.object.Id;
             this.state.isExistingMAEF = this.isExistingMAEF;
-
-            resetFirstRun({
-                contractString: JSON.stringify(this.state.contract),
-            })
-                .then(result => {
-                    this.state.contract.SDS_Helper_FirstRun__c = result;
+            if (!this.isExistingMAEF){
+                resetFirstRun({
+                    contractString: JSON.stringify(this.state.contract),
                 })
-            if (!this.isExistingMAEF) {
-                this.setStepStages();
+                    .then(result => {
+                        this.state.contract.SDS_Helper_FirstRun__c = result;
+                    })
+                this.isFirstLoad = this.state.contract.SDS_Helper_FirstRun__c;
+                if (this.isFirstLoad) {
+                    this.state.showModal = true;
+                }
             }
-            this.isFirstLoad = this.state.contract.SDS_Helper_FirstRun__c;
-            if (this.isFirstLoad) {
+            else{
                 this.state.showModal = true;
             }
+            this.setStepStages();
             this.isFormataenderung = this.state.contract.Formataenderung__c;
 
             for (let i = 0; i < this.state.screens.length; i++) {

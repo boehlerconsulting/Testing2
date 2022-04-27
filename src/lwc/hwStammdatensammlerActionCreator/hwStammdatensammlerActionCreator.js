@@ -61,11 +61,6 @@ const setOeffnungszeiten = ( pv_ScreenIndex, pv_SectionIndex, pv_CategoryIndex, 
     weekday: pv_Weekday
 } );
 
-const setMaefUrl = ( button ) => ( {
-    type:  "setMaefUrl",
-    button: button
-} );
-
 const setActiveSectionsEmpty = ( pv_screenIndex ) => ( {
     type:  "setActiveSectionsEmpty",
     screenIndex: pv_screenIndex
@@ -85,7 +80,6 @@ export {
     setWarningFalse,
     setButtonDisable,
     setOeffnungszeiten,
-    setMaefUrl,
     setActiveSectionsEmpty,
     setActiveSectionsAll
 };

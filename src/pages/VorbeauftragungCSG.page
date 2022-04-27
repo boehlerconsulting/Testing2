@@ -107,7 +107,7 @@
             wir die
         </div>
         <div style="font-size:14px; padding:10px,0px,0px,15px; width : 700px;text-align: left;font-weight:bold">
-            CSG GmbH
+            DPDHL Real Estate Deutschland GmbH
             <br/>{!Bezeichnung}
             <br/>{!Strasse}
             <br/>{!Postleitzahl}&nbsp;{!Ort}

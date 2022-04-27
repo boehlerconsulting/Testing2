@@ -120,7 +120,7 @@
     <div class="main">
         <div style="page-break-after:always;" class="startblock">
             <div class="headText centerElement" style="font-size: 16pt;">
-                Mietvertrag über den Betrieb einer Packstation
+                Mietvertrag über den Betrieb einer Post- / Packstation
             </div>
             <br/><br/><br/><br/>
             <p>Zwischen</p>
@@ -189,29 +189,26 @@
                 </p>
                 <p>(2) Werden für den Mietzweck erforderliche Genehmigungen nicht oder nur mit
                     erheblichen Einschränkungen, unverhältnismäßigen Bedingungen oder Auflagen erteilt, räumt der Vermieter
-                    dem Mieter ein unbefristetes Sonderkündigungsrecht ein. Schadenersatzansprüche entstehen dem
-                    Vermieter in diesem Fall nicht.
+                    dem Mieter ein unbefristetes Sonderkündigungsrecht ein. Wechselseitige Schadenersatzansprüche entstehen den Parteien in diesem Fall nicht.
                 </p>
             </div>
             <div class="headText" >§ 3 Wettbewerbs-/ Konkurrenzschutz</div>
             <div class="parabody">
-                <p>(1) Der Vermieter gewährt dem Mieter Konkurrenzschutz für den Vertragszweck gemäß § 2 dieses Vertrages
-                    so lange dieser Vertrag für die Anmietung einer Grundstücksfläche auf dem Grundstück gem. § 1(1) (nachfolgend STANDORT) läuft.
-                    Dieser beinhaltet, dass der Vermieter ohne schriftliche Einwilligung des Mieters während der Laufzeit
-                    dieses Vertrags am STANDORT nicht berechtigt ist, Packstationen und / oder Packstations-ähnliche Geräte (vgl. § 2 dieses Vertrags) – außer
-                    für den Mieter und mit diesem gemäß § 15 AktG verbundene Unternehmen (DPDHL Group) - aufbauen und / oder
-                    betreiben zu lassen oder diese selbst aufzubauen und / oder zu betreiben.
+                <p>(1) Der Vermieter ist während der Laufzeit dieses Vertrags ohne schriftliche Einwilligung des Mieters nicht berechtigt,
+                    auf dem Grundstück der Teilmietfläche (§1 Abs. 1 dieses Vertrages,  nachfolgend „STANDORT“), weitere Parcel Locker Systeme,
+                    Paketautomaten und / oder andere automatisierte Zustelllösungen für Pakete  aufbauen, betreiben zu lassen oder dieses selbst zu tun.
                 </p>
 
-                <p>(2) Außerdem verpflichtet sich der Vermieter am STANDORT weder Gewerbemietraum noch Außenwerbeflächen
-                    an Konkurrenzunternehmen mit Geschäftstätigkeit im Vertrieb von Brief- und Paketdienstleistungen zu überlassen.
+                <p>(2) Der Vermieter verpflichtet sich während der Laufzeit dieses Vertrags, am ‘STANDORT‘ weder Gewerbemietraum noch
+                    Außenwerbeflächen an andere Unternehmen mit Geschäftstätigkeit im Bereich Vertrieb von Brief- und / oder
+                    Paketdienstleistungen in Deutschland zu überlassen.
                 </p>
             </div>
             <div class="headText" style="page-break-before:always;">§ 4 Übergabe der Mietsache</div>
             <div class="parabody" >
 
-                <p>(1) Der Vermieter wird dem Mieter die Mietfläche in einem zu dem vereinbarten Mietzweck (§ 2) geeigneten
-                    Zustand übergeben.
+                <p>(1) Der Vermieter wird dem Mieter die Mietfläche in einem zu dem vereinbarten Mietzweck (§ 2) geeigneten Zustand gemäß
+                    Darstellung in der Anlage: Standortdokumentation übergeben.
                 </p>
                 <p>(2) Übergabetermin der Mietfläche ist
                     <apex:outputText value="{0, date, dd.MM.yyyy}">
@@ -233,25 +230,18 @@
                 </p>
                 <p>(4) Der Vertrag beginnt mit der Übergabe der Mietsache nach § 4 (2).
                 </p>
-                <p>(5) Eine nicht nur vorübergehende Störung (etwa in Folge unvorhersehbarer Baumaßnahmen,
-                    Straßenschäden, Sperrungen oder ein Wegfall der Nutzungsmöglichkeit der Mietsache, die Einziehung
-                    der Straße) berechtigt den Mieter zur fristlosen Kündigung des Mietvertrages.
+                <p>(5) Die Rückgabe der Mietsache protokollieren die Parteien zum Vertragsende.
                 </p>
-                <p>(6) Die Rückgabe der Mietsache protokollieren die Parteien zum Vertragsende.</p>
-                <p>(7) Im Falle der Störung oder des Wegfalls der Nutzungsmöglichkeit (z. B. bei unvorhersehbaren Baumaßnahmen,
-                    Straßenschäden, Sperrungen, Änderung oder Einziehung der Straße) durch behördliche Festsetzungen,
-                    sind die Vertragspartner zur fristlosen Kündigung berechtigt. In diesem Fall
-                    ist der Vermieter bei der Suche eines Ersatzstandortes behilflich.</p>
+                <p>(6) Im Falle der nicht nur vorübergehenden Störung oder des Wegfalls der Nutzungsmöglichkeit
+                    (z. B. bei unvorhersehbaren Baumaßnahmen, Straßenschäden, Sperrungen, Änderung oder Einziehung der Straße),
+                    insbesondere durch behördliche Festsetzungen, sind die Vertragspartner zur fristlosen Kündigung berechtigt.
+                </p>
             </div>
             <div class="headText">§ 6 Mietzins</div>
             <div class="parabody">
 
                 <p>(1) Der monatliche Mietzins für die ausschließliche Nutzung der Mietfläche und die Mitnutzungsrechte
                     am Gesamtgrundstück gemäß § 1 beträgt
-                    <!--<apex:outputText value="{0, number, ###,###,###,##0.00}">
-                        <apex:param value="{!calculated_mietkosten}"/>
-                    </apex:outputText>
-                    €.-->
                     {!CalculatedMietkosten}.
                 </p>
                 <p>(2) Die Anmietung der Aufstellfläche erfolgt umsatzsteuerfrei. Sollten die Leistungen der Deutschen Post,
@@ -259,15 +249,9 @@
                     sich der Mietzins zuzüglich der dann jeweils gültigen Umsatzsteuer; die auf die jeweilige Fläche entfallenden
                     Mietnebenkosten verstehen sich in diesem Falle ebenfalls zuzüglich Umsatzsteuer.</p>
                 <p>(3) Als Entschädigung für den vorab kalkulierten Stromverbrauch auf der Mietfläche von
-                    <!--<apex:outputText value="{0, number, ###,###,###,##0.00}">
-                        <apex:param value="{!Stromverbrauch}"/>
-                    </apex:outputText>-->
                     {!formattedStromverbrauch}
                     kWh/Monat zahlt der Mieter die folgende, gleichbleibende
                     Stromkostenpauschale von
-                    <!--<apex:outputText value="{0, number, ###,###,###,##0.00}">
-                        <apex:param value="{!calculated_stromkosten}"/>
-                    </apex:outputText>-->
                     {!CalculatedStromkosten} monatlich.<br/>
                     Weitere Nebenkosten fallen nicht an oder sind in dem vereinbarten Mietzins enthalten.
                 </p>
@@ -275,9 +259,6 @@
                     werden und sich der Energiebedarf dadurch ändert, wird die Strompauschale einvernehmlich neu berechnet
                     und als Nachtrag dem Vertrag beigefügt.</p>
                 <p>(5) Aus alledem folgt die monatliche Zahlung von
-                    <!--<apex:outputText value="{0, number, ###,###,###,##0.00}">
-                        <apex:param value="{!calculated_gesamtverguetung}"/>
-                    </apex:outputText>-->
                     {!CalculatedGesamtverguetung} gesamt,
                     fällig monatlich im Voraus und spätestens zum 10. Arbeitstag des Zahlmonats zahlbar durch Anweisung
                     auf folgendes Konto, beginnend ab Übergabe der<br />Mietsache § 4 (2).:</p>
@@ -287,22 +268,15 @@
             </div>
             <div class="headText" style="page-break-before:always;">§ 7 Pflichten des Vermieters</div>
             <div class="parabody">
-
-                <p>(1) Werden für Aufstellung der Packstation oder ergänzender Servicemodule Genehmigungen erforderlich,
-                    unterstützt der Vermieter den Mieter bei deren Beantragung/ Beschaffung nach besten Kräften und
-                    wird insbesondere erforderliche Pläne zur Verfügung stellen.
-                </p>
-                <p>(2) Der Vermieter hat die zur bzw. von der Packstation führenden Verkehrswege auf seinem Grundstück während
+                <p>(1) Der Vermieter hat die zur bzw. von der Packstation führenden Verkehrswege auf seinem Grundstück während
                     der Miet- / Gestattungszeit in einem Zustand zu erhalten, der die vertragsgemäße Nutzung des Packstation erlaubt.
                     Die Instandhaltung und Instandsetzung der Grundstücksfläche mit Ausnahme der Aufstellfläche ist Sache des Vermieters.
                 </p>
-                <p>(3) Die Verkehrssicherungspflicht im Bereich der Packstation, einschließlich der Zugänge und Zufahrten zur und von der Packstation
+                <p>(2) Die Verkehrssicherungspflicht im Bereich der Packstation, einschließlich der Zugänge und Zufahrten zur und von der Packstation
                     und der Mietfläche, die nicht auch gleichzeitig Aufstellfläche ist, obliegt dem Vermieter.</p>
             </div>
             <div class="headText">§ 8 Pflichten des Mieters</div>
             <div class="parabody">
-
-
                 <p>(1) Der Mieter sorgt für die Instandhaltung, Instandsetzung und Reinigung der Packstation und etwaiger
                     Servicemodule.
                 </p>
@@ -343,14 +317,15 @@
                 </p>
                 <p>(6) Für Mietzahlungen, Korrespondenz, Verwaltung und Abwicklung des Vertrages ist beauftragt und
                     Ansprechpartner die:<br/>
-                <span class="address">CSG GmbH<br/></span>
+                <span class="address">DPDHL Real Estate Deutschland GmbH<br/></span>
                 <span class="address">{!Bezeichnung}<br/></span>
                 <span class="address">{!Strasse}<br/></span>
                 <span class="address">{!Postleitzahl} {!Ort}.<br/></span>
                 </p>
-                <p>(7) Mietzins-/ Pauschal- und Abschlagzahlungen erfolgen durch CSG GmbH per Gutschrift auf das
-                    benannte Verrechnungskonto des Vermieters, § 6 (3).
-                    Eine Rechnungstellung des Vermieters an die CSG GmbH erfolgt nicht.</p>
+                <p>(7) Mietzins-/ Pauschal- und Abschlagzahlungen erfolgen durch die DPDHL Real Estate Deutschland GmbH per
+                    Gutschrift auf das benannte Verrechnungskonto des Vermieters, § 6 (5).
+                    Eine Rechnungstellung des Vermieters an die DPDHL Real Estate Deutschland GmbH erfolgt nicht.
+                </p>
             </div>
             <div class="headText">§ 11 Vertragsänderungen,<br/>
                 Rechtsunwirksamkeit einzelner Vertragsbestimmungen<br/>

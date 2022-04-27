@@ -12,7 +12,7 @@
  */
 @IsTest
 private class EinrichtungsprozessBaseCtrlTest {
-	
+	/* todo*/
 	@IsTest
 	static void testInit () {
 		

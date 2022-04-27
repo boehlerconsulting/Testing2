@@ -23,6 +23,6 @@ export default class HW_Oeffnungszeiten extends LightningElement {
     @api sectionIndex;
     @api index;
     @api screenLocked;
-
+    @api isExistingMaef;
 
 }

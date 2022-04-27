@@ -17,7 +17,6 @@ import hwRequestEvaluator from "c/hwRequestEvaluator";
 import saveSteps from '@salesforce/apex/HW_Stammdatensammler_LC.saveSteps';
 import saveSObject from '@salesforce/apex/HW_Stammdatensammler_LC.saveSObject';
 import saveOeffnungszeiten from '@salesforce/apex/HW_Stammdatensammler_LC.saveOeffnungszeiten';
-import getMAEFUrl from '@salesforce/apex/HW_Stammdatensammler_LC.getMAEFUrl';
 
 const reduce = (state, action, caller) => {
     switch (action.type) {
@@ -41,9 +40,6 @@ const reduce = (state, action, caller) => {
             break;
         case "setOeffnungszeiten":
             reduceSetOeffnungszeiten(state, action, caller);
-            break;
-        case "setMaefUrl":
-            reduceSetMaefUrl(state, caller, action);
             break;
         case "setActiveSectionsEmpty":
             reduceSetActiveSectionsEmpty(action.screenIndex, state);
@@ -183,6 +179,9 @@ function reduceSetStepDone(state, action, caller) {
 }
 
 function reduceSetButtonDisable(action, state, caller) {
+    if (state.isExistingMAEF){
+        return;
+    }
     let actionButton = action.button;
     state.sentDocuments.add(actionButton.iv_VisualforceName);
     state.screens[actionButton.screenPosition].buttons[actionButton.position] = {
@@ -211,15 +210,15 @@ function reduceSetButtonDisable(action, state, caller) {
         for (let j = 0; j < state.screens[i].buttons.length; j++) {
             let button = state.screens[i].buttons[j];
             if (!button.iv_isPreview
-                && actionButton.iv_VisualforceName !== button.iv_VisualforceName){
+                && actionButton.iv_VisualforceName !== button.iv_VisualforceName) {
                 button.allRequiredDocumentsSent = true;
                 for (let k = 0; k < button.pflichtdokumente.length; k++) {
                     let pflichtdokument = button.pflichtdokumente[k];
-                    if (!state.sentDocuments.has(pflichtdokument.Pflichtdokument__r.Visualforce_Page__c)){
+                    if (!state.sentDocuments.has(pflichtdokument.Pflichtdokument__r.Visualforce_Page__c)) {
                         button.allRequiredDocumentsSent = false;
                     }
                 }
-                button.isDisabled = ! button.lv_AllFieldsValid || ! button.allRequiredDocumentsSent;
+                button.isDisabled = !button.lv_AllFieldsValid || !button.allRequiredDocumentsSent;
             }
         }
     }
@@ -306,37 +305,74 @@ function reduceSetOeffnungszeiten(state, action, caller) {
     if (!oeffnungszeitenToSaveById.has(oeffnungszeit.Id)) {
         oeffnungszeitenToSaveById.set(oeffnungszeit.Id, oeffnungszeit);
     }
-
     let fieldName = action.fieldName;
+    if (!state.isExistingMAEF){
+        if (oeffnungszeit.Wochentag__c === 'Montag'
+            && oeffnungszeit.Kategorie__c === 'Filialöffnungszeiten') {
+            for (let i = 0; i < state.screens.length; i++) {
+                for (let j = 0; j < state.screens[i].sections.length; j++) {
+                    let section = state.screens[i].sections[j];
 
-    if (oeffnungszeit.Wochentag__c === 'Montag'
-        && oeffnungszeit.Kategorie__c === 'Filialöffnungszeiten') {
-        for (let i = 0; i < state.screens.length; i++) {
-            for (let j = 0; j < state.screens[i].sections.length; j++) {
-                let section = state.screens[i].sections[j];
+                    if (section.iv_HasOeffnungszeiten) {
+                        for (let k = 0; k < section.il_Oeffnungszeits.length; k++) {
 
-                if (section.iv_HasOeffnungszeiten) {
-                    for (let k = 0; k < section.il_Oeffnungszeits.length; k++) {
+                            for (let l = 0; l < section.il_Oeffnungszeits[k].pl_Oeffnungszeitens.length; l++) {
+                                let oeffnungszeitWochentag = section.il_Oeffnungszeits[k].pl_Oeffnungszeitens[l];
 
-                        for (let l = 0; l < section.il_Oeffnungszeits[k].pl_Oeffnungszeitens.length; l++) {
-                            let oeffnungszeitWochentag = section.il_Oeffnungszeits[k].pl_Oeffnungszeitens[l];
+                                if (fieldName === 'vm_von__c' || fieldName === 'vm_bis__c') {
+                                    if (oeffnungszeitWochentag.Wochentag__c !== 'Sonntag' && !oeffnungszeitWochentag.manuallyEdited) {
+                                        oeffnungszeitWochentag[fieldName] = action.value;
 
-                            if (fieldName === 'vm_von__c' || fieldName === 'vm_bis__c') {
-                                if (oeffnungszeitWochentag.Wochentag__c !== 'Sonntag' && !oeffnungszeitWochentag.manuallyEdited) {
-                                    oeffnungszeitWochentag[fieldName] = action.value;
-
-                                    state.screens[i].sections[j].il_Oeffnungszeits[k].pl_Oeffnungszeitens[l] = {
-                                        ...state.screens[i].sections[j].il_Oeffnungszeits[k].pl_Oeffnungszeitens[l],
-                                        [fieldName]: action.value
-                                    };
-                                    if (!oeffnungszeitenToSaveById.has(oeffnungszeitWochentag.Id)) {
-                                        oeffnungszeitenToSaveById.set(oeffnungszeitWochentag.Id, oeffnungszeitWochentag);
+                                        state.screens[i].sections[j].il_Oeffnungszeits[k].pl_Oeffnungszeitens[l] = {
+                                            ...state.screens[i].sections[j].il_Oeffnungszeits[k].pl_Oeffnungszeitens[l],
+                                            [fieldName]: action.value
+                                        };
+                                        if (!oeffnungszeitenToSaveById.has(oeffnungszeitWochentag.Id)) {
+                                            oeffnungszeitenToSaveById.set(oeffnungszeitWochentag.Id, oeffnungszeitWochentag);
+                                        }
                                     }
                                 }
+                                if (fieldName === 'nm_von__c' || fieldName === 'nm_bis__c') {
+                                    if (oeffnungszeitWochentag.Wochentag__c !== 'Sonntag'
+                                        && oeffnungszeitWochentag.Wochentag__c !== 'Samstag'
+                                        && !oeffnungszeitWochentag.manuallyEdited) {
+                                        oeffnungszeitWochentag[fieldName] = action.value;
+
+                                        state.screens[i].sections[j].il_Oeffnungszeits[k].pl_Oeffnungszeitens[l] = {
+                                            ...state.screens[i].sections[j].il_Oeffnungszeits[k].pl_Oeffnungszeitens[l],
+                                            [fieldName]: action.value
+                                        };
+                                        if (!oeffnungszeitenToSaveById.has(oeffnungszeitWochentag.Id)) {
+                                            oeffnungszeitenToSaveById.set(oeffnungszeitWochentag.Id, oeffnungszeitWochentag);
+                                        }
+                                    }
+                                }
+
                             }
-                            if (fieldName === 'nm_von__c' || fieldName === 'nm_bis__c') {
-                                if (oeffnungszeitWochentag.Wochentag__c !== 'Sonntag'
-                                    && oeffnungszeitWochentag.Wochentag__c !== 'Samstag'
+                            state.screens[i].sections[j].il_Oeffnungszeits[k] = {
+                                ...state.screens[i].sections[j].il_Oeffnungszeits[k],
+
+                            };
+                        }
+                    }
+
+                }
+            }
+        }
+        if (oeffnungszeit.Wochentag__c !== 'Montag'
+            && oeffnungszeit.Kategorie__c === 'Filialöffnungszeiten') {
+            let wochentag = oeffnungszeit.Wochentag__c;
+            for (let i = 0; i < state.screens.length; i++) {
+                for (let j = 0; j < state.screens[i].sections.length; j++) {
+                    let section = state.screens[i].sections[j];
+
+                    if (section.iv_HasOeffnungszeiten) {
+                        for (let k = 0; k < section.il_Oeffnungszeits.length; k++) {
+
+                            for (let l = 0; l < section.il_Oeffnungszeits[k].pl_Oeffnungszeitens.length; l++) {
+                                let oeffnungszeitWochentag = section.il_Oeffnungszeits[k].pl_Oeffnungszeitens[l];
+
+                                if (oeffnungszeitWochentag.Wochentag__c === wochentag
                                     && !oeffnungszeitWochentag.manuallyEdited) {
                                     oeffnungszeitWochentag[fieldName] = action.value;
 
@@ -348,96 +384,24 @@ function reduceSetOeffnungszeiten(state, action, caller) {
                                         oeffnungszeitenToSaveById.set(oeffnungszeitWochentag.Id, oeffnungszeitWochentag);
                                     }
                                 }
+
                             }
+                            state.screens[i].sections[j].il_Oeffnungszeits[k] = {
+                                ...state.screens[i].sections[j].il_Oeffnungszeits[k],
 
+                            };
                         }
-                        state.screens[i].sections[j].il_Oeffnungszeits[k] = {
-                            ...state.screens[i].sections[j].il_Oeffnungszeits[k],
-
-                        };
                     }
-                }
 
+                }
             }
         }
     }
-    if (oeffnungszeit.Wochentag__c !== 'Montag'
-        && oeffnungszeit.Kategorie__c === 'Filialöffnungszeiten') {
-        let wochentag = oeffnungszeit.Wochentag__c;
-        for (let i = 0; i < state.screens.length; i++) {
-            for (let j = 0; j < state.screens[i].sections.length; j++) {
-                let section = state.screens[i].sections[j];
-
-                if (section.iv_HasOeffnungszeiten) {
-                    for (let k = 0; k < section.il_Oeffnungszeits.length; k++) {
-
-                        for (let l = 0; l < section.il_Oeffnungszeits[k].pl_Oeffnungszeitens.length; l++) {
-                            let oeffnungszeitWochentag = section.il_Oeffnungszeits[k].pl_Oeffnungszeitens[l];
-
-                            if (oeffnungszeitWochentag.Wochentag__c === wochentag
-                                && !oeffnungszeitWochentag.manuallyEdited) {
-                                oeffnungszeitWochentag[fieldName] = action.value;
-
-                                state.screens[i].sections[j].il_Oeffnungszeits[k].pl_Oeffnungszeitens[l] = {
-                                    ...state.screens[i].sections[j].il_Oeffnungszeits[k].pl_Oeffnungszeitens[l],
-                                    [fieldName]: action.value
-                                };
-                                if (!oeffnungszeitenToSaveById.has(oeffnungszeitWochentag.Id)) {
-                                    oeffnungszeitenToSaveById.set(oeffnungszeitWochentag.Id, oeffnungszeitWochentag);
-                                }
-                            }
-
-                        }
-                        state.screens[i].sections[j].il_Oeffnungszeits[k] = {
-                            ...state.screens[i].sections[j].il_Oeffnungszeits[k],
-
-                        };
-                    }
-                }
-
-            }
-        }
-    }
-
     let oeffnungszeitenToSave = [];
     for (let oeffnungszeitValue of oeffnungszeitenToSaveById.values()) {
         oeffnungszeitenToSave.push(oeffnungszeitValue);
     }
     handleSaveOeffnungszeiten(oeffnungszeitenToSave, caller, state, action);
-}
-
-function reduceSetMaefUrl(state, caller, action) {
-    state.showSpinner = true;
-
-    const apexRequest = new HwApexRequest(caller);
-    apexRequest
-        .setMethod(getMAEFUrl)
-        .setMethodName("HW_Stammdatensammler_LC.getMAEFUrl")
-        .setParameters({
-            isPreview: action.button.iv_Label !== 'MAEF Beleg versenden',
-            accountString: JSON.stringify(state.object),
-            contractString: JSON.stringify(state.contract)
-        })
-        .setConfig({
-            showSpinner: false,
-            showErrorMessage: true,
-            showSuccessMessage: false,
-            successMessage: "Success"
-        })
-        .execute()
-        .then((url) => {
-            state.showSpinner = false;
-            state.screens[0] = {
-                ...state.screens[0],
-
-            };
-            if (action.button.iv_Label !== 'MAEF Beleg versenden') {
-                window.open(url, '_blank');
-            } else {
-                caller.closeModal();
-                caller.showToast('Der MAEF Beleg wurde erfolgreich versendet.');
-            }
-        })
 }
 
 function reduceSetSteps(state, action, caller) {
@@ -685,7 +649,7 @@ function checkOeffnungszeitVisibility(state) {
     }
 }
 
-function getFieldValidity(field){
+function getFieldValidity(field) {
     let isValid = false;
     if (field.hide) {
         isValid = true;
@@ -795,36 +759,32 @@ function setSectionVisibility(state, field) {
 }
 
 function saveObject(sObject, caller, state, action) {
+    let apexRequest = new HwApexRequest(caller);
+    apexRequest
+        .setMethod(saveSObject)
+        .setMethodName("HW_Stammdatensammler_LC.saveSObject")
+        .setParameters({
+            po_SObject: JSON.stringify(sObject),
+            pl_FormulaFieldNamesSObject: state.formulaFieldNamesSObject,
+            pl_FormulaFieldNamesContract: state.formulaFieldNamesContract,
+            pv_AccountId: state.recordId
+        })
+        .setConfig({
+            showSpinner: false,
+            showErrorMessage: true,
+            showSuccessMessage: false,
+            successMessage: "Success"
+        });
 
-    if (!state.isExistingMAEF) {
+    state.apexRequests.unshift(apexRequest);
 
-        let apexRequest = new HwApexRequest(caller);
-        apexRequest
-            .setMethod(saveSObject)
-            .setMethodName("HW_Stammdatensammler_LC.saveSObject")
-            .setParameters({
-                po_SObject: JSON.stringify(sObject),
-                pl_FormulaFieldNamesSObject: state.formulaFieldNamesSObject,
-                pl_FormulaFieldNamesContract: state.formulaFieldNamesContract,
-                pv_AccountId: state.recordId
-            })
-            .setConfig({
-                showSpinner: false,
-                showErrorMessage: true,
-                showSuccessMessage: false,
-                successMessage: "Success"
-            });
-
-        state.apexRequests.unshift(apexRequest);
-
-        if (new hwRequestEvaluator().isExecuting) {
-            return;
-        }
-        new hwRequestEvaluator().isExecuting = true;
-        spinnerOnButtons(true, state);
-        apexRequest = state.apexRequests[state.apexRequests.length - 1];
-        processRequestQueue(sObject, caller, state, action, apexRequest);
+    if (new hwRequestEvaluator().isExecuting) {
+        return;
     }
+    new hwRequestEvaluator().isExecuting = true;
+    spinnerOnButtons(true, state);
+    apexRequest = state.apexRequests[state.apexRequests.length - 1];
+    processRequestQueue(sObject, caller, state, action, apexRequest);
 }
 
 function spinnerOnButtons(enabled, state) {

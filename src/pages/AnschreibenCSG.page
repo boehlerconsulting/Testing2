@@ -119,7 +119,7 @@
             <div id="recipient" class="recipient">
                 <div class="tags">DP AG · NL MKV · VL {!currentLead.VL_Name__c} · {!senderAddress.ShippingStreet} · {!senderAddress.ShippingPostalCode} {!senderAddress.ShippingCity}</div>
                 <br/><br/><br/>
-                CSG GmbH<br/>
+                DPDHL Real Estate Deutschland GmbH<br/>
                 {!ansprechpartnerCSG}<br/>
                 {!bezeichnungCSG}<br/>
                 {!strasseCSG}<br/>

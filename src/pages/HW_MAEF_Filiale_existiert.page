@@ -15,7 +15,6 @@
  */
  -->
 <apex:page id="HW_MAEF" controller="HW_Document_C" contentType="{!contentType}" renderAs="{!renderAs}"
-           action="{!controllerActions}"
            applyHtmlTag="false" applyBodyTag="false" showHeader="false" standardStylesheets="false" cache="true">
 
     <html xmlns:v="urn:schemas-microsoft-com:vml"
@@ -23,6 +22,7 @@
           xmlns:x="urn:schemas-microsoft-com:office:excel">
     <head>
         <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+        <apex:outputText value="{!sheetName}" escape="false"/>
 
         <style type="text/css" media="print,all">
             @page {
@@ -118,7 +118,7 @@
                 background-color: RGB(255, 204, 153);
             }
 
-            .text-blue{
+            .text-blue {
                 background-color: RGB(218, 238, 243);
             }
 
@@ -305,7 +305,7 @@
         <tr>
             <td/>
             <td class="check-green">
-                {!IF(LEN(TEXT(tempMAEFContract.ErsatzloseSchliessungMitAblaufDes__c)) != 0,'x','')}
+                {!ersatzloseSchliessung}
             </td>
             <td/>
             <td>Ersatzlose Schließung mit Ablauf des</td>
@@ -313,7 +313,7 @@
             <td/>
             <td colspan="3" class="text-green">
                 <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
-                    <apex:param value="{!tempMAEFContract.ErsatzloseSchliessungMitAblaufDes__c}"/>
+                    <apex:param value="{!Feld['MAEF2_ErsatzloseSchliessungMitAblaufDes']}"/>
                 </apex:outputText>
             </td>
             <td/>
@@ -362,7 +362,7 @@
         <tr>
             <td/>
             <td class="check-yellow">
-                {!IF(LEN(TEXT(tempMAEFContract.MAEF_Voruebergehende_Schliessung_ab__c)) != 0,'x','')}
+                {!voruebergehendeSchliessung}
             </td>
             <td/>
             <td>Vorübergehende <span class="bold">ganztägige</span> Schließung</td>
@@ -370,18 +370,18 @@
             <td/>
             <td colspan="3" class="text-yellow">
                 <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
-                    <apex:param value="{!tempMAEFContract.MAEF_Voruebergehende_Schliessung_ab__c}"/>
+                    <apex:param value="{!Feld['MAEF2_MAEF_Voruebergehende_Schliessung_a']}"/>
                 </apex:outputText>
             </td>
             <td></td>
             <td colspan="3" class="text-yellow">
                 <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
-                    <apex:param value="{!tempMAEFContract.MAEF_Voruebergehende_Schliessung_bis__c}"/>
+                    <apex:param value="{!Feld['MAEF2_Voruebergehende_Schliessung_bis']}"/>
                 </apex:outputText>
             </td>
             <td/>
             <td class="check-green">
-                {!IF(LEN(TEXT(tempMAEFContract.AenderungDerOeffnungszeitenAb__c)) != 0,'x','')}
+                {!aenderungOeffnungszeiten}
             </td>
             <td/>
             <td>Änderung der Öffnungszeiten ab</td>
@@ -391,7 +391,7 @@
             <td/>
             <td colspan="4" class="text-green">
                 <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
-                    <apex:param value="{!tempMAEFContract.AenderungDerOeffnungszeitenAb__c}"/>
+                    <apex:param value="{!Feld['MAEF2_AenderungDerOeffnungszeitenAb']}"/>
                 </apex:outputText>
             </td>
             <td/>
@@ -430,11 +430,11 @@
             <td/>
             <td class="align-right">Grund&nbsp;</td>
             <td class="underlined-yellow">
-                {!tempMAEFContract.Grund__c}
+                {!Feld['MAEF2_Grund']}
             </td>
             <td class="align-right">Ad-hoc-Vertretung&nbsp;</td>
             <td colspan="2" class="underlined-yellow">
-                {!tempMAEFContract.AdHocVertretung__c}
+                {!Feld['MAEF2_AdHocVertretung']}
             </td>
             <td/>
             <td/>
@@ -442,7 +442,7 @@
             <td/>
             <td class="align-right">Zustellung der Pf-Sdg&nbsp;</td>
             <td class="underlined-yellow">
-                {!tempMAEFContract.ZustellungDerPfSdg__c}
+                {!Feld['MAEF2_ZustellungDerPfSdg']}
             </td>
             <td/>
             <td/>
@@ -453,7 +453,7 @@
             <td/>
             <td colspan="4" class="text-green">
                 <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
-                    <apex:param value="{!tempMAEFContract.AenderungDerOeffnungszeitenBis__c}"/>
+                    <apex:param value="{!Feld['MAEF2_AenderungDerOeffnungszeitenBis']}"/>
                 </apex:outputText>
             </td>
             <td/>
@@ -489,7 +489,7 @@
         <tr>
             <td/>
             <td class="check-green">
-                {!IF(LEN(TEXT(tempMAEFContract.DatumDerSchliessung__c)) != 0,'x','')}
+                {!datumSchliessung}
             </td>
             <td/>
             <td rowspan="2" colspan="3" class="align-center">Schließung mit Ablauf des</td>
@@ -503,7 +503,7 @@
             <td/>
             <td/>
             <td class="check-yellow">
-                {!IF(LEN(TEXT(tempMAEFContract.sonstigeAenderungAb__c)) != 0,'x','')}
+                {!sonstigeAenderung}
             </td>
             <td/>
             <td>sonstige Änderung ab</td>
@@ -513,7 +513,7 @@
             <td/>
             <td colspan="4" class="text-yellow">
                 <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
-                    <apex:param value="{!tempMAEFContract.sonstigeAenderungAb__c}"/>
+                    <apex:param value="{!Feld['MAEF2_sonstigeAenderungAb']}"/>
                 </apex:outputText>
             </td>
             <td/>
@@ -550,13 +550,13 @@
             <td/>
             <td colspan="2" class="text-green">
                 <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
-                    <apex:param value="{!tempMAEFContract.DatumDerSchliessung__c}"/>
+                    <apex:param value="{!Feld['MAEF2_DatumDerSchliessung']}"/>
                 </apex:outputText>
             </td>
             <td/>
             <td colspan="3" class="text-green">
                 <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
-                    <apex:param value="{!tempMAEFContract.DatumderEroeffnung__c}"/>
+                    <apex:param value="{!Feld['MAEF2_Datum_der_Eroeffnung']}"/>
                 </apex:outputText>
             </td>
             <td/>
@@ -639,14 +639,14 @@
             <td/>
             <td/>
             <td/>
-            <td colspan="8" class="text-orange">{!oldMAEFAccount.ASt_Name__c}</td>
+            <td colspan="8" class="text-orange">{!oldAccount.ASt_Name__c}</td>
             <td/>
             <td class="border-left"/>
-            <apex:outputPanel rendered="{!oldMAEFAccount.ASt_Name__c != tempMAEFAccount.ASt_Name__c}">
-                <td colspan="8" class="changed-orange">{!tempMAEFAccount.ASt_Name__c}</td>
+            <apex:outputPanel rendered="{!oldAccount.ASt_Name__c != Feld['MAEF2_ASt_Name']}">
+                <td colspan="8" class="changed-orange">{!Feld['MAEF2_ASt_Name']}</td>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!not(oldMAEFAccount.ASt_Name__c != tempMAEFAccount.ASt_Name__c)}">
-                <td colspan="8" class="text-orange">{!tempMAEFAccount.ASt_Name__c}</td>
+            <apex:outputPanel rendered="{!not(oldAccount.ASt_Name__c != Feld['MAEF2_ASt_Name'])}">
+                <td colspan="8" class="text-orange">{!Feld['MAEF2_ASt_Name']}</td>
             </apex:outputPanel>
             <td/>
             <td/>
@@ -686,23 +686,23 @@
             <td/>
             <td/>
             <td/>
-            <td colspan="6" class="text-orange">{!oldMAEFAccount.Strasse__c}</td>
+            <td colspan="6" class="text-orange">{!oldAccount.Strasse__c}</td>
             <td/>
-            <td class="text-orange">{!oldMAEFAccount.Filiale_Hausnummer__c}</td>
+            <td class="text-orange">{!oldAccount.Filiale_Hausnummer__c}</td>
             <td/>
             <td class="border-left"/>
-            <apex:outputPanel rendered="{!oldMAEFAccount.Strasse__c != tempMAEFAccount.Strasse__c}">
-                <td colspan="6" class="changed-orange">{!tempMAEFAccount.Strasse__c}</td>
+            <apex:outputPanel rendered="{!oldAccount.Strasse__c != Feld['MAEF2_Strasse']}">
+                <td colspan="6" class="changed-orange">{!Feld['MAEF2_Strasse']}</td>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!not(oldMAEFAccount.Strasse__c != tempMAEFAccount.Strasse__c)}">
-                <td colspan="6" class="text-orange">{!tempMAEFAccount.Strasse__c}</td>
+            <apex:outputPanel rendered="{!not(oldAccount.Strasse__c != Feld['MAEF2_Strasse'])}">
+                <td colspan="6" class="text-orange">{!Feld['MAEF2_Strasse']}</td>
             </apex:outputPanel>
             <td/>
-            <apex:outputPanel rendered="{!oldMAEFAccount.Filiale_Hausnummer__c != tempMAEFAccount.Filiale_Hausnummer__c}">
-                <td class="changed-orange">{!tempMAEFAccount.Filiale_Hausnummer__c}</td>
+            <apex:outputPanel rendered="{!oldAccount.Filiale_Hausnummer__c != Feld['MAEF2_Filiale_Hausnummer']}">
+                <td class="changed-orange">{!Feld['MAEF2_Filiale_Hausnummer']}</td>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!not(oldMAEFAccount.Filiale_Hausnummer__c != tempMAEFAccount.Filiale_Hausnummer__c)}">
-                <td class="text-orange">{!tempMAEFAccount.Filiale_Hausnummer__c}</td>
+            <apex:outputPanel rendered="{!not(oldAccount.Filiale_Hausnummer__c != Feld['MAEF2_Filiale_Hausnummer'])}">
+                <td class="text-orange">{!Feld['MAEF2_Filiale_Hausnummer']}</td>
             </apex:outputPanel>
             <td/>
             <td/>
@@ -742,32 +742,34 @@
             <td/>
             <td/>
             <td/>
-            <td colspan="3" class="text-orange">{!oldMAEFAccount.ShippingCity}</td>
+            <td colspan="3" class="text-orange">{!oldAccount.ShippingCity}</td>
             <td/>
-            <td colspan="2" class="text-orange">{!oldMAEFAccount.Ortsteil_Postanschrift__c}</td>
+            <td colspan="2" class="text-orange">{!oldAccount.Ortsteil_Postanschrift__c}</td>
             <td/>
-            <td class="text-orange">{!oldMAEFAccount.ShippingPostalCode}</td>
+            <td class="text-orange">{!oldAccount.ShippingPostalCode}</td>
             <td/>
             <td class="border-left"/>
-            <apex:outputPanel rendered="{!oldMAEFAccount.ShippingCity != tempMAEFAccount.ShippingCity}">
-                <td colspan="3" class="changed-orange">{!tempMAEFAccount.ShippingCity}</td>
+            <apex:outputPanel rendered="{!oldAccount.ShippingCity != Feld['MAEF2_ShippingCity']}">
+                <td colspan="3" class="changed-orange">{!Feld['MAEF2_ShippingCity']}</td>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!not(oldMAEFAccount.ShippingCity != tempMAEFAccount.ShippingCity)}">
-                <td colspan="3" class="text-orange">{!tempMAEFAccount.ShippingCity}</td>
-            </apex:outputPanel>
-            <td/>
-            <apex:outputPanel rendered="{!oldMAEFAccount.Ortsteil_Postanschrift__c != tempMAEFAccount.Ortsteil_Postanschrift__c}">
-                <td colspan="2" class="changed-orange">{!tempMAEFAccount.Ortsteil_Postanschrift__c}</td>
-            </apex:outputPanel>
-            <apex:outputPanel rendered="{!not(oldMAEFAccount.Ortsteil_Postanschrift__c != tempMAEFAccount.Ortsteil_Postanschrift__c)}">
-                <td colspan="2" class="text-orange">{!tempMAEFAccount.Ortsteil_Postanschrift__c}</td>
+            <apex:outputPanel rendered="{!not(oldAccount.ShippingCity != Feld['MAEF2_ShippingCity'])}">
+                <td colspan="3" class="text-orange">{!Feld['MAEF2_ShippingCity']}</td>
             </apex:outputPanel>
             <td/>
-            <apex:outputPanel rendered="{!oldMAEFAccount.ShippingPostalCode != tempMAEFAccount.ShippingPostalCode}">
-                <td class="changed-orange">{!tempMAEFAccount.ShippingPostalCode}</td>
+            <apex:outputPanel
+                    rendered="{!oldAccount.Ortsteil_Postanschrift__c != Feld['MAEF2_Ortsteil_Postanschrift']}">
+                <td colspan="2" class="changed-orange">{!Feld['MAEF2_Ortsteil_Postanschrift']}</td>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!not(oldMAEFAccount.ShippingPostalCode != tempMAEFAccount.ShippingPostalCode)}">
-                <td class="text-orange">{!tempMAEFAccount.ShippingPostalCode}</td>
+            <apex:outputPanel
+                    rendered="{!not(oldAccount.Ortsteil_Postanschrift__c != Feld['MAEF2_Ortsteil_Postanschrift'])}">
+                <td colspan="2" class="text-orange">{!Feld['MAEF2_Ortsteil_Postanschrift']}</td>
+            </apex:outputPanel>
+            <td/>
+            <apex:outputPanel rendered="{!oldAccount.ShippingPostalCode != Feld['MAEF2_ShippingPostalCode']}">
+                <td class="changed-orange">{!Feld['MAEF2_ShippingPostalCode']}</td>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!not(oldAccount.ShippingPostalCode != Feld['MAEF2_ShippingPostalCode'])}">
+                <td class="text-orange">{!Feld['MAEF2_ShippingPostalCode']}</td>
             </apex:outputPanel>
             <td/>
             <td/>
@@ -807,23 +809,23 @@
             <td/>
             <td/>
             <td/>
-            <td colspan="3" class="text-green" style="mso-number-format:'@'">{!oldMAEFAccount.Phone}</td>
+            <td colspan="3" class="text-green" style="mso-number-format:'@'">{!oldAccount.Phone}</td>
             <td/>
-            <td colspan="4" class="text-green" style="mso-number-format:'@'">{!oldMAEFAccount.Fax}</td>
+            <td colspan="4" class="text-green" style="mso-number-format:'@'">{!oldAccount.Fax}</td>
             <td/>
             <td class="border-left"/>
-            <apex:outputPanel rendered="{!oldMAEFAccount.Phone != tempMAEFAccount.Phone}">
-                <td colspan="3" class="changed-green" style="mso-number-format:'@'">{!tempMAEFAccount.Phone}</td>
+            <apex:outputPanel rendered="{!oldAccount.Phone != Feld['MAEF2_Phone']}">
+                <td colspan="3" class="changed-green" style="mso-number-format:'@'">{!Feld['MAEF2_Phone']}</td>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!not(oldMAEFAccount.Phone != tempMAEFAccount.Phone)}">
-                <td colspan="3" class="text-green" style="mso-number-format:'@'">{!tempMAEFAccount.Phone}</td>
+            <apex:outputPanel rendered="{!not(oldAccount.Phone != Feld['MAEF2_Phone'])}">
+                <td colspan="3" class="text-green" style="mso-number-format:'@'">{!Feld['MAEF2_Phone']}</td>
             </apex:outputPanel>
             <td/>
-            <apex:outputPanel rendered="{!oldMAEFAccount.Fax != tempMAEFAccount.Fax}">
-                <td colspan="4" class="changed-green" style="mso-number-format:'@'">{!tempMAEFAccount.Fax}</td>
+            <apex:outputPanel rendered="{!oldAccount.Fax != Feld['MAEF2_Fax']}">
+                <td colspan="4" class="changed-green" style="mso-number-format:'@'">{!Feld['MAEF2_Fax']}</td>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!not(oldMAEFAccount.Fax != tempMAEFAccount.Fax)}">
-                <td colspan="4" class="text-green" style="mso-number-format:'@'">{!tempMAEFAccount.Fax}</td>
+            <apex:outputPanel rendered="{!not(oldAccount.Fax != Feld['MAEF2_Fax'])}">
+                <td colspan="4" class="text-green" style="mso-number-format:'@'">{!Feld['MAEF2_Fax']}</td>
             </apex:outputPanel>
             <td/>
             <td/>
@@ -864,27 +866,27 @@
             <td/>
             <td/>
             <td/>
-            <td colspan="3" class="text-orange" style="mso-number-format: '@'">{!oldMAEFAccount.ASt_Nummer__c}</td>
+            <td colspan="3" class="text-orange" style="mso-number-format: '@'">{!oldAccount.ASt_Nummer__c}</td>
             <td/>
             <td colspan="4" class="text-orange"
-                style="mso-number-format: '@'">{!oldMAEFAccount.DPAG_Kostenstelle__c}</td>
+                style="mso-number-format: '@'">{!oldAccount.DPAG_Kostenstelle__c}</td>
             <td/>
             <td class="border-left"/>
-            <apex:outputPanel rendered="{!oldMAEFAccount.ASt_Nummer__c != tempMAEFAccount.ASt_Nummer__c}">
+            <apex:outputPanel rendered="{!oldAccount.ASt_Nummer__c != Feld['MAEF2_ASt_Nummer']}">
                 <td colspan="3" class="changed-orange"
-                    style="mso-number-format: '@'">{!tempMAEFAccount.ASt_Nummer__c}</td>
+                    style="mso-number-format: '@'">{!Feld['MAEF2_ASt_Nummer']}</td>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!not(oldMAEFAccount.ASt_Nummer__c != tempMAEFAccount.ASt_Nummer__c)}">
-                <td colspan="3" class="text-orange" style="mso-number-format: '@'">{!tempMAEFAccount.ASt_Nummer__c}</td>
+            <apex:outputPanel rendered="{!not(oldAccount.ASt_Nummer__c != Feld['MAEF2_ASt_Nummer'])}">
+                <td colspan="3" class="text-orange" style="mso-number-format: '@'">{!Feld['MAEF2_ASt_Nummer']}</td>
             </apex:outputPanel>
             <td/>
-            <apex:outputPanel rendered="{!oldMAEFAccount.DPAG_Kostenstelle__c != tempMAEFAccount.DPAG_Kostenstelle__c}">
+            <apex:outputPanel rendered="{!oldAccount.DPAG_Kostenstelle__c != Feld['MAEF2_DPAG_Kostenstelle']}">
                 <td colspan="4" class="changed-orange"
-                    style="mso-number-format: '@'">{!tempMAEFAccount.DPAG_Kostenstelle__c}</td>
+                    style="mso-number-format: '@'">{!Feld['MAEF2_DPAG_Kostenstelle']}</td>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!not(oldMAEFAccount.DPAG_Kostenstelle__c != tempMAEFAccount.DPAG_Kostenstelle__c)}">
+            <apex:outputPanel rendered="{!not(oldAccount.DPAG_Kostenstelle__c != Feld['MAEF2_DPAG_Kostenstelle'])}">
                 <td colspan="4" class="text-orange"
-                    style="mso-number-format: '@'">{!tempMAEFAccount.DPAG_Kostenstelle__c}</td>
+                    style="mso-number-format: '@'">{!Feld['MAEF2_DPAG_Kostenstelle']}</td>
             </apex:outputPanel>
             <td/>
             <td/>
@@ -924,15 +926,15 @@
             <td/>
             <td colspan="4">Debitorennr.</td>
             <td/>
-            <td colspan="3" class="text-green" style="mso-number-format: '@'">{!oldMAEFAccount.Debitor__c}</td>
+            <td colspan="3" class="text-green" style="mso-number-format: '@'">{!oldAccount.Debitor__c}</td>
             <td/>
             <td/>
             <td class="border-left"/>
-            <apex:outputPanel rendered="{!oldMAEFAccount.Debitor__c != tempMAEFAccount.Debitor__c}">
-                <td colspan="3" class="changed-green" style="mso-number-format: '@'">{!tempMAEFAccount.Debitor__c}</td>
+            <apex:outputPanel rendered="{!oldAccount.Debitor__c != Feld['MAEF2_Debitor']}">
+                <td colspan="3" class="changed-green" style="mso-number-format: '@'">{!Feld['MAEF2_Debitor']}</td>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!not(oldMAEFAccount.Debitor__c != tempMAEFAccount.Debitor__c)}">
-                <td colspan="3" class="text-green" style="mso-number-format: '@'">{!tempMAEFAccount.Debitor__c}</td>
+            <apex:outputPanel rendered="{!not(oldAccount.Debitor__c != Feld['MAEF2_Debitor'])}">
+                <td colspan="3" class="text-green" style="mso-number-format: '@'">{!Feld['MAEF2_Debitor']}</td>
             </apex:outputPanel>
             <td/>
             <td/>
@@ -963,7 +965,7 @@
             <td rowspan="2" colspan="5" class="align-top" style="white-space: normal;">WaWi-Nummer<span
                         class="addition"> (Pflichtfeld) &nbsp;</span>/ ASt-Nr. Referenz-Filiale für Verkaufsprodukte
             </td>
-            <td colspan="3" class="text-orange" style="mso-number-format: '@'">{!oldMAEFAccount.WaWi_Nummer__c}</td>
+            <td colspan="3" class="text-orange" style="mso-number-format: '@'">{!oldAccount.WaWi_Nummer__c}</td>
             <td/>
             <td/>
             <td/>
@@ -971,16 +973,16 @@
             <td/>
             <td/>
             <td class="border-left"/>
-            <apex:outputPanel rendered="{!oldMAEFAccount.WaWi_Nummer__c != tempMAEFAccount.WaWi_Nummer__c}">
+            <apex:outputPanel rendered="{!oldAccount.WaWi_Nummer__c != Feld['MAEF2_WaWi_Nummer']}">
                 <td colspan="3" class="changed-orange"
-                    style="mso-number-format: '@'">{!tempMAEFAccount.WaWi_Nummer__c}</td>
+                    style="mso-number-format: '@'">{!Feld['MAEF2_WaWi_Nummer']}</td>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!not(oldMAEFAccount.WaWi_Nummer__c != tempMAEFAccount.WaWi_Nummer__c)}">
+            <apex:outputPanel rendered="{!not(oldAccount.WaWi_Nummer__c != Feld['MAEF2_WaWi_Nummer'])}">
                 <td colspan="3" class="text-orange"
-                    style="mso-number-format: '@'">{!tempMAEFAccount.WaWi_Nummer__c}</td>
+                    style="mso-number-format: '@'">{!Feld['MAEF2_WaWi_Nummer']}</td>
             </apex:outputPanel>
             <td/>
-            <td colspan="4" class="changed-green">{!tempMAEFContract.AStNrReferenzFilialeVerkaufsproduktespro__c}</td>
+            <td colspan="4" class="changed-green">{!Feld['MAEF2_AStNrReferenzFilialeVerkaufsproduk']}</td>
             <td/>
             <td/>
         </tr>
@@ -1015,19 +1017,19 @@
             <td/>
             <td/>
             <td/>
-            <td colspan="6" class="text-orange">{!oldMAEFAccount.Filialtyp_OZ__c}</td>
+            <td colspan="6" class="text-orange">{!oldAccount.Filialtyp_OZ__c}</td>
             <td/>
             <td class="text-orange"></td>
             <td/>
             <td class="border-left"/>
-            <apex:outputPanel rendered="{!oldMAEFAccount.Filialtyp_OZ__c != tempMAEFAccount.Filialtyp_OZ__c}">
-                <td colspan="6" class="changed-orange">{!tempMAEFAccount.Filialtyp_OZ__c}</td>
+            <apex:outputPanel rendered="{!oldAccount.Filialtyp_OZ__c != Feld['MAEF2_Filialtyp_OZ']}">
+                <td colspan="6" class="changed-orange">{!Feld['MAEF2_Filialtyp_OZ']}</td>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!not(oldMAEFAccount.Filialtyp_OZ__c != tempMAEFAccount.Filialtyp_OZ__c)}">
-                <td colspan="6" class="text-orange">{!tempMAEFAccount.Filialtyp_OZ__c}</td>
+            <apex:outputPanel rendered="{!not(oldAccount.Filialtyp_OZ__c != Feld['MAEF2_Filialtyp_OZ'])}">
+                <td colspan="6" class="text-orange">{!Feld['MAEF2_Filialtyp_OZ']}</td>
             </apex:outputPanel>
             <td/>
-            <td class="changed-orange">{!tempMAEFContract.RegelInterim__c}</td>
+            <td class="changed-orange">{!Feld['MAEF2_RegelInterim']}</td>
             <td/>
             <td/>
         </tr>
@@ -1067,25 +1069,25 @@
             <td/>
             <td/>
             <td colspan="3" class="text-green"
-                style="mso-number-format: '@'">{!text(oldMAEFAccount.Anzahl_Schalter__c)}</td>
+                style="mso-number-format: '@'">{!AccountFeld['Anzahl_Schalter__c']}</td>
             <td/>
-            <td colspan="4" class="text-green">{!oldMAEFAccount.Branche_FACTS__c}</td>
+            <td colspan="4" class="text-green">{!AccountFeld['Branche_FACTS__c']}</td>
             <td/>
             <td class="border-left"/>
-            <apex:outputPanel rendered="{!oldMAEFAccount.Anzahl_Schalter__c != tempMAEFAccount.Anzahl_Schalter__c}">
+            <apex:outputPanel rendered="{!AccountFeld['Anzahl_Schalter__c'] != Feld['MAEF2_Anzahl_Schalter']}">
                 <td colspan="3" class="changed-green"
-                    style="mso-number-format: '@'">{!text(tempMAEFAccount.Anzahl_Schalter__c)}</td>
+                    style="mso-number-format: '@'">{!Feld['MAEF2_Anzahl_Schalter']}</td>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!not(oldMAEFAccount.Anzahl_Schalter__c != tempMAEFAccount.Anzahl_Schalter__c)}">
+            <apex:outputPanel rendered="{!not(AccountFeld['Anzahl_Schalter__c'] != Feld['MAEF2_Anzahl_Schalter'])}">
                 <td colspan="3" class="text-green"
-                    style="mso-number-format: '@'">{!text(tempMAEFAccount.Anzahl_Schalter__c)}</td>
+                    style="mso-number-format: '@'">{!Feld['MAEF2_Anzahl_Schalter']}</td>
             </apex:outputPanel>
             <td/>
-            <apex:outputPanel rendered="{!oldMAEFAccount.Branche_FACTS__c != tempMAEFAccount.Branche_FACTS__c}">
-                <td colspan="4" class="changed-green">{!tempMAEFAccount.Branche_FACTS__c}</td>
+            <apex:outputPanel rendered="{!AccountFeld['Branche_FACTS__c'] != Feld['MAEF2_Branche_FACTS']}">
+                <td colspan="4" class="changed-green">{!Feld['MAEF2_Branche_FACTS']}</td>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!not(oldMAEFAccount.Branche_FACTS__c != tempMAEFAccount.Branche_FACTS__c)}">
-                <td colspan="4" class="text-green">{!tempMAEFAccount.Branche_FACTS__c}</td>
+            <apex:outputPanel rendered="{!not(AccountFeld['Branche_FACTS__c'] != Feld['MAEF2_Branche_FACTS'])}">
+                <td colspan="4" class="text-green">{!Feld['MAEF2_Branche_FACTS']}</td>
             </apex:outputPanel>
             <td/>
             <td/>
@@ -1134,7 +1136,7 @@
             <td/>
             <td class="border-left"/>
             <td colspan="3" class="changed-green"
-                style="mso-number-format: '@'">{!text(tempMAEFContract.AnzahlMitarbeiter__c)}</td>
+                style="mso-number-format: '@'">{!Feld['MAEF2_AnzahlMitarbeiter']}</td>
             <td/>
             <td/>
             <td/>
@@ -1178,19 +1180,19 @@
             <td/>
             <td/>
             <td/>
-            <td colspan="6" class="text-green">{!oldMAEFAccount.Name}</td>
+            <td colspan="6" class="text-green">{!AccountFeld['Name']}</td>
             <td/>
             <td class="text-green"></td>
             <td/>
             <td class="border-left"/>
-            <apex:outputPanel rendered="{!oldMAEFAccount.Name != tempMAEFAccount.Name}">
-                <td colspan="6" class="changed-green">{!tempMAEFAccount.Name}</td>
+            <apex:outputPanel rendered="{!AccountFeld['Name'] != Feld['MAEF2_Name']}">
+                <td colspan="6" class="changed-green">{!Feld['MAEF2_Name']}</td>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!not(oldMAEFAccount.Name != tempMAEFAccount.Name)}">
-                <td colspan="6" class="text-green">{!tempMAEFAccount.Name}</td>
+            <apex:outputPanel rendered="{!not(AccountFeld['Name'] != Feld['MAEF2_Name'])}">
+                <td colspan="6" class="text-green">{!Feld['MAEF2_Name']}</td>
             </apex:outputPanel>
             <td/>
-            <td class="changed-green">{!tempMAEFContract.AnredeMAEF__c}</td>
+            <td class="changed-green">{!Feld['MAEF2_AnredeMAEF']}</td>
             <td/>
             <td/>
         </tr>
@@ -1229,22 +1231,22 @@
             <td/>
             <td/>
             <td/>
-            <td colspan="3" class="text-green" style="mso-number-format: '@'">{!oldMAEFAccount.Masterkasse_KKZ__c}</td>
+            <td colspan="3" class="text-green" style="mso-number-format: '@'">{!AccountFeld['Masterkasse_KKZ__c']}</td>
             <td/>
             <td colspan="4" class="text-green" style="mso-number-format: '@'"></td>
             <td/>
             <td class="border-left"/>
-            <apex:outputPanel rendered="{!oldMAEFAccount.Masterkasse_KKZ__c != tempMAEFAccount.Masterkasse_KKZ__c}">
+            <apex:outputPanel rendered="{!AccountFeld['Masterkasse_KKZ__c'] != Feld['MAEF2_Masterkasse_KKZ']}">
                 <td colspan="3" class="changed-green"
-                    style="mso-number-format: '@'">{!tempMAEFAccount.Masterkasse_KKZ__c}</td>
+                    style="mso-number-format: '@'">{!Feld['MAEF2_Masterkasse_KKZ']}</td>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!not(oldMAEFAccount.Masterkasse_KKZ__c != tempMAEFAccount.Masterkasse_KKZ__c)}">
+            <apex:outputPanel rendered="{!not(AccountFeld['Masterkasse_KKZ__c'] != Feld['MAEF2_Masterkasse_KKZ'])}">
                 <td colspan="3" class="text-green"
-                    style="mso-number-format: '@'">{!tempMAEFAccount.Masterkasse_KKZ__c}</td>
+                    style="mso-number-format: '@'">{!Feld['MAEF2_Masterkasse_KKZ']}</td>
             </apex:outputPanel>
             <td/>
             <td colspan="4" class="changed-green"
-                style="mso-number-format: '@'">{!tempMAEFContract.SteuernummerPartner__c}</td>
+                style="mso-number-format: '@'">{!Feld['MAEF2_SteuernummerPartner']}</td>
             <td/>
             <td/>
         </tr>
@@ -1286,7 +1288,7 @@
             <td colspan="8" class="text-green"></td>
             <td/>
             <td class="border-left"/>
-            <td colspan="8" class="changed-green">{!tempMAEFContract.TagesstempelMAEF__c}</td>
+            <td colspan="8" class="changed-green">{!Feld['MAEF2_TagesstempelMAEF']}</td>
             <td/>
             <td/>
         </tr>
@@ -1325,29 +1327,39 @@
             <td/>
             <td/>
             <td/>
-            <td class="text-orange">{!IF(oldMAEFAccount.PostfachanlageCheckbox__c==true, 'Ja', 'Nein')}</td>
+            <td class="text-orange">{!IF(AccountFeld['PostfachanlageCheckbox__c']==true, 'Ja', 'Nein')}</td>
             <td/>
-            <td class="text-orange">{!oldMAEFAccount.Postfach_Betreiber__c}</td>
+            <td class="text-orange">{!AccountFeld['Postfach_Betreiber__c']}</td>
             <td/>
             <td colspan="4" class="text-green"></td>
             <td/>
             <td class="border-left"/>
-            <apex:outputPanel rendered="{!oldMAEFAccount.PostfachanlageCheckbox__c != tempMAEFAccount.PostfachanlageCheckbox__c}">
-                <td class="changed-orange">{!IF(tempMAEFAccount.PostfachanlageCheckbox__c==true, 'Ja', 'Nein')}</td>
+            <apex:outputPanel rendered="{!!IsErsatzloseSchliessung}">
+                <apex:outputPanel
+                        rendered="{!AccountFeld['PostfachanlageCheckbox__c'] != Feld['MAEF2_PostfachanlageCheckbox']}">
+                    <td class="changed-orange">{!IF(Feld['MAEF2_PostfachanlageCheckbox']==true, 'Ja', 'Nein')}</td>
+                </apex:outputPanel>
+                <apex:outputPanel
+                        rendered="{!not(AccountFeld['PostfachanlageCheckbox__c'] != Feld['MAEF2_PostfachanlageCheckbox'])}">
+                    <td class="text-orange">{!IF(Feld['MAEF2_PostfachanlageCheckbox']==true, 'Ja', 'Nein')}</td>
+                </apex:outputPanel>
+                <td/>
+                <apex:outputPanel rendered="{!AccountFeld['Postfach_Betreiber__c'] != Feld['MAEF2_Postfach_Betreiber']}">
+                    <td class="changed-orange">{!Feld['MAEF2_Postfach_Betreiber']}</td>
+                </apex:outputPanel>
+                <apex:outputPanel
+                        rendered="{!not(AccountFeld['Postfach_Betreiber__c'] != Feld['MAEF2_Postfach_Betreiber'])}">
+                    <td class="text-orange">{!Feld['MAEF2_Postfach_Betreiber']}</td>
+                </apex:outputPanel>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!not(oldMAEFAccount.PostfachanlageCheckbox__c != tempMAEFAccount.PostfachanlageCheckbox__c)}">
-                <td class="text-orange">{!IF(tempMAEFAccount.PostfachanlageCheckbox__c==true, 'Ja', 'Nein')}</td>
-            </apex:outputPanel>
-            <td/>
-            <apex:outputPanel rendered="{!oldMAEFAccount.Postfach_Betreiber__c != tempMAEFAccount.Postfach_Betreiber__c}">
-                <td class="changed-orange">{!tempMAEFAccount.Postfach_Betreiber__c}</td>
-            </apex:outputPanel>
-            <apex:outputPanel rendered="{!not(oldMAEFAccount.Postfach_Betreiber__c != tempMAEFAccount.Postfach_Betreiber__c)}">
-                <td class="text-orange">{!tempMAEFAccount.Postfach_Betreiber__c}</td>
+            <apex:outputPanel rendered="{!IsErsatzloseSchliessung}">
+                <td class="text-orange"></td>
+                <td/>
+                <td class="text-orange"></td>
             </apex:outputPanel>
             <td/>
             <td colspan="4"
-                class="changed-green">{!tempMAEFContract.VerteilschlussPfSdg__c}</td>
+                class="changed-green">{!Feld['MAEF2_VerteilschlussPfSdg']}</td>
             <td/>
             <td/>
         </tr>
@@ -1393,10 +1405,10 @@
             <td/>
             <td/>
             <td class="border-left"/>
-            <td colspan="3" class="changed-green">{!tempMAEFContract.AnlagenTypPfSchrank__c}</td>
+            <td colspan="3" class="changed-green">{!Feld['MAEF2_AnlagenTypPfSchrank']}</td>
             <td/>
             <td colspan="2" class="changed-green"
-                style="mso-number-format: '@'">{!text(tempMAEFContract.AnzahlPfSchraenke__c)}</td>
+                style="mso-number-format: '@'">{!Feld['MAEF2_AnzahlPfSchraenke']}</td>
             <td/>
             <td/>
             <td/>
@@ -1437,36 +1449,36 @@
             <td/>
             <td/>
             <td/>
-            <td colspan="3" class="text-orange">{!IF(oldMAEFAccount.Paketausgabe__c==true, 'Ja', 'Nein')}</td>
+            <td colspan="3" class="text-orange">{!IF(AccountFeld['Paketausgabe__c']==true, 'Ja', 'Nein')}</td>
             <td/>
-            <td colspan="2" class="text-orange">{!IF(oldMAEFAccount.Briefausgabe__c==true, 'Ja', 'Nein')}</td>
+            <td colspan="2" class="text-orange">{!IF(AccountFeld['Briefausgabe__c']==true, 'Ja', 'Nein')}</td>
             <td/>
             <td/>
             <td/>
             <td class="border-left"/>
-            <apex:outputPanel rendered="{!NOT(ISBLANK(tempMAEFContract.ErsatzloseSchliessungMitAblaufDes__c))}">
+            <apex:outputPanel rendered="{!ersatzloseSchliessung != ''}">
                 <td colspan="3" class="text-orange"></td>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!ISBLANK(tempMAEFContract.ErsatzloseSchliessungMitAblaufDes__c)}">
-                <apex:outputPanel rendered="{!oldMAEFAccount.Paketausgabe__c != tempMAEFAccount.Paketausgabe__c}">
+            <apex:outputPanel rendered="{!ersatzloseSchliessung == ''}">
+                <apex:outputPanel rendered="{!AccountFeld['Paketausgabe__c'] != Feld['MAEF2_Paketausgabe']}">
                     <td colspan="3"
-                        class="changed-orange">{!IF(tempMAEFAccount.Paketausgabe__c==true, 'Ja', 'Nein')}</td>
+                        class="changed-orange">{!IF(Feld['MAEF2_Paketausgabe']==true, 'Ja', 'Nein')}</td>
                 </apex:outputPanel>
-                <apex:outputPanel rendered="{!not(oldMAEFAccount.Paketausgabe__c != tempMAEFAccount.Paketausgabe__c)}">
-                    <td colspan="3" class="text-orange">{!IF(tempMAEFAccount.Paketausgabe__c==true, 'Ja', 'Nein')}</td>
+                <apex:outputPanel rendered="{!not(AccountFeld['Paketausgabe__c'] != Feld['MAEF2_Paketausgabe'])}">
+                    <td colspan="3" class="text-orange">{!IF(Feld['MAEF2_Paketausgabe']==true, 'Ja', 'Nein')}</td>
                 </apex:outputPanel>
             </apex:outputPanel>
             <td/>
-            <apex:outputPanel rendered="{!NOT(ISBLANK(tempMAEFContract.ErsatzloseSchliessungMitAblaufDes__c))}">
+            <apex:outputPanel rendered="{!ersatzloseSchliessung != ''}">
                 <td colspan="3" class="text-orange"></td>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!ISBLANK(tempMAEFContract.ErsatzloseSchliessungMitAblaufDes__c)}">
-                <apex:outputPanel rendered="{!oldMAEFAccount.Briefausgabe__c != tempMAEFAccount.Briefausgabe__c}">
+            <apex:outputPanel rendered="{!ersatzloseSchliessung == ''}">
+                <apex:outputPanel rendered="{!AccountFeld['Briefausgabe__c'] != Feld['MAEF2_Briefausgabe']}">
                     <td colspan="2"
-                        class="changed-orange">{!IF(tempMAEFAccount.Briefausgabe__c==true, 'Ja', 'Nein')}</td>
+                        class="changed-orange">{!IF(Feld['MAEF2_Briefausgabe']==true, 'Ja', 'Nein')}</td>
                 </apex:outputPanel>
-                <apex:outputPanel rendered="{!not(oldMAEFAccount.Briefausgabe__c != tempMAEFAccount.Briefausgabe__c)}">
-                    <td colspan="2" class="text-orange">{!IF(tempMAEFAccount.Briefausgabe__c==true, 'Ja', 'Nein')}</td>
+                <apex:outputPanel rendered="{!not(AccountFeld['Briefausgabe__c'] != Feld['MAEF2_Briefausgabe'])}">
+                    <td colspan="2" class="text-orange">{!IF(Feld['MAEF2_Briefausgabe']==true, 'Ja', 'Nein')}</td>
                 </apex:outputPanel>
             </apex:outputPanel>
             <td/>
@@ -1511,12 +1523,12 @@
             <td/>
             <td colspan="3" class="text-orange" style="mso-number-format: '@'">{!PostfilialeDirekt}</td>
             <td/>
-            <td colspan="2" class="changed-green" style="mso-number-format: '@'">{!tempMAEFContract.ZS_Id__c}</td>
+            <td colspan="2" class="changed-green" style="mso-number-format: '@'">{!Feld['MAEF2_ZSId']}</td>
             <td/>
             <td/>
             <td/>
             <td class="border-left"/>
-            <td colspan="3" class="changed-orange">{!tempMAEFContract.PostfilialeDirektMAEF__c}</td>
+            <td colspan="3" class="changed-orange">{!Feld['MAEF2_PostfilialeDirekt']}</td>
             <td/>
             <td/>
             <td/>
@@ -1588,28 +1600,28 @@
             <td/>
             <td/>
             <td/>
-            <td colspan="3" class="text-orange" style="mso-number-format: '@'">{!oldMAEFAccount.DHL_Express_Int__c}</td>
+            <td colspan="3" class="text-orange" style="mso-number-format: '@'">{!AccountFeld['DHL_Express_Int__c']}</td>
             <td/>
-            <td class="text-orange">{!oldMAEFAccount.Briefkasten__c}</td>
+            <td class="text-orange">{!AccountFeld['Briefkasten__c']}</td>
             <td/>
             <td/>
             <td/>
             <td/>
             <td class="border-left"/>
-            <apex:outputPanel rendered="{!oldMAEFAccount.DHL_Express_Int__c != tempMAEFAccount.DHL_Express_Int__c}">
+            <apex:outputPanel rendered="{!AccountFeld['DHL_Express_Int__c'] != Feld['MAEF2_DHL_Express_Int']}">
                 <td colspan="3" class="changed-orange"
-                    style="mso-number-format: '@'">{!tempMAEFAccount.DHL_Express_Int__c}</td>
+                    style="mso-number-format: '@'">{!Feld['MAEF2_DHL_Express_Int']}</td>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!not(oldMAEFAccount.DHL_Express_Int__c != tempMAEFAccount.DHL_Express_Int__c)}">
+            <apex:outputPanel rendered="{!not(AccountFeld['DHL_Express_Int__c'] != Feld['MAEF2_DHL_Express_Int'])}">
                 <td colspan="3" class="text-orange"
-                    style="mso-number-format: '@'">{!tempMAEFAccount.DHL_Express_Int__c}</td>
+                    style="mso-number-format: '@'">{!Feld['MAEF2_DHL_Express_Int']}</td>
             </apex:outputPanel>
             <td/>
-            <apex:outputPanel rendered="{!oldMAEFAccount.Briefkasten__c != tempMAEFAccount.Briefkasten__c}">
-                <td class="changed-orange">{!tempMAEFAccount.Briefkasten__c}</td>
+            <apex:outputPanel rendered="{!AccountFeld['Briefkasten__c'] != Feld['MAEF2_Briefkasten']}">
+                <td class="changed-orange">{!Feld['MAEF2_Briefkasten']}</td>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!not(oldMAEFAccount.Briefkasten__c != tempMAEFAccount.Briefkasten__c)}">
-                <td class="text-orange">{!tempMAEFAccount.Briefkasten__c}</td>
+            <apex:outputPanel rendered="{!not(AccountFeld['Briefkasten__c'] != Feld['MAEF2_Briefkasten'])}">
+                <td class="text-orange">{!Feld['MAEF2_Briefkasten']}</td>
             </apex:outputPanel>
             <td/>
             <td/>
@@ -1652,24 +1664,24 @@
             <td/>
             <td/>
             <td/>
-            <td colspan="3" class="text-orange" style="mso-number-format: '@'">{!oldMAEFAccount.ASt_ID__c}</td>
+            <td colspan="3" class="text-orange" style="mso-number-format: '@'">{!AccountFeld['ASt_ID__c']}</td>
             <td/>
-            <td colspan="4" class="text-green" style="mso-number-format: '@'">{!oldMAEFAccount.Filial_ILN__c}</td>
+            <td colspan="4" class="text-green" style="mso-number-format: '@'">{!AccountFeld['Filial_ILN__c']}</td>
             <td/>
             <td class="border-left"/>
-            <apex:outputPanel rendered="{!oldMAEFAccount.ASt_ID__c != tempMAEFAccount.ASt_ID__c}">
-                <td colspan="3" class="changed-orange" style="mso-number-format: '@'">{!tempMAEFAccount.ASt_ID__c}</td>
+            <apex:outputPanel rendered="{!AccountFeld['ASt_ID__c'] != Feld['MAEF2_AstID']}">
+                <td colspan="3" class="changed-orange" style="mso-number-format: '@'">{!Feld['MAEF2_AstID']}</td>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!not(oldMAEFAccount.ASt_ID__c != tempMAEFAccount.ASt_ID__c)}">
-                <td colspan="3" class="text-orange" style="mso-number-format: '@'">{!tempMAEFAccount.ASt_ID__c}</td>
+            <apex:outputPanel rendered="{!not(AccountFeld['ASt_ID__c'] != Feld['MAEF2_AstID'])}">
+                <td colspan="3" class="text-orange" style="mso-number-format: '@'">{!Feld['MAEF2_AstID']}</td>
             </apex:outputPanel>
             <td/>
-            <apex:outputPanel rendered="{!oldMAEFAccount.Filial_ILN__c != tempMAEFAccount.Filial_ILN__c}">
+            <apex:outputPanel rendered="{!AccountFeld['Filial_ILN__c'] != Feld['MAEF2_FilialILN']}">
                 <td colspan="4" class="changed-green"
-                    style="mso-number-format: '@'">{!tempMAEFAccount.Filial_ILN__c}</td>
+                    style="mso-number-format: '@'">{!Feld['MAEF2_FilialILN']}</td>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!not(oldMAEFAccount.Filial_ILN__c != tempMAEFAccount.Filial_ILN__c)}">
-                <td colspan="4" class="text-green" style="mso-number-format: '@'">{!tempMAEFAccount.Filial_ILN__c}</td>
+            <apex:outputPanel rendered="{!not(AccountFeld['Filial_ILN__c'] != Feld['MAEF2_FilialILN'])}">
+                <td colspan="4" class="text-green" style="mso-number-format: '@'">{!Feld['MAEF2_FilialILN']}</td>
             </apex:outputPanel>
             <td/>
             <td/>
@@ -1709,11 +1721,11 @@
             <td/>
             <td/>
             <td/>
-            <td colspan="8" class="text-green">{!tempMAEFContract.Externe_Filial_Bezeichnung__c}</td>
+            <td colspan="8" class="text-green">{!Feld['MAEF2_Externe_Filial_Bezeichnung']}</td>
             <td/>
             <td class="border-left"/>
             <td colspan="8"
-                class="text-green">{!IF(NOT(ISBLANK(tempMAEFContract.ErsatzloseSchliessungMitAblaufDes__c)), '',  tempMAEFContract.Externe_Filial_Bezeichnung__c)}</td>
+                class="text-green">{!IF(ersatzloseSchliessung != '', '',  Feld['MAEF2_Externe_Filial_Bezeichnung'])}</td>
             <td/>
             <td/>
         </tr>
@@ -1762,7 +1774,7 @@
             <td class="border-top"/>
             <td class="border-top"/>
             <td/>
-            <td colspan="8" class="text-green">{!tempMAEFContract.ErgaenzenderHinweisStandort__c}</td>
+            <td colspan="8" class="text-green">{!Feld['MAEF2_ErgaenzenderHinweisStandort']}</td>
             <td/>
             <td/>
         </tr>
@@ -1804,7 +1816,7 @@
             <td/>
             <td colspan="3" class="text-green">
                 <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
-                    <apex:param value="{!tempMAEFContract.Schlussinventur__c}"/>
+                    <apex:param value="{!Feld['MAEF2_Schlussinventur']}"/>
                 </apex:outputText>
             </td>
             <td/>
@@ -1860,7 +1872,8 @@
             <td/>
             <td/>
             <td/>
-            <td colspan="3" class="text-green" style="mso-number-format:'@'">{!tempMAEFContract.ZusendeanschriftFuerInventurzaehllisten__c}</td>
+            <td colspan="3" class="text-green"
+                style="mso-number-format:'@'">{!Feld['MAEF2_ZusendeanschriftInventurzaehlisten']}</td>
             <td/>
             <td/>
             <td class="border-left"/>
@@ -1893,39 +1906,39 @@
             <td/>
             <td class="border-left"/>
             <td/>
-            <td class="align-right">Montag</td>
-            <apex:outputPanel rendered="{!oldMAEFAccount.Mo_vm_von__c != tempMAEFAccount.Mo_vm_von__c
-            || oldMAEFAccount.Mo_vm_bis__c != tempMAEFAccount.Mo_vm_bis__c
-            || oldMAEFAccount.Mo_nm_von__c != tempMAEFAccount.Mo_nm_von__c
-            || oldMAEFAccount.Mo_nm_von__c != tempMAEFAccount.Mo_nm_von__c }">
-                <td colspan="5" class="changed-orange">
-                    {!tempMAEFAccount.Mo_vm_von__c} - {!tempMAEFAccount.Mo_vm_bis__c}
-                    &nbsp; {!tempMAEFAccount.Mo_nm_von__c} - {!tempMAEFAccount.Mo_nm_bis__c}</td>
+            <td class="align-right">{!Filialoeffnungszeiten[0].Wochentag__c}</td>
+            <apex:outputPanel rendered="{!oldAccount.Mo_vm_von__c != Filialoeffnungszeiten[0].vm_von__c
+            || oldAccount.Mo_vm_bis__c != Filialoeffnungszeiten[0].vm_bis__c
+            || oldAccount.Mo_nm_von__c != Filialoeffnungszeiten[0].nm_von__c
+            || oldAccount.Mo_nm_von__c != Filialoeffnungszeiten[0].nm_von__c }">
+                <td colspan="5" class="changed-orange">{!Filialoeffnungszeiten[0].vm_von__c}
+                    - {!Filialoeffnungszeiten[0].vm_bis__c} &nbsp;
+                    {!Filialoeffnungszeiten[0].nm_von__c} - {!Filialoeffnungszeiten[0].nm_bis__c}</td>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!not(oldMAEFAccount.Mo_vm_von__c != tempMAEFAccount.Mo_vm_von__c)
-            && not(oldMAEFAccount.Mo_vm_bis__c != tempMAEFAccount.Mo_vm_bis__c)
-            && not(oldMAEFAccount.Mo_nm_von__c != tempMAEFAccount.Mo_nm_von__c)
-            && not(oldMAEFAccount.Mo_nm_von__c != tempMAEFAccount.Mo_nm_von__c) }">
-                <td colspan="5" class="text-orange">
-                    {!tempMAEFAccount.Mo_vm_von__c} - {!tempMAEFAccount.Mo_vm_bis__c}
-                    &nbsp; {!tempMAEFAccount.Mo_nm_von__c} - {!tempMAEFAccount.Mo_nm_bis__c}</td>
+            <apex:outputPanel rendered="{!not(oldAccount.Mo_vm_von__c != Filialoeffnungszeiten[0].vm_von__c)
+            && not(oldAccount.Mo_vm_bis__c != Filialoeffnungszeiten[0].vm_bis__c)
+            && not(oldAccount.Mo_nm_von__c != Filialoeffnungszeiten[0].nm_von__c)
+            && not(oldAccount.Mo_nm_von__c != Filialoeffnungszeiten[0].nm_von__c) }">
+                <td colspan="5" class="text-orange">{!Filialoeffnungszeiten[0].vm_von__c}
+                    - {!Filialoeffnungszeiten[0].vm_bis__c} &nbsp;
+                    {!Filialoeffnungszeiten[0].nm_von__c} - {!Filialoeffnungszeiten[0].nm_bis__c}</td>
             </apex:outputPanel>
             <td/>
-            <apex:outputPanel rendered="{!oldMAEFAccount.Gz_Mo_vm_von__c != tempMAEFAccount.Gz_Mo_vm_von__c
-            || oldMAEFAccount.Gz_Mo_vm_bis__c != tempMAEFAccount.Gz_Mo_vm_bis__c
-            || oldMAEFAccount.Gz_Mo_nm_von__c != tempMAEFAccount.Gz_Mo_nm_von__c
-            || oldMAEFAccount.Gz_Mo_nm_von__c != tempMAEFAccount.Gz_Mo_nm_von__c }">
-                <td colspan="4" class="changed-green">{!tempMAEFAccount.Gz_Mo_vm_von__c}
-                    - {!tempMAEFAccount.Gz_Mo_vm_bis__c}
-                    &nbsp; {!tempMAEFAccount.Gz_Mo_nm_von__c} - {!tempMAEFAccount.Gz_Mo_nm_bis__c}</td>
+            <apex:outputPanel rendered="{!oldAccount.Gz_Mo_vm_von__c != OeffnungszeitenHauptgeschaeft[0].vm_von__c
+            || oldAccount.Gz_Mo_vm_bis__c != OeffnungszeitenHauptgeschaeft[0].vm_bis__c
+            || oldAccount.Gz_Mo_nm_von__c != OeffnungszeitenHauptgeschaeft[0].nm_von__c
+            || oldAccount.Gz_Mo_nm_von__c != OeffnungszeitenHauptgeschaeft[0].nm_von__c }">
+                <td colspan="4" class="changed-green">{!OeffnungszeitenHauptgeschaeft[0].vm_von__c}
+                    - {!OeffnungszeitenHauptgeschaeft[0].vm_bis__c} &nbsp;
+                    {!OeffnungszeitenHauptgeschaeft[0].nm_von__c} - {!OeffnungszeitenHauptgeschaeft[0].nm_bis__c}</td>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!not(oldMAEFAccount.Gz_Mo_vm_von__c != tempMAEFAccount.Gz_Mo_vm_von__c)
-            && not(oldMAEFAccount.Gz_Mo_vm_bis__c != tempMAEFAccount.Gz_Mo_vm_bis__c)
-            && not(oldMAEFAccount.Gz_Mo_nm_von__c != tempMAEFAccount.Gz_Mo_nm_von__c)
-            && not(oldMAEFAccount.Gz_Mo_nm_von__c != tempMAEFAccount.Gz_Mo_nm_von__c) }">
-                <td colspan="4" class="text-green">{!tempMAEFAccount.Gz_Mo_vm_von__c}
-                    - {!tempMAEFAccount.Gz_Mo_vm_bis__c}
-                    &nbsp; {!tempMAEFAccount.Gz_Mo_nm_von__c} - {!tempMAEFAccount.Gz_Mo_nm_bis__c}</td>
+            <apex:outputPanel rendered="{!not(oldAccount.Gz_Mo_vm_von__c != OeffnungszeitenHauptgeschaeft[0].vm_von__c)
+            && not(oldAccount.Gz_Mo_vm_bis__c != OeffnungszeitenHauptgeschaeft[0].vm_bis__c)
+            && not(oldAccount.Gz_Mo_nm_von__c != OeffnungszeitenHauptgeschaeft[0].nm_von__c)
+            && not(oldAccount.Gz_Mo_nm_von__c != OeffnungszeitenHauptgeschaeft[0].nm_von__c) }">
+                <td colspan="4" class="text-green">{!OeffnungszeitenHauptgeschaeft[0].vm_von__c}
+                    - {!OeffnungszeitenHauptgeschaeft[0].vm_bis__c} &nbsp;
+                    {!OeffnungszeitenHauptgeschaeft[0].nm_von__c} - {!OeffnungszeitenHauptgeschaeft[0].nm_bis__c}</td>
             </apex:outputPanel>
             <td/>
             <td/>
@@ -1975,39 +1988,39 @@
             <td class="border-top"/>
             <td/>
             <td/>
-            <td class="align-right">Dienstag</td>
-            <apex:outputPanel rendered="{!oldMAEFAccount.Di_vm_von__c != tempMAEFAccount.Di_vm_von__c
-            || oldMAEFAccount.Di_vm_bis__c != tempMAEFAccount.Di_vm_bis__c
-            || oldMAEFAccount.Di_nm_von__c != tempMAEFAccount.Di_nm_von__c
-            || oldMAEFAccount.Di_nm_von__c != tempMAEFAccount.Di_nm_von__c }">
+            <td class="align-right">{!Filialoeffnungszeiten[1].Wochentag__c}</td>
+            <apex:outputPanel rendered="{!oldAccount.Di_vm_von__c != Filialoeffnungszeiten[1].vm_von__c
+            || oldAccount.Di_vm_bis__c != Filialoeffnungszeiten[1].vm_bis__c
+            || oldAccount.Di_nm_von__c != Filialoeffnungszeiten[1].nm_von__c
+            || oldAccount.Di_nm_von__c != Filialoeffnungszeiten[1].nm_von__c }">
                 <td colspan="5" class="changed-orange">
-                    {!tempMAEFAccount.Di_vm_von__c} - {!tempMAEFAccount.Di_vm_bis__c}
-                    &nbsp; {!tempMAEFAccount.Di_nm_von__c} - {!tempMAEFAccount.Di_nm_bis__c}</td>
+                    {!Filialoeffnungszeiten[1].vm_von__c} - {!Filialoeffnungszeiten[1].vm_bis__c}
+                    &nbsp; {!Filialoeffnungszeiten[1].nm_von__c} - {!Filialoeffnungszeiten[1].nm_bis__c}</td>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!not(oldMAEFAccount.Di_vm_von__c != tempMAEFAccount.Di_vm_von__c)
-            && not(oldMAEFAccount.Di_vm_bis__c != tempMAEFAccount.Di_vm_bis__c)
-            && not(oldMAEFAccount.Di_nm_von__c != tempMAEFAccount.Di_nm_von__c)
-            && not(oldMAEFAccount.Di_nm_von__c != tempMAEFAccount.Di_nm_von__c) }">
+            <apex:outputPanel rendered="{!not(oldAccount.Di_vm_von__c != Filialoeffnungszeiten[1].vm_von__c)
+            && not(oldAccount.Di_vm_bis__c != Filialoeffnungszeiten[1].vm_bis__c)
+            && not(oldAccount.Di_nm_von__c != Filialoeffnungszeiten[1].nm_von__c)
+            && not(oldAccount.Di_nm_von__c != Filialoeffnungszeiten[1].nm_von__c) }">
                 <td colspan="5" class="text-orange">
-                    {!tempMAEFAccount.Di_vm_von__c} - {!tempMAEFAccount.Di_vm_bis__c}
-                    &nbsp; {!tempMAEFAccount.Di_nm_von__c} - {!tempMAEFAccount.Di_nm_bis__c}</td>
+                    {!Filialoeffnungszeiten[1].vm_von__c} - {!Filialoeffnungszeiten[1].vm_bis__c}
+                    &nbsp; {!Filialoeffnungszeiten[1].nm_von__c} - {!Filialoeffnungszeiten[1].nm_bis__c}</td>
             </apex:outputPanel>
             <td/>
-            <apex:outputPanel rendered="{!oldMAEFAccount.Gz_Di_vm_von__c != tempMAEFAccount.Gz_Di_vm_von__c
-            || oldMAEFAccount.Gz_Di_vm_bis__c != tempMAEFAccount.Gz_Di_vm_bis__c
-            || oldMAEFAccount.Gz_Di_nm_von__c != tempMAEFAccount.Gz_Di_nm_von__c
-            || oldMAEFAccount.Gz_Di_nm_von__c != tempMAEFAccount.Gz_Di_nm_von__c }">
-                <td colspan="4" class="changed-green">{!tempMAEFAccount.Gz_Di_vm_von__c}
-                    - {!tempMAEFAccount.Gz_Di_vm_bis__c}
-                    &nbsp; {!tempMAEFAccount.Gz_Di_nm_von__c} - {!tempMAEFAccount.Gz_Di_nm_bis__c}</td>
+            <apex:outputPanel rendered="{!oldAccount.Gz_Di_vm_von__c != OeffnungszeitenHauptgeschaeft[1].vm_von__c
+            || oldAccount.Gz_Di_vm_bis__c != OeffnungszeitenHauptgeschaeft[1].vm_bis__c
+            || oldAccount.Gz_Di_nm_von__c != OeffnungszeitenHauptgeschaeft[1].nm_von__c
+            || oldAccount.Gz_Di_nm_von__c != OeffnungszeitenHauptgeschaeft[1].nm_von__c }">
+                <td colspan="4" class="changed-green">{!OeffnungszeitenHauptgeschaeft[1].vm_von__c}
+                    - {!OeffnungszeitenHauptgeschaeft[1].vm_bis__c}
+                    &nbsp; {!OeffnungszeitenHauptgeschaeft[1].nm_von__c} - {!OeffnungszeitenHauptgeschaeft[1].nm_bis__c}</td>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!not(oldMAEFAccount.Gz_Di_vm_von__c != tempMAEFAccount.Gz_Di_vm_von__c)
-            && not(oldMAEFAccount.Gz_Di_vm_bis__c != tempMAEFAccount.Gz_Di_vm_bis__c)
-            && not(oldMAEFAccount.Gz_Di_nm_von__c != tempMAEFAccount.Gz_Di_nm_von__c)
-            && not(oldMAEFAccount.Gz_Di_nm_von__c != tempMAEFAccount.Gz_Di_nm_von__c) }">
-                <td colspan="4" class="text-green">{!tempMAEFAccount.Gz_Di_vm_von__c}
-                    - {!tempMAEFAccount.Gz_Di_vm_bis__c}
-                    &nbsp; {!tempMAEFAccount.Gz_Di_nm_von__c} - {!tempMAEFAccount.Gz_Di_nm_bis__c}</td>
+            <apex:outputPanel rendered="{!not(oldAccount.Gz_Di_vm_von__c != OeffnungszeitenHauptgeschaeft[1].vm_von__c)
+            && not(oldAccount.Gz_Di_vm_bis__c != OeffnungszeitenHauptgeschaeft[1].vm_bis__c)
+            && not(oldAccount.Gz_Di_nm_von__c != OeffnungszeitenHauptgeschaeft[1].nm_von__c)
+            && not(oldAccount.Gz_Di_nm_von__c != OeffnungszeitenHauptgeschaeft[1].nm_von__c) }">
+                <td colspan="4" class="text-green">{!OeffnungszeitenHauptgeschaeft[1].vm_von__c}
+                    - {!OeffnungszeitenHauptgeschaeft[1].vm_bis__c}
+                    &nbsp; {!OeffnungszeitenHauptgeschaeft[1].nm_von__c} - {!OeffnungszeitenHauptgeschaeft[1].nm_bis__c}</td>
             </apex:outputPanel>
             <td/>
             <td/>
@@ -2047,41 +2060,42 @@
             <td/>
             <td/>
             <td/>
-            <td colspan="6" class="text-blue" style="mso-number-format:'@'">{!tempMAEFContract.Umleitungsfiliale_PackstationenMAEF__c}</td>
+            <td colspan="6" class="text-blue"
+                style="mso-number-format:'@'">{!Feld['MAEF2_Umleitungsfiliale_PackstationenMAE']}</td>
             <td/>
-            <td class="align-right">Mittwoch</td>
-            <apex:outputPanel rendered="{!oldMAEFAccount.Mi_vm_von__c != tempMAEFAccount.Mi_vm_von__c
-            || oldMAEFAccount.Mi_vm_bis__c != tempMAEFAccount.Mi_vm_bis__c
-            || oldMAEFAccount.Mi_nm_von__c != tempMAEFAccount.Mi_nm_von__c
-            || oldMAEFAccount.Mi_nm_von__c != tempMAEFAccount.Mi_nm_von__c }">
+            <td class="align-right">{!Filialoeffnungszeiten[2].Wochentag__c}</td>
+            <apex:outputPanel rendered="{!oldAccount.Mi_vm_von__c != Filialoeffnungszeiten[2].vm_von__c
+            || oldAccount.Mi_vm_bis__c != Filialoeffnungszeiten[2].vm_bis__c
+            || oldAccount.Mi_nm_von__c != Filialoeffnungszeiten[2].nm_von__c
+            || oldAccount.Mi_nm_von__c != Filialoeffnungszeiten[2].nm_von__c }">
                 <td colspan="5" class="changed-orange">
-                    {!tempMAEFAccount.Mi_vm_von__c} - {!tempMAEFAccount.Mi_vm_bis__c}
-                    &nbsp; {!tempMAEFAccount.Mi_nm_von__c} - {!tempMAEFAccount.Mi_nm_bis__c}</td>
+                    {!Filialoeffnungszeiten[2].vm_von__c} - {!Filialoeffnungszeiten[2].vm_bis__c}
+                    &nbsp; {!Filialoeffnungszeiten[2].nm_von__c} - {!Filialoeffnungszeiten[2].nm_bis__c}</td>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!not(oldMAEFAccount.Mi_vm_von__c != tempMAEFAccount.Mi_vm_von__c)
-            && not(oldMAEFAccount.Mi_vm_bis__c != tempMAEFAccount.Mi_vm_bis__c)
-            && not(oldMAEFAccount.Mi_nm_von__c != tempMAEFAccount.Mi_nm_von__c)
-            && not(oldMAEFAccount.Mi_nm_von__c != tempMAEFAccount.Mi_nm_von__c) }">
+            <apex:outputPanel rendered="{!not(oldAccount.Mi_vm_von__c != Filialoeffnungszeiten[2].vm_von__c)
+            && not(oldAccount.Mi_vm_bis__c != Filialoeffnungszeiten[2].vm_bis__c)
+            && not(oldAccount.Mi_nm_von__c != Filialoeffnungszeiten[2].nm_von__c)
+            && not(oldAccount.Mi_nm_von__c != Filialoeffnungszeiten[2].nm_von__c) }">
                 <td colspan="5" class="text-orange">
-                    {!tempMAEFAccount.Mi_vm_von__c} - {!tempMAEFAccount.Mi_vm_bis__c}
-                    &nbsp; {!tempMAEFAccount.Mi_nm_von__c} - {!tempMAEFAccount.Mi_nm_bis__c}</td>
+                    {!Filialoeffnungszeiten[2].vm_von__c} - {!Filialoeffnungszeiten[2].vm_bis__c}
+                    &nbsp; {!Filialoeffnungszeiten[2].nm_von__c} - {!Filialoeffnungszeiten[2].nm_bis__c}</td>
             </apex:outputPanel>
             <td/>
-            <apex:outputPanel rendered="{!oldMAEFAccount.Gz_Mi_vm_von__c != tempMAEFAccount.Gz_Mi_vm_von__c
-            || oldMAEFAccount.Gz_Mi_vm_bis__c != tempMAEFAccount.Gz_Mi_vm_bis__c
-            || oldMAEFAccount.Gz_Mi_nm_von__c != tempMAEFAccount.Gz_Mi_nm_von__c
-            || oldMAEFAccount.Gz_Mi_nm_von__c != tempMAEFAccount.Gz_Mi_nm_von__c }">
-                <td colspan="4" class="changed-green">{!tempMAEFAccount.Gz_Mi_vm_von__c}
-                    - {!tempMAEFAccount.Gz_Mi_vm_bis__c}
-                    &nbsp; {!tempMAEFAccount.Gz_Mi_nm_von__c} - {!tempMAEFAccount.Gz_Mi_nm_bis__c}</td>
+            <apex:outputPanel rendered="{!oldAccount.Gz_Mi_vm_von__c != OeffnungszeitenHauptgeschaeft[2].vm_von__c
+            || oldAccount.Gz_Mi_vm_bis__c != OeffnungszeitenHauptgeschaeft[2].vm_bis__c
+            || oldAccount.Gz_Mi_nm_von__c != OeffnungszeitenHauptgeschaeft[2].nm_von__c
+            || oldAccount.Gz_Mi_nm_von__c != OeffnungszeitenHauptgeschaeft[2].nm_von__c }">
+                <td colspan="4" class="changed-green">{!OeffnungszeitenHauptgeschaeft[2].vm_von__c}
+                    - {!OeffnungszeitenHauptgeschaeft[2].vm_bis__c}
+                    &nbsp; {!OeffnungszeitenHauptgeschaeft[2].nm_von__c} - {!OeffnungszeitenHauptgeschaeft[2].nm_bis__c}</td>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!not(oldMAEFAccount.Gz_Mi_vm_von__c != tempMAEFAccount.Gz_Mi_vm_von__c)
-            && not(oldMAEFAccount.Gz_Mi_vm_bis__c != tempMAEFAccount.Gz_Mi_vm_bis__c)
-            && not(oldMAEFAccount.Gz_Mi_nm_von__c != tempMAEFAccount.Gz_Mi_nm_von__c)
-            && not(oldMAEFAccount.Gz_Mi_nm_von__c != tempMAEFAccount.Gz_Mi_nm_von__c) }">
-                <td colspan="4" class="text-green">{!tempMAEFAccount.Gz_Mi_vm_von__c}
-                    - {!tempMAEFAccount.Gz_Mi_vm_bis__c}
-                    &nbsp; {!tempMAEFAccount.Gz_Mi_nm_von__c} - {!tempMAEFAccount.Gz_Mi_nm_bis__c}</td>
+            <apex:outputPanel rendered="{!not(oldAccount.Gz_Mi_vm_von__c != OeffnungszeitenHauptgeschaeft[2].vm_von__c)
+            && not(oldAccount.Gz_Mi_vm_bis__c != OeffnungszeitenHauptgeschaeft[2].vm_bis__c)
+            && not(oldAccount.Gz_Mi_nm_von__c != OeffnungszeitenHauptgeschaeft[2].nm_von__c)
+            && not(oldAccount.Gz_Mi_nm_von__c != OeffnungszeitenHauptgeschaeft[2].nm_von__c) }">
+                <td colspan="4" class="text-green">{!OeffnungszeitenHauptgeschaeft[2].vm_von__c}
+                    - {!OeffnungszeitenHauptgeschaeft[2].vm_bis__c}
+                    &nbsp; {!OeffnungszeitenHauptgeschaeft[2].nm_von__c} - {!OeffnungszeitenHauptgeschaeft[2].nm_bis__c}</td>
             </apex:outputPanel>
             <td/>
             <td/>
@@ -2121,41 +2135,41 @@
             <td/>
             <td/>
             <td/>
-            <td colspan="6" class="text-blue" style="mso-number-format:'@'">{!tempMAEFContract.Fuer_PackstationenMAEF__c}</td>
+            <td colspan="6" class="text-blue" style="mso-number-format:'@'">{!Feld['MAEF2_Fuer_PackstationenMAEF']}</td>
             <td/>
-            <td class="align-right">Donnerstag</td>
-            <apex:outputPanel rendered="{!oldMAEFAccount.Do_vm_von__c != tempMAEFAccount.Do_vm_von__c
-            || oldMAEFAccount.Do_vm_bis__c != tempMAEFAccount.Do_vm_bis__c
-            || oldMAEFAccount.Do_nm_von__c != tempMAEFAccount.Do_nm_von__c
-            || oldMAEFAccount.Do_nm_von__c != tempMAEFAccount.Do_nm_von__c }">
+            <td class="align-right">{!Filialoeffnungszeiten[3].Wochentag__c}</td>
+            <apex:outputPanel rendered="{!oldAccount.Do_vm_von__c != Filialoeffnungszeiten[3].vm_von__c
+            || oldAccount.Do_vm_bis__c != Filialoeffnungszeiten[3].vm_bis__c
+            || oldAccount.Do_nm_von__c != Filialoeffnungszeiten[3].nm_von__c
+            || oldAccount.Do_nm_von__c != Filialoeffnungszeiten[3].nm_von__c }">
                 <td colspan="5" class="changed-orange">
-                    {!tempMAEFAccount.Do_vm_von__c} - {!tempMAEFAccount.Do_vm_bis__c}
-                    &nbsp; {!tempMAEFAccount.Do_nm_von__c} - {!tempMAEFAccount.Do_nm_bis__c}</td>
+                    {!Filialoeffnungszeiten[3].vm_von__c} - {!Filialoeffnungszeiten[3].vm_bis__c}
+                    &nbsp; {!Filialoeffnungszeiten[3].nm_von__c} - {!Filialoeffnungszeiten[3].nm_bis__c}</td>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!not(oldMAEFAccount.Do_vm_von__c != tempMAEFAccount.Do_vm_von__c)
-            && not(oldMAEFAccount.Do_vm_bis__c != tempMAEFAccount.Do_vm_bis__c)
-            && not(oldMAEFAccount.Do_nm_von__c != tempMAEFAccount.Do_nm_von__c)
-            && not(oldMAEFAccount.Do_nm_von__c != tempMAEFAccount.Do_nm_von__c) }">
+            <apex:outputPanel rendered="{!not(oldAccount.Do_vm_von__c != Filialoeffnungszeiten[3].vm_von__c)
+            && not(oldAccount.Do_vm_bis__c != Filialoeffnungszeiten[3].vm_bis__c)
+            && not(oldAccount.Do_nm_von__c != Filialoeffnungszeiten[3].nm_von__c)
+            && not(oldAccount.Do_nm_von__c != Filialoeffnungszeiten[3].nm_von__c) }">
                 <td colspan="5" class="text-orange">
-                    {!tempMAEFAccount.Do_vm_von__c} - {!tempMAEFAccount.Do_vm_bis__c}
-                    &nbsp; {!tempMAEFAccount.Do_nm_von__c} - {!tempMAEFAccount.Do_nm_bis__c}</td>
+                    {!Filialoeffnungszeiten[3].vm_von__c} - {!Filialoeffnungszeiten[3].vm_bis__c}
+                    &nbsp; {!Filialoeffnungszeiten[3].nm_von__c} - {!Filialoeffnungszeiten[3].nm_bis__c}</td>
             </apex:outputPanel>
             <td/>
-            <apex:outputPanel rendered="{!oldMAEFAccount.Gz_Do_vm_von__c != tempMAEFAccount.Gz_Do_vm_von__c
-            || oldMAEFAccount.Gz_Do_vm_bis__c != tempMAEFAccount.Gz_Do_vm_bis__c
-            || oldMAEFAccount.Gz_Do_nm_von__c != tempMAEFAccount.Gz_Do_nm_von__c
-            || oldMAEFAccount.Gz_Do_nm_von__c != tempMAEFAccount.Gz_Do_nm_von__c }">
-                <td colspan="4" class="changed-green">{!tempMAEFAccount.Gz_Do_vm_von__c}
-                    - {!tempMAEFAccount.Gz_Do_vm_bis__c}
-                    &nbsp; {!tempMAEFAccount.Gz_Do_nm_von__c} - {!tempMAEFAccount.Gz_Do_nm_bis__c}</td>
+            <apex:outputPanel rendered="{!oldAccount.Gz_Do_vm_von__c != OeffnungszeitenHauptgeschaeft[3].vm_von__c
+            || oldAccount.Gz_Do_vm_bis__c != OeffnungszeitenHauptgeschaeft[3].vm_bis__c
+            || oldAccount.Gz_Do_nm_von__c != OeffnungszeitenHauptgeschaeft[3].nm_von__c
+            || oldAccount.Gz_Do_nm_von__c != OeffnungszeitenHauptgeschaeft[3].nm_von__c }">
+                <td colspan="4" class="changed-green">{!OeffnungszeitenHauptgeschaeft[3].vm_von__c}
+                    - {!OeffnungszeitenHauptgeschaeft[3].vm_bis__c}
+                    &nbsp; {!OeffnungszeitenHauptgeschaeft[3].nm_von__c} - {!OeffnungszeitenHauptgeschaeft[3].nm_bis__c}</td>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!not(oldMAEFAccount.Gz_Do_vm_von__c != tempMAEFAccount.Gz_Do_vm_von__c)
-            && not(oldMAEFAccount.Gz_Do_vm_bis__c != tempMAEFAccount.Gz_Do_vm_bis__c)
-            && not(oldMAEFAccount.Gz_Do_nm_von__c != tempMAEFAccount.Gz_Do_nm_von__c)
-            && not(oldMAEFAccount.Gz_Do_nm_von__c != tempMAEFAccount.Gz_Do_nm_von__c) }">
-                <td colspan="4" class="text-green">{!tempMAEFAccount.Gz_Do_vm_von__c}
-                    - {!tempMAEFAccount.Gz_Do_vm_bis__c}
-                    &nbsp; {!tempMAEFAccount.Gz_Do_nm_von__c} - {!tempMAEFAccount.Gz_Do_nm_bis__c}</td>
+            <apex:outputPanel rendered="{!not(oldAccount.Gz_Do_vm_von__c != OeffnungszeitenHauptgeschaeft[3].vm_von__c)
+            && not(oldAccount.Gz_Do_vm_bis__c != OeffnungszeitenHauptgeschaeft[3].vm_bis__c)
+            && not(oldAccount.Gz_Do_nm_von__c != OeffnungszeitenHauptgeschaeft[3].nm_von__c)
+            && not(oldAccount.Gz_Do_nm_von__c != OeffnungszeitenHauptgeschaeft[3].nm_von__c) }">
+                <td colspan="4" class="text-green">{!OeffnungszeitenHauptgeschaeft[3].vm_von__c}
+                    - {!OeffnungszeitenHauptgeschaeft[3].vm_bis__c}
+                    &nbsp; {!OeffnungszeitenHauptgeschaeft[3].nm_von__c} - {!OeffnungszeitenHauptgeschaeft[3].nm_bis__c}</td>
             </apex:outputPanel>
             <td/>
             <td/>
@@ -2195,41 +2209,42 @@
             <td/>
             <td/>
             <td/>
-            <td colspan="6" class="text-green" style="mso-number-format:'@'">{!tempMAEFContract.AusgabeBenachrichtigterSendungenMAEF__c}</td>
+            <td colspan="6" class="text-green"
+                style="mso-number-format:'@'">{!Feld['MAEF2_AusgabeBenachrichtigterSendungenMA']}</td>
             <td/>
-            <td class="align-right">Freitag</td>
-            <apex:outputPanel rendered="{!oldMAEFAccount.Fr_vm_von__c != tempMAEFAccount.Fr_vm_von__c
-            || oldMAEFAccount.Fr_vm_bis__c != tempMAEFAccount.Fr_vm_bis__c
-            || oldMAEFAccount.Fr_nm_von__c != tempMAEFAccount.Fr_nm_von__c
-            || oldMAEFAccount.Fr_nm_von__c != tempMAEFAccount.Fr_nm_von__c }">
+            <td class="align-right">{!Filialoeffnungszeiten[4].Wochentag__c}</td>
+            <apex:outputPanel rendered="{!oldAccount.Fr_vm_von__c != Filialoeffnungszeiten[4].vm_von__c
+            || oldAccount.Fr_vm_bis__c != Filialoeffnungszeiten[4].vm_bis__c
+            || oldAccount.Fr_nm_von__c != Filialoeffnungszeiten[4].nm_von__c
+            || oldAccount.Fr_nm_von__c != Filialoeffnungszeiten[4].nm_von__c }">
                 <td colspan="5" class="changed-orange">
-                    {!tempMAEFAccount.Fr_vm_von__c} - {!tempMAEFAccount.Fr_vm_bis__c}
-                    &nbsp; {!tempMAEFAccount.Fr_nm_von__c} - {!tempMAEFAccount.Fr_nm_bis__c}</td>
+                    {!Filialoeffnungszeiten[4].vm_von__c} - {!Filialoeffnungszeiten[4].vm_bis__c}
+                    &nbsp; {!Filialoeffnungszeiten[4].nm_von__c} - {!Filialoeffnungszeiten[4].nm_bis__c}</td>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!not(oldMAEFAccount.Fr_vm_von__c != tempMAEFAccount.Fr_vm_von__c)
-            && not(oldMAEFAccount.Fr_vm_bis__c != tempMAEFAccount.Fr_vm_bis__c)
-            && not(oldMAEFAccount.Fr_nm_von__c != tempMAEFAccount.Fr_nm_von__c)
-            && not(oldMAEFAccount.Fr_nm_von__c != tempMAEFAccount.Fr_nm_von__c) }">
+            <apex:outputPanel rendered="{!not(oldAccount.Fr_vm_von__c != Filialoeffnungszeiten[4].vm_von__c)
+            && not(oldAccount.Fr_vm_bis__c != Filialoeffnungszeiten[4].vm_bis__c)
+            && not(oldAccount.Fr_nm_von__c != Filialoeffnungszeiten[4].nm_von__c)
+            && not(oldAccount.Fr_nm_von__c != Filialoeffnungszeiten[4].nm_von__c) }">
                 <td colspan="5" class="text-orange">
-                    {!tempMAEFAccount.Fr_vm_von__c} - {!tempMAEFAccount.Fr_vm_bis__c}
-                    &nbsp; {!tempMAEFAccount.Fr_nm_von__c} - {!tempMAEFAccount.Fr_nm_bis__c}</td>
+                    {!Filialoeffnungszeiten[4].vm_von__c} - {!Filialoeffnungszeiten[4].vm_bis__c}
+                    &nbsp; {!Filialoeffnungszeiten[4].nm_von__c} - {!Filialoeffnungszeiten[4].nm_bis__c}</td>
             </apex:outputPanel>
             <td/>
-            <apex:outputPanel rendered="{!oldMAEFAccount.Gz_Fr_vm_von__c != tempMAEFAccount.Gz_Fr_vm_von__c
-            || oldMAEFAccount.Gz_Fr_vm_bis__c != tempMAEFAccount.Gz_Fr_vm_bis__c
-            || oldMAEFAccount.Gz_Fr_nm_von__c != tempMAEFAccount.Gz_Fr_nm_von__c
-            || oldMAEFAccount.Gz_Fr_nm_von__c != tempMAEFAccount.Gz_Fr_nm_von__c }">
-                <td colspan="4" class="changed-green">{!tempMAEFAccount.Gz_Fr_vm_von__c}
-                    - {!tempMAEFAccount.Gz_Fr_vm_bis__c}
-                    &nbsp; {!tempMAEFAccount.Gz_Fr_nm_von__c} - {!tempMAEFAccount.Gz_Fr_nm_bis__c}</td>
+            <apex:outputPanel rendered="{!oldAccount.Gz_Fr_vm_von__c != OeffnungszeitenHauptgeschaeft[4].vm_von__c
+            || oldAccount.Gz_Fr_vm_bis__c != OeffnungszeitenHauptgeschaeft[4].vm_bis__c
+            || oldAccount.Gz_Fr_nm_von__c != OeffnungszeitenHauptgeschaeft[4].nm_von__c
+            || oldAccount.Gz_Fr_nm_von__c != OeffnungszeitenHauptgeschaeft[4].nm_von__c }">
+                <td colspan="4" class="changed-green">{!OeffnungszeitenHauptgeschaeft[4].vm_von__c}
+                    - {!OeffnungszeitenHauptgeschaeft[4].vm_bis__c}
+                    &nbsp; {!OeffnungszeitenHauptgeschaeft[4].nm_von__c} - {!OeffnungszeitenHauptgeschaeft[4].nm_bis__c}</td>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!not(oldMAEFAccount.Gz_Fr_vm_von__c != tempMAEFAccount.Gz_Fr_vm_von__c)
-            && not(oldMAEFAccount.Gz_Fr_vm_bis__c != tempMAEFAccount.Gz_Fr_vm_bis__c)
-            && not(oldMAEFAccount.Gz_Fr_nm_von__c != tempMAEFAccount.Gz_Fr_nm_von__c)
-            && not(oldMAEFAccount.Gz_Fr_nm_von__c != tempMAEFAccount.Gz_Fr_nm_von__c) }">
-                <td colspan="4" class="text-green">{!tempMAEFAccount.Gz_Fr_vm_von__c}
-                    - {!tempMAEFAccount.Gz_Fr_vm_bis__c}
-                    &nbsp; {!tempMAEFAccount.Gz_Fr_nm_von__c} - {!tempMAEFAccount.Gz_Fr_nm_bis__c}</td>
+            <apex:outputPanel rendered="{!not(oldAccount.Gz_Fr_vm_von__c != OeffnungszeitenHauptgeschaeft[4].vm_von__c)
+            && not(oldAccount.Gz_Fr_vm_bis__c != OeffnungszeitenHauptgeschaeft[4].vm_bis__c)
+            && not(oldAccount.Gz_Fr_nm_von__c != OeffnungszeitenHauptgeschaeft[4].nm_von__c)
+            && not(oldAccount.Gz_Fr_nm_von__c != OeffnungszeitenHauptgeschaeft[4].nm_von__c) }">
+                <td colspan="4" class="text-green">{!OeffnungszeitenHauptgeschaeft[4].vm_von__c}
+                    - {!OeffnungszeitenHauptgeschaeft[4].vm_bis__c}
+                    &nbsp; {!OeffnungszeitenHauptgeschaeft[4].nm_von__c} - {!OeffnungszeitenHauptgeschaeft[4].nm_bis__c}</td>
             </apex:outputPanel>
             <td/>
             <td/>
@@ -2269,41 +2284,42 @@
             <td/>
             <td/>
             <td/>
-            <td colspan="6" class="text-green" style="mso-number-format:'@'">{!tempMAEFContract.AusgabebenSendungenFrachtinMAEF__c}</td>
+            <td colspan="6" class="text-green"
+                style="mso-number-format:'@'">{!Feld['MAEF2_AusgabebenSendungenFrachtinMAEF']}</td>
             <td/>
-            <td class="align-right">Samstag</td>
-            <apex:outputPanel rendered="{!oldMAEFAccount.Sa_vm_von__c != tempMAEFAccount.Sa_vm_von__c
-            || oldMAEFAccount.Sa_vm_bis__c != tempMAEFAccount.Sa_vm_bis__c
-            || oldMAEFAccount.Sa_nm_von__c != tempMAEFAccount.Sa_nm_von__c
-            || oldMAEFAccount.Sa_nm_von__c != tempMAEFAccount.Sa_nm_von__c }">
+            <td class="align-right">{!Filialoeffnungszeiten[5].Wochentag__c}</td>
+            <apex:outputPanel rendered="{!oldAccount.Sa_vm_von__c != Filialoeffnungszeiten[5].vm_von__c
+            || oldAccount.Sa_vm_bis__c != Filialoeffnungszeiten[5].vm_bis__c
+            || oldAccount.Sa_nm_von__c != Filialoeffnungszeiten[5].nm_von__c
+            || oldAccount.Sa_nm_von__c != Filialoeffnungszeiten[5].nm_von__c }">
                 <td colspan="5" class="changed-orange">
-                    {!tempMAEFAccount.Sa_vm_von__c} - {!tempMAEFAccount.Sa_vm_bis__c}
-                    &nbsp; {!tempMAEFAccount.Sa_nm_von__c} - {!tempMAEFAccount.Sa_nm_bis__c}</td>
+                    {!Filialoeffnungszeiten[5].vm_von__c} - {!Filialoeffnungszeiten[5].vm_bis__c}
+                    &nbsp; {!Filialoeffnungszeiten[5].nm_von__c} - {!Filialoeffnungszeiten[5].nm_bis__c}</td>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!not(oldMAEFAccount.Sa_vm_von__c != tempMAEFAccount.Sa_vm_von__c)
-            && not(oldMAEFAccount.Sa_vm_bis__c != tempMAEFAccount.Sa_vm_bis__c)
-            && not(oldMAEFAccount.Sa_nm_von__c != tempMAEFAccount.Sa_nm_von__c)
-            && not(oldMAEFAccount.Sa_nm_von__c != tempMAEFAccount.Sa_nm_von__c) }">
+            <apex:outputPanel rendered="{!not(oldAccount.Sa_vm_von__c != Filialoeffnungszeiten[5].vm_von__c)
+            && not(oldAccount.Sa_vm_bis__c != Filialoeffnungszeiten[5].vm_bis__c)
+            && not(oldAccount.Sa_nm_von__c != Filialoeffnungszeiten[5].nm_von__c)
+            && not(oldAccount.Sa_nm_von__c != Filialoeffnungszeiten[5].nm_von__c) }">
                 <td colspan="5" class="text-orange">
-                    {!tempMAEFAccount.Sa_vm_von__c} - {!tempMAEFAccount.Sa_vm_bis__c}
-                    &nbsp; {!tempMAEFAccount.Sa_nm_von__c} - {!tempMAEFAccount.Sa_nm_bis__c}</td>
+                    {!Filialoeffnungszeiten[5].vm_von__c} - {!Filialoeffnungszeiten[5].vm_bis__c}
+                    &nbsp; {!Filialoeffnungszeiten[5].nm_von__c} - {!Filialoeffnungszeiten[5].nm_bis__c}</td>
             </apex:outputPanel>
             <td/>
-            <apex:outputPanel rendered="{!oldMAEFAccount.Gz_Sa_vm_von__c != tempMAEFAccount.Gz_Sa_vm_von__c
-            || oldMAEFAccount.Gz_Sa_vm_bis__c != tempMAEFAccount.Gz_Sa_vm_bis__c
-            || oldMAEFAccount.Gz_Sa_nm_von__c != tempMAEFAccount.Gz_Sa_nm_von__c
-            || oldMAEFAccount.Gz_Sa_nm_von__c != tempMAEFAccount.Gz_Sa_nm_von__c }">
-                <td colspan="4" class="changed-green">{!tempMAEFAccount.Gz_Sa_vm_von__c}
-                    - {!tempMAEFAccount.Gz_Sa_vm_bis__c}
-                    &nbsp; {!tempMAEFAccount.Gz_Sa_nm_von__c} - {!tempMAEFAccount.Gz_Sa_nm_bis__c}</td>
+            <apex:outputPanel rendered="{!oldAccount.Gz_Sa_vm_von__c != OeffnungszeitenHauptgeschaeft[5].vm_von__c
+            || oldAccount.Gz_Sa_vm_bis__c != OeffnungszeitenHauptgeschaeft[5].vm_bis__c
+            || oldAccount.Gz_Sa_nm_von__c != OeffnungszeitenHauptgeschaeft[5].nm_von__c
+            || oldAccount.Gz_Sa_nm_von__c != OeffnungszeitenHauptgeschaeft[5].nm_von__c }">
+                <td colspan="4" class="changed-green">{!OeffnungszeitenHauptgeschaeft[5].vm_von__c}
+                    - {!OeffnungszeitenHauptgeschaeft[5].vm_bis__c}
+                    &nbsp; {!OeffnungszeitenHauptgeschaeft[5].nm_von__c} - {!OeffnungszeitenHauptgeschaeft[5].nm_bis__c}</td>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!not(oldMAEFAccount.Gz_Sa_vm_von__c != tempMAEFAccount.Gz_Sa_vm_von__c)
-            && not(oldMAEFAccount.Gz_Sa_vm_bis__c != tempMAEFAccount.Gz_Sa_vm_bis__c)
-            && not(oldMAEFAccount.Gz_Sa_nm_von__c != tempMAEFAccount.Gz_Sa_nm_von__c)
-            && not(oldMAEFAccount.Gz_Sa_nm_von__c != tempMAEFAccount.Gz_Sa_nm_von__c) }">
-                <td colspan="4" class="text-green">{!tempMAEFAccount.Gz_Sa_vm_von__c}
-                    - {!tempMAEFAccount.Gz_Sa_vm_bis__c}
-                    &nbsp; {!tempMAEFAccount.Gz_Sa_nm_von__c} - {!tempMAEFAccount.Gz_Sa_nm_bis__c}</td>
+            <apex:outputPanel rendered="{!not(oldAccount.Gz_Sa_vm_von__c != OeffnungszeitenHauptgeschaeft[5].vm_von__c)
+            && not(oldAccount.Gz_Sa_vm_bis__c != OeffnungszeitenHauptgeschaeft[5].vm_bis__c)
+            && not(oldAccount.Gz_Sa_nm_von__c != OeffnungszeitenHauptgeschaeft[5].nm_von__c)
+            && not(oldAccount.Gz_Sa_nm_von__c != OeffnungszeitenHauptgeschaeft[5].nm_von__c) }">
+                <td colspan="4" class="text-green">{!OeffnungszeitenHauptgeschaeft[5].vm_von__c}
+                    - {!OeffnungszeitenHauptgeschaeft[5].vm_bis__c}
+                    &nbsp; {!OeffnungszeitenHauptgeschaeft[5].nm_von__c} - {!OeffnungszeitenHauptgeschaeft[5].nm_bis__c}</td>
             </apex:outputPanel>
             <td/>
             <td/>
@@ -2343,46 +2359,46 @@
             <td/>
             <td/>
             <td/>
-            <td class="text-green">{!tempMAEFContract.EinrichtungMOPSMAEF__c}</td>
+            <td class="text-green">{!Feld['MAEF2_EinrichtungMOPSMAEF']}</td>
             <td/>
             <td/>
             <td/>
             <td/>
             <td/>
             <td/>
-            <td class="align-right">Sonntag</td>
-            <apex:outputPanel rendered="{!oldMAEFAccount.So_vm_von__c != tempMAEFAccount.So_vm_von__c
-            || oldMAEFAccount.So_vm_bis__c != tempMAEFAccount.So_vm_bis__c
-            || oldMAEFAccount.So_nm_von__c != tempMAEFAccount.So_nm_von__c
-            || oldMAEFAccount.So_nm_von__c != tempMAEFAccount.So_nm_von__c }">
+            <td class="align-right">{!Filialoeffnungszeiten[6].Wochentag__c}</td>
+            <apex:outputPanel rendered="{!oldAccount.So_vm_von__c != Filialoeffnungszeiten[6].vm_von__c
+            || oldAccount.So_vm_bis__c != Filialoeffnungszeiten[6].vm_bis__c
+            || oldAccount.So_nm_von__c != Filialoeffnungszeiten[6].nm_von__c
+            || oldAccount.So_nm_von__c != Filialoeffnungszeiten[6].nm_von__c }">
                 <td colspan="5" class="changed-orange">
-                    {!tempMAEFAccount.So_vm_von__c} - {!tempMAEFAccount.So_vm_bis__c}
-                    &nbsp; {!tempMAEFAccount.So_nm_von__c} - {!tempMAEFAccount.So_nm_bis__c}</td>
+                    {!Filialoeffnungszeiten[6].vm_von__c} - {!Filialoeffnungszeiten[6].vm_bis__c}
+                    &nbsp; {!Filialoeffnungszeiten[6].nm_von__c} - {!Filialoeffnungszeiten[6].nm_bis__c}</td>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!not(oldMAEFAccount.So_vm_von__c != tempMAEFAccount.So_vm_von__c)
-            && not(oldMAEFAccount.So_vm_bis__c != tempMAEFAccount.So_vm_bis__c)
-            && not(oldMAEFAccount.So_nm_von__c != tempMAEFAccount.So_nm_von__c)
-            && not(oldMAEFAccount.So_nm_von__c != tempMAEFAccount.So_nm_von__c) }">
+            <apex:outputPanel rendered="{!not(oldAccount.So_vm_von__c != Filialoeffnungszeiten[6].vm_von__c)
+            && not(oldAccount.So_vm_bis__c != Filialoeffnungszeiten[6].vm_bis__c)
+            && not(oldAccount.So_nm_von__c != Filialoeffnungszeiten[6].nm_von__c)
+            && not(oldAccount.So_nm_von__c != Filialoeffnungszeiten[6].nm_von__c) }">
                 <td colspan="5" class="text-orange">
-                    {!tempMAEFAccount.So_vm_von__c} - {!tempMAEFAccount.So_vm_bis__c}
-                    &nbsp; {!tempMAEFAccount.So_nm_von__c} - {!tempMAEFAccount.So_nm_bis__c}</td>
+                    {!Filialoeffnungszeiten[6].vm_von__c} - {!Filialoeffnungszeiten[6].vm_bis__c}
+                    &nbsp; {!Filialoeffnungszeiten[6].nm_von__c} - {!Filialoeffnungszeiten[6].nm_bis__c}</td>
             </apex:outputPanel>
             <td/>
-            <apex:outputPanel rendered="{!oldMAEFAccount.Gz_So_vm_von__c != tempMAEFAccount.Gz_So_vm_von__c
-            || oldMAEFAccount.Gz_So_vm_bis__c != tempMAEFAccount.Gz_So_vm_bis__c
-            || oldMAEFAccount.Gz_So_nm_von__c != tempMAEFAccount.Gz_So_nm_von__c
-            || oldMAEFAccount.Gz_So_nm_von__c != tempMAEFAccount.Gz_So_nm_von__c }">
-                <td colspan="4" class="changed-green">{!tempMAEFAccount.Gz_So_vm_von__c}
-                    - {!tempMAEFAccount.Gz_So_vm_bis__c}
-                    &nbsp; {!tempMAEFAccount.Gz_So_nm_von__c} - {!tempMAEFAccount.Gz_So_nm_bis__c}</td>
+            <apex:outputPanel rendered="{!oldAccount.Gz_So_vm_von__c != OeffnungszeitenHauptgeschaeft[6].vm_von__c
+            || oldAccount.Gz_So_vm_bis__c != OeffnungszeitenHauptgeschaeft[6].vm_bis__c
+            || oldAccount.Gz_So_nm_von__c != OeffnungszeitenHauptgeschaeft[6].nm_von__c
+            || oldAccount.Gz_So_nm_von__c != OeffnungszeitenHauptgeschaeft[6].nm_von__c }">
+                <td colspan="4" class="changed-green">{!OeffnungszeitenHauptgeschaeft[6].vm_von__c}
+                    - {!OeffnungszeitenHauptgeschaeft[6].vm_bis__c}
+                    &nbsp; {!OeffnungszeitenHauptgeschaeft[6].nm_von__c} - {!OeffnungszeitenHauptgeschaeft[6].nm_bis__c}</td>
             </apex:outputPanel>
-            <apex:outputPanel rendered="{!not(oldMAEFAccount.Gz_So_vm_von__c != tempMAEFAccount.Gz_So_vm_von__c)
-            && not(oldMAEFAccount.Gz_So_vm_bis__c != tempMAEFAccount.Gz_So_vm_bis__c)
-            && not(oldMAEFAccount.Gz_So_nm_von__c != tempMAEFAccount.Gz_So_nm_von__c)
-            && not(oldMAEFAccount.Gz_So_nm_von__c != tempMAEFAccount.Gz_So_nm_von__c) }">
-                <td colspan="4" class="text-green">{!tempMAEFAccount.Gz_So_vm_von__c}
-                    - {!tempMAEFAccount.Gz_So_vm_bis__c}
-                    &nbsp; {!tempMAEFAccount.Gz_So_nm_von__c} - {!tempMAEFAccount.Gz_So_nm_bis__c}</td>
+            <apex:outputPanel rendered="{!not(oldAccount.Gz_So_vm_von__c != OeffnungszeitenHauptgeschaeft[6].vm_von__c)
+            && not(oldAccount.Gz_So_vm_bis__c != OeffnungszeitenHauptgeschaeft[6].vm_bis__c)
+            && not(oldAccount.Gz_So_nm_von__c != OeffnungszeitenHauptgeschaeft[6].nm_von__c)
+            && not(oldAccount.Gz_So_nm_von__c != OeffnungszeitenHauptgeschaeft[6].nm_von__c) }">
+                <td colspan="4" class="text-green">{!OeffnungszeitenHauptgeschaeft[6].vm_von__c}
+                    - {!OeffnungszeitenHauptgeschaeft[6].vm_bis__c}
+                    &nbsp; {!OeffnungszeitenHauptgeschaeft[6].nm_von__c} - {!OeffnungszeitenHauptgeschaeft[6].nm_bis__c}</td>
             </apex:outputPanel>
             <td/>
             <td/>
@@ -2447,7 +2463,7 @@
             <td/>
             <td colspan="4" class="align-top" style="font-size:9pt;">Sonstiges/Grund Änderung Öffnz:</td>
             <td colspan="19" class="text-orange"
-                style="border-right:none; mso-number-format:'@'" >{!tempMAEFContract.SonstigesGrundMAEF__c}</td>
+                style="border-right:none; mso-number-format:'@'">{!Feld['MAEF2_SonstigesGrundMAEF']}</td>
             <td/>
             <td/>
         </tr>
@@ -2484,7 +2500,8 @@
             <td>Erstellt:</td>
             <td/>
             <td/>
-            <td colspan="3" class="underlined-yellow" style="mso-number-format:'@'">{!$User.FirstName} {!$User.LastName}</td>
+            <td colspan="3" class="underlined-yellow"
+                style="mso-number-format:'@'">{!$User.FirstName} {!$User.LastName}</td>
             <td/>
             <td class="align-right">Datum:</td>
             <td colspan="3" class="underlined-yellow">
@@ -2496,7 +2513,8 @@
             <td/>
             <td/>
             <td class="align-right">Telefon:</td>
-            <td colspan="3" class="underlined-yellow" style="mso-number-format:'@'">{!$User.Phone} / {!$User.MobilePhone}</td>
+            <td colspan="3" class="underlined-yellow" style="mso-number-format:'@'">{!$User.Phone}
+                / {!$User.MobilePhone}</td>
             <td/>
             <td class="align-right">Stelle:</td>
             <td colspan="3" class="underlined-yellow" style="mso-number-format:'@'">{!Stelle}</td>

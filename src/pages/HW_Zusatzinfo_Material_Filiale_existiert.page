@@ -23,13 +23,8 @@
           xmlns:x="urn:schemas-microsoft-com:office:excel">
     <head>
         <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
-
+        <apex:outputText value="{!sheetName}" escape="false"/>
         <style type="text/css" media="print,all">
-
-            @page {
-                size: 21.0cm 29.7cm !important;
-                margin: .63in .47in .16in .51in;
-            }
 
             br {
                 mso-data-placement: same-cell;
@@ -39,8 +34,6 @@
                 font-family: sans-serif;
                 text-align: left;
                 margin: 0px;
-            <!-- [ if mso ] > background-color: RGB(192, 192, 192);
-            < ! [ endif ] -->
             }
 
             table {
@@ -49,8 +42,8 @@
             }
 
             tr {
-                height: 0.51cm;
                 vertical-align: bottom;
+                height: 0.53cm;
                 font-size: 10pt;
                 white-space: nowrap;
             }
@@ -59,514 +52,212 @@
                 background-color: RGB(255, 255, 255);
             }
 
-            .header {
-                font-size: 14pt;
-            }
-
-            .label,
-            .label-large {
-                font-size: 12pt;
-            }
-
-            .label-medium,
-            .label-bold {
-                font-size: 11pt;
-            }
-
             .bold,
-            .header,
-            .label-large,
-            .label-bold {
+            .header {
                 font-weight: bold;
             }
 
-            .underline {
-                text-decoration: underline;
-            }
-
-            .align-middle,
-            .info-box {
-                vertical-align: middle;
-            }
-
-            .align-center,
             .border,
-            .text-green {
-                text-align: center;
-            }
-
-            .border,
-            .info-box,
-            .text-green {
+            .header {
+                border-width: thin;
                 border-style: solid;
             }
 
-            .border-bottom,
-            .underlined-green {
-                border-bottom-style: solid;
-            }
-
-            .border-top,
-            .border-top-bold {
-                border-top-style: solid;
-            }
-
-            .border-left,
-            .label-bold,
-            .underlined-green {
-                border-left-style: solid;
-            }
-
-            .border-left-top {
-                border-left-style: solid;
-                border-top-style: solid;
-            }
-
-            .border-left-bottom {
-                border-left-style: solid;
-                border-bottom-style: solid;
-            }
-
-            .border,
-            .border-top,
-            .text-green,
-            .underlined-green {
-                border-width: thin;
-            }
-
-            .border-medium,
-            .border-left,
-            .border-left-top,
-            .border-top-bold,
-            .info-box,
-            .label-bold {
-                border-width: medium;
-            }
-
-            .text-green,
-            .underlined-green {
-                background-color: RGB(204, 255, 204);
+            .bg-yellow,
+            .header,
+            .text {
+                background-color: RGB(255, 255, 0);
             }
 
         </style>
     </head>
 
-    <!--[if mso]>
-    <body style="background-color: RGB(192,192,192);">
-    <![endif]-->
-
+    <body>
     <table>
-        <col style="width:1.33cm"/>
-        <col style="width:2.54cm"/>
-        <col style="width:2.46cm"/>
-        <col style="width:2.12cm"/>
-        <col style="width:1.44cm"/>
-        <col style="width:2.81cm"/>
-        <col style="width:0.95cm"/>
-        <col style="width:0.13cm"/>
-        <col style="width:4.22cm"/>
-        <col style="width:0.34cm"/>
-        <col style="width:0.34cm"/>
+        <col style="width:6.30cm"/>
+        <col style="width:4.40cm"/>
 
-        <tr style="height:0.59cm">
+        <tr>
+            <td class="header">Feldbezeichnung</td>
+            <td class="header">Feldinhalt</td>
+        </tr>
+        <tr>
+            <td class="text">Filialname</td>
+            <td class="text">{!Feld['ZUS_ASt_Name']} </td>
+        </tr>
+        <tr>
+            <td class="text">Eröffnung</td>
+            <td class="text">
+                <apex:outputText value="{0, date, dd'.'MM'.'yyyy}">
+                    <apex:param value="{!Feld['ZUS_SonstigeAenderungAb']}"/>
+                </apex:outputText>
+            </td>
+        </tr>
+        <tr>
+            <td class="text">Einrichtungstermin Interim</td>
+            <td class="text">
 
-            <td class="header">Zusatzinformation Materialerstausstattung</td>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td rowspan="2" colspan="4">
-                <apex:outputtext escape="false" value="{!LogoZusatzinfoMaterial}"/>
             </td>
-            <td/>
-        </tr>
-        <tr style="height:0.59cm">
-            <td class="header">für Filialen und Verkaufsstellen</td>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-        </tr>
-        <tr style="height:0.26cm">
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-        </tr>
-        <tr>
-            <td rowspan="5" colspan="10" class="info-box" style="white-space: normal;">
-                <span class="bold">Hinweis:</span><br/>
-                Der Vordruck ist <span class="bold">bei <span class="underline">jeder</span> Neueröffnung</span> einer
-                Partner-, DP Shop- oder kleinen Partner-Filiale OZ 84, die eine Erstausstattung mit
-                Verbrauchsmaterialien erforderlich macht, vom Vertriebsmanager bzw. von der Vertriebsleitung
-                auszufüllen. Die Erstausstattung erfolgt grundsätzlich anhand von mit dem Partnermanagement abgestimmten
-                Erstausstattungslisten je Filialtyp und den u. g. Zusatzinformationen.
-            </td>
-            <td/>
-        </tr>
-        <tr>
-            <td/>
-        </tr>
-        <tr>
-            <td/>
-        </tr>
-        <tr>
-            <td/>
-        </tr>
-        <tr>
-            <td/>
         </tr>
         <tr>
             <td/>
             <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
         </tr>
-        <tr style="height:15.75pt">
-            <td class="label-large">ASt-Name</td>
-            <td/>
-            <td colspan="5" class="border">{!Feld['Zusatzinfo_Material_Filialname']}</td>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
+        <tr>
+            <td class="text">Straße</td>
+            <td class="text" style="mso-number-format: '@'">{!Feld['ZUS_Strasse']}</td>
+        </tr>
+        <tr>
+            <td class="text">Hausnummer</td>
+            <td class="text" style="mso-number-format: '@'">{!Feld['ZUS_Hausnummer']}</td>
+        </tr>
+        <tr>
+            <td class="text">PLZ</td>
+            <td class="text" style="mso-number-format: '@'">{!RIGHT(Feld['ZUS_Postleitzahl'], 5)}</td>
+        </tr>
+        <tr>
+            <td class="text">Ort</td>
+            <td class="text" style="mso-number-format: '@'">{!Feld['ZUS_Ort']}</td>
+        </tr>
+        <tr>
+            <td class="text">Telefon</td>
+            <td class="text" style="mso-number-format: '@'">{!Feld['ZUS_Telefon']}</td>
         </tr>
         <tr>
             <td/>
             <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-        </tr>
-        <tr style="height:15.75pt">
-            <td class="label-large">ASt-OZ <span style="font-weight: normal;">(12-stellig)</span></td>
-            <td/>
-            <td colspan="2" class="border">{!Feld['Zusatzinfo_Material_Aussenstellen_Nummer']}</td>
-            <td/>
-            <td class="border">Regel</td>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-        </tr>
-        <tr style="height:15.75pt">
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-        </tr>
-        <tr style="height:12pt">
-            <td class="border-left-top" colspan="10"/>
-            <td class="border-left"/>
-        </tr>
-        <tr style="height:15.75pt">
-            <td class="label-bold">Grundausstattung aller Formblätter erforderlich?</td>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td class="text-green">{!Feld['Zusatzinfo_Material_Grundausstattung']}</td>
-            <td/>
-            <td/>
-            <td/>
-            <td class="border-left"/>
-        </tr>
-        <tr style="height:4.5pt">
-            <td class="border-left" colspan="10"/>
-            <td class="border-left"/>
-        </tr>
-        <tr style="height:15.75pt">
-            <td class="label-bold">Nur Lieferung der zusätzlichen Formblätter (upgrade OZ 79 -> 95)?</td>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td class="text-green">{!Feld['Zusatzinfo_Lieferung_der_zusatzlichen']}</td>
-            <td/>
-            <td/>
-            <td/>
-            <td class="border-left"/>
-        </tr>
-        <tr style="height:9pt">
-            <td class="border-left" colspan="10"/>
-            <td class="border-left"/>
-        </tr>
-        <tr style="height:15.75pt">
-            <td class="border-left"/>
-            <td/>
-            <td class="label-large" style="text-align: right;">Anzahl der Schalter:</td>
-            <td class="text-green">{!Feld['Zusatzinfo_Material_Anzahl_der_Schalter']}</td>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td class="border-left"/>
-        </tr>
-        <tr style="height:12pt">
-            <td class="border-left" colspan="10"/>
-            <td class="border-left"/>
-        </tr>
-        <tr style="height:12pt">
-            <td class="border-left-top" colspan="10"/>
-            <td class="border-left"/>
-        </tr>
-        <tr style="height:15.75pt">
-            <td class="border-left"><span class="label-large">Zusatzausstattung erforderlich?</span></td>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td class="border-left"/>
-        </tr>
-        <tr style="height:4.5pt">
-            <td class="border-left" colspan="10"/>
-            <td class="border-left"/>
         </tr>
         <tr>
-            <td class="border-left"/>
-            <td class="label">Kontoauszugsdrucker</td>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td class="text-green">{!Feld['Zusatzinfo_Material_Kontoauszugsdrucker']}</td>
-            <td/>
-            <td class="border-top"/>
-            <td/>
-            <td class="border-left"/>
+            <td class="text">ASTNr</td>
+            <td class="text">{!Feld['ZUS_AstNr']}</td>
         </tr>
         <tr>
-            <td class="border-left"/>
-            <td class="label">Briefmarkenautomat</td>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td class="text-green">{!Feld['Zusatzinfo_Material_Briefmarkenautomat']}</td>
-            <td/>
-            <td/>
-            <td/>
-            <td class="border-left"/>
-        </tr>
-        <tr style="height:12pt">
-            <td class="border-left" colspan="10"/>
-            <td class="border-left"/>
-        </tr>
-        <tr style="height:12pt">
-            <td class="border-left-top" colspan="10"/>
-            <td class="border-left"/>
-        </tr>
-        <tr style="height:15.75pt">
-            <td class="border-left"><span class="label-large">Stempel mit speziellem Eindruck erforderlich?</span></td>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td class="border-left"/>
-        </tr>
-        <tr style="height:4.5pt">
-            <td class="border-left" colspan="10"/>
-            <td class="border-left"/>
+            <td class="text">Debitor</td>
+            <td class="text">{!Feld['ZUS_Debitor']}</td>
         </tr>
         <tr>
-            <td class="border-left"/>
-            <td class="label">Tagesstempel</td>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td class="text-green">{!Feld['Zusatzinfo_Material_Tagesstempel']}</td>
-            <td/>
-            <td/>
-            <td/>
-            <td class="border-left"/>
+            <td class="text">WaWi-Nummer</td>
+            <td class="text">{!Feld['ZUS_WawiNr']}</td>
         </tr>
-        <tr style="height:12pt">
-            <td class="border-left-bottom" colspan="10"/>
-            <td class="border-left"/>
+        <tr>
+            <td class="text">Filialtyp</td>
+            <td class="text">{!Feld['ZUS_Filialtyp']}</td>
         </tr>
-        <tr style="height:7.5pt">
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
+        <tr>
+            <td class="text">Filialtyp Vorgängerfiliale</td>
+            <td class="text"></td>
         </tr>
-        <tr style="height:12.75pt">
-            <td class="border-left-top" colspan="10"/>
-            <td class="border-left"/>
+        <tr>
+            <td class="text">Vertriebsleitung</td>
+            <td class="text">{!Feld['ZUS_VL']}</td>
         </tr>
-        <tr style="height:12.75pt">
-            <td class="border-left"><span class="label-large">Interimsfiliale:</span></td>
-            <td/>
-            <td/>
-            <td class="label-medium">Einrichtungstermin:</td>
-            <td/>
-            <td/>
-            <td colspan="3" class="text-green"></td>
-            <td/>
-            <td class="border-left"/>
+        <tr>
+            <td class="text">Interim</td>
+            <td class="text">{!Feld['ZUS_Interim']}</td>
         </tr>
-        <tr style="height:12.75pt">
-            <td class="border-left" colspan="10"/>
-            <td class="border-left"/>
-        </tr>
-        <tr style="height:12.75pt">
-            <td class="border-left">bei Versand MÄF &lt; x-20 AT ggfs. abweichende Lieferanschrift (Versand per
-                Fracht):
-            </td>
+        <tr>
             <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td class="border-left"/>
-        </tr>
-        <tr style="height:12.75pt">
-            <td colspan="6" class="underlined-green"></td>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td class="border-left"/>
-        </tr>
-        <tr style="height:12.75pt">
-            <td colspan="6" class="underlined-green"></td>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td class="border-left"/>
-        </tr>
-        <tr style="height:12.75pt">
-            <td colspan="6" class="underlined-green"></td>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td class="border-left"/>
-        </tr>
-        <tr style="height:9pt">
-            <td class="border-top-bold" colspan="10"/>
             <td/>
         </tr>
         <tr>
-            <td class="border-left-top" colspan="10"><span class="bold">Name, Telefonnummer und E-Mail-Adresse des zuständigen Bearbeiters der VL:</span>
-            </td>
-            <td class="border-left"/>
+            <td class="text">Öffnungszeiten Post Montag</td>
+            <td class="text">{!Filialoeffnungszeiten[0].vm_von__c} - {!Filialoeffnungszeiten[0].vm_bis__c}
+                &nbsp; {!Filialoeffnungszeiten[0].nm_von__c} - {!Filialoeffnungszeiten[0].nm_bis__c}</td>
         </tr>
         <tr>
-            <td class="border-left">VL:</td>
-            <td>{!Feld['Zusatzinfo_Material_VL']}</td>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td class="border-left"/>
+            <td class="text">Öffnungszeiten Post Dienstag</td>
+            <td class="text">{!Filialoeffnungszeiten[1].vm_von__c} - {!Filialoeffnungszeiten[1].vm_bis__c}
+                &nbsp; {!Filialoeffnungszeiten[1].nm_von__c} - {!Filialoeffnungszeiten[1].nm_bis__c}</td>
         </tr>
         <tr>
-            <td class="border-left"><span class="label-medium">Name:</span></td>
-            <td>{!Feld['Zusatzinfo_Material_Name_VM']}</td>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td class="border-left"/>
+            <td class="text">Öffnungszeiten Post Mittwoch</td>
+            <td class="text">{!Filialoeffnungszeiten[2].vm_von__c} - {!Filialoeffnungszeiten[2].vm_bis__c}
+                &nbsp; {!Filialoeffnungszeiten[2].nm_von__c} - {!Filialoeffnungszeiten[2].nm_bis__c}</td>
         </tr>
         <tr>
-            <td class="border-left"><span class="label-medium">Tel:</span></td>
-            <td>{!Feld['Zusatzinfo_Material_Tel_VM']}</td>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td class="border-left"/>
+            <td class="text">Öffnungszeiten Post Donnerstag</td>
+            <td class="text">{!Filialoeffnungszeiten[3].vm_von__c} - {!Filialoeffnungszeiten[3].vm_bis__c}
+                &nbsp; {!Filialoeffnungszeiten[3].nm_von__c} - {!Filialoeffnungszeiten[3].nm_bis__c}</td>
         </tr>
         <tr>
-            <td class="border-left"><span class="label-medium">E-Mail:</span></td>
-            <td colspan="3" class="text-green">{!Feld['Zusatzinfo_Material_Email_VM']}</td>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td/>
-            <td class="border-left"/>
+            <td class="text">Öffnungszeiten Post Freitag</td>
+            <td class="text">{!Filialoeffnungszeiten[4].vm_von__c} - {!Filialoeffnungszeiten[4].vm_bis__c}
+                &nbsp; {!Filialoeffnungszeiten[4].nm_von__c} - {!Filialoeffnungszeiten[4].nm_bis__c}</td>
         </tr>
-        <tr style="height:15.75pt">
-            <td class="border-left-bottom" colspan="10"/>
-            <td class="border-left"/>
+        <tr>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td class="text">Grundausstattung Material</td>
+            <td class="text">{!Feld['ZUS_GrundausstattungFormblaetter']}</td>
+        </tr>
+        <tr>
+            <td class="text">Upgrade (nur 79->95)</td>
+            <td class="text">{!Feld['ZUS_LieferungFormblaetter']}</td>
+        </tr>
+        <tr>
+            <td class="text">Anzahl Schalter</td>
+            <td class="text">{!Feld['ZUS_Anzahl_Schalter']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td class="text">Postfach</td>
+            <td class="text">{!Feld['ZUS_PostfachanlageCheckbox']}</td>
+        </tr>
+        <tr>
+            <td class="text">express</td>
+            <td class="text">{!Feld['ZUS_Paketausgabe']}</td>
+        </tr>
+        <tr>
+            <td class="text">brief</td>
+            <td class="text">{!Feld['ZUS_Briefausgabe']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td class="text">Kontoauszugsdrucker</td>
+            <td class="text">{!Feld['ZUS_Kontoauszugsdrucker']}</td>
+        </tr>
+        <tr>
+            <td class="text">Briefmarkenautomat</td>
+            <td class="text">{!Feld['ZUS_Briefmarkenautomat']}</td>
+        </tr>
+        <tr>
+            <td class="text">KKZ</td>
+            <td class="text">{!Feld['ZUS_Masterkasse_KKZ']}</td>
+        </tr>
+        <tr>
+            <td class="text">TagesStempel</td>
+            <td class="text">{!Feld['ZUS_Tagesstempel']}</td>
+        </tr>
+        <tr>
+            <td class="text">Tagesstempelinschrift</td>
+            <td class="text">{!Feld['ZUS_TagesstempelMAEF']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td class="text">Angebotstafel</td>
+            <td class="text">{!Feld['ZUS_Angebotstafel']}</td>
+        </tr>
+        <tr>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td class="text">Sonstiges</td>
+            <td class="text">{!Feld['ZUS_SonstigesGrundMAEF']}</td>
         </tr>
     </table>
-    <!--[if mso]>
     </body>
-    <![endif]-->
+
     </html>
 </apex:page>

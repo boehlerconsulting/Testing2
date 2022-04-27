@@ -12,7 +12,7 @@
  */
 @IsTest
 private class OeffnungszeitServiceTest {
-	
+	/* todo*/
 	@IsTest
 	static void testGetDefinitionsByAccountId () {
 		

@@ -13,6 +13,7 @@
 public with sharing class EinrichtungsprozessAndienungCtrl extends EinrichtungsprozessBaseCtrl {
 	
 	private List<Oeffnungszeiten__c> filialOeffnungszeiten = new List<Oeffnungszeiten__c>();
+	protected String mainProcess = 'Einrichtungsprozess';
 	
 	@AuraEnabled
 	public static String init ( Id recordId ) {
@@ -155,7 +156,7 @@ public with sharing class EinrichtungsprozessAndienungCtrl extends Einrichtungsp
 						Maximale_Laenge__c,
 						Bild__c
 				FROM Feld__mdt
-				WHERE Prozess__c = 'Einrichtungsprozess'
+				WHERE Sektion__r.Fenster__r.Process__c = :mainProcess
 				AND Sektion__r.Fenster__r.DeveloperName = 'AuftragVerEntsorgungBriefPaket'
 				ORDER BY Nummerierung__c ASC NULLS LAST
 		] ) {
@@ -179,7 +180,7 @@ public with sharing class EinrichtungsprozessAndienungCtrl extends Einrichtungsp
 						Fenster__c,
 						Nummerierung__c
 				FROM Sektion__mdt
-				WHERE Prozess__c = 'Einrichtungsprozess'
+				WHERE Fenster__r.Process__c = :mainProcess
 				AND Fenster__r.DeveloperName = 'AuftragVerEntsorgungBriefPaket'
 				ORDER BY Nummerierung__c ASC NULLS LAST
 		] ) {
@@ -202,7 +203,7 @@ public with sharing class EinrichtungsprozessAndienungCtrl extends Einrichtungsp
 						Titel__c,
 						Nummerierung__c
 				FROM Fenster__mdt
-				WHERE Prozess__c = 'Einrichtungsprozess'
+				WHERE Process__c = :mainProcess
 				AND DeveloperName = 'AuftragVerEntsorgungBriefPaket'
 				ORDER BY Nummerierung__c ASC NULLS LAST
 		] );
@@ -235,6 +236,7 @@ public with sharing class EinrichtungsprozessAndienungCtrl extends Einrichtungsp
 				FROM Oeffnungszeiten__c
 				WHERE Account__c = :account.Id
 				AND Kategorie__c = 'Filialöffnungszeiten'
+				AND Prozess__c = :HW_Stammdatensammler_LC.mainProcess
 				ORDER BY Name ASC NULLS LAST
 		];
 		if ( filialOeffnungszeiten.size() == 0 ) {

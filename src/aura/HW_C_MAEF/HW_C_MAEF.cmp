@@ -17,6 +17,7 @@
 
 <aura:component description="HW_C_MAEF" implements="force:lightningQuickActionWithoutHeader,force:hasRecordId">
 
+    <aura:attribute name="isLaufenderBetrieb" type="Boolean" default="true"/>
 
     <aura:html tag="style">
         .slds-spinner_container{
@@ -40,7 +41,7 @@
 
     <c:hwStammdatensammler
             recordId="{!v.recordId}"
-            isExistingMAEF="true"
+            isExistingMAEF="{!v.isLaufenderBetrieb}"
             oncloseModal="{!c.closeModal}"
             onrefreshView="{!c.refreshView}"
     ></c:hwStammdatensammler>

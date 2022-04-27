@@ -14,7 +14,7 @@
  */
 @IsTest
 private class HW_Stammdatensammler_LC_T {
-	
+	/* todo*/
 	@IsTest
 	static void testFirstDataLoad () {
 		
@@ -78,11 +78,11 @@ private class HW_Stammdatensammler_LC_T {
 		String lv_StateString = HW_Stammdatensammler_LC.loadData( lo_Lead.Id, false );
 		HW_Stammdatensammler_LC.State lo_State = ( HW_Stammdatensammler_LC.State )
 				JSON.deserialize( lv_StateString, HW_Stammdatensammler_LC.State.class );
-		HW_Stammdatensammler_LC.saveSteps( JSON.serialize( lo_State.il_Steps ) );
+		HW_Stammdatensammler_LC.saveSteps( JSON.serialize( lo_State.steps ) );
 		
 		Test.stopTest();
 		
-		System.assertNotEquals( null, lo_State.il_Steps );
+		System.assertNotEquals( null, lo_State.steps );
 	}
 	
 	@IsTest
@@ -122,7 +122,7 @@ private class HW_Stammdatensammler_LC_T {
 			Test.startTest();
 			HW_Stammdatensammler_LC.loadData( lo_Lead.Id, false );
 			Account lo_Account = [ SELECT Id FROM Account LIMIT 1 ];
-			HW_Stammdatensammler_LC.saveDocument( lo_Account.Id, 'HW_Selbstauskunft', 'pdf' );
+			HW_Stammdatensammler_LC.saveDocument( lo_Account.Id, 'HW_Selbstauskunft', 'pdf', 'false' );
 			Test.stopTest();
 		}
 	}
@@ -146,11 +146,8 @@ private class HW_Stammdatensammler_LC_T {
 			Test.startTest();
 			HW_Stammdatensammler_LC.loadData( lead.Id, false );
 			HW_Stammdatensammler_LC.loadData( lead.Id, true );
-			Account account = [ SELECT Id, MAEF_Zwischenspeicher__c FROM Account LIMIT 1 ];
-			Contract contract = [ SELECT Id FROM Contract LIMIT 1 ];
-			HW_Stammdatensammler_LC.getMAEFUrl( true, JSON.serialize( account ), JSON.serialize( contract ) );
-			HW_Stammdatensammler_LC.getMAEFUrl( false, JSON.serialize( account ), JSON.serialize( contract ) );
-			HW_Stammdatensammler_LC.getDocumentUrl( account.Id, 'HW_Selbstauskunft', 'pdf' );
+			Account account = [ SELECT Id FROM Account LIMIT 1 ];
+			HW_Stammdatensammler_LC.getDocumentUrl( account.Id, 'HW_Selbstauskunft', 'pdf', 'false' );
 			HW_Stammdatensammler_LC.validateAstId( account.Id );
 			Test.stopTest();
 		}

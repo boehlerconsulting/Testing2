@@ -14,6 +14,7 @@
 
 @isTest
 public class HW_Document_C_T {
+	/* todo*/
     @IsTest
     public static void testPage_HW_FACTS_Stammdatenbeleg() {
         HW_Document_C controller = testDocumentController(Page.HW_FACTS_Stammdatenbeleg, 'HTML', 'FACTS Stammdatenbeleg für Test');
@@ -89,7 +90,6 @@ public class HW_Document_C_T {
         initTestData(pageRef, output);
         
         HW_Document_C controller = new HW_Document_C();
-        controller.controllerActions();
         
         System.assert(controller.getFeld().size() > 0);
         

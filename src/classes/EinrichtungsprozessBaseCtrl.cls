@@ -26,6 +26,7 @@ public with sharing virtual class EinrichtungsprozessBaseCtrl {
 	protected Boolean isErsatz = false;
 	protected Boolean isAbbau = false;
 	protected Boolean hasPermission = FeatureManagement.checkPermission( 'SchreibrechteEinrichtungsprozess' );
+	protected String mainProcess = 'Einrichtungsprozess';
 	
 	@AuraEnabled
 	public static void saveFieldValue ( Id recordId, String fieldName, String dataType, String value ) {
@@ -352,7 +353,7 @@ public with sharing virtual class EinrichtungsprozessBaseCtrl {
 						Maximale_Laenge__c,
 						Bild__c
 				FROM Feld__mdt
-				WHERE Prozess__c = 'Einrichtungsprozess'
+				WHERE Sektion__r.Fenster__r.Process__c = :mainProcess
 				AND Sektion__r.Fenster__r.DeveloperName != 'AuftragVerEntsorgungBriefPaket'
 				ORDER BY Nummerierung__c ASC NULLS LAST
 		] ) {
@@ -376,7 +377,7 @@ public with sharing virtual class EinrichtungsprozessBaseCtrl {
 						Fenster__c,
 						Nummerierung__c
 				FROM Sektion__mdt
-				WHERE Prozess__c = 'Einrichtungsprozess'
+				WHERE Fenster__r.Process__c = :mainProcess
 				AND Fenster__r.DeveloperName != 'AuftragVerEntsorgungBriefPaket'
 				ORDER BY Nummerierung__c ASC NULLS LAST
 		] ) {
@@ -409,7 +410,7 @@ public with sharing virtual class EinrichtungsprozessBaseCtrl {
 						ORDER BY Nummerierung__c ASC NULLS LAST
 				)
 				FROM Fenster__mdt
-				WHERE Prozess__c = 'Einrichtungsprozess'
+				WHERE Process__c = :mainProcess
 				AND DeveloperName != 'AuftragVerEntsorgungBriefPaket'
 				ORDER BY Nummerierung__c ASC NULLS LAST
 		] );

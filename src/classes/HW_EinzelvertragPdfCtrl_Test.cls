@@ -39,15 +39,8 @@ private class HW_EinzelvertragPdfCtrl_Test {
         ApexPages.currentPage().getParameters().put('sp','12');
         ApexPages.currentPage().getParameters().put('mk','10');
         HW_EinzelvertragPdfCtrl evControl = new HW_EinzelvertragPdfCtrl();
-
         lead = evControl.getCurrentLead();
         System.assertEquals(4, lead.Summe_aller_Module__c);
-        System.assertEquals('PM DPI Rhein-Main Team PM Commercial',evControl.getBezeichnung());
-        System.assertEquals('Saalburgallee 19',evControl.getStrasse());
-        System.assertEquals('60385',evControl.getPostleitzahl());
-        System.assertEquals('Frankfurt', evControl.getOrt());
-        //System.assertEquals(12,evControl.getStromverbrauch());
-
         Test.stopTest();
     }
 }

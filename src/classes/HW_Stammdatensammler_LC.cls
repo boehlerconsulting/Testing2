@@ -11,17 +11,18 @@
  */
 public without sharing class HW_Stammdatensammler_LC {
 	
+	public static String mainProcess = 'Stammdatensammler Filiale';
 	private static Boolean isFormataenderungAutoGen = false;
 	
-	private State io_State = new State();
-	private Id iv_RecordId;
-	private String iv_SObjectName;
-	private Boolean lv_FirstDataLoad;
+	public Id recordId;
+	private State state = new State();
+	private String sObjectName;
+	private Boolean firstDataLoad;
 	private Boolean isExistingMAEF = false;
-	private Map<Id, List<Sektion__mdt>> im_SectionsByScreenId;
-	private Map<Id, List<Feld__mdt>> im_FieldsBySectionId;
-	private List<Stammdatensammler__c> il_ProgressStates;
-	private Map<String, List<Oeffnungszeiten__c>> im_OeffnungszeitensByKategorie = new Map<String, List<Oeffnungszeiten__c>>();
+	private Map<Id, List<Sektion__mdt>> sectionsByScreenId;
+	private Map<Id, List<Feld__mdt>> fieldsBySectionId;
+	private List<Stammdatensammler__c> progressStates;
+	private Map<String, List<Oeffnungszeiten__c>> oeffnungszeitensByKategorie = new Map<String, List<Oeffnungszeiten__c>>();
 	private Map<String, List<DokumentPflichtfeld__mdt>> pflichtfelderByDocumentVisualforceName
 			= new Map<String, List<DokumentPflichtfeld__mdt>>();
 	private Map<String, List<DokumentPflichtdokument__mdt>> pflichtdokumenteByDocumentVisualforceName
@@ -31,38 +32,52 @@ public without sharing class HW_Stammdatensammler_LC {
 	
 	@AuraEnabled
 	public static String loadData ( Id recordId, Boolean isExistingMAEF ) {
-		HW_Stammdatensammler_LC po_Ctrl = new HW_Stammdatensammler_LC();
-		po_Ctrl.lv_FirstDataLoad = false;
-		po_Ctrl.isExistingMAEF = isExistingMAEF;
-		po_Ctrl.iv_RecordId = recordId;
+		HW_Stammdatensammler_LC instance = new HW_Stammdatensammler_LC();
+		instance.firstDataLoad = false;
+		instance.isExistingMAEF = isExistingMAEF;
+		instance.recordId = recordId;
 		
-		if ( po_Ctrl.isExistingMAEF ) {
-			po_Ctrl.initializeExistingMAEF( recordId );
+		if ( instance.isExistingMAEF ) {
+			instance.initializeLaufenderBetrieb();
 		}
 		else {
-			po_Ctrl.initializeStammdatensammler( recordId );
+			instance.initialize();
 		}
-		return po_Ctrl.lv_FirstDataLoad ? null : JSON.serialize( po_Ctrl.io_State );
+		return instance.firstDataLoad ? null : JSON.serialize( instance.state );
 	}
 	
 	@AuraEnabled
-	public static void saveDocument ( String recordId, String visualforceName, String dataType ) {
+	public static void saveDocument ( String recordId, String visualforceName, String dataType, String isLaufenderBetrieb ) {
 		Savepoint savepoint = Database.setSavepoint();
 		try {
+			Account account = [
+					SELECT
+							ProzessStammdatensammler__c,
+							Lead__r.ProzessStammdatensammler__c
+					FROM Account
+					WHERE Id = :recordId
+					LIMIT 1
+			];
+			String mainProcess = isLaufenderBetrieb == 'true'
+					? account.ProzessStammdatensammler__c
+					: account.Lead__r.ProzessStammdatensammler__c;
 			PageReference pageReference = getPage( visualforceName );
 			pageReference.getParameters().put( 'id', recordId );
 			pageReference.getParameters().put( 'output', dataType );
+			pageReference.getParameters().put( 'mainProcess', mainProcess );
 			new HW_Document_C( pageReference ).save();
 			if ( visualforceName == 'HW_FACTS_Stammdatenbeleg' ) {
 				PageReference einverstaendniserklaerung = getPage( 'HW_Einverstaendniserklaerung' );
 				einverstaendniserklaerung.getParameters().put( 'id', recordId );
 				einverstaendniserklaerung.getParameters().put( 'output', 'PDF' );
+				einverstaendniserklaerung.getParameters().put( 'mainProcess', mainProcess );
 				new HW_Document_C( einverstaendniserklaerung ).save();
 			}
 			if ( visualforceName == 'HW_MAEF' ) {
 				PageReference zusatzinfoMaterial = getPage( 'HW_Zusatzinfo_Material' );
 				zusatzinfoMaterial.getParameters().put( 'id', recordId );
 				zusatzinfoMaterial.getParameters().put( 'output', 'excel' );
+				zusatzinfoMaterial.getParameters().put( 'mainProcess', mainProcess );
 				new HW_Document_C( zusatzinfoMaterial ).save();
 			}
 		}
@@ -72,17 +87,29 @@ public without sharing class HW_Stammdatensammler_LC {
 		}
 	}
 	
-	@AuraEnabled(Cacheable=true)
-	public static String getDocumentUrl ( String recordId, String visualforceName, String dataType ) {
+	@AuraEnabled( Cacheable=true )
+	public static String getDocumentUrl ( String recordId, String visualforceName, String dataType, String isLaufenderBetrieb ) {
+		Account account = [
+				SELECT
+						ProzessStammdatensammler__c,
+						Lead__r.ProzessStammdatensammler__c
+				FROM Account
+				WHERE Id = :recordId
+				LIMIT 1
+		];
+		String mainProcess = isLaufenderBetrieb == 'true'
+				? account.ProzessStammdatensammler__c
+				: account.Lead__r.ProzessStammdatensammler__c;
 		PageReference pageReference = getPage( visualforceName );
 		pageReference.getParameters().put( 'id', recordId );
 		pageReference.getParameters().put( 'output', dataType );
+		pageReference.getParameters().put( 'mainProcess', mainProcess );
 		return pageReference.getUrl();
 	}
 	
 	@AuraEnabled
 	public static Boolean resetFirstRunHelper ( String contractString ) {
-		Contract con = ( Contract ) JSON.deserialize( contractString, Contract.class );
+		Contract con = (Contract) JSON.deserialize( contractString, Contract.class );
 		//MYPM-1130
 		con.SDS_Helper_FirstRun__c = false;
 		update con;
@@ -138,34 +165,90 @@ public without sharing class HW_Stammdatensammler_LC {
 		return pageReference;
 	}
 	
-	@AuraEnabled
-	public static String getMAEFUrl ( Boolean isPreview, String accountString, String contractString ) {
-		HW_MaefWrapper wrapper = new HW_MaefWrapper();
-		wrapper.account = ( Account ) JSON.deserialize( accountString, Account.class );
-		wrapper.contract = ( Contract ) JSON.deserialize( contractString, Contract.class );
-		update new Account(
-				Id = wrapper.account.Id,
-				MAEF_Zwischenspeicher__c = JSON.serialize( wrapper )
-		);
-		PageReference pageReference = Page.HW_MAEF_Filiale_existiert;
-		pageReference.getParameters().put( 'id', wrapper.account.Id );
-		pageReference.getParameters().put( 'output', 'excel' );
-		if ( isPreview ) {
-			return pageReference.getUrl();
+	private void initializeLaufenderBetrieb () {
+		sObjectName = String.valueOf( recordId.getSobjectType() );
+		setMainProcess();
+		buildScreens();
+		state.account = (Account) Database.query( buildQueryString( 'Id' ) )[ 0 ];
+		deleteExistingContract();
+		deleteExisingOeffnungszeiten();
+		state.contract = loadContract();
+		loadProgressStates();
+		if ( progressStates.size() == 0 ) {
+			insertProgressStatesLaufenderBetrieb();
 		}
-		else {
-			new HW_Document_C( pageReference ).saveExistingMAEF();
-			return pageReference.getUrl();
+		buildSteps();
+		setOeffnungszeitenLaufenderBetrieb();
+	}
+	
+	private void setOeffnungszeitenLaufenderBetrieb () {
+		createOeffnungszeiten();
+		for ( Screen screen : state.screens ) {
+			
+			for ( Section section : screen.sections ) {
+				if ( section.iv_Title == 'Filialöffnungszeiten' ) {
+					section.il_Oeffnungszeits.add(
+							new Oeffnungszeit(
+									oeffnungszeitensByKategorie.get( 'Filialöffnungszeiten' )
+							)
+					);
+					section.iv_HasOeffnungszeiten = true;
+				
+				}
+				else if ( section.iv_Title == 'Geschäftsöffnungszeiten' ) {
+					section.il_Oeffnungszeits.add(
+							new Oeffnungszeit(
+									oeffnungszeitensByKategorie.get( 'Öffnungszeiten Hauptgeschäft' )
+							)
+					);
+					section.iv_HasOeffnungszeiten = true;
+				}
+				else {
+					//Sonarqube --> do nothing
+				}
+			}
 		}
 	}
 	
-	private void initializeExistingMAEF ( Id recordId ) {
-		OrgE_DP__c lo_OrgE_DP = null;
-		iv_RecordId = recordId;
-		iv_SObjectName = String.valueOf( recordId.getSobjectType() );
-		buildScreens();
-		io_State.io_SObject = loadAccount( lo_OrgE_DP );
-		io_State.io_Contract = loadContract();
+	private void createOeffnungszeiten () {
+		List<Oeffnungszeiten__c> oeffnungszeitens = OeffnungszeitService.createDefinitions(
+				state.account.Id,
+				'Filialöffnungszeiten',
+				false );
+		oeffnungszeitens.addAll( OeffnungszeitService.createDefinitions(
+				state.account.Id,
+				'Öffnungszeiten Hauptgeschäft',
+				true ) );
+		insert oeffnungszeitens;
+		loadOeffnungszeiten( state.account.Id );
+	}
+	
+	private void deleteExisingOeffnungszeiten () {
+		List<Oeffnungszeiten__c> oeffnungszeiten = [
+				SELECT
+						Id
+				FROM Oeffnungszeiten__c
+				WHERE Account__c = :recordId
+				AND Prozess__c = :mainProcess
+		];
+		if ( oeffnungszeiten.size() > 0 ) {
+			delete oeffnungszeiten;
+			Database.emptyRecycleBin( oeffnungszeiten );
+		}
+	}
+	
+	private void deleteExistingContract () {
+		List<Contract> contracts = [
+				SELECT
+						Id
+				FROM Contract
+				WHERE AccountId = :recordId
+				AND Prozess__c = :mainProcess
+		];
+		if ( contracts.size() > 0 ) {
+			delete contracts;
+			Database.emptyRecycleBin( contracts );
+		}
 	}
 	
 	/**
@@ -185,18 +268,18 @@ public without sharing class HW_Stammdatensammler_LC {
 	}
 	
 	//init from outside
-	public void callInitializeStammdatensammler ( Id pv_RecordId ) {
-		this.lv_FirstDataLoad = true;
-		this.initializeStammdatensammler( pv_RecordId );
+	public void callInitializeStammdatensammler () {
+		this.firstDataLoad = true;
+		this.initialize();
 	}
 	
-	private void initializeStammdatensammler ( Id pv_RecordId ) {
+	private void initialize () {
 		
 		OrgE_DP__c lo_OrgE_DP = null;
-		if ( String.valueOf( pv_RecordId.getSobjectType() ) == 'Lead' ) {
-			lead = loadLead( pv_RecordId );
+		if ( String.valueOf( recordId.getSobjectType() ) == 'Lead' ) {
+			lead = loadLead( recordId );
 			if ( !lead.SDS_initialisiert__c ) {
-				lv_FirstDataLoad = true;
+				firstDataLoad = true;
 				if ( lead.VL__c == null ) {
 					List<OrgE_DP__c> ll_OrgEDPS = [
 							SELECT
@@ -208,8 +291,8 @@ public without sharing class HW_Stammdatensammler_LC {
 									SELECT
 											Id,
 											OrgE_DP__c
-									FROM User
-									WHERE Id = :UserInfo.getUserId()
+									from User
+									where Id = :UserInfo.getUserId()
 							].OrgE_DP__c
 					];
 					lo_OrgE_DP = ( ll_OrgEDPS.size() == 1 ) ? ll_OrgEDPS.get( 0 ) : null;
@@ -219,34 +302,48 @@ public without sharing class HW_Stammdatensammler_LC {
 				update lead;
 			}
 		}
-		
-		iv_RecordId = pv_RecordId;
-		iv_SObjectName = String.valueOf( pv_RecordId.getSobjectType() );
-		setIsFormataenderung();
+		sObjectName = String.valueOf( recordId.getSobjectType() );
+		setMainProcess();
 		buildScreens();
-		io_State.io_SObject = loadAccount( lo_OrgE_DP );
+		state.account = loadAccount( lo_OrgE_DP );
 		loadProgressStates();
-		if ( il_ProgressStates.size() == 0 ) {
+		if ( progressStates.size() == 0 ) {
 			insertProgressStates();
 		}
 		buildSteps();
 		setOeffnungszeiten();
-		io_State.io_Contract = loadContract();
+		state.contract = loadContract();
 	}
 	
-	private void setIsFormataenderung () {
-		if ( iv_SObjectName == 'Lead' ) {
-			HW_Stammdatensammler_LC.isFormataenderungAutoGen = lead.Formataenderung__c;
+	private void setMainProcess () {
+		if ( isExistingMAEF ) {
+			Account account = [
+					SELECT
+							ProzessStammdatensammler__c
+					FROM Account
+					WHERE Id = :recordId
+					LIMIT 1
+			];
+			mainProcess = account.ProzessStammdatensammler__c;
 		}
 		else {
-			HW_Stammdatensammler_LC.isFormataenderungAutoGen = [
-					SELECT
-							Id,
-							Lead__r.Formataenderung__c
-					FROM Account
-					WHERE Id = :iv_RecordId
-					LIMIT 1
-			].Lead__r.Formataenderung__c;
+			if ( sObjectName == 'Lead' ) {
+				HW_Stammdatensammler_LC.isFormataenderungAutoGen = lead.Formataenderung__c;
+				mainProcess = lead.ProzessStammdatensammler__c;
+			}
+			else {
+				Account account = [
+						SELECT
+								Id,
+								Lead__r.Formataenderung__c,
+								Lead__r.ProzessStammdatensammler__c
+						FROM Account
+						WHERE Id = :recordId
+						LIMIT 1
+				];
+				HW_Stammdatensammler_LC.isFormataenderungAutoGen = account.Lead__r.Formataenderung__c;
+				mainProcess = account.Lead__r.ProzessStammdatensammler__c;
+			}
 		}
 	}
 	
@@ -257,7 +354,8 @@ public without sharing class HW_Stammdatensammler_LC {
 						Formataenderung__c,
 						SDS_initialisiert__c,
 						VL__c,
-						VL__r.GL__r.Werksnummer_Debitor_I__c
+						VL__r.GL__r.Werksnummer_Debitor_I__c,
+						ProzessStammdatensammler__c
 				FROM Lead
 				WHERE Id = :pv_LeadId
 		];
@@ -266,7 +364,7 @@ public without sharing class HW_Stammdatensammler_LC {
 	@AuraEnabled
 	public static void saveSteps ( String pv_Steps ) {
 		
-		List<Step> ll_Steps = ( List<Step> ) JSON.deserialize( pv_Steps, List<Step>.class );
+		List<Step> ll_Steps = (List<Step>) JSON.deserialize( pv_Steps, List<Step>.class );
 		List<Stammdatensammler__c> ll_ProgressSteps = new List<Stammdatensammler__c>();
 		
 		for ( Step lo_Step : ll_Steps ) {
@@ -288,12 +386,12 @@ public without sharing class HW_Stammdatensammler_LC {
 			List<String> pl_FormulaFieldNamesSObject,
 			List<String> pl_FormulaFieldNamesContract,
 			Id pv_AccountId ) {
-		SObject sobj = ( SObject ) JSON.deserialize( po_SObject, SObject.class );
+		SObject sobj = (SObject) JSON.deserialize( po_SObject, SObject.class );
 		update sobj;
 		if ( sobj.Id.getSobjectType().getDescribe().getName() == 'Account'
-				&& ( String ) sobj.get( 'ASt_ID__c' ) != ( String ) sobj.get( 'ASt_ID_SDS__c' ) ) {
+				&& (String) sobj.get( 'ASt_ID__c' ) != (String) sobj.get( 'ASt_ID_SDS__c' ) ) {
 			
-			updateAstID( pv_AccountId, ( String ) sobj.get( 'ASt_ID_SDS__c' ) );
+			updateAstID( pv_AccountId, (String) sobj.get( 'ASt_ID_SDS__c' ) );
 		}
 		return reloadFormulaFields( pv_AccountId, pl_FormulaFieldNamesSObject, pl_FormulaFieldNamesContract );
 	}
@@ -326,7 +424,7 @@ public without sharing class HW_Stammdatensammler_LC {
 	@AuraEnabled
 	public static void saveOeffnungszeiten ( String po_SObjects ) {
 		List<Oeffnungszeiten__c> lo_Oeffnungszeiten =
-				( List<Oeffnungszeiten__c> ) JSON.deserialize( po_SObjects, List<Oeffnungszeiten__c>.class );
+				(List<Oeffnungszeiten__c>) JSON.deserialize( po_SObjects, List<Oeffnungszeiten__c>.class );
 		update lo_Oeffnungszeiten;
 	}
 	
@@ -348,7 +446,7 @@ public without sharing class HW_Stammdatensammler_LC {
 			
 			String lv_SObjectQuery = 'SELECT ' + lv_SObjectFields
 					+ ' FROM Account WHERE Id = \'' + pv_RecordId + '\' LIMIT 1';
-			lo_State.io_SObject = ( Account ) Database.query( lv_SObjectQuery )[ 0 ];
+			lo_State.account = (Account) Database.query( lv_SObjectQuery )[ 0 ];
 		}
 		
 		if ( pl_FormulaFieldNamesContract.size() > 0 ) {
@@ -368,7 +466,7 @@ public without sharing class HW_Stammdatensammler_LC {
 					+ lv_RelatedObject + ' = \''
 					+ pv_RecordId + '\' ORDER BY CreatedDate DESC NULLS LAST';
 			
-			lo_State.io_Contract = ( Contract ) Database.query( lv_ContractQuery )[ 0 ];
+			lo_State.contract = (Contract) Database.query( lv_ContractQuery )[ 0 ];
 		}
 		
 		return JSON.serialize(
@@ -381,7 +479,6 @@ public without sharing class HW_Stammdatensammler_LC {
 				SELECT
 						Id,
 						Titel__c,
-						Ist_Filialfenster__c,
 						Nummerierung__c, (
 						SELECT
 								Id,
@@ -391,16 +488,16 @@ public without sharing class HW_Stammdatensammler_LC {
 								Datentyp__c,
 								ist_Vorschau__c
 						FROM Schaltflaechen__r
-						WHERE Prozess__c = 'Stammdatensammler'
+						WHERE Fenster__r.Process__c = :mainProcess
 						ORDER BY Nummerierung__c ASC NULLS LAST
 				)
 				FROM Fenster__mdt
-				WHERE Prozess__c = 'Stammdatensammler' AND Ist_Existierende_MAEF__c = :isExistingMAEF
+				WHERE Process__c = :mainProcess
 				ORDER BY Nummerierung__c ASC NULLS LAST
 		];
 	}
 	
-	private static List<Sektion__mdt> loadSektionen () {
+	private List<Sektion__mdt> loadSektionen () {
 		return [
 				SELECT
 						Nummerierung__c,
@@ -408,13 +505,13 @@ public without sharing class HW_Stammdatensammler_LC {
 						Fenster__c,
 						Titel__c
 				FROM Sektion__mdt
-				WHERE Prozess__c = 'Stammdatensammler'
+				WHERE Fenster__r.Process__c = :mainProcess
 				ORDER BY Nummerierung__c ASC NULLS LAST
 		];
 	}
 	
 	private void loadPflichtfelderByDocument () {
-		String process = isFormataenderungAutoGen ? 'Formataenderung' : 'Stammdatensammler';
+		String subProcess = isFormataenderungAutoGen ? 'Formataenderung' : mainProcess;
 		for ( DokumentPflichtfeld__mdt dokumentPflichtfeld : [
 				SELECT
 						Dokument__r.Visualforce_Page__c,
@@ -426,7 +523,7 @@ public without sharing class HW_Stammdatensammler_LC {
 						Feld__r.Feldtyp__c,
 						Feld__r.ist_Formelfeld__c
 				FROM DokumentPflichtfeld__mdt
-				WHERE Prozess__c = :process
+				WHERE Prozess__c = :subProcess
 		] ) {
 			pflichtfeldByDeveloperName.put( dokumentPflichtfeld.Feld__r.DeveloperName, dokumentPflichtfeld );
 			if ( pflichtfelderByDocumentVisualforceName.containsKey( dokumentPflichtfeld.Dokument__r.Visualforce_Page__c ) ) {
@@ -441,14 +538,14 @@ public without sharing class HW_Stammdatensammler_LC {
 	}
 	
 	private void loadPflichtdokumenteByDocument () {
-		String process = isFormataenderungAutoGen ? 'Formataenderung' : 'Stammdatensammler';
+		String subProcess = isFormataenderungAutoGen ? 'Formataenderung' : mainProcess;
 		for ( DokumentPflichtdokument__mdt dokumentPflichtdokument : [
 				SELECT
 						Dokument__r.Visualforce_Page__c,
 						Prozess__c,
 						Pflichtdokument__r.Visualforce_Page__c
 				FROM DokumentPflichtdokument__mdt
-				WHERE Prozess__c = :process
+				WHERE Prozess__c = :subProcess
 		] ) {
 			if ( pflichtdokumenteByDocumentVisualforceName.containsKey( dokumentPflichtdokument.Dokument__r.Visualforce_Page__c ) ) {
 				pflichtdokumenteByDocumentVisualforceName.get( dokumentPflichtdokument.Dokument__r.Visualforce_Page__c ).add( dokumentPflichtdokument );
@@ -493,20 +590,19 @@ public without sharing class HW_Stammdatensammler_LC {
 						VorgaengerfilialeVorhanden__c,
 						Ausblenden__c,
 						DeveloperName
-				
 				FROM Feld__mdt
-				WHERE Prozess__c = 'Stammdatensammler'
+				WHERE Sektion__r.Fenster__r.Process__c = :mainProcess
 				AND Feldname__c != NULL
 				AND ( Objektname__c = 'Account'
-				OR Objektname__c = 'Contract')
+				OR Objektname__c = 'Contract' )
 				ORDER BY Nummerierung__c ASC NULLS LAST
 		] ) {
 			lv_Field.Erforderlich__c = pflichtfeldByDeveloperName.containsKey( lv_Field.DeveloperName );
-			if ( im_FieldsBySectionId.containsKey( lv_Field.Sektion__c ) ) {
-				im_FieldsBySectionId.get( lv_Field.Sektion__c ).add( lv_Field );
+			if ( fieldsBySectionId.containsKey( lv_Field.Sektion__c ) ) {
+				fieldsBySectionId.get( lv_Field.Sektion__c ).add( lv_Field );
 			}
 			else {
-				im_FieldsBySectionId.put( lv_Field.Sektion__c, new List<Feld__mdt> {
+				fieldsBySectionId.put( lv_Field.Sektion__c, new List<Feld__mdt> {
 						lv_Field
 				} );
 			}
@@ -515,10 +611,10 @@ public without sharing class HW_Stammdatensammler_LC {
 	
 	private String buildQueryString ( String pv_FilterField ) {
 		Set<String> ls_FieldNames = new Set<String>();
-		for ( Id lv_Key : im_SectionsByScreenId.keySet() ) {
-			for ( Sektion__mdt lo_Section : im_SectionsByScreenId.get( lv_Key ) ) {
-				if ( im_FieldsBySectionId.containsKey( lo_Section.Id ) ) {
-					for ( Feld__mdt lo_Field : im_FieldsBySectionId.get( lo_Section.Id ) ) {
+		for ( Id lv_Key : sectionsByScreenId.keySet() ) {
+			for ( Sektion__mdt lo_Section : sectionsByScreenId.get( lv_Key ) ) {
+				if ( fieldsBySectionId.containsKey( lo_Section.Id ) ) {
+					for ( Feld__mdt lo_Field : fieldsBySectionId.get( lo_Section.Id ) ) {
 						if ( lo_Field.Objektname__c == 'Account' ) {
 							ls_FieldNames.add( lo_Field.Feldname__c );
 						}
@@ -534,9 +630,11 @@ public without sharing class HW_Stammdatensammler_LC {
 		ls_FieldNames.add( 'Debitoranfrage_versendet__c' );
 		ls_FieldNames.add( 'RecordType.DeveloperName' );
 		ls_FieldNames.add( 'Lead__r.Formataenderung__c' );
+		ls_FieldNames.add( 'Lead__r.ProzessStammdatensammler__c' );
+		ls_FieldNames.add( 'ProzessStammdatensammler__c' );
 		ls_FieldNames.remove( null );
 		return 'SELECT ' + getFields( ls_FieldNames ) + ' FROM Account WHERE '
-				+ pv_FilterField + ' = \'' + iv_RecordId + '\'';
+				+ pv_FilterField + ' = \'' + recordId + '\'';
 	}
 	
 	private String getFields ( Set<String> ls_FieldNames ) {
@@ -549,51 +647,50 @@ public without sharing class HW_Stammdatensammler_LC {
 	}
 	
 	private Contract loadContract () {
-		Contract lo_Contract = null;
-		
-		String lv_RelatedObject = 'AccountId';
+		Contract existingContract = null;
+		String relatedObjectFieldName = 'AccountId';
 		Map<String, Schema.SObjectField> fieldMap = Contract.SObjectType.getDescribe().fields.getMap();
-		
 		Set<String> fieldNames = fieldMap.keySet();
 		List<String> fields = new List<String>();
 		fields.addAll( fieldNames );
-		
-		String lv_Query = 'SELECT ' + String.join( fields, ',' )
+		String query = 'SELECT ' + String.join( fields, ',' )
 				+ ' FROM Contract ' +
-				'WHERE ' + lv_RelatedObject + ' = \'' + io_State.io_SObject.Id + '\' ' +
+				'WHERE ' + relatedObjectFieldName + ' = \'' + state.account.Id + '\' ' +
+				'AND Prozess__c = :mainProcess ' +
 				'ORDER BY CreatedDate DESC NULLS LAST';
-		List<Contract> ll_Contracts = Database.query( lv_Query );
-		if ( ll_Contracts.size() > 0 ) {
-			lo_Contract = ll_Contracts[ 0 ];
-			update lo_Contract;
+		List<Contract> contracts = Database.query( query );
+		if ( contracts.size() > 0 ) {
+			existingContract = contracts[ 0 ];
+			update existingContract;
 		}
-		
-		if ( lo_Contract == null ) {
-			lo_Contract = new Contract(
+		if ( existingContract == null ) {
+			/* todo MIGRATION set Prozess__c = "Stammdatensammler Filiale" on existing contract records*/
+			existingContract = new Contract(
 					Name = 'Vertrag SDS',
-					Lead__c = isExistingMAEF ? null : iv_RecordId,
-					AccountId = io_State.io_SObject.Id,
+					Lead__c = isExistingMAEF ? null : recordId,
+					AccountId = state.account.Id,
 					StartDate = Date.today(),
 					SDS_Helper_FirstRun__c = true,
 					ContractTerm = 48,
 					RecordTypeId = Schema.SObjectType.Contract.getRecordTypeInfosByDeveloperName()
-							.get( 'Partnerfiliale_Vertrag' ).getRecordTypeId()
+							.get( 'Partnerfiliale_Vertrag' ).getRecordTypeId(),
+					Prozess__c = mainProcess
 			);
-			insert lo_Contract;
+			insert existingContract;
 		}
-		lo_Contract = ( Contract ) Database.query( lv_Query )[ 0 ];
-		return lo_Contract;
+		existingContract = (Contract) Database.query( query )[ 0 ];
+		return existingContract;
 	}
 	
 	private void loadSectionInfo () {
 		for ( Sektion__mdt lv_Sektion : loadSektionen() ) {
 			
-			if ( im_SectionsByScreenId.containsKey( lv_Sektion.Fenster__c ) ) {
+			if ( sectionsByScreenId.containsKey( lv_Sektion.Fenster__c ) ) {
 				
-				im_SectionsByScreenId.get( lv_Sektion.Fenster__c ).add( lv_Sektion );
+				sectionsByScreenId.get( lv_Sektion.Fenster__c ).add( lv_Sektion );
 			}
 			else {
-				im_SectionsByScreenId.put( lv_Sektion.Fenster__c, new List<Sektion__mdt> {
+				sectionsByScreenId.put( lv_Sektion.Fenster__c, new List<Sektion__mdt> {
 						lv_Sektion
 				} );
 			}
@@ -601,27 +698,27 @@ public without sharing class HW_Stammdatensammler_LC {
 	}
 	
 	private void buildScreens () {
-		im_SectionsByScreenId = new Map<Id, List<Sektion__mdt>>();
-		im_FieldsBySectionId = new Map<Id, List<Feld__mdt>>();
+		sectionsByScreenId = new Map<Id, List<Sektion__mdt>>();
+		fieldsBySectionId = new Map<Id, List<Feld__mdt>>();
 		pflichtfelderByDocumentVisualforceName = new Map<String, List<DokumentPflichtfeld__mdt>>();
 		pflichtfeldByDeveloperName = new Map<String, DokumentPflichtfeld__mdt>();
 		loadPflichtfelderByDocument();
 		loadPflichtdokumenteByDocument();
 		loadFields();
 		loadSectionInfo();
-		io_State.il_Screens = new List<Screen>();
+		state.screens = new List<Screen>();
 		
 		for ( Fenster__mdt lv_Fenster : this.loadFensters() ) {
-			if ( im_SectionsByScreenId.containsKey( lv_Fenster.Id ) ) {
+			if ( sectionsByScreenId.containsKey( lv_Fenster.Id ) ) {
 				
 				List<Section> ll_Sections = new List<Section>();
-				for ( Sektion__mdt lo_Section : im_SectionsByScreenId.get( lv_Fenster.Id ) ) {
+				for ( Sektion__mdt lo_Section : sectionsByScreenId.get( lv_Fenster.Id ) ) {
 					
 					
 					ll_Sections.add(
 							new Section(
 									lo_Section.Titel__c,
-									im_FieldsBySectionId.containsKey( lo_Section.Id ) ? im_FieldsBySectionId.get( lo_Section.Id ) : null
+									fieldsBySectionId.containsKey( lo_Section.Id ) ? fieldsBySectionId.get( lo_Section.Id ) : null
 							)
 					);
 				}
@@ -629,11 +726,10 @@ public without sharing class HW_Stammdatensammler_LC {
 				Screen lo_Screen = new Screen(
 						lv_Fenster.Titel__c,
 						ll_Sections,
-						lv_Fenster.Id,
-						lv_Fenster.Ist_Filialfenster__c
+						lv_Fenster.Id
 				);
 				buildButtons( lv_Fenster, lo_Screen );
-				io_State.il_Screens.add(
+				state.screens.add(
 						lo_Screen
 				);
 			}
@@ -666,8 +762,8 @@ public without sharing class HW_Stammdatensammler_LC {
 	}
 	
 	private void loadProgressStates () {
-		
-		il_ProgressStates = [
+		/* todo MIGRATION set Prozess__c = "Stammdatensammler" on existing Stammdatensammler__c records*/
+		progressStates = [
 				SELECT
 						Id,
 						Name,
@@ -676,33 +772,52 @@ public without sharing class HW_Stammdatensammler_LC {
 						Status__c,
 						Gesperrt__c
 				FROM Stammdatensammler__c
-				WHERE Lead__c = :iv_RecordId
-				OR Account__c = :iv_RecordId
+				WHERE ( Lead__c = :recordId
+				OR Account__c = :recordId )
+				AND Prozess__c = :mainProcess
 				ORDER BY Nummerierung__c ASC NULLS LAST
 		];
 	}
 	
 	private void insertProgressStates () {
 		Integer i = 1;
-		for ( Screen screen : io_State.il_Screens ) {
-			il_ProgressStates.add(
+		for ( Screen screen : state.screens ) {
+			progressStates.add(
 					new Stammdatensammler__c(
 							Name = screen.title,
-							Lead__c = iv_RecordId,
-							Account__c = io_State.io_SObject.Id,
-							Status__c = screen.title == 'Erfassung Grunddaten' ? 'active' : 'open',
-							Nummerierung__c = i
+							Lead__c = recordId,
+							Account__c = state.account.Id,
+							Status__c = i == 1 ? 'active' : 'open',
+							Nummerierung__c = i,
+							Prozess__c = mainProcess
 					)
 			);
 			i++;
 		}
-		insert il_ProgressStates;
+		insert progressStates;
+	}
+	
+	private void insertProgressStatesLaufenderBetrieb () {
+		Integer i = 1;
+		for ( Screen screen : state.screens ) {
+			progressStates.add(
+					new Stammdatensammler__c(
+							Name = screen.title,
+							Account__c = recordId,
+							Status__c = i == 1 ? 'active' : 'open',
+							Nummerierung__c = i,
+							Prozess__c = mainProcess
+					)
+			);
+			i++;
+		}
+		insert progressStates;
 	}
 	
 	private void buildSteps () {
 		
-		for ( Stammdatensammler__c lv_ProgressState : il_ProgressStates ) {
-			io_State.il_Steps.add(
+		for ( Stammdatensammler__c lv_ProgressState : progressStates ) {
+			state.steps.add(
 					new Step(
 							lv_ProgressState.Name,
 							lv_ProgressState.Status__c,
@@ -715,13 +830,13 @@ public without sharing class HW_Stammdatensammler_LC {
 	
 	private Account loadAccount ( OrgE_DP__c lo_OrgE_DP ) {
 		Account lo_Account = new Account();
-		if ( iv_SObjectName == 'Account' ) {
-			lo_Account = ( Account ) Database.query( buildQueryString( 'Id' ) )[ 0 ];
+		if ( sObjectName == 'Account' ) {
+			lo_Account = (Account) Database.query( buildQueryString( 'Id' ) )[ 0 ];
 			loadOeffnungszeiten( lo_Account.Id );
 		}
-		else if ( iv_SObjectName == 'Lead' ) {
+		else if ( sObjectName == 'Lead' ) {
 			if ( accountExists() ) {
-				lo_Account = ( Account ) Database.query( buildQueryString( 'Lead__c' ) )[ 0 ];
+				lo_Account = (Account) Database.query( buildQueryString( 'Lead__c' ) )[ 0 ];
 				loadOeffnungszeiten( lo_Account.Id );
 			}
 			else {
@@ -772,7 +887,7 @@ public without sharing class HW_Stammdatensammler_LC {
 						Filialnetzaenderung__r.Filiale_Filialpartner__c,
 						Formataenderung__c
 				FROM Lead
-				WHERE Id = :iv_RecordId
+				WHERE Id = :recordId
 				LIMIT 1
 		];
 		
@@ -812,7 +927,7 @@ public without sharing class HW_Stammdatensammler_LC {
 		if ( lo_Lead.Formataenderung__c == true ) {
 			
 			Filialnetzaenderung__c fnaeComplete =
-					( Filialnetzaenderung__c ) HW_SharedVertragsUtils.queryAllFields(
+					(Filialnetzaenderung__c) HW_SharedVertragsUtils.queryAllFields(
 							'Filialnetzaenderung__c',
 							lo_Lead.Filialnetzaenderung__c,
 							'Id'
@@ -821,7 +936,7 @@ public without sharing class HW_Stammdatensammler_LC {
 			if ( fnaeComplete.Filiale_Filialpartner__c != null ) {
 				
 				Account filialpartnerComplete =
-						( Account ) HW_SharedVertragsUtils.queryAllFields(
+						(Account) HW_SharedVertragsUtils.queryAllFields(
 								'Account',
 								fnaeComplete.Filiale_Filialpartner__c,
 								'Id'
@@ -966,7 +1081,6 @@ public without sharing class HW_Stammdatensammler_LC {
 	}
 	
 	private void loadOeffnungszeiten ( Id pv_AccountId ) {
-		
 		for ( Oeffnungszeiten__c io_Oeffnungszeiten : [
 				SELECT
 						Name,
@@ -980,14 +1094,14 @@ public without sharing class HW_Stammdatensammler_LC {
 						Account__c
 				FROM Oeffnungszeiten__c
 				WHERE Account__c = :pv_AccountId
+				AND Prozess__c = :mainProcess
 				ORDER BY Name DESC NULLS LAST
 		] ) {
-			
-			if ( im_OeffnungszeitensByKategorie.containsKey( io_Oeffnungszeiten.Kategorie__c ) ) {
-				im_OeffnungszeitensByKategorie.get( io_Oeffnungszeiten.Kategorie__c ).add( io_Oeffnungszeiten );
+			if ( oeffnungszeitensByKategorie.containsKey( io_Oeffnungszeiten.Kategorie__c ) ) {
+				oeffnungszeitensByKategorie.get( io_Oeffnungszeiten.Kategorie__c ).add( io_Oeffnungszeiten );
 			}
 			else {
-				im_OeffnungszeitensByKategorie.put( io_Oeffnungszeiten.Kategorie__c, new List<Oeffnungszeiten__c> {
+				oeffnungszeitensByKategorie.put( io_Oeffnungszeiten.Kategorie__c, new List<Oeffnungszeiten__c> {
 						io_Oeffnungszeiten
 				} );
 			}
@@ -1019,11 +1133,11 @@ public without sharing class HW_Stammdatensammler_LC {
 	}
 	
 	private void createOeffnungszeiten ( Id pv_AccountId ) {
+		/* todo MIGRATION set Prozess__c on existing records*/
 		List<Oeffnungszeiten__c> vl_Oeffnungszeitens = new List<Oeffnungszeiten__c>();
 		for ( PicklistEntry io_KategorieEntry : Oeffnungszeiten__c.Kategorie__c.getDescribe().getPicklistValues() ) {
 			
 			for ( PicklistEntry io_WochentagEntry : Oeffnungszeiten__c.Wochentag__c.getDescribe().getPicklistValues() ) {
-				
 				if ( io_KategorieEntry.getValue() == 'Filialöffnungszeiten' && io_WochentagEntry.getValue() == 'Montag' ) {
 					vl_Oeffnungszeitens.add(
 							new Oeffnungszeiten__c(
@@ -1033,7 +1147,8 @@ public without sharing class HW_Stammdatensammler_LC {
 									vm_von__c = '',
 									vm_bis__c = '',
 									nm_von__c = '',
-									nm_bis__c = ''
+									nm_bis__c = '',
+									Prozess__c = mainProcess
 							)
 					);
 				}
@@ -1046,7 +1161,8 @@ public without sharing class HW_Stammdatensammler_LC {
 									vm_von__c = '',
 									vm_bis__c = '',
 									nm_von__c = '-',
-									nm_bis__c = '-'
+									nm_bis__c = '-',
+									Prozess__c = mainProcess
 							)
 					);
 				}
@@ -1065,7 +1181,8 @@ public without sharing class HW_Stammdatensammler_LC {
 									vm_von__c = '00:00',
 									vm_bis__c = '00:00',
 									nm_von__c = '-',
-									nm_bis__c = '-'
+									nm_bis__c = '-',
+									Prozess__c = mainProcess
 							)
 					);
 				}
@@ -1078,7 +1195,8 @@ public without sharing class HW_Stammdatensammler_LC {
 									vm_von__c = '-',
 									vm_bis__c = '-',
 									nm_von__c = '-',
-									nm_bis__c = '-'
+									nm_bis__c = '-',
+									Prozess__c = mainProcess
 							)
 					);
 				
@@ -1093,11 +1211,11 @@ public without sharing class HW_Stammdatensammler_LC {
 	private void categorizeOeffnungszeiten ( List<Oeffnungszeiten__c> catList ) {
 		for ( Oeffnungszeiten__c io_Oeffnungszeiten : catList ) {
 			
-			if ( im_OeffnungszeitensByKategorie.containsKey( io_Oeffnungszeiten.Kategorie__c ) ) {
-				im_OeffnungszeitensByKategorie.get( io_Oeffnungszeiten.Kategorie__c ).add( io_Oeffnungszeiten );
+			if ( oeffnungszeitensByKategorie.containsKey( io_Oeffnungszeiten.Kategorie__c ) ) {
+				oeffnungszeitensByKategorie.get( io_Oeffnungszeiten.Kategorie__c ).add( io_Oeffnungszeiten );
 			}
 			else {
-				im_OeffnungszeitensByKategorie.put( io_Oeffnungszeiten.Kategorie__c, new List<Oeffnungszeiten__c> {
+				oeffnungszeitensByKategorie.put( io_Oeffnungszeiten.Kategorie__c, new List<Oeffnungszeiten__c> {
 						io_Oeffnungszeiten
 				} );
 			}
@@ -1106,24 +1224,24 @@ public without sharing class HW_Stammdatensammler_LC {
 	
 	private void setOeffnungszeiten () {
 		
-		for ( Screen screen : io_State.il_Screens ) {
+		for ( Screen screen : state.screens ) {
 			
 			for ( Section section : screen.sections ) {
 				if ( section.iv_Title == 'Veränderungsmeldung zu Postfachanlagen (PfA)' ) {
 					
 					section.il_Oeffnungszeits.add(
 							new Oeffnungszeit(
-									im_OeffnungszeitensByKategorie.get( 'Sortierzeiten' )
+									oeffnungszeitensByKategorie.get( 'Sortierzeiten' )
 							)
 					);
 					section.il_Oeffnungszeits.add(
 							new Oeffnungszeit(
-									im_OeffnungszeitensByKategorie.get( 'Zugangszeiten' )
+									oeffnungszeitensByKategorie.get( 'Zugangszeiten' )
 							)
 					);
 					section.il_Oeffnungszeits.add(
 							new Oeffnungszeit(
-									im_OeffnungszeitensByKategorie.get( 'Ausgabezeiten' )
+									oeffnungszeitensByKategorie.get( 'Ausgabezeiten' )
 							)
 					);
 					
@@ -1133,17 +1251,17 @@ public without sharing class HW_Stammdatensammler_LC {
 				else if ( section.iv_Title == 'Öffnungszeiten' ) {
 					section.il_Oeffnungszeits.add(
 							new Oeffnungszeit(
-									im_OeffnungszeitensByKategorie.get( 'Filialöffnungszeiten' )
+									oeffnungszeitensByKategorie.get( 'Filialöffnungszeiten' )
 							)
 					);
 					section.il_Oeffnungszeits.add(
 							new Oeffnungszeit(
-									im_OeffnungszeitensByKategorie.get( 'Öffnungszeiten Hauptgeschäft' )
+									oeffnungszeitensByKategorie.get( 'Öffnungszeiten Hauptgeschäft' )
 							)
 					);
 					section.il_Oeffnungszeits.add(
 							new Oeffnungszeit(
-									im_OeffnungszeitensByKategorie.get( 'Zugangszeiten für SB' )
+									oeffnungszeitensByKategorie.get( 'Zugangszeiten für SB' )
 							)
 					);
 					
@@ -1157,41 +1275,39 @@ public without sharing class HW_Stammdatensammler_LC {
 	}
 	
 	private Boolean accountExists () {
-		return [ SELECT Id FROM Account WHERE Lead__c = :iv_RecordId ].size() > 0;
+		return [ SELECT Id FROM Account WHERE Lead__c = :recordId ].size() > 0;
 	}
 	
 	@TestVisible
 	private class State {
 		
-		private Account io_SObject;
-		private SObject io_Contract;
-		private List<Screen> il_Screens;
+		private Account account;
+		private SObject contract;
+		private List<Screen> screens;
 		@TestVisible
-		private List<Step> il_Steps;
+		private List<Step> steps;
 		
 		public State () {
-			this.il_Screens = new List<Screen>();
-			this.il_Steps = new List<Step>();
+			this.screens = new List<Screen>();
+			this.steps = new List<Step>();
 		}
 	}
 	@TestVisible
 	private class Screen {
 		private String title;
 		private Boolean isActive;
-		private Boolean isAccount;
 		private Id key;
 		private List<Section> sections;
 		private List<Button> buttons;
 		private List<String> activeSections;
 		
-		public Screen ( String title, List<Section> sections, Id key, Boolean pv_IsAccountScreen ) {
+		public Screen ( String title, List<Section> sections, Id key ) {
 			this.title = title;
 			this.isActive = false;
 			this.sections = sections;
 			this.activeSections = new List<String>();
 			this.key = key;
 			this.buttons = new List<Button>();
-			this.isAccount = pv_IsAccountScreen;
 		}
 	}
 	
@@ -1337,7 +1453,7 @@ public without sharing class HW_Stammdatensammler_LC {
 		}
 		
 		public Integer compareTo ( Object obj ) {
-			Field field = ( Field ) ( obj );
+			Field field = (Field) ( obj );
 			
 			if ( this.Nummerierung > field.Nummerierung ) {
 				return 1;

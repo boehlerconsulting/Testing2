@@ -23,14 +23,16 @@ public without sharing class HW_Document_C {
 	private Map<String, Feld__mdt> im_ContractDocumentFieldToFieldMap = new Map<String, Feld__mdt>();
 	private Map<String, Object> im_fieldValues = new Map<String, Object>();
 	private Map<String, List<Oeffnungszeiten__c>> im_OeffnungszeitensByKategorie = new Map<String, List<Oeffnungszeiten__c>>();
-	private Id iv_talendUserId = [ SELECT Id FROM User WHERE IstSchnittstellenbenutzer__c = TRUE LIMIT 1 ].Id;
 	private Contract contract;
 	private Account account;
-	private Account iv_tempMAEFaccount;
+	private Account iv_tempMAEFaccount = new Account();
 	private Account iv_oldMAEFaccount;
-	private Contract iv_tempMAEFcontract;
+	private Contract iv_tempMAEFcontract = new Contract();
 	private String errorMessage = '';
 	private PageReference currentPage = null;
+	private Boolean isExistingMAEF = false;
+	private String mainProcess;
+	private Map<String, Object> oldAccountStateByFieldName = new Map<String, Object>();
 	
 	public HW_Document_C () {
 		currentPage = ApexPages.currentPage();
@@ -44,6 +46,9 @@ public without sharing class HW_Document_C {
 	
 	private void initialize () {
 		String lv_outputParam = currentPage.getParameters().get( 'output' );
+		iv_currentObjectId = String.escapeSingleQuotes( currentPage.getParameters().get( 'id' ) );
+		mainProcess = currentPage.getParameters().get( 'mainProcess' );
+		isExistingMAEF = mainProcess == 'Stammdatensammler Filiale laufender Betrieb';
 		if ( String.isNotBlank( lv_outputParam ) ) {
 			switch on lv_outputParam.toUpperCase() {
 				when 'PDF' {
@@ -66,7 +71,6 @@ public without sharing class HW_Document_C {
 				}
 			}
 		}
-		iv_currentObjectId = String.escapeSingleQuotes( currentPage.getParameters().get( 'id' ) );
 		onLoad();
 	}
 	
@@ -78,12 +82,17 @@ public without sharing class HW_Document_C {
 			}
 			if ( getDocumentDeveloperName() == 'FACTS_Beleg'
 					|| getDocumentDeveloperName() == 'MAEF_Beleg'
-					|| getDocumentDeveloperName() == 'Zusatzinfo_Material' ) {
+					|| getDocumentDeveloperName() == 'Zusatzinfo_Material'
+					|| getDocumentDeveloperName() == 'MAEF_Beleg_Filiale_existiert'
+					|| getDocumentDeveloperName() == 'Zusatzinfo_Material_Filiale_existiert' ) {
 				loadOeffnungszeiten( iv_currentObjectId );
 			}
 			if ( getDocumentDeveloperName() == 'FACTS_Beleg' ) {
 				loadFACTS();
 			}
+		}
+		if ( isExistingMAEF && getDocumentDeveloperName() == 'MAEF_Beleg_Filiale_existiert' ) {
+			setOldAccountState();
 		}
 	}
 	
@@ -103,10 +112,10 @@ public without sharing class HW_Document_C {
 						DeveloperName,
 						Feld__c
 				FROM Dokumenten_Feld_Mapping__mdt
-				WHERE Prozess__c = 'Stammdatensammler' AND
-				Dokument__r.Visualforce_Page__c = :getCurrentPageName()
+				WHERE Feld__r.Sektion__r.Fenster__r.Process__c = :mainProcess
+				AND Dokument__r.Visualforce_Page__c = :getCurrentPageName()
 		];
-		Map<ID, String> lm_fieldIdsAndNames = new Map<ID, String>();
+		Map<Id, String> lm_fieldIdsAndNames = new Map<Id, String>();
 		for ( Dokumenten_Feld_Mapping__mdt lv_fieldMapping : ll_fieldMappingList ) {
 			lm_fieldIdsAndNames.put( lv_fieldMapping.Feld__c, lv_fieldMapping.DeveloperName );
 		}
@@ -118,8 +127,8 @@ public without sharing class HW_Document_C {
 						Feldtyp__c,
 						Textformat__c
 				FROM Feld__mdt
-				WHERE Prozess__c = 'Stammdatensammler' AND
-				Id IN :lm_fieldIdsAndNames.keySet() AND Objektname__c = :pv_SObjectName
+				WHERE Sektion__r.Fenster__r.Process__c = :mainProcess
+				AND Id IN :lm_fieldIdsAndNames.keySet() AND Objektname__c = :pv_SObjectName
 		];
 		
 		for ( Feld__mdt field : ll_fieldList ) {
@@ -152,23 +161,26 @@ public without sharing class HW_Document_C {
 		lv_Fields = lv_Fields.removeEnd( ',' );
 		
 		String lv_IdField = pv_SObjectName == 'Account' ? 'Id' : 'AccountId';
-		
-		return 'SELECT ' + lv_Fields + ' FROM ' + pv_SObjectName + ' WHERE ' + lv_IdField + ' = :iv_currentObjectId';
+		String query = 'SELECT ' + lv_Fields + ' FROM ' + pv_SObjectName + ' WHERE ' + lv_IdField + ' = :iv_currentObjectId';
+		if ( pv_SObjectName == 'Contract' ) {
+			query += ' AND Prozess__c = :mainProcess';
+		}
+		return query;
 	}
 	
 	private void loadData () {
-		loadData( 'Account' );
-		loadData( 'Contract' );
+		iv_tempMAEFaccount = (Account) loadData( 'Account' );
+		iv_tempMAEFcontract = (Contract) loadData( 'Contract' );
+		if ( isExistingMAEF && getDocumentDeveloperName() == 'MAEF_Beleg_Filiale_existiert' ) {
+			emptyRelevantTempValuesIfIsErsatzloseSchliessung();
+		}
+		mapDataToFieldNames( iv_tempMAEFaccount );
+		mapDataToFieldNames( iv_tempMAEFcontract );
 	}
 	
-	private void loadData ( String sObjectName ) {
-		String lv_QueryString = buildQueryString( sObjectName );
-		if ( String.isNotBlank( lv_QueryString ) ) {
-			List<SObject> queryResults = Database.query( lv_QueryString );
-			if ( queryResults != null && !queryResults.isEmpty() ) {
-				mapDataToFieldNames( queryResults[ 0 ] );
-			}
-		}
+	private SObject loadData ( String sObjectName ) {
+		List<SObject> queryResults = Database.query( buildQueryString( sObjectName ) );
+		return queryResults[ 0 ];
 	}
 	
 	private void mapDataToFieldNames ( SObject po_currentObject ) {
@@ -185,15 +197,37 @@ public without sharing class HW_Document_C {
 				else {
 					lv_fieldValue = po_currentObject.get( lo_Field.Feldname__c );
 				}
-				
 				im_fieldValues.put( lv_documentFieldName, lv_fieldValue != null ? lv_fieldValue : '' );
 			}
 		}
 	}
 	
 	public Map<String, Object> getFeld () {
-		
 		return im_fieldValues;
+	}
+	
+	public Map<String, Object> getAccountFeld () {
+		return oldAccountStateByFieldName;
+	}
+	
+	public String getErsatzloseSchliessung () {
+		return im_fieldValues.get( 'MAEF2_ErsatzloseSchliessungMitAblaufDes' ) == '' ? '' : 'x';
+	}
+	
+	public String getVoruebergehendeSchliessung () {
+		return im_fieldValues.get( 'MAEF2_MAEF_Voruebergehende_Schliessung_a' ) == '' ? '' : 'x';
+	}
+	
+	public String getAenderungOeffnungszeiten () {
+		return im_fieldValues.get( 'MAEF2_AenderungDerOeffnungszeitenAb' ) == '' ? '' : 'x';
+	}
+	
+	public String getDatumSchliessung () {
+		return im_fieldValues.get( 'MAEF2_DatumDerSchliessung' ) == '' ? '' : 'x';
+	}
+	
+	public String getSonstigeAenderung () {
+		return im_fieldValues.get( 'MAEF2_sonstigeAenderungAb' ) == '' ? '' : 'x';
 	}
 	
 	public String getContentType () {
@@ -266,9 +300,11 @@ public without sharing class HW_Document_C {
 	private String getDocumentDeveloperName () {
 		if ( String.isBlank( iv_fileName ) ) {
 			List<Dokument__mdt> ll_dokumente = [
-					SELECT DeveloperName
+					SELECT
+							DeveloperName
 					FROM Dokument__mdt
-					WHERE Prozess__c = 'Stammdatensammler' AND Visualforce_Page__c = :getCurrentPageName()
+					WHERE Prozess__c = :mainProcess
+					AND Visualforce_Page__c = :getCurrentPageName()
 					LIMIT 1
 			];
 			iv_fileName = ll_dokumente.isEmpty() ? getCurrentPageName() : ll_dokumente[ 0 ].DeveloperName;
@@ -307,6 +343,9 @@ public without sharing class HW_Document_C {
 				return 'Postbankanfrage VL ' + getAccount().Lead__r.VL__r.Name + ' - ' + getAccount().ASt_Name__c;
 			}
 			when 'Zusatzinfo_Material' {
+				return 'Matwi_Stamm_' + getAccount().ASt_Name__c;
+			}
+			when 'Zusatzinfo_Material_Filiale_existiert' {
 				return 'Matwi_Stamm_' + getAccount().ASt_Name__c;
 			}
 			when 'Einverstaendniserklaerung' {
@@ -391,35 +430,6 @@ public without sharing class HW_Document_C {
 		return aenderungsgrunds;
 	}
 	
-	// Comments proof of concept
-	/*
-	public String getComments () {
-		return
-				'<div style=\'mso-element:comment-list\'>' +
-						'<div style=\'mso-element:comment\'>' +
-						'<xml>' +
-						'<v:shapetype id="_x0000_t202" coordsize="21600,21600" o:spt="202" path="m,l,21600r21600,l21600,xe">' +
-						'<v:stroke joinstyle="miter"/>' +
-						'<v:path gradientshapeok="t" o:connecttype="rect"/>' +
-						'</v:shapetype>' +
-						'<v:shape id="_comment1" type="#_x0000_t202" ' +
-						'style=\'width:96pt;height:55.5pt;z-index:1;visibility:hidden\' ' +
-						'fillcolor="infoBackground [80]" o:insetmode="auto">' +
-						'<v:textbox style=\'mso-direction-alt:auto\'/>' +
-						'<x:ClientData ObjectType="Note">' +
-						'<x:Row>10</x:Row>' +
-						'<x:Column>21</x:Column>' +
-						'</x:ClientData>' +
-						'</v:shape>' +
-						'</xml>' +
-						'<div v:shape="_comment1" >' +
-						'z.B. Telefonnummer,<br/> Kassennummer,<br/> Entsorgungszeiten,  etc.' +
-						'</div>' +
-						'</div>' +
-						'</div>';
-	}
-	*/
-	
 	public String getSheetName () {
 		String sheetName = 'Tabelle1';
 		switch on getDocumentDeveloperName() {
@@ -463,70 +473,49 @@ public without sharing class HW_Document_C {
 						'<![endif]-->';
 	}
 	
-	public void controllerActions () {
-		setTemporaryData();
-	}
-	
-	public void saveExistingMAEF () {
-		setTemporaryData();
-		Account account = getAccount();
-		account.Lead__c = null;
-		saveDocument( new List<Id> {
-				iv_currentObjectId,
-				createEmailDelivery( account )
-		} );
-	}
-	
-	private void setTemporaryData () {
-		if ( getAccount().MAEF_Zwischenspeicher__c != null ) {
-			HW_Stammdatensammler_LC.HW_MaefWrapper hwMaefWrapper =
-					(HW_Stammdatensammler_LC.HW_MaefWrapper) JSON.deserialize( getAccount().MAEF_Zwischenspeicher__c,
-							HW_Stammdatensammler_LC.HW_MaefWrapper.class );
-			
-			this.iv_tempMAEFaccount = hwMaefWrapper.account;
-			this.iv_tempMAEFcontract = hwMaefWrapper.contract;
-			emptyRelevantTempValuesIfIsErsatzloseSchliessung();
-		}
-	}
-	
 	private void emptyRelevantTempValuesIfIsErsatzloseSchliessung () {
-		if ( this.iv_tempMAEFcontract.ErsatzloseSchliessungMitAblaufDes__c != null ) {
-			this.iv_tempMAEFaccount.ASt_Name__c = null;
-			this.iv_tempMAEFaccount.Strasse__c = null;
-			this.iv_tempMAEFaccount.Filiale_Hausnummer__c = null;
-			this.iv_tempMAEFaccount.ShippingCity = null;
-			this.iv_tempMAEFaccount.Ortsteil_Postanschrift__c = null;
-			this.iv_tempMAEFaccount.ShippingPostalCode = null;
-			this.iv_tempMAEFaccount.Phone = null;
-			this.iv_tempMAEFaccount.Fax = null;
-			this.iv_tempMAEFaccount.ASt_Nummer__c = null;
-			this.iv_tempMAEFaccount.DPAG_Kostenstelle__c = null;
-			this.iv_tempMAEFaccount.Debitor__c = null;
-			this.iv_tempMAEFaccount.WaWi_Nummer__c = null;
-			this.iv_tempMAEFaccount.Filialtyp_OZ__c = null;
-			this.iv_tempMAEFaccount.Anzahl_Schalter__c = null;
-			this.iv_tempMAEFaccount.Branche_FACTS__c = null;
-			this.iv_tempMAEFaccount.Name = null;
-			this.iv_tempMAEFaccount.Masterkasse_KKZ__c = null;
-			this.iv_tempMAEFaccount.PostfachanlageCheckbox__c = null;
-			this.iv_tempMAEFaccount.Postfach_Betreiber__c = null;
-			this.iv_tempMAEFaccount.DHL_Express_Int__c = null;
-			this.iv_tempMAEFaccount.Briefkasten__c = null;
-			this.iv_tempMAEFaccount.ASt_ID__c = null;
-			this.iv_tempMAEFaccount.Filial_ILN__c = null;
-			
-			this.iv_tempMAEFcontract.AStNrReferenzFilialeVerkaufsproduktespro__c = null;
-			this.iv_tempMAEFcontract.RegelInterim__c = null;
-			this.iv_tempMAEFcontract.AnredeMAEF__c = null;
-			this.iv_tempMAEFcontract.SteuernummerPartner__c = null;
-			this.iv_tempMAEFcontract.TagesstempelMAEF__c = null;
-			this.iv_tempMAEFcontract.VerteilschlussPfSdg__c = null;
-			this.iv_tempMAEFcontract.AnlagenTypPfSchrank__c = null;
-			this.iv_tempMAEFcontract.AnzahlPfSchraenke__c = null;
-			this.iv_tempMAEFcontract.PostfilialeDirektMAEF__c = null;
-			this.iv_tempMAEFcontract.ErgaenzenderHinweisStandort__c = null;
-			this.iv_tempMAEFcontract.AnzahlMitarbeiter__c = null;
+		if ( getIsErsatzloseSchliessung() ) {
+			iv_tempMAEFcontract.ASt_Name__c = null;
+			iv_tempMAEFcontract.Strasse__c = null;
+			iv_tempMAEFcontract.Filiale_Hausnummer__c = null;
+			iv_tempMAEFcontract.ShippingCity__c = null;
+			iv_tempMAEFcontract.Ortsteil_Postanschrift__c = null;
+			iv_tempMAEFcontract.ShippingPostalCode__c = null;
+			iv_tempMAEFcontract.Phone__c = null;
+			iv_tempMAEFcontract.Fax__c = null;
+			iv_tempMAEFcontract.ASt_Nummer__c = null;
+			iv_tempMAEFcontract.DPAG_Kostenstelle__c = null;
+			iv_tempMAEFcontract.Debitor__c = null;
+			iv_tempMAEFcontract.WaWi_Nummer__c = null;
+			iv_tempMAEFcontract.Filialtyp_OZ__c = null;
+			iv_tempMAEFcontract.Anzahl_Schalter__c = null;
+			iv_tempMAEFcontract.Branche_FACTS__c = null;
+			iv_tempMAEFcontract.Name__c = null;
+			iv_tempMAEFcontract.Masterkasse_KKZ__c = null;
+			iv_tempMAEFcontract.PostfachanlageCheckbox__c = null;
+			iv_tempMAEFcontract.Postfach_Betreiber__c = null;
+			iv_tempMAEFcontract.DHL_Express_Int__c = null;
+			iv_tempMAEFcontract.Briefkasten__c = null;
+			iv_tempMAEFcontract.ASt_ID__c = null;
+			iv_tempMAEFcontract.Filial_ILN__c = null;
+			iv_tempMAEFcontract.AStNrReferenzFilialeVerkaufsproduktespro__c = null;
+			iv_tempMAEFcontract.RegelInterim__c = null;
+			iv_tempMAEFcontract.AnredeMAEF__c = null;
+			iv_tempMAEFcontract.SteuernummerPartner__c = null;
+			iv_tempMAEFcontract.TagesstempelMAEF__c = null;
+			iv_tempMAEFcontract.VerteilschlussPfSdg__c = null;
+			iv_tempMAEFcontract.AnlagenTypPfSchrank__c = null;
+			iv_tempMAEFcontract.AnzahlPfSchraenke__c = null;
+			iv_tempMAEFcontract.PostfilialeDirektMAEF__c = null;
+			iv_tempMAEFcontract.ErgaenzenderHinweisStandort__c = null;
+			iv_tempMAEFcontract.AnzahlMitarbeiter__c = null;
 		}
+	}
+	
+	public Boolean getIsErsatzloseSchliessung () {
+		return iv_tempMAEFcontract.ErsatzloseSchliessungMitAblaufDes__c != null
+				|| ( iv_tempMAEFcontract.DatumDerSchliessung__c != null
+				&& iv_tempMAEFcontract.DatumderEroeffnung__c == null );
 	}
 	
 	public void save () {
@@ -558,7 +547,7 @@ public without sharing class HW_Document_C {
 	private ContentDocumentLink createContentDocumentLinkTalendUser ( Id contentDocumentId ) {
 		ContentDocumentLink cdl = new ContentDocumentLink();
 		cdl.ContentDocumentId = contentDocumentId;
-		cdl.LinkedEntityId = iv_talendUserId;
+		cdl.LinkedEntityId = InterfaceUser.getInstance().getId();
 		cdl.ShareType = 'V';
 		cdl.Visibility = 'AllUsers';
 		return cdl;
@@ -597,6 +586,7 @@ public without sharing class HW_Document_C {
 						SELECT
 								Id
 						FROM Contracts
+						WHERE Prozess__c = :mainProcess
 				)
 				FROM Account
 				WHERE Id = :iv_currentObjectId
@@ -625,7 +615,7 @@ public without sharing class HW_Document_C {
 		List<ContentVersion> ll_contentVersions = [
 				SELECT ContentDocumentId
 				FROM ContentVersion
-				WHERE ContentDocumentId in :ls_contentDocumentIds AND PathOnClient = :getFileNameWithExtension()
+				WHERE ContentDocumentId IN :ls_contentDocumentIds AND PathOnClient = :getFileNameWithExtension()
 				LIMIT 1
 		];
 		
@@ -762,9 +752,9 @@ public without sharing class HW_Document_C {
 						Account__c
 				FROM Oeffnungszeiten__c
 				WHERE Account__c = :pv_AccountId
+				AND Prozess__c = :mainProcess
 				ORDER BY Name ASC NULLS LAST
 		] ) {
-			
 			if ( im_OeffnungszeitensByKategorie.containsKey( io_Oeffnungszeiten.Kategorie__c ) ) {
 				im_OeffnungszeitensByKategorie.get( io_Oeffnungszeiten.Kategorie__c ).add( io_Oeffnungszeiten );
 			}
@@ -855,7 +845,7 @@ public without sharing class HW_Document_C {
 						Nummerierung__c,
 						DeveloperName
 				FROM Sektion__mdt
-				WHERE Prozess__c = 'Stammdatensammler'
+				WHERE Fenster__r.Process__c = :mainProcess
 				AND Fenster__r.DeveloperName = 'Erfassung_Daten_FACTS_Beleg'
 				ORDER BY Nummerierung__c ASC
 		];
@@ -870,7 +860,7 @@ public without sharing class HW_Document_C {
 						Feldtyp__c, // diese werden für die Wertebeschaffung gebraucht siehe getFieldMapping -> ll_fieldList
 						Textformat__c
 				FROM Feld__mdt
-				WHERE Prozess__c = 'Stammdatensammler'
+				WHERE Sektion__r.Fenster__r.Process__c = :mainProcess
 				AND Sektion__c IN :lv_sections
 				AND Nicht_relevant_fuer_FACTS_Dokument__c = FALSE
 				ORDER BY Nummerierung__c ASC
@@ -941,6 +931,7 @@ public without sharing class HW_Document_C {
 							Filialtyp__c
 					FROM Contract
 					WHERE AccountId = :iv_currentObjectId
+					AND Prozess__c = :mainProcess
 					LIMIT 1
 			];
 		}
@@ -974,7 +965,6 @@ public without sharing class HW_Document_C {
 							ShippingPostalCode,
 							ShippingCity,
 							Eroeffnungsdatum__c,
-							MAEF_Zwischenspeicher__c,
 							Lead__c,
 							Debitor__c,
 							ASt_Name__c,
@@ -993,7 +983,7 @@ public without sharing class HW_Document_C {
 		return account;
 	}
 	
-	public Account getOldMAEFAccount () {
+	public Account getOldAccount () {
 		if ( iv_oldMAEFaccount == null ) {
 			iv_oldMAEFaccount = [
 					SELECT
@@ -1096,11 +1086,34 @@ public without sharing class HW_Document_C {
 		return iv_oldMAEFaccount;
 	}
 	
-	public Account getTempMAEFAccount () {
-		return iv_tempMAEFaccount;
-	}
-	
 	public Contract getTempMAEFContract () {
 		return iv_tempMAEFcontract;
+	}
+	
+	private void setOldAccountState () {
+		oldAccountStateByFieldName.put( 'Anzahl_Schalter__c', getValue( 'number', 'Anzahl_Schalter__c' ) );
+		oldAccountStateByFieldName.put( 'Branche_FACTS__c', getValue( 'text', 'Branche_FACTS__c' ) );
+		oldAccountStateByFieldName.put( 'Name', getValue( 'text', 'Name' ) );
+		oldAccountStateByFieldName.put( 'Masterkasse_KKZ__c', getValue( 'text', 'Masterkasse_KKZ__c' ) );
+		oldAccountStateByFieldName.put( 'PostfachanlageCheckbox__c', getValue( 'text', 'PostfachanlageCheckbox__c' ) );
+		oldAccountStateByFieldName.put( 'Postfach_Betreiber__c', getValue( 'text', 'Postfach_Betreiber__c' ) );
+		oldAccountStateByFieldName.put( 'Paketausgabe__c', getValue( 'text', 'Paketausgabe__c' ) );
+		oldAccountStateByFieldName.put( 'Briefausgabe__c', getValue( 'text', 'Briefausgabe__c' ) );
+		oldAccountStateByFieldName.put( 'DHL_Express_Int__c', getValue( 'text', 'DHL_Express_Int__c' ) );
+		oldAccountStateByFieldName.put( 'Briefkasten__c', getValue( 'text', 'Briefkasten__c' ) );
+		oldAccountStateByFieldName.put( 'ASt_ID__c', getValue( 'text', 'ASt_ID__c' ) );
+		oldAccountStateByFieldName.put( 'Filial_ILN__c', getValue( 'text', 'Filial_ILN__c' ) );
+	}
+	
+	private Object getValue ( String type, String fieldName ) {
+		SObject sobj = getOldAccount();
+		Object value = '';
+		if ( type == 'number' ) {
+			return Decimal.valueOf( String.valueOf( sobj.get( fieldName ) ) ).format();
+		}
+		else {
+			value = sobj.get( fieldName );
+		}
+		return value != null ? value : '';
 	}
 }

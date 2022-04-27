@@ -56,7 +56,8 @@ public with sharing class FormataenderungLeadGenCtrl {
 						
 						//INIT SDS
 						HW_Stammdatensammler_LC po_Ctrl = new HW_Stammdatensammler_LC();
-						po_Ctrl.callInitializeStammdatensammler( leadId );
+						po_Ctrl.recordId = leadId;
+						po_Ctrl.callInitializeStammdatensammler();
 						
 						//MYPM-1129
 						prefillSDS( leadId, filialpartnerComplete, fnaeComplete, partnerContractComplete );

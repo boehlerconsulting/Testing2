@@ -25,7 +25,9 @@ export default class HW_ProgressIndicator extends NavigationMixin(LightningEleme
     io_Dispatcher = new HwApplicationStateActionDispatcher(this);
 
     renderedCallback() {
-        this.calculateProgressValueWidth();
+        if (this.steps){
+            this.calculateProgressValueWidth();
+        }
     }
 
     calculateProgressValueWidth() {
@@ -76,6 +78,6 @@ export default class HW_ProgressIndicator extends NavigationMixin(LightningEleme
     }
 
     get showNextButton(){
-        return this.activeStepIndex < this.steps.length - 1;
+        return this.steps ? this.activeStepIndex < this.steps.length - 1 : false;
     }
 }
